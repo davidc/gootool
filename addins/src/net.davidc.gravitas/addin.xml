@@ -1,0 +1,23 @@
+<addin spec-version="1.0">
+  <!-- The unique ID of this addin. Used to check if it's already installed or compare its version -->
+  <id>net.davidc.gravitas</id>
+
+  <!-- name shown to user -->
+  <name>Gravitas</name>
+
+  <!-- either "mod" or "level". For user display, and to determine whether to create a chapter 5 entry -->
+  <type>level</type>
+
+  <!-- Version. Must be numerically comparable at each "." boundary. You could also do it without periods. 11281 is a fine version number.-->
+  <version>0.5</version>
+
+  <!-- description shown to user -->
+  <description>This is a lovely level you can play!</description>
+
+  <!-- author shown to user -->
+  <author>davidc/grav</author>
+
+  <level>
+    <name>... level details to appear on ch 5</name>
+  </level>
+</addin>

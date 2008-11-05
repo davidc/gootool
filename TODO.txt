@@ -1,0 +1,30 @@
+- strip down bouncycastle to only needed classes
+- refreshrate in config.txt - NEW IN NEW VERSION!!!
+
+- let them save tower jpgs (and the original transparent one)
+
+- verify addin spec version
+
+- loading status windows while doing long activities (e.g. initial load, profile gen, upload, merge)
+
+- Don't SAVE if unmodified on LAUNCH
+
+- fullscreen
+
+- backup/restore profile to websit e- perhaps just store their last 5 uploaded profiles?
+- mark user as cheat - requires X votes
+
+
+- reformat b5s and use as wog website server
+
+- zkm
+
+- more addin author-friendly functionality (e.g. add a directory as an addin)
+
+
+todo
+when installing make sure not existing addin with that id
+check dependencies
+
+
+replace good.davidc.net refs before release

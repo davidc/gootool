@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<project name="addins" default="build" basedir=".">
+
+  <property name="addins.src" value="src"/>
+  <property name="addins.dest" value="dist"/>
+
+  <taskdef resource="net/sf/antcontrib/antlib.xml" classpath="../lib/build/ant-contrib-1.0b3.jar"/>
+
+
+  <target name="build" description="Builds all addins in the src directory">
+    <mkdir dir="${addins.dest}"/>
+
+    <foreach target="-foreach-addin" param="src.dir">
+      <path>
+        <dirset dir="${addins.src}" includes="/*/">
+        </dirset>
+      </path>
+    </foreach>
+  </target>
+
+  <target name="-foreach-addin">
+    <!-- Read the XML file to get the addin name and version -->
+    <xmlproperty file="${src.dir}/addin.xml"/>
+
+    <property name="out.file" value="${addins.dest}/${addin.id}_${addin.version}.goomod"/>
+
+    <zip file="${out.file}">
+      <fileset dir="${src.dir}">
+        <exclude name="**/.svn"/>
+        <exclude name="**/Thumbs.db"/>
+      </fileset>
+    </zip>
+  </target>
+
+  <target name="clean" description="Removes everything that was built">
+    <delete dir="${addins.dest}"/>
+  </target>
+
+</project>

@@ -1,0 +1,95 @@
+The pers2.dat file is encrypted in the same way as the data files, except the
+plaintext is padded with zero bytes. The character encoding used is unknown;
+most likely it is the native character set of the operating system.
+
+At the highest level, it contains a sequence of strings, terminated by the
+sequence ",0." (without quotes). Each string is encoded with a decimal integer
+signifying its length, followed by a comma, followed by the string contents.
+For example, "foo" would be encoded as "3,foo" (quotes for clarity only).
+
+The strings in the data file describe a dictionary, with alternating keys and
+values. Keys in use are:
+
+- "countrycode": values are two-letter ISO 3166-1 country codes, or EU for the
+European Union, or XX for unknown.
+- "fullscreen": indicates whether the game runs in full-screen or in windowed
+mode; value is either "true" or "false"
+- "mrpp": most recent player profile; value is a decimal integer between 1 and 3.
+- "profile_0"/"profile_1"/"profile_2": the three player profile slots.
+
+Obviously, the player profile strings are the most interesting. These strings
+consist of a number of fields, seperated by comma's. The first four fields are:
+- player name
+- player flags (see below)
+- total play time (in seconds)
+- number of levels played/completed
+
+The player flags field is an integer that combines several bits:
+1: online play is enabled
+2: World of Goo Corporation has been unlocked
+4: World of Goo Corporation has been destroyed
+8: the whistle has been found
+16: the Terms & Conditions have been accepted (this unlocks Deliverance)
+
+So a player that has finished the first two chapters, for example, would
+have flags set to 2|8 = 10 or 1|2|8 = 11 (here '|' indicates bitwise-or).
+
+Then follows, for each level:
+- level id (same as the directory name in res/levels/)
+- greatest number of balls collected
+- least number of moves used
+- least time taken (in seconds)
+
+Usually, the number of level descriptions is equal to fourth field (total
+number of levels played), but sometimes there is more level data. I haven't
+looked into exactly why this is; maybe these are levels that have been played
+but not yet completed.
+
+Then, the World of Goo Coporation data follows, which is a string prefixed by
+an underscore character (_) which is how it can be distinguished from more
+level data.
+
+It may be empty if WoGC has not been unlocked yet. Otherwise, it contains first
+the location of balls, and then the configuration of strands (connections
+between balls). All data is seperated by colon characters ( .
+
+Each ball description consists of six fields; for example:
+b:Drained:-61.88:211.98:-0.96:1.75
+The fields are:
+- "b" (fixed)
+- "Drained" (fixed)
+- x-coordinate as a decimal number
+- y-coordinate as a decimal number
+- unknown decimal number
+- unknown decimal number
+The unknown numbers may be horizontal/vertical walking speed or something like
+that.
+
+Each strand description consists of seven fields; for example:
+s:Drained:288,20,9.000,140.0,0
+The fields are:
+- "s" (fixed)
+- "Drained" (fixed)
+- first endpoint (zero-based index of a ball in the list above)
+- second endpoint (same as above)
+- "9.0" (fixed): may be connection strength
+- decimal number: usually close to 140, may be length of strand but this can
+also be derived from its endpoints.
+- "0" or "1": indicates whether or not a ball was absorbed to create this
+strand, which is released if the strand is destroyed.
+
+Next, the online player key follows, which is prefixed by an underscore; the
+player key is 32 characters long and consists of lower-case hexadecimal digits.
+If the player has never connected to the internet, the key is empty.
+
+Since this key is used to authenticate players online, it should be kept
+private. I propose to take an MD5 hash code of the string and use that instead,
+so players can be identified without compromising their scoreboard standing.
+For example: "d41d8cd98f00b204e9800998ecf8427e" would be transformed to
+"74be16979710d4c4e7c6647856088456". If you do not want players to be globally
+identifiable, use an HMAC instead.
+
+The final field is a decimal integer, representing the number of newly collected
+goo balls since the player last visited World of Goo Corporation. This number is
+displayed on the main screen.
+
