@@ -7,7 +7,7 @@ import java.util.logging.Logger;
 import java.awt.*;
 
 /**
- * @author David Croft (david.croft@infotrek.net)
+ * @author David Croft (davidc@goofans.com)
  * @version $Id$
  */
 public class Resolution implements Comparable

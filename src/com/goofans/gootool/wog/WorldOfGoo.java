@@ -30,7 +30,7 @@ import org.w3c.dom.Node;
  * <p/>
  * // orig version exe 2,191,360
  *
- * @author David Croft (david.croft@infotrek.net)
+ * @author David Croft (davidc@goofans.com)
  * @version $Id$
  */
 public class WorldOfGoo

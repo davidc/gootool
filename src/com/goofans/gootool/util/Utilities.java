@@ -6,7 +6,7 @@ import java.util.logging.Logger;
 import java.nio.channels.FileChannel;
 
 /**
- * @author David Croft (david.croft@infotrek.net)
+ * @author David Croft (davidc@goofans.com)
  * @version $Id$
  */
 public class Utilities

@@ -10,7 +10,7 @@ import java.text.DateFormat;
 /**
  * TODO ESC to close dialog
  *
- * @author David Croft (david.croft@infotrek.net)
+ * @author David Croft (davidc@goofans.com)
  * @version $Id$
  */
 public class AboutDialog extends JDialog

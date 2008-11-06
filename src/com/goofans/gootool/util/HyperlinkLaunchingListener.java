@@ -5,7 +5,7 @@ import javax.swing.event.HyperlinkEvent;
 import java.io.IOException;
 
 /**
- * @author David Croft (david.croft@infotrek.net)
+ * @author David Croft (davidc@goofans.com)
 * @version $Id$
 */
 public class HyperlinkLaunchingListener implements HyperlinkListener

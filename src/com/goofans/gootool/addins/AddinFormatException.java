@@ -1,7 +1,7 @@
 package com.goofans.gootool.addins;
 
 /**
- * @author David Croft (david.croft@infotrek.net)
+ * @author David Croft (davidc@goofans.com)
  * @version $Id$
  */
 public class AddinFormatException extends Exception

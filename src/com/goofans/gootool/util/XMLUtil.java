@@ -13,7 +13,7 @@ import org.xml.sax.SAXException;
 import org.xml.sax.InputSource;
 
 /**
- * @author David Croft (david.croft@infotrek.net)
+ * @author David Croft (davidc@goofans.com)
  * @version $Id$
  */
 public class XMLUtil
