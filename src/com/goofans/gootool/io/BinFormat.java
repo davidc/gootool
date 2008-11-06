@@ -234,6 +234,7 @@ public class BinFormat
   }
 
 
+  @SuppressWarnings({"UseOfSystemOutOrSystemErr"})
   public static void main(String[] args) throws IOException, TransformerException
   {
     WorldOfGoo.init();
@@ -242,12 +243,11 @@ public class BinFormat
 
 //    Document doc = XMLUtil.loadDocumentFromInputStream(new ByteArrayInputStream(s.getBytes()));
     Document doc = XMLUtil.loadDocumentFromReader(new StringReader(s));
-    XMLUtil.writeDocumentToString(doc);
-//    System.out.println(XMLUtil.writeDocumentToString(doc));
+    System.out.println(XMLUtil.writeDocumentToString(doc));
 
     TESTMODE = true;
 
-//    testFile("properties\\resources.xml.bin");
+    testFile("properties/resources.xml.bin");
 //    testFile("res\\levels\\GoingUp\\GoingUp.level.bin");
 //    testFile("res\\levels\\GoingUp\\GoingUp.resrc.bin");
 //    testFile("res\\levels\\GoingUp\\GoingUp.scene.bin");

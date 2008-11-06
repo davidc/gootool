@@ -15,7 +15,7 @@ import java.util.logging.Logger;
  * @author David Croft (davidc@goofans.com)
  * @version $Id$
  */
-public class OptionsPanel
+public class OptionsPanel implements ViewComponent
 {
   private static final Logger log = Logger.getLogger(OptionsPanel.class.getName());
 
@@ -27,11 +27,8 @@ public class OptionsPanel
   private JCheckBox skipOpeningMovieCheckBox;
   private JTextField watermark;
 
-  private Controller controller;
-
   public OptionsPanel(Controller controller)
   {
-    this.controller = controller;
     for (Language language : Language.getSupportedLanguages()) {
       languageCombo.addItem(language);
     }

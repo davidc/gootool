@@ -27,7 +27,6 @@ import java.util.logging.Logger;
  */
 public class Controller implements ActionListener
 {
-
   private static final Logger log = Logger.getLogger(Controller.class.getName());
 
   public static final String CMD_EXIT = "Exit";
@@ -310,7 +309,7 @@ public class Controller implements ActionListener
     System.exit(0);
   }
 
-  public void save(boolean launch)
+  private void save(boolean launch)
   {
     updateModelFromView(editorConfig);
     // TODO validate here
@@ -365,7 +364,7 @@ public class Controller implements ActionListener
       liveConfig = WorldOfGoo.readConfiguration();
     }
     catch (IOException e) {
-      e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+      showErrorDialog("Error re-reading configuration!", "We recommend you restart GooTool. " + e.getMessage());
     }
     editorConfig = new Configuration(liveConfig);
     updateViewFromModel(editorConfig);
@@ -409,11 +408,6 @@ public class Controller implements ActionListener
     editorConfig = new Configuration(c);
 
 //    updateViewFromModel(editorConfig);
-  }
-
-  public Configuration getLiveConfig()
-  {
-    return liveConfig;
   }
 
   public Configuration getEditorConfig()

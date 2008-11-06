@@ -22,7 +22,8 @@ import org.w3c.dom.NodeList;
  * @version $Id$
  */
 public class AddinFactory
-{  private static final Logger log = Logger.getLogger(AddinFactory.class.getName());
+{
+//  private static final Logger log = Logger.getLogger(AddinFactory.class.getName());
 
   private static final XPathExpression XPATH_ADDIN_SPECVERSION;
   private static final XPathExpression XPATH_ADDIN_ID;
@@ -187,17 +188,16 @@ public class AddinFactory
   /**
    * Gets the node's value as an integer. Returns null if node not found or not a number.
    */
-  private static Integer getNodeIntegerValue(Document document, XPathExpression expression) throws XPathExpressionException
-  {
-    Object node = expression.evaluate(document, XPathConstants.NUMBER);
-
-    if (!(node instanceof Double) || ((Double) node).isNaN()) {
-//      throw new AddinFormatException("Node " + expression + " is not a numeric value.");
-      return null;
-    }
-
-    return ((Double) node).intValue();
-  }
+//  private static Integer getNodeIntegerValue(Document document, XPathExpression expression) throws XPathExpressionException
+//  {
+//    Object node = expression.evaluate(document, XPathConstants.NUMBER);
+//
+//    if (!(node instanceof Double) || ((Double) node).isNaN()) {
+//      return null;
+//    }
+//
+//    return ((Double) node).intValue();
+//  }
 
   /**
    * Gets the node's value as a string. Never returns null. Empty string if node not found.

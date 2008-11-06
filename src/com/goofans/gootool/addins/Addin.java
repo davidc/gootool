@@ -14,7 +14,8 @@ import java.util.logging.Logger;
  * @version $Id$
  */
 public class Addin
-{  private static final Logger log = Logger.getLogger(Addin.class.getName());
+{
+  private static final Logger log = Logger.getLogger(Addin.class.getName());
 
   public static final int TYPE_UNKNOWN = 0; // no loaded addin should ever have this type
   public static final int TYPE_MOD = 1;

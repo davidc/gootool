@@ -23,7 +23,7 @@ import java.util.logging.Logger;
  * @author David Croft (davidc@goofans.com)
  * @version $Id$
  */
-public class AddinsPanel
+public class AddinsPanel implements ViewComponent
 {
   private static final Logger log = Logger.getLogger(AddinsPanel.class.getName());
 
@@ -129,14 +129,7 @@ public class AddinsPanel
 
   public void updateModelFromView(Configuration c)
   {
-    //TODO?
-    //To change body of created methods use File | Settings | File Templates.
   }
-
-  //  private LinkedList<Addin> getAddins()
-//  {
-//    return controller.getEditorConfig().getAddins();
-//  }
 
   private class MyTableModel extends AbstractTableModel
   {

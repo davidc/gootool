@@ -100,7 +100,7 @@ public class TerseFormatter extends Formatter {
      * @param  length The string length. Negative values are clamped to 0.
      * @return A string of length <code>length</code> filled with white spaces.
      */
-    public static String spaces(int length) {
+    private static String spaces(int length) {
         // No need to synchronize.  In the unlikely event of two threads
         // calling this method at the same time and the two calls creating a
         // new string, the String.intern() call will take care of

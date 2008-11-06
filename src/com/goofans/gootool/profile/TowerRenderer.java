@@ -161,7 +161,7 @@ public class TowerRenderer implements ImageObserver
   }
 
   // Given "world" coordinates, map them to a point on our canvas.
-  public Point getPixelCoords(double x, double y)
+  private Point getPixelCoords(double x, double y)
   {
     int x2 = ((int) (x / WORLD_SCALE_TO_PIXELS) + xOffset);
     int y2 = (yOffset - (int) (y / WORLD_SCALE_TO_PIXELS));
@@ -288,7 +288,7 @@ public class TowerRenderer implements ImageObserver
     return false;
   }
 
-  public void rotateTest() throws IOException
+  private void rotateTest() throws IOException
   {
     File strandFile = WorldOfGoo.getResource("res\\balls\\Drained\\spring_goo.png");
 
@@ -348,7 +348,7 @@ public class TowerRenderer implements ImageObserver
 
     TowerRenderer tr = new TowerRenderer(t);
 
-//    tr.rotateTest();
+    tr.rotateTest();
 
     tr.render();
     System.err.println("Writing");

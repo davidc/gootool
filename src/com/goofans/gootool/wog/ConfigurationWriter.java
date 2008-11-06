@@ -159,7 +159,7 @@ public class ConfigurationWriter
     }
   }
 
-  private void writePrivateConfig(Configuration c) throws IOException
+  private void writePrivateConfig(Configuration c)
   {
     // Tool preferences
     Preferences p = Preferences.userNodeForPackage(GooTool.class);

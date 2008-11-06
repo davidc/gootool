@@ -35,8 +35,8 @@ public class Language
   }
 
 
-  private final static List<Language> LANGUAGES;
-  public final static Language DEFAULT_LANGUAGE;
+  private static final List<Language> LANGUAGES;
+  public static final Language DEFAULT_LANGUAGE;
 
   static {
     List<Language> languages = new ArrayList<Language>();
@@ -44,6 +44,7 @@ public class Language
     DEFAULT_LANGUAGE = new Language("en", "English");
     languages.add(DEFAULT_LANGUAGE);
     languages.add(new Language("es", "Spanish"));
+    languages.add(new Language("de", "German"));
     LANGUAGES = Collections.unmodifiableList(languages);
 
     // TODO populate this from http://cyanyde.com/~scaevolus/WorldOfGoo/properties/text.xml
