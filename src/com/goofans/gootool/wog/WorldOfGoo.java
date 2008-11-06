@@ -13,9 +13,7 @@ import com.goofans.gootool.GooTool;
 
 import javax.xml.xpath.*;
 import java.io.*;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.prefs.Preferences;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -65,6 +63,7 @@ public class WorldOfGoo
   static final String PREF_SCREENWIDTH = "screen_width";
   static final String PREF_SCREENHEIGHT = "screen_height";
   static final String PREF_UIINSET = "ui_inset";
+  static final String PREF_ADDINS = "addins";
 
   static final XPathExpression USER_CONFIG_XPATH_LANGUAGE;
   static final XPathExpression USER_CONFIG_XPATH_SCREENWIDTH;
@@ -279,12 +278,20 @@ public class WorldOfGoo
     int height = p.getInt(WorldOfGoo.PREF_SCREENHEIGHT, c.getResolution().getHeight());
     c.setResolution(Resolution.getResolutionByDimensions(width, height));
     c.setUiInset(p.getInt(WorldOfGoo.PREF_UIINSET, c.getUiInset()));
+
+    String addins = p.get(WorldOfGoo.PREF_ADDINS, null);
+    if (addins != null) {
+      StringTokenizer tok = new StringTokenizer(addins,  ",");
+      while (tok.hasMoreTokens()) {
+        c.enableAddin(tok.nextToken());
+      }
+    }
   }
 
 
   public static List<Addin> getAvailableAddins()
   {
-    return availableAddins;
+    return Collections.unmodifiableList(availableAddins);
   }
 
   @SuppressWarnings({"UseOfSystemOutOrSystemErr"})

@@ -82,10 +82,10 @@ public class GooTool
 //      JOptionPane.showMessageDialog(null, "Error reading current WoG configuration. Bailing out.", "GooTool Error", JOptionPane.ERROR_MESSAGE);
 //      System.exit(2);
     }
+    controller.setInitialConfiguration(c);
+
     mainFrame = new MainFrame(controller);
     controller.setMainFrame(mainFrame);
-
-    controller.setInitialConfiguration(c);
 
     mainFrame.pack();
     mainFrame.setVisible(true);

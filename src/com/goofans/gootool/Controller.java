@@ -17,6 +17,7 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -84,7 +85,6 @@ public class Controller implements ActionListener
     else if (cmd.equals(CMD_REVERT)) {
       log.info("Reverting");
       editorConfig = new Configuration(liveConfig);
-      // TODO now force all UI elements to update
       updateViewFromModel(editorConfig);
     }
     else if (cmd.equals(CMD_ADDIN_INSTALL)) {
@@ -105,7 +105,7 @@ public class Controller implements ActionListener
   private Addin getSelectedAddin()
   {
     int selectedRow = mainFrame.addinsPanel.addinTable.getSelectedRow();
-    return WorldOfGoo.getAvailableAddins().get(selectedRow);
+    return getDisplayAddins().get(selectedRow);
   }
 
   private void installAddin()
@@ -201,24 +201,26 @@ public class Controller implements ActionListener
   {
     Addin addin = getSelectedAddin();
 
+    // TODO better checking of satisfaction here (use editor config, i.e. what's enabled
+
     if (!addin.areDependenciesSatisfiedBy(WorldOfGoo.getAvailableAddins())) {
       log.info("Not installing because dependencies not satisfied");
       showErrorDialog("Can't enable " + addin.getName(), "Can't enable this addin because its dependencies aren't satisfied");
       return;
     }
 
-//    updateModelFromView(editorConfig);
-//    editorConfig.enableAddin(addin.getId());
-//    mainFrame.addinsPanel.updateViewFromModel(editorConfig);
-    showErrorDialog("Can't enable " + addin.getName(), "Enabling addins is disabled in this release. Check back at www.goofans.com soon!");
-  }
+//    showErrorDialog("Can't enable " + addin.getName(), "Enabling addins is disabled in this release. Check back at www.goofans.com soon!");
 
+    updateModelFromView(editorConfig);
+    editorConfig.enableAddin(addin.getId());
+    updateViewFromModel(editorConfig);
+  }
 
   private void disableAddin()
   {
     updateModelFromView(editorConfig);
     editorConfig.disableAddin(getSelectedAddin().getId());
-    mainFrame.addinsPanel.updateViewFromModel(editorConfig);
+    updateViewFromModel(editorConfig);
   }
 
 
@@ -238,19 +240,53 @@ public class Controller implements ActionListener
   }
 
 
-  public void reorderAddins(int srcRow, int destRow)
+  public void reorderAddins(final int srcRow, final int destRow)
   {
     log.fine("Reordering addins, " + srcRow + " to " + destRow);
 
 //    List<String> addins = editorConfig.getEnabledAddins();
-    List<Addin> addins = WorldOfGoo.getAvailableAddins();
 
-    Addin removed = addins.remove(srcRow);
-    log.fine("Addin being moved is " + removed);
-    if (destRow > srcRow) destRow--;
-    addins.add(destRow, removed);
+//    List<Addin> addins = WorldOfGoo.getAvailableAddins();
 
-    // TODO reorder it in our Configuration
+//    Addin removed = addins.remove(srcRow);
+//    log.fine("Addin being moved is " + removed);
+//    if (destRow > srcRow) destRow--;
+//    addins.add(destRow, removed);
+
+    String fromId = getDisplayAddins().get(srcRow).getId();
+    String toId = getDisplayAddins().get(destRow).getId();
+
+    log.fine("Reordering " + fromId + " before " + toId);
+
+
+    int fromEntry = -1;
+    int toEntry = -1;
+
+    List<String> enabledAddins = editorConfig.getEnabledAddins();
+
+    log.fine("Enabled addins: " + enabledAddins);
+
+    for (int i = 0; i < enabledAddins.size(); i++) {
+      String s = enabledAddins.get(i);
+
+      if (fromId.equals(s)) fromEntry = i;
+      if (toId.equals(s)) toEntry = i;
+    }
+
+    log.fine("Moving from pos " + fromEntry + " to " + toEntry);
+
+    if (fromEntry == -1 || toEntry == -1) {
+      log.fine("Can't reorder, something wasn't found");
+      return;
+    }
+
+    // TODO we should still let them drag to items at the end (disabled ones)
+
+    String removed = enabledAddins.remove(srcRow);
+    log.finest("removed = " + removed);
+    if (toEntry > fromEntry) toEntry--;
+    enabledAddins.add(toEntry, removed);
+
     mainFrame.addinsPanel.updateViewFromModel(editorConfig);
   }
 
@@ -325,6 +361,15 @@ public class Controller implements ActionListener
 
     progressDialog.setVisible(true);
 
+    try {
+      liveConfig = WorldOfGoo.readConfiguration();
+    }
+    catch (IOException e) {
+      e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+    }
+    editorConfig = new Configuration(liveConfig);
+    updateViewFromModel(editorConfig);
+
     // TODO refresh liveconfig from live
 
     if (launch) {
@@ -355,6 +400,7 @@ public class Controller implements ActionListener
   public void setMainFrame(MainFrame mainFrame)
   {
     this.mainFrame = mainFrame;
+    updateViewFromModel(editorConfig);
   }
 
   public void setInitialConfiguration(Configuration c)
@@ -362,7 +408,7 @@ public class Controller implements ActionListener
     liveConfig = c;
     editorConfig = new Configuration(c);
 
-    updateViewFromModel(editorConfig);
+//    updateViewFromModel(editorConfig);
   }
 
   public Configuration getLiveConfig()
@@ -390,5 +436,31 @@ public class Controller implements ActionListener
   private void updateModelFromView(Configuration c)
   {
     mainFrame.updateModelFromView(c);
+  }
+
+  public List<Addin> getDisplayAddins()
+  {
+    List<Addin> availableAddins = new ArrayList<Addin>(WorldOfGoo.getAvailableAddins());
+    List<Addin> displayAddins = new ArrayList<Addin>(availableAddins.size());
+
+    /* First, all the enabled addins, in order */
+
+    for (String id : getEditorConfig().getEnabledAddins()) {
+      for (Addin availableAddin : availableAddins) {
+        if (availableAddin.getId().equals(id)) {
+          displayAddins.add(availableAddin);
+          availableAddins.remove(availableAddin);
+          break;
+        }
+      }
+    }
+
+    /* Then any remaining addins */
+
+    for (Addin availableAddin : availableAddins) {
+      displayAddins.add(availableAddin);
+    }
+
+    return displayAddins;
   }
 }

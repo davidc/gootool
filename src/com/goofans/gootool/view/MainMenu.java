@@ -35,7 +35,7 @@ public class MainMenu
     menuItem.addActionListener(controller);
     menu.add(menuItem);
 
-    menuItem = new JMenuItem("Reload current configuration");
+    menuItem = new JMenuItem("Revert to saved configuration");
     menuItem.setMnemonic(KeyEvent.VK_R);
     menuItem.setActionCommand(Controller.CMD_REVERT);
     menuItem.addActionListener(controller);

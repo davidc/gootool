@@ -176,6 +176,14 @@ public class ConfigurationWriter
     p.putInt(WorldOfGoo.PREF_SCREENWIDTH, c.getResolution().getWidth());
     p.putInt(WorldOfGoo.PREF_SCREENHEIGHT, c.getResolution().getHeight());
     p.putInt(WorldOfGoo.PREF_UIINSET, c.getUiInset());
+
+    StringBuilder sb = new StringBuilder();
+    for (String s : c.getEnabledAddins()) {
+      if (sb.length() != 0) sb.append(',');
+      sb.append(s);
+    }
+
+    p.put(WorldOfGoo.PREF_ADDINS, sb.toString());
   }
 
   /*

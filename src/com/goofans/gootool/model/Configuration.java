@@ -27,13 +27,6 @@ public class Configuration
 
   public Configuration()
   {
-//    addins.add(new Addin("One"));
-//    addins.add(new Addin("Two"));
-//    addins.add(new Addin("Three"));
-//    addins.add(new Addin("Four"));
-//    addins.add(new Addin("Five"));
-//    addins.add(new Addin("Six"));
-//    addins.add(new Addin("Seven"));
   }
 
   public Configuration(Configuration c)
@@ -45,7 +38,6 @@ public class Configuration
     skipOpeningMovie = c.skipOpeningMovie;
     watermark = c.watermark;
 
-//    enabledAddins = new LinkedList<String>(c.enabledAddins);
     enabledAddins = new ArrayList<String>(c.enabledAddins);
   }
 
@@ -131,6 +123,11 @@ public class Configuration
   public List<String> getEnabledAddins()
   {
     return enabledAddins;
+  }
+
+  public void setEnabledAddins(List<String> enabledAddins)
+  {
+    this.enabledAddins = enabledAddins;
   }
 
   public boolean equals(Object o)
