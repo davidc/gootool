@@ -27,20 +27,18 @@
     <BallInstance type="water" x="-329.74" y="411.84" id="8" angle="0" />
     <BallInstance type="water" x="-329.74" y="411.84" id="9" angle="0" />
     <BallInstance type="water" x="-329.74" y="411.84" id="10" angle="0" />
-
   </xsl:template>
 
   <!-- Delete existing strand instances -->
   <xsl:template match="/level/Strand"/>
 
-
+  <!-- Set visual debug and insert new Strands -->
   <xsl:template match="/level">
     <xsl:copy>
       <xsl:copy-of select="@*"/>
       <!-- set visual debug. set attributes after copying them, so we can overwrite -->
       <!--<xsl:attribute name="visualdebug">true</xsl:attribute>-->
       <xsl:apply-templates/>
-
 
       <!-- Here is where we can insert nodes at the end of the file -->
       <!-- As a demo, just insert the new strands at the end -->
@@ -50,8 +48,6 @@
       <Strand gb1="2" gb2="3" />
       <Strand gb1="3" gb2="4" />
 
-
     </xsl:copy>
   </xsl:template>
-
 </xsl:transform>

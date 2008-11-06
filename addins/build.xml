@@ -22,6 +22,9 @@
     <!-- Read the XML file to get the addin name and version -->
     <xmlproperty file="${src.dir}/addin.xml"/>
 
+    <fail unless="addin.id" message="No Addin ID set in ${src.dir}"/>
+    <fail unless="addin.version" message="No Addin version set in ${src.dir}"/>
+
     <property name="out.file" value="${addins.dest}/${addin.id}_${addin.version}.goomod"/>
 
     <zip file="${out.file}">
