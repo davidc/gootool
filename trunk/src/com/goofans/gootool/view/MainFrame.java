@@ -8,17 +8,15 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.util.logging.Logger;
 
 /**
  * @author David Croft (davidc@goofans.com)
  * @version $Id$
  */
-public class MainFrame extends JFrame
+public class MainFrame extends JFrame implements ViewComponent
 {
-  private static final Logger log = Logger.getLogger(MainFrame.class.getName());
+//  private static final Logger log = Logger.getLogger(MainFrame.class.getName());
 
-  private JTabbedPane tabbedPane1;
   private JPanel rootPanel;
   private JButton saveButton;
   private JButton saveAndLaunchButton;
@@ -29,7 +27,7 @@ public class MainFrame extends JFrame
   private Controller controller;
 
   public AddinsPanel addinsPanel;
-  public OptionsPanel optionsPanel;
+  private OptionsPanel optionsPanel;
 
   public MainFrame(final Controller controller)
   {

@@ -102,7 +102,7 @@ public class XMLUtil
     StringWriter writer = new StringWriter();
     Result result = new StreamResult(writer);
 
-    // Write the DOM document to the file
+    // Write the DOM document to the string
     Transformer xformer = TransformerFactory.newInstance().newTransformer();
     xformer.transform(source, result);
 

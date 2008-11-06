@@ -39,18 +39,16 @@ public class Tower
       String type = tok.nextToken();
       if (type.equals("b")) {
         Ball ball = new Ball();
-        ball.ballType = tok.nextToken();
+        tok.nextToken(); // ball.ballType = tok.nextToken(); // don't need this
         ball.xPos = Double.parseDouble(tok.nextToken());
         ball.yPos = Double.parseDouble(tok.nextToken());
         tok.nextToken(); // ignore xMomentum
         tok.nextToken(); // ignore yMomentum
         balls.add(ball);
-
-//        usedStrandBalls++;
       }
       else if (type.equals("s")) {
         Strand strand = new Strand();
-        strand.strandType = tok.nextToken();
+        tok.nextToken(); // strand.strandType = tok.nextToken(); // don't need this
         strand.firstBall = balls.get(Integer.parseInt(tok.nextToken()));
         strand.secondBall = balls.get(Integer.parseInt(tok.nextToken()));
         tok.nextToken(); // ignore connectionStrength
@@ -63,7 +61,7 @@ public class Tower
         strand.secondBall.inStructure = true;
       }
       else {
-        throw new IOException("Invalid ball type " + type);
+        throw new IOException("Invalid tower element type " + type);
       }
     }
 
@@ -84,7 +82,7 @@ public class Tower
 
   public class Ball
   {
-    public String ballType;
+    //    public String ballType;
     public double xPos;
     public double yPos;
     //    public double xMomentum;
@@ -94,7 +92,7 @@ public class Tower
 
   public class Strand
   {
-    public String strandType;
+    //    public String strandType;
     public Ball firstBall;
     public Ball secondBall;
 //    public double connectionStrength;

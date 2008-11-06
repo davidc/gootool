@@ -125,11 +125,6 @@ public class Configuration
     return enabledAddins;
   }
 
-  public void setEnabledAddins(List<String> enabledAddins)
-  {
-    this.enabledAddins = enabledAddins;
-  }
-
   public boolean equals(Object o)
   {
     if (this == o) return true;
@@ -144,9 +139,7 @@ public class Configuration
     if (resolution != null ? !resolution.equals(that.resolution) : that.resolution != null) return false;
     if (watermark != null ? !watermark.equals(that.watermark) : that.watermark != null) return false;
 
-    if (!enabledAddins.equals(that.enabledAddins)) return false;
-
-    return true;
+    return enabledAddins.equals(that.enabledAddins);
   }
 
   public int hashCode()

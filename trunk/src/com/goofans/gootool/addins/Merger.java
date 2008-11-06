@@ -23,8 +23,7 @@ public class Merger
     this(new StringReader(BinFormat.decodeFile(encryptedFile)), transform);
   }
 
-
-  public Merger(Reader input, Reader transform) throws IOException, TransformerException
+  public Merger(Reader input, Reader transform) throws TransformerException
   {
     this.input = input;
 
@@ -37,7 +36,7 @@ public class Merger
     transformer.setParameter(name, value);
   }
 
-  public String merge() throws IOException, TransformerException
+  public String merge() throws TransformerException
   {
     Source src = new StreamSource(input);
     StringWriter writer = new StringWriter();

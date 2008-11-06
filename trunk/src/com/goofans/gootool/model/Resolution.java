@@ -17,7 +17,7 @@ public class Resolution implements Comparable
   private int width;
   private int height;
 
-  public Resolution(int width, int height)
+  private Resolution(int width, int height)
   {
     this.width = width;
     this.height = height;

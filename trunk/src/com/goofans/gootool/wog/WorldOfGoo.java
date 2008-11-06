@@ -8,7 +8,6 @@ import com.goofans.gootool.model.Language;
 import com.goofans.gootool.model.Resolution;
 import com.goofans.gootool.util.Utilities;
 import com.goofans.gootool.util.XMLUtil;
-import com.goofans.gootool.util.VersionSpec;
 import com.goofans.gootool.GooTool;
 
 import javax.xml.xpath.*;
@@ -137,7 +136,7 @@ public class WorldOfGoo
     updateAvailableAddins();
   }
 
-  public static void updateAvailableAddins()
+  private static void updateAvailableAddins()
   {
     availableAddins = new LinkedList<Addin>();
 
@@ -257,15 +256,15 @@ public class WorldOfGoo
     }
   }
 
-  private static void readPrivateConfig(Configuration c) throws IOException
+  private static void readPrivateConfig(Configuration c)
   {
     Preferences p = Preferences.userNodeForPackage(GooTool.class);
 
-    String versionStr = p.get(WorldOfGoo.PREF_LASTVERSION, null);
-    if (versionStr != null) {
-      VersionSpec lastVersion = new VersionSpec(versionStr);
+//    String versionStr = p.get(WorldOfGoo.PREF_LASTVERSION, null);
+//    if (versionStr != null) {
+//      VersionSpec lastVersion = new VersionSpec(versionStr);
       // Here we can put any upgrade stuff
-    }
+//    }
 
     c.setAllowWidescreen(p.getBoolean(PREF_ALLOW_WIDESCREEN, c.isAllowWidescreen()));
     c.setSkipOpeningMovie(p.getBoolean(PREF_SKIP_OPENING_MOVIE, c.isSkipOpeningMovie()));
@@ -281,7 +280,7 @@ public class WorldOfGoo
 
     String addins = p.get(WorldOfGoo.PREF_ADDINS, null);
     if (addins != null) {
-      StringTokenizer tok = new StringTokenizer(addins,  ",");
+      StringTokenizer tok = new StringTokenizer(addins, ",");
       while (tok.hasMoreTokens()) {
         c.enableAddin(tok.nextToken());
       }

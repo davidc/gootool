@@ -31,15 +31,7 @@ public class GooTool
 
   public static void main(String[] args)
   {
-
-    String systemLaf = UIManager.getSystemLookAndFeelClassName();
-    try {
-      UIManager.setLookAndFeel(systemLaf);
-      log.log(Level.FINER, "Changed look and feel to " + systemLaf);
-    }
-    catch (Exception e) {
-      log.log(Level.WARNING, "unable to change to look and feel to " + systemLaf, e);
-    }
+    setLookAndFeel();
 
     log.info("Launching gootool " + Version.RELEASE_FULL);
 
@@ -55,6 +47,18 @@ public class GooTool
       log.log(Level.SEVERE, "Uncaught exception", t);
       JOptionPane.showMessageDialog(null, "Uncaught exception (" + t.getClass().getName() + ") " + t.getLocalizedMessage(), "GooTool Exception", JOptionPane.ERROR_MESSAGE);
       System.exit(1);
+    }
+  }
+
+  private static void setLookAndFeel()
+  {
+    String systemLaf = UIManager.getSystemLookAndFeelClassName();
+    try {
+      UIManager.setLookAndFeel(systemLaf);
+      log.log(Level.FINER, "Changed look and feel to " + systemLaf);
+    }
+    catch (Exception e) {
+      log.log(Level.WARNING, "unable to change to look and feel to " + systemLaf, e);
     }
   }
 

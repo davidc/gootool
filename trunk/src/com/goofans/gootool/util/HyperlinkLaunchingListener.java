@@ -3,21 +3,25 @@ package com.goofans.gootool.util;
 import javax.swing.event.HyperlinkListener;
 import javax.swing.event.HyperlinkEvent;
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * @author David Croft (davidc@goofans.com)
-* @version $Id$
-*/
+ * @version $Id$
+ */
 public class HyperlinkLaunchingListener implements HyperlinkListener
 {
-  public void hyperlinkUpdate(HyperlinkEvent e)
+  private static final Logger log = Logger.getLogger(HyperlinkLaunchingListener.class.getName());
+
+  public void hyperlinkUpdate(HyperlinkEvent event)
   {
-    if (e.getEventType() == HyperlinkEvent.EventType.ACTIVATED) {
+    if (event.getEventType() == HyperlinkEvent.EventType.ACTIVATED) {
       try {
-        Runtime.getRuntime().exec(e.getURL().toString());
+        Runtime.getRuntime().exec(event.getURL().toString());
       }
-      catch (IOException e1) {
-        e1.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+      catch (IOException e) {
+        log.log(Level.WARNING, "Couldn't launch hyperlink " + event.getURL(), e);
       }
     }
   }
