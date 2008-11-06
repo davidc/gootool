@@ -30,7 +30,7 @@ public class TowerRenderer implements ImageObserver
   private static final int PRETTY_PADDING_X = 40;
   private static final int PRETTY_PADDING_Y = 40;//top only
 
-  private static final Dimension THUMBNAIL_MAXSIZE = new Dimension(200, 200);
+  private static final Dimension THUMBNAIL_MAXSIZE = new Dimension(200, 300);
 
   private Tower t;
   private Dimension fullSizeDimension;
@@ -242,10 +242,11 @@ public class TowerRenderer implements ImageObserver
     int prettyWidth = pretty.getWidth();
     int prettyHeight = pretty.getHeight();
 
-    double scale = THUMBNAIL_MAXSIZE.width / (double) prettyWidth;
-    if (((double) prettyHeight) * scale > THUMBNAIL_MAXSIZE.height) {
-      scale = THUMBNAIL_MAXSIZE.height / ((double) prettyHeight);
-    }
+    double scale1 = THUMBNAIL_MAXSIZE.width / (double) prettyWidth;
+//    if (((double) prettyHeight) * scale > THUMBNAIL_MAXSIZE.height) {
+      double scale2 = THUMBNAIL_MAXSIZE.height / ((double) prettyHeight);
+//    }
+    double scale = Math.min(scale1, scale2);
     log.finer("Thumbnail scale = " + scale);
 
     // if the image is already tiny
@@ -253,6 +254,7 @@ public class TowerRenderer implements ImageObserver
 
     int width = (int) (prettyWidth * scale);
     int height = (int) (prettyHeight * scale);
+    log.finer("Thumbnail size = " + width + " x " + height);
 
     thumbnail = new BufferedImage(width, height, BufferedImage.TYPE_3BYTE_BGR);
     Graphics2D g = thumbnail.createGraphics();
