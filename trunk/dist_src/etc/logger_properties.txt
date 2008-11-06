@@ -12,4 +12,4 @@ java.util.logging.FileHandler.pattern = %t/gootool%u.log
 java.util.logging.FileHandler.append = true
 java.util.logging.FileHandler.formatter = java.util.logging.SimpleFormatter
 
-net.infotrek.gootool.level = ALL
+com.goofans.gootool.level = ALL
