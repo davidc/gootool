@@ -10,7 +10,7 @@ import java.util.List;
  * <p/>
  * Needs to support equals() in order to determine whether we must prompt before exit.
  *
- * @author David Croft (david.croft@infotrek.net)
+ * @author David Croft (davidc@goofans.com)
  * @version $Id$
  */
 public class Configuration

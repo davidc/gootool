@@ -6,7 +6,7 @@ import java.util.Arrays;
 /**
  * Specification of a version in n.n.n.n format. (up to 4 numbers)
  *
- * @author David Croft (david.croft@infotrek.net)
+ * @author David Croft (davidc@goofans.com)
  * @version $Id$
  */
 public class VersionSpec implements Comparable<VersionSpec>

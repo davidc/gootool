@@ -19,7 +19,7 @@ import org.bouncycastle.crypto.params.KeyParameter;
 import org.w3c.dom.Document;
 
 /**
- * @author David Croft (david.croft@infotrek.net)
+ * @author David Croft (davidc@goofans.com)
  * @version $Id$
  */
 public class BinFormat

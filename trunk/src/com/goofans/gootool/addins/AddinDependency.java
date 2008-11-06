@@ -8,7 +8,7 @@ import java.util.logging.Logger;
 /**
  * Immutable after construction.
  *
- * @author David Croft (david.croft@infotrek.net)
+ * @author David Croft (davidc@goofans.com)
  * @version $Id$
  */
 public class AddinDependency

@@ -4,7 +4,7 @@ import javax.swing.filechooser.FileFilter;
 import java.io.File;
 
 /**
- * @author David Croft (david.croft@infotrek.net)
+ * @author David Croft (davidc@goofans.com)
  * @version $Id$
  */
 public class WogExeFileFilter extends FileFilter
