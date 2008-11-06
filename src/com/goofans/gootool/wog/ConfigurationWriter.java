@@ -26,8 +26,6 @@ import org.w3c.dom.Node;
 
 /**
  * Handles the actual writing of the configuration to the World of Goo directory.
- * <p/>
- * res/movie/2dboyLogo
  *
  * @author David Croft (davidc@goofans.com)
  * @version $Id$

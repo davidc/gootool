@@ -31,7 +31,7 @@ public class ProgressDialog extends JDialog implements ConfigurationProgressList
 
     setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 
-    setIconImage(GooTool.getTheInstance().getMainIconImage());
+    setIconImage(GooTool.getMainIconImage());
     setContentPane(rootPanel);
 //
 //    addWindowListener(new WindowAdapter()
@@ -44,7 +44,7 @@ public class ProgressDialog extends JDialog implements ConfigurationProgressList
 
     task.setText("");
 
-    iconLabel.setIcon(GooTool.getTheInstance().getMainIcon());
+    iconLabel.setIcon(GooTool.getMainIcon());
 
     pack();
   }
