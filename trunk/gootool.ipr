@@ -102,6 +102,10 @@
         <inspection_tool class="CharacterComparison" level="WARNING" enabled="true" />
         <inspection_tool class="SimpleDateFormatWithoutLocale" level="WARNING" enabled="true" />
         <inspection_tool class="DateToString" level="WARNING" enabled="true" />
+        <inspection_tool class="SystemOutErr" level="WARNING" enabled="true" />
+        <inspection_tool class="MissortedModifiers" level="WARNING" enabled="true">
+          <option name="m_requireAnnotationsFirst" value="true" />
+        </inspection_tool>
       </profile>
     </profiles>
     <list size="0" />

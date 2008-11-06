@@ -23,18 +23,49 @@ public class GooTool
 {
   private static final Logger log = Logger.getLogger(GooTool.class.getName());
 
-  private static GooTool theInstance;
-
-  private MainFrame mainFrame;
-
-  private Controller controller;
-  private final ImageIcon icon;
+  private static ImageIcon icon;
 
   private GooTool()
   {
-    theInstance = this;
-    controller = new Controller();
+  }
 
+  public static void main(String[] args)
+  {
+
+    String systemLaf = UIManager.getSystemLookAndFeelClassName();
+    try {
+      UIManager.setLookAndFeel(systemLaf);
+      log.log(Level.FINER, "Changed look and feel to " + systemLaf);
+    }
+    catch (Exception e) {
+      log.log(Level.WARNING, "unable to change to look and feel to " + systemLaf, e);
+    }
+
+    log.info("Launching gootool " + Version.RELEASE_FULL);
+
+    try {
+      initIcon();
+      initWog();
+
+      Configuration c = initModel();
+
+      initControllerAndView(c);
+    }
+    catch (Throwable t) {
+      log.log(Level.SEVERE, "Uncaught exception", t);
+      JOptionPane.showMessageDialog(null, "Uncaught exception (" + t.getClass().getName() + ") " + t.getLocalizedMessage(), "GooTool Exception", JOptionPane.ERROR_MESSAGE);
+      System.exit(1);
+    }
+  }
+
+  private static void initIcon()
+  {
+    icon = new ImageIcon(GooTool.class.getResource("/48x48.png"));
+    log.fine("icon = " + icon);
+  }
+
+  private static void initWog()
+  {
     // Locate WoG
     WorldOfGoo.init();
 
@@ -63,77 +94,41 @@ public class GooTool
         }
       }
     }
+  }
 
-
-    icon = new ImageIcon(getClass().getResource("/48x48.png"));
-    log.fine("icon = " + icon);
-
+  private static Configuration initModel()
+  {
     Configuration c;
     try {
       c = WorldOfGoo.readConfiguration();
     }
     catch (IOException e) {
       log.log(Level.SEVERE, "Error reading configuration", e);
-      //TODO temp for lang
-      JOptionPane.showMessageDialog(null, "Error reading current WoG configuration. Loading defaults.", "GooTool Error", JOptionPane.ERROR_MESSAGE);
-      c = new Configuration();
-
-      // Restore this:
-//      JOptionPane.showMessageDialog(null, "Error reading current WoG configuration. Bailing out.", "GooTool Error", JOptionPane.ERROR_MESSAGE);
-//      System.exit(2);
+      JOptionPane.showMessageDialog(null, "Error reading current WoG configuration: " + e.getLocalizedMessage(), "GooTool Error", JOptionPane.ERROR_MESSAGE);
+      System.exit(2);
+      return null;
     }
+    return c;
+  }
+
+  private static void initControllerAndView(Configuration c)
+  {
+    Controller controller = new Controller();
     controller.setInitialConfiguration(c);
 
-    mainFrame = new MainFrame(controller);
+    MainFrame mainFrame = new MainFrame(controller);
     controller.setMainFrame(mainFrame);
 
     mainFrame.pack();
     mainFrame.setVisible(true);
   }
 
-  public static void main(String[] args)
-  {
-//    try {
-//      initLogger();
-//    }
-//    catch (IOException e) {
-//      JOptionPane.showMessageDialog(null, "ERROR: Couldn't open our logfile: " + e.getLocalizedMessage(), "Error opening gootool", JOptionPane.ERROR_MESSAGE);
-//      e.printStackTrace();
-//      System.exit(1);
-//    }
-
-    String systemLaf = UIManager.getSystemLookAndFeelClassName();
-    try {
-      UIManager.setLookAndFeel(systemLaf);
-      log.log(Level.FINER, "Changed look and feel to " + systemLaf);
-    }
-    catch (Exception e) {
-      log.log(Level.WARNING, "unable to change to look and feel to " + systemLaf, e);
-    }
-
-    log.info("Launching gootool " + Version.RELEASE_FULL);
-
-    try {
-      new GooTool();
-    }
-    catch (Throwable t) {
-      log.log(Level.SEVERE, "Uncaught exception", t);
-      JOptionPane.showMessageDialog(null, "Uncaught exception (" + t.getClass().getName() + ") " + t.getLocalizedMessage(), "GooTool Exception", JOptionPane.ERROR_MESSAGE);
-      System.exit(1);
-    }
-  }
-
-  public static GooTool getTheInstance()
-  {
-    return theInstance;
-  }
-
-  public ImageIcon getMainIcon()
+  public static ImageIcon getMainIcon()
   {
     return icon;
   }
 
-  public Image getMainIconImage()
+  public static Image getMainIconImage()
   {
     return icon.getImage();
   }
