@@ -70,9 +70,6 @@ public class Utilities
     }
   }
 
-  /**
-   * Copies the file. Sets the last modified time of the new file to the same as the old file.
-   */
   public static void copyFile(File from, File to) throws IOException
   {
     FileChannel in = (new FileInputStream(from)).getChannel();
@@ -88,46 +85,5 @@ public class Utilities
     finally {
       in.close();
     }
-    to.setLastModified(from.lastModified());
-  }
-
-  // Removes a directory by removing all files in it first. TODO doesn't yet recurse(not sure if I want this)
-  public static void rmdirAll(File dir) throws IOException
-  {
-    for (File file : dir.listFiles()) {
-      if (!file.delete()) {
-        throw new IOException("Can't delete " + file);
-      }
-    }
-    if (!dir.delete()) {
-      throw new IOException("Can't delete " + dir);
-    }
-  }
-
-  private static final int BUFSIZ = 4096;
-
-  public static void copyStreams(InputStream is, OutputStream os) throws IOException
-  {
-    byte[] buf = new byte[BUFSIZ];
-
-    int numRead;
-    while ((numRead = is.read(buf, 0, BUFSIZ)) != -1) {
-      os.write(buf, 0, numRead);
-    }
-  }
-
-  public static String readStreamInfoString(InputStream is) throws IOException
-  {
-    StringBuilder sb = new StringBuilder();
-
-    char[] buf = new char[BUFSIZ];
-    BufferedReader r = new BufferedReader(new InputStreamReader(is));
-
-    int numRead;
-    while ((numRead = r.read(buf, 0, BUFSIZ)) != -1) {
-      sb.append(buf, 0, numRead);
-    }
-
-    return sb.toString();
   }
 }

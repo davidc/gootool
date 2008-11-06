@@ -8,19 +8,18 @@ import com.goofans.gootool.model.Language;
 import com.goofans.gootool.model.Resolution;
 import com.goofans.gootool.util.Utilities;
 import com.goofans.gootool.util.XMLUtil;
-import com.goofans.gootool.util.VersionSpec;
-import com.goofans.gootool.GooTool;
 
+import javax.xml.transform.TransformerException;
 import javax.xml.xpath.*;
 import java.io.*;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
-import java.util.prefs.Preferences;
+import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.w3c.dom.Document;
+import org.w3c.dom.Node;
 
 /**
  * Encapsulates the static data about World of Goo, i.e. path and version.
@@ -46,30 +45,23 @@ public class WorldOfGoo
   private static boolean wogFound;
   private static File wogDir;
   private static File addinsDir;
-  private static File customDir;
 
   private static List<Addin> availableAddins;
 
   private static final String EXE_FILENAME = "WorldOfGoo.exe";
-  static final String USER_CONFIG_FILE = "properties/config.txt";
-//  static final String GOOTOOL_CONFIG_FILE = "properties/gootool.txt";
+  private static final String USER_CONFIG_FILE = "properties/config.txt";
+  private static final String GOOTOOL_CONFIG_FILE = "properties/gootool.txt";
 
   private static final String ADDIN_DIR = "addins";
-  private static final String CUSTOM_DIR = "custom";
 
-  static final String PREF_LASTVERSION = "gootool_version";
-  static final String PREF_ALLOW_WIDESCREEN = "allow_widescreen";
-  static final String PREF_SKIP_OPENING_MOVIE = "skip_opening_movie";
-  static final String PREF_WATERMARK = "watermark";
-  static final String PREF_LANGUAGE = "language";
-  static final String PREF_SCREENWIDTH = "screen_width";
-  static final String PREF_SCREENHEIGHT = "screen_height";
-  static final String PREF_UIINSET = "ui_inset";
+  private static final String PROP_ALLOW_WIDESCREEN = "allow_widescreen";
+  private static final String PROP_SKIP_OPENING_MOVIE = "skip_opening_movie";
+  private static final String PROP_WATERMARK = "watermark";
 
-  static final XPathExpression USER_CONFIG_XPATH_LANGUAGE;
-  static final XPathExpression USER_CONFIG_XPATH_SCREENWIDTH;
-  static final XPathExpression USER_CONFIG_XPATH_SCREENHEIGHT;
-  static final XPathExpression USER_CONFIG_XPATH_UIINSET;
+  private static final XPathExpression USER_CONFIG_XPATH_LANGUAGE;
+  private static final XPathExpression USER_CONFIG_XPATH_SCREENWIDTH;
+  private static final XPathExpression USER_CONFIG_XPATH_SCREENHEIGHT;
+  private static final XPathExpression USER_CONFIG_XPATH_UIINSET;
 
   public static final String GOOMOD_EXTENSION = "goomod";
   private static final String GOOMOD_EXTENSION_WITH_DOT = "." + GOOMOD_EXTENSION;
@@ -133,7 +125,6 @@ public class WorldOfGoo
     wogDir = searchPath;
 
     addinsDir = new File(wogDir, ADDIN_DIR);
-    customDir = new File(wogDir, CUSTOM_DIR);
 
     updateAvailableAddins();
   }
@@ -197,13 +188,8 @@ public class WorldOfGoo
 
   public static void launch() throws IOException
   {
-    File exe = new File(getCustomDir(), EXE_FILENAME);
-    log.log(Level.FINE, "Launching " + exe + " in " + customDir);
-
-    // TODO why does this take forever when launchind under IDEA?
-    ProcessBuilder pb = new ProcessBuilder(exe.getAbsolutePath());
-    pb.directory(customDir);
-    pb.start();
+    File exe = new File(getWogDir(), EXE_FILENAME);
+    Runtime.getRuntime().exec(exe.getAbsolutePath(), null, wogDir);
   }
 
   public static File getWogDir() throws IOException
@@ -214,18 +200,13 @@ public class WorldOfGoo
     return wogDir;
   }
 
-  public static File getCustomDir() throws IOException
+  public static void writeConfiguration(Configuration c) throws IOException
   {
-    if (!wogFound) {
-      throw new IOException("WoG isn't found yet");
-    }
-    return customDir;
+    writeUserConfig(c);
+    writePrivateConfig(c);
   }
 
 
-  /**
-   * Loads the defaults from main config.txt. These are overwritten by our preferences if we have any.
-   */
   private static void readUserConfig(Configuration c) throws IOException
   {
     // Load the users's config.txt
@@ -260,27 +241,67 @@ public class WorldOfGoo
 
   private static void readPrivateConfig(Configuration c) throws IOException
   {
-    Preferences p = Preferences.userNodeForPackage(GooTool.class);
-
-    String versionStr = p.get(WorldOfGoo.PREF_LASTVERSION, null);
-    if (versionStr != null) {
-      VersionSpec lastVersion = new VersionSpec(versionStr);
-      // Here we can put any upgrade stuff
+    // Load our private parameters out of our own config file
+    Properties p = new Properties();
+    File toolConfig = new File(getWogDir(), GOOTOOL_CONFIG_FILE);
+    if (toolConfig.exists()) {
+      FileInputStream is = new FileInputStream(toolConfig);
+      p.load(is);
+      is.close();
+      c.setAllowWidescreen(Boolean.valueOf(p.getProperty(PROP_ALLOW_WIDESCREEN)));
+      c.setSkipOpeningMovie(Boolean.valueOf(p.getProperty(PROP_SKIP_OPENING_MOVIE)));
+      c.setWatermark(p.getProperty(PROP_WATERMARK));
     }
-
-    c.setAllowWidescreen(p.getBoolean(PREF_ALLOW_WIDESCREEN, c.isAllowWidescreen()));
-    c.setSkipOpeningMovie(p.getBoolean(PREF_SKIP_OPENING_MOVIE, c.isSkipOpeningMovie()));
-    c.setWatermark(p.get(WorldOfGoo.PREF_WATERMARK, ""));
-
-    String languageStr = p.get(WorldOfGoo.PREF_LANGUAGE, null);
-    if (languageStr != null) c.setLanguage(Language.getLanguageByCode(languageStr));
-
-    int width = p.getInt(WorldOfGoo.PREF_SCREENWIDTH, c.getResolution().getWidth());
-    int height = p.getInt(WorldOfGoo.PREF_SCREENHEIGHT, c.getResolution().getHeight());
-    c.setResolution(Resolution.getResolutionByDimensions(width, height));
-    c.setUiInset(p.getInt(WorldOfGoo.PREF_UIINSET, c.getUiInset()));
+    else {
+      c.setAllowWidescreen(false);
+      c.setSkipOpeningMovie(false);
+      c.setWatermark("");
+    }
   }
 
+  private static void writeUserConfig(Configuration c) throws IOException
+  {
+    // Load the users's config.txt
+    Document document = XMLUtil.loadDocumentFromFile(new File(getWogDir(), USER_CONFIG_FILE));
+
+    try {
+      Node n = (Node) USER_CONFIG_XPATH_LANGUAGE.evaluate(document, XPathConstants.NODE);
+      n.setNodeValue(c.getLanguage().getCode());
+
+      n = (Node) USER_CONFIG_XPATH_SCREENWIDTH.evaluate(document, XPathConstants.NODE);
+      n.setNodeValue(String.valueOf(c.getResolution().getWidth()));
+
+      n = (Node) USER_CONFIG_XPATH_SCREENHEIGHT.evaluate(document, XPathConstants.NODE);
+      n.setNodeValue(String.valueOf(c.getResolution().getHeight()));
+
+      n = (Node) USER_CONFIG_XPATH_UIINSET.evaluate(document, XPathConstants.NODE);
+      n.setNodeValue(String.valueOf(c.getUiInset()));
+    }
+    catch (XPathExpressionException e) {
+      throw new IOException("Unable to execute XPath", e);
+    }
+
+    try {
+      XMLUtil.writeDocumentToFile(document, new File(getWogDir(), USER_CONFIG_FILE + ".new"));
+    }
+    catch (TransformerException e) {
+      throw new IOException("Unable to write config file", e);
+    }
+
+  }
+
+  private static void writePrivateConfig(Configuration c) throws IOException
+  {
+    // Tool properties
+    Properties p = new Properties();
+    p.setProperty(PROP_ALLOW_WIDESCREEN, String.valueOf(c.isAllowWidescreen()));
+    p.setProperty(PROP_SKIP_OPENING_MOVIE, String.valueOf(c.isSkipOpeningMovie()));
+    p.setProperty(PROP_WATERMARK, c.getWatermark());
+
+    FileOutputStream os = new FileOutputStream(new File(getWogDir(), GOOTOOL_CONFIG_FILE));
+    p.store(os, "GooTool config");
+    os.close();
+  }
 
   public static List<Addin> getAvailableAddins()
   {
@@ -295,7 +316,7 @@ public class WorldOfGoo
     Configuration c = readConfiguration();
     System.out.println("c = " + c);
 
-//    writeConfiguration(c);
+    writeConfiguration(c);
   }
 
   private static File getAddinInstalledFile(String addinId)

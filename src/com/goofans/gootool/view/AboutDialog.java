@@ -28,7 +28,7 @@ public class AboutDialog extends JDialog
     setLocationByPlatform(true);
     setResizable(false);
 
-    setIconImage(GooTool.getTheInstance().getMainIconImage());
+    setIconImage(GooTool.getTheInstance().getMainIcon());
 
     setContentPane(rootPanel);
 

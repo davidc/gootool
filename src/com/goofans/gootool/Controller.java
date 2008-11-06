@@ -6,9 +6,7 @@ import com.goofans.gootool.model.Configuration;
 import com.goofans.gootool.view.AboutDialog;
 import com.goofans.gootool.view.MainFrame;
 import com.goofans.gootool.view.AddinPropertiesDialog;
-import com.goofans.gootool.view.ProgressDialog;
 import com.goofans.gootool.wog.WorldOfGoo;
-import com.goofans.gootool.wog.ConfigurationWriter;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -67,11 +65,18 @@ public class Controller implements ActionListener
       openAboutDialog();
     }
     else if (cmd.equals(CMD_SAVE)) {
-      save(false);
+      save();
     }
     else if (cmd.equals(CMD_SAVE_AND_LAUNCH)) {
-      save(true);
-
+      save();
+      // if no errors
+      try {
+        WorldOfGoo.launch();
+      }
+      catch (IOException e) {
+        log.log(Level.SEVERE, "Error launching WoG", e);
+        showErrorDialog("Error launching World of Goo", e.getLocalizedMessage());
+      }
     }
     else if (cmd.equals(CMD_EXIT)) {
       maybeExit();
@@ -274,70 +279,10 @@ public class Controller implements ActionListener
     System.exit(0);
   }
 
-  public void save(boolean launch)
+  public void save()
   {
     updateModelFromView(editorConfig);
-    // TODO validate here
-
-    try {
-      if (!WorldOfGoo.getCustomDir().exists()) {
-        showMessageDialog("Since this is the first time you have run GooTool, it wiil take quite a long time for the initial save.");
-      }
-    }
-    catch (IOException e) {
-      // shouldn't happen
-      log.log(Level.SEVERE, "Couldn't get custom dir", e);
-    }
-
-    final ConfigurationWriter configWriter = new ConfigurationWriter();
-
-    final ProgressDialog progressDialog = new ProgressDialog(mainFrame, "Building your World of Goo");
-    configWriter.addListener(progressDialog);
-
-
-    new Thread()
-    {
-      public void run()
-      {
-        try {
-          configWriter.writeConfiguration(editorConfig);
-          SwingUtilities.invokeLater(new Runnable()
-          {
-            public void run()
-            {
-              progressDialog.setVisible(false);
-            }
-          });
-        }
-        catch (final IOException e) {
-          log.log(Level.SEVERE, "Error writing configuration", e);
-          SwingUtilities.invokeLater(new Runnable()
-          {
-            public void run()
-            {
-              showErrorDialog("Error writing configuration", e.getMessage());
-              progressDialog.setVisible(false);
-            }
-          });
-        }
-      }
-    }.start();
-
-    progressDialog.setVisible(true);
-
-    // TODO refresh liveconfig from live
-
-    if (launch) {
-      // TODO must block here until
-      // if no errors
-      try {
-        WorldOfGoo.launch();
-      }
-      catch (IOException e) {
-        log.log(Level.SEVERE, "Error launching WoG", e);
-        showErrorDialog("Error launching World of Goo", e.getLocalizedMessage());
-      }
-    }
+    // TODO now write this out to WorldOfGoo.save. And copyFile it to liveConfig if no failure.
   }
 
   private JDialog aboutDialog;

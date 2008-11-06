@@ -162,7 +162,7 @@ public class ProfilePanel implements ActionListener
               d.setTitle("Tower");
               BufferedImage prettyImg = tr.getPretty();
               d.setPreferredSize(new Dimension(prettyImg.getWidth(), prettyImg.getHeight()));
-              d.setIconImage(GooTool.getTheInstance().getMainIconImage());
+              d.setIconImage(GooTool.getTheInstance().getMainIcon());
               JLabel jLabel = new JLabel(new ImageIcon(prettyImg));
               jLabel.setBorder(new LineBorder(Color.BLACK));
               d.add(jLabel);
