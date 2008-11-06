@@ -26,7 +26,7 @@
     <minVersion>1.6.0</minVersion>
     <maxVersion></maxVersion>
     <jdkPreference>preferJre</jdkPreference>
-    <opt>-Djava.util.logging.config.file=etc/logger.properties</opt>
+    <opt>-Djava.util.logging.config.file=etc/logger_properties.txt</opt>
   </jre>
   <versionInfo>
     <fileVersion>0.0.0.0</fileVersion>
