@@ -3,8 +3,6 @@
 
 - let them save tower jpgs (and the original transparent one)
 
-- verify addin spec version
-
 - loading status windows while doing long activities (e.g. initial load, profile gen, upload, merge)
 
 - Don't SAVE if unmodified on LAUNCH
@@ -30,6 +28,7 @@ check dependencies
 store wog location in registry
 
 web report on what balls are used, by what levels, etc.
+- where is this image used?
 
 tood: It is illegal to override a file in the World of Goo directory itself, and GooTool will not load the addin if it has files directly inside override.
 
@@ -37,3 +36,11 @@ tood: It is illegal to override a file in the World of Goo directory itself, and
 remove wog references
 
 can't access our formatter currently inside the jar/exe
+
+show current JRE info on about->version
+
+- preference, upload tower on goo exit, or upload tower continuously during play (need to detect when process exits - java.lang.Process?)
+
+stick custom dir in user homedir or something?
+
+- Perhaps stop overrides of Drained files, to prevent cheating in goocorp?

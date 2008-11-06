@@ -108,7 +108,7 @@ public class AddinsPanel
       uninstallButton.setEnabled(false);
     }
     else {
-      Addin addin = WorldOfGoo.getAvailableAddins().get(row);
+      Addin addin = controller.getDisplayAddins().get(row);
       boolean isEnabled = controller.getEditorConfig().isEnabledAdddin(addin.getId());
 
       propertiesButton.setEnabled(true);
@@ -142,7 +142,7 @@ public class AddinsPanel
   {
     public int getRowCount()
     {
-      return WorldOfGoo.getAvailableAddins().size();
+      return controller.getDisplayAddins().size();
     }
 
     public int getColumnCount()
@@ -152,7 +152,7 @@ public class AddinsPanel
 
     public Object getValueAt(int rowIndex, int columnIndex)
     {
-      Addin addin = WorldOfGoo.getAvailableAddins().get(rowIndex);
+      Addin addin = controller.getDisplayAddins().get(rowIndex);
 
       if (columnIndex == 0) return addin.getName();
       if (columnIndex == 1) return addin.getTypeText();
@@ -192,11 +192,9 @@ public class AddinsPanel
   {
     public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column)
     {
-      java.util.List<Addin> addins = WorldOfGoo.getAvailableAddins();
+      Addin addin = controller.getDisplayAddins().get(row);
 
-      Addin addin = addins.get(row);
-
-      if (addin.areDependenciesSatisfiedBy(addins)) {
+      if (addin.areDependenciesSatisfiedBy(WorldOfGoo.getAvailableAddins())) {
         setForeground(Color.BLACK);
       }
       else {
@@ -225,17 +223,30 @@ public class AddinsPanel
     protected Transferable createTransferable(JComponent c)
     {
       int row = ((JTable) c).getSelectedRow();
-      if (row < 0) {
+      if (row < 0) return null;
+
+      String addinId = controller.getDisplayAddins().get(row).getId();
+
+      if (!controller.getEditorConfig().isEnabledAdddin(addinId)) {
         return null;
       }
-      else {
-        return new MyTransferable(row);
-      }
+
+      return new MyTransferable(row);
     }
 
     public boolean canImport(TransferSupport support)
     {
-      return support.isDataFlavorSupported(FLAVOR);
+      if (!support.isDataFlavorSupported(FLAVOR))
+      return false;
+
+
+//      DropLocation dropLocation = support.getDropLocation();
+//
+//      if (!(support.getDropLocation() instanceof JTable.DropLocation)) {
+//        return false;
+//      }
+      // TODO check they're not dropping it below the end of hte table
+      return true;
     }
 
     public boolean importData(TransferSupport support)
