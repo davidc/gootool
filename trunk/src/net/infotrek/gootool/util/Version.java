@@ -8,7 +8,7 @@ import java.text.SimpleDateFormat;
 /**
  * Static access to the build/release version information.
  *
- * @author David Croft (david@infotrek.net)
+ * @author David Croft (david.croft@infotrek.net)
  * @version $Id: Version.java 187 2008-05-13 12:18:42Z david $
  */
 public class Version
@@ -20,17 +20,17 @@ public class Version
   public static final String RELEASE_FULL;
   public static final Date RELEASE_DATE;
 
-  public static final String BUILD_USER = "david";
-  public static final Date BUILD_DATE = new Date();
-  public static final String BUILD_JAVA = "java";
-  public static final String BUILD_OS = "win";
+  public static final String BUILD_USER;
+  public static final Date BUILD_DATE;
+  public static final String BUILD_JAVA;
+  public static final String BUILD_OS;
 
   static
   {
     try {
       Properties p = new Properties();
       p.load(Version.class.getResourceAsStream("/release.properties"));
-//      p.load(Version.class.getResourceAsStream("/build.properties"));
+      p.load(Version.class.getResourceAsStream("/build.properties"));
 
       RELEASE_MAJOR = Integer.parseInt(p.getProperty("release.major", "0"));
       RELEASE_MINOR = Integer.parseInt(p.getProperty("release.minor", "0"));
@@ -45,10 +45,10 @@ public class Version
       }
       RELEASE_FULL = releaseFull;
 
-//      BUILD_USER = p.getProperty("build.user");
-//      BUILD_DATE = new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.ENGLISH).parse(p.getProperty("build.date"));
-//      BUILD_JAVA = p.getProperty("build.java");
-//      BUILD_OS = p.getProperty("build.os");
+      BUILD_USER = p.getProperty("build.user");
+      BUILD_DATE = new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.ENGLISH).parse(p.getProperty("build.date"));
+      BUILD_JAVA = p.getProperty("build.java");
+      BUILD_OS = p.getProperty("build.os");
 
     }
     catch (Exception e) {

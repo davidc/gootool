@@ -69,7 +69,7 @@ public class AboutDialog extends JDialog
     DateFormat df = DateFormat.getDateInstance(DateFormat.MEDIUM);
     versionField.setText(Version.RELEASE_FULL + " (" + df.format(Version.RELEASE_DATE) + ")");
     df = DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.MEDIUM);
-    buildField.setText(df.format(Version.BUILD_DATE) + " by " + Version.BUILD_USER + " on " + Version.BUILD_JAVA);
+    buildField.setText(df.format(Version.BUILD_DATE) + " by " + Version.BUILD_USER + " using " + Version.BUILD_JAVA);
 
     pack();
   }
