@@ -21,7 +21,6 @@
     <li><b>SmallDivide</b> - Removes all black balls and adds a new structure of drip balls.</li>
   </ul>
 
-<!--<br/><br/>-->
    <p>N.B. This test addin modifies existing game levels. It is intended for test purposes only, so don't make
     any changes that could allow leaderboard fudging (e.g. changing to ivy balls would allow them to save more
     balls).</p>
@@ -34,7 +33,6 @@
   <!-- Other addins this one depends on. -->
   <dependencies>
     <depends ref="net.davidc.test.mynewball" min-version="1.0" max-version="1.0"/>
-    <depends ref="com.2dboy.talic.fsbalxxxxxxxxxxxxxxxxxxxlfsbalxxxxxxxxxxxxxxxxxxxlfsbalxxxxxxxxxxxxxxxxxxxlfsbalxxxxxxxxxxxxxxxxxxxlfsbalxxxxxxxxxxxxxxxxxxxlfsbalxxxxxxxxxxxxxxxxxxxlfsbalxxxxxxxxxxxxxxxxxxxlfsbalxxxxxxxxxxxxxxxxxxxlfsbalxxxxxxxxxxxxxxxxxxxl"/>
     <depends ref="net.davidc.test.mynewball3" min-version="15"/>
   </dependencies>
 </addin>

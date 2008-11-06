@@ -162,7 +162,7 @@
   </target>
 
   <target name="obfuscate" depends="jar">
-    <proguard printmapping="proguard.${gootool.version.full}.mapping" optimizationpasses="3" overloadaggressively="true" repackageclasses="" allowaccessmodification="true"
+    <proguard printmapping="mapping/${gootool.version.full}.mapping" optimizationpasses="3" overloadaggressively="true" repackageclasses="" allowaccessmodification="true"
             renamesourcefileattribute="SourceFile">
       <keepattribute name="SourceFile"/>
       <keepattribute name="LineNumberTable"/>

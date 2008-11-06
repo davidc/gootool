@@ -215,7 +215,7 @@ public class Controller implements ActionListener
 //    updateModelFromView(editorConfig);
 //    editorConfig.enableAddin(addin.getId());
 //    mainFrame.addinsPanel.updateViewFromModel(editorConfig);
-    showErrorDialog("Can't enable " + addin.getName(), "Enabling addins is disabled in this release. Check goo.davidc.net soon!");
+    showErrorDialog("Can't enable " + addin.getName(), "Enabling addins is disabled in this release. Check back at www.goofans.com soon!");
   }
 
 
