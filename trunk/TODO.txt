@@ -27,4 +27,13 @@ when installing make sure not existing addin with that id
 check dependencies
 
 
-replace good.davidc.net refs before release
+store wog location in registry
+
+web report on what balls are used, by what levels, etc.
+
+tood: It is illegal to override a file in the World of Goo directory itself, and GooTool will not load the addin if it has files directly inside override.
+
+
+remove wog references
+
+can't access our formatter currently inside the jar/exe
