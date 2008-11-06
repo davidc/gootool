@@ -18,7 +18,7 @@
     <windowTitle>World of Goo Tool</windowTitle>
   </singleInstance>
   <classPath>
-    <mainClass>net.infotrek.gootool.GooTool</mainClass>
+    <mainClass>com.goofans.gootool.GooTool</mainClass>
     <cp>lib/*</cp>
   </classPath>
   <jre>
