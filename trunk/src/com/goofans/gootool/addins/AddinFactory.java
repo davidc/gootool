@@ -42,6 +42,8 @@ public class AddinFactory
 
   private static final VersionSpec SPEC_VERSION_1_0 = new VersionSpec("1.0");
 
+  private static final String GOOMOD_MANIFEST = "addin.xml";
+
 
   static {
     XPath path = XPathFactory.newInstance().newXPath();
@@ -70,7 +72,7 @@ public class AddinFactory
     ZipFile zipFile = new ZipFile(file);
 
     try {
-      ZipEntry manifestEntry = zipFile.getEntry("addin.xml");
+      ZipEntry manifestEntry = zipFile.getEntry(GOOMOD_MANIFEST);
 
       if (manifestEntry == null) {
         throw new AddinFormatException("No manifest found, is this an addin?");

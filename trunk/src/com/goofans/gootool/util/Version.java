@@ -20,13 +20,14 @@ public class Version
   public static final String RELEASE_FULL;
   public static final Date RELEASE_DATE;
 
+  public static final VersionSpec RELEASE;
+
   public static final String BUILD_USER;
   public static final Date BUILD_DATE;
   public static final String BUILD_JAVA;
   public static final String BUILD_OS;
 
-  static
-  {
+  static {
     try {
       Properties p = new Properties();
       p.load(Version.class.getResourceAsStream("/release.properties"));
@@ -37,11 +38,12 @@ public class Version
       RELEASE_MICRO = Integer.parseInt(p.getProperty("release.micro", "0"));
       RELEASE_TYPE = p.getProperty("release.type");
       RELEASE_DATE = new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.ENGLISH).parse(p.getProperty("release.date"));
+      RELEASE = new VersionSpec(RELEASE_MAJOR, RELEASE_MINOR, RELEASE_MICRO);
 
       String releaseFull;
       releaseFull = RELEASE_MAJOR + "." + RELEASE_MINOR + "." + RELEASE_MICRO;
       if (RELEASE_TYPE.length() > 0) {
-        releaseFull  += "-" + RELEASE_TYPE;
+        releaseFull += "-" + RELEASE_TYPE;
       }
       RELEASE_FULL = releaseFull;
 
