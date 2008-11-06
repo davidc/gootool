@@ -3,7 +3,7 @@
   <id>com.2dboy.talic.football</id>
 
   <!-- name shown to user -->
-  <name>Football Towers</name>
+  <name>GooCorp Footballs</name>
 
   <!-- either "mod" or "level". For user display, and to determine whether to create a chapter 5 entry -->
   <type>mod</type>

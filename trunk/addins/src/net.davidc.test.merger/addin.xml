@@ -1,10 +1,9 @@
 <addin spec-version="1.0">
-
   <!-- The unique ID of this addin. Read the spec for uniqueness and format requirements. -->
   <id>net.davidc.test.merger</id>
 
   <!-- Short display name shown to user. -->
-  <name>5Merger Test</name>
+  <name>Merger Test</name>
 
   <!-- either "mod" or "level". For user display, and to determine whether to create a chapter 5 entry -->
   <type>mod</type>
@@ -29,7 +28,7 @@
     </html>
   ]]></description>
 
-  <!-- Author shown to user on mod properties. -->
+  <!-- Author shown to user. -->
   <author>davidc</author>
 
   <!-- Other addins this one depends on. -->

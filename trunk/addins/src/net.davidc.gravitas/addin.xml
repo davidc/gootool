@@ -1,23 +1,31 @@
 <addin spec-version="1.0">
-  <!-- The unique ID of this addin. Used to check if it's already installed or compare its version -->
+  <!-- The unique ID of this addin. Read the spec for uniqueness and format requirements. -->
   <id>net.davidc.gravitas</id>
 
-  <!-- name shown to user -->
+  <!-- Short display name shown to user. -->
   <name>Gravitas</name>
 
   <!-- either "mod" or "level". For user display, and to determine whether to create a chapter 5 entry -->
   <type>level</type>
 
-  <!-- Version. Must be numerically comparable at each "." boundary. You could also do it without periods. 11281 is a fine version number.-->
+  <!-- Version. Must be numerically comparable in each "."-delimited component. You could also do it without periods at all, e.g. 11281.-->
   <version>0.5</version>
 
-  <!-- description shown to user -->
-  <description>This is a lovely level you can play!</description>
+  <!-- Description shown to user when mod is selected. Basic HTML is allowed if you put it in a CDATA and surround it with <html></html>. -->
+  <description>This is a lovely level you can play. It has awesome gravity!</description>
 
-  <!-- author shown to user -->
-  <author>davidc/grav</author>
+  <!-- Author shown to user. -->
+  <author>davidc</author>
 
+  <!-- Other addins this one depends on. -->
+  <dependencies>
+    <depends ref="net.davidc.test.mynewball" min-version="1.0"/>
+  </dependencies>
+
+  <!-- Details about this level -->
   <level>
-    <name>... level details to appear on ch 5</name>
+    <dir>Gravitas</dir>
+    <name text="Gravitas" de="Schwerkraftas"/>
+    <subtitle text="weighty matters" de="gewichtige Angelegenheiten"/>
   </level>
 </addin>

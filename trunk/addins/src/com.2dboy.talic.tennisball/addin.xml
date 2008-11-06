@@ -1,9 +1,9 @@
 <addin spec-version="1.0">
   <!-- The unique ID of this addin. Used to check if it's already installed or compare its version -->
-  <id>com.2dboy.talic.basketball</id>
+  <id>com.2dboy.talic.tennisball</id>
 
   <!-- name shown to user -->
-  <name>Football Towers</name>
+  <name>GooCorp Tennis Balls</name>
 
   <!-- either "mod" or "level". For user display, and to determine whether to create a chapter 5 entry -->
   <type>mod</type>
