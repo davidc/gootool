@@ -112,7 +112,6 @@ public class GooTool
     }
 
     log.info("Launching gootool " + Version.RELEASE_FULL);
-    log.finest("This is finest");
 
     try {
       new GooTool();
@@ -129,7 +128,12 @@ public class GooTool
     return theInstance;
   }
 
-  public Image getMainIcon()
+  public ImageIcon getMainIcon()
+  {
+    return icon;
+  }
+
+  public Image getMainIconImage()
   {
     return icon.getImage();
   }

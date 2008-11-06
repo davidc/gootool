@@ -30,7 +30,7 @@ public class AddinPropertiesDialog extends JDialog
 
     setLocationByPlatform(true);
 
-    setIconImage(GooTool.getTheInstance().getMainIcon());
+    setIconImage(GooTool.getTheInstance().getMainIconImage());
 
     setContentPane(rootPanel);
 

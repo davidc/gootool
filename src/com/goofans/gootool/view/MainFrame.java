@@ -38,7 +38,7 @@ public class MainFrame extends JFrame
 
     setLocationByPlatform(true);
     setMinimumSize(new Dimension(800, 500));
-    setIconImage(GooTool.getTheInstance().getMainIcon());
+    setIconImage(GooTool.getTheInstance().getMainIconImage());
 
 
     setContentPane(rootPanel);
