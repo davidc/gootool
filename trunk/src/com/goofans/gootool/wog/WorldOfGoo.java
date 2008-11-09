@@ -131,7 +131,16 @@ public class WorldOfGoo
     wogDir = searchPath;
 
     addinsDir = new File(wogDir, ADDIN_DIR);
-    customDir = new File(wogDir, CUSTOM_DIR);
+//    customDir = new File(wogDir, CUSTOM_DIR);
+
+    // try and put custom inside. TODO Don't do this in production, use a chooser always
+
+    try {
+      setCustomDir(new File(wogDir, CUSTOM_DIR));
+    }
+    catch (IOException e) {
+      log.log(Level.WARNING, "Can't use custom directory inside wog", e);
+    }
 
     updateAvailableAddins();
   }
@@ -212,10 +221,25 @@ public class WorldOfGoo
     return wogDir;
   }
 
+  public static void setCustomDir(File customDir) throws IOException
+  {
+    if (customDir.exists() && !customDir.isDirectory()) throw new IOException(customDir + " isn't a directory");
+    if (!customDir.exists() && !customDir.mkdir()) throw new IOException("Can't create "+ customDir);
+
+    //test write
+    File testFile = new File(customDir, "writeTest");
+    FileOutputStream os = new FileOutputStream(testFile);
+    os.write(65);
+    os.close();
+
+    testFile.delete();
+    WorldOfGoo.customDir = customDir;
+  }
+
   public static File getCustomDir() throws IOException
   {
-    if (!wogFound) {
-      throw new IOException("WoG isn't found yet");
+    if (customDir == null) {
+      throw new IOException("Custom dir isn't selected yet");
     }
     return customDir;
   }
@@ -263,7 +287,7 @@ public class WorldOfGoo
 //    String versionStr = p.get(WorldOfGoo.PREF_LASTVERSION, null);
 //    if (versionStr != null) {
 //      VersionSpec lastVersion = new VersionSpec(versionStr);
-      // Here we can put any upgrade stuff
+    // Here we can put any upgrade stuff
 //    }
 
     c.setAllowWidescreen(p.getBoolean(PREF_ALLOW_WIDESCREEN, c.isAllowWidescreen()));
@@ -291,6 +315,23 @@ public class WorldOfGoo
   public static List<Addin> getAvailableAddins()
   {
     return Collections.unmodifiableList(availableAddins);
+  }
+
+  // ONLY FOR USE BY TEST CASES !!!!!
+  public static void DEBUGaddAvailableAddin(Addin a)
+  {
+    availableAddins.add(a);
+  }
+  
+  // ONLY FOR USE BY TEST CASES !!!!!
+  public static void DEBUGremoveAddinById(String id)
+  {
+    for (Addin availableAddin : availableAddins) {
+      if (availableAddin.getId().equals(id)) {
+        availableAddins.remove(availableAddin);
+        return;
+      }
+    }
   }
 
   @SuppressWarnings({"UseOfSystemOutOrSystemErr"})

@@ -13,10 +13,7 @@ import java.util.logging.Logger;
 import java.util.prefs.Preferences;
 
 import com.goofans.gootool.GooTool;
-import com.goofans.gootool.addins.Merger;
-import com.goofans.gootool.addins.Addin;
-import com.goofans.gootool.addins.AddinInstaller;
-import com.goofans.gootool.addins.AddinFormatException;
+import com.goofans.gootool.addins.*;
 import com.goofans.gootool.model.Configuration;
 import com.goofans.gootool.util.Utilities;
 import com.goofans.gootool.util.Version;
@@ -86,6 +83,7 @@ public class ConfigurationWriter
   {
     File wogDir = WorldOfGoo.getWogDir();
     File customDir = WorldOfGoo.getCustomDir();
+    log.info("Copying game files from " + wogDir + " to " + customDir);
 
     customDir.mkdir();
 
@@ -268,12 +266,13 @@ public class ConfigurationWriter
   }
 
   @SuppressWarnings({"UseOfSystemOutOrSystemErr"})
-  public static void main(String[] args) throws IOException
+  public static void main(String[] args) throws IOException, AddinFormatException
   {
     Logger.getLogger("").setLevel(Level.ALL);
     Logger.getLogger("").getHandlers()[0].setLevel(Level.ALL);
 
     WorldOfGoo.init();
+    WorldOfGoo.setCustomDir(new File("C:\\BLAH\\"));
     ConfigurationWriter writer = new ConfigurationWriter();
 
     writer.addListener(new ConfigurationProgressListener()
@@ -300,10 +299,16 @@ public class ConfigurationWriter
       System.out.println("addin.getId() = " + addin.getId());
     }
 
+    // Remove any installed net.davidc.madscientist.dejavu
+    WorldOfGoo.DEBUGremoveAddinById("net.davidc.madscientist.dejavu");
+
+    Addin addin = AddinFactory.loadAddinFromDir(new File("addins/src/net.davidc.madscientist.dejavu"));
+    WorldOfGoo.DEBUGaddAvailableAddin(addin);
+
     // Should end up as a football, since earlier is priority
-    c.enableAddin("com.2dboy.talic.football");
-    c.enableAddin("com.2dboy.talic.basketball");
-    c.enableAddin("net.davidc.test.merger");
+//    c.enableAddin("com.2dboy.talic.football");
+//    c.enableAddin("com.2dboy.talic.basketball");
+    c.enableAddin("net.davidc.madscientist.dejavu");
 
     writer.writeConfiguration(c);
   }
