@@ -25,6 +25,13 @@ public class VersionSpec implements Comparable<VersionSpec>
     this.numDisplayFields = 3;
   }
 
+  public VersionSpec(int[] inVersion)
+  {
+    if (inVersion.length < 1 || inVersion.length > 4) throw new NumberFormatException("Version has too many/too few fields");
+    System.arraycopy(inVersion, 0, version, 0, inVersion.length);
+    this.numDisplayFields = inVersion.length;
+  }
+
   public VersionSpec(String versionStr) throws NumberFormatException
   {
     StringTokenizer tok = new StringTokenizer(versionStr, ".");

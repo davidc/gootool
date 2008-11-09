@@ -82,9 +82,7 @@ public class GooTool
 
         if (chooser.showOpenDialog(null) != JFileChooser.APPROVE_OPTION) {
           log.info("User refused to locate WorldOfGoo.exe, exiting");
-          // TODO temp for lang
-//          System.exit(2);
-          break;
+          System.exit(2);
         }
 
         File selectedFile = chooser.getSelectedFile();

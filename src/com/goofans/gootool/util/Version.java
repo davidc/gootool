@@ -16,6 +16,7 @@ public class Version
   public static final int RELEASE_MAJOR;
   public static final int RELEASE_MINOR;
   public static final int RELEASE_MICRO;
+  public static final int RELEASE_REVISION;
   public static final String RELEASE_TYPE;
   public static final String RELEASE_FULL;
   public static final Date RELEASE_DATE;
@@ -36,12 +37,14 @@ public class Version
       RELEASE_MAJOR = Integer.parseInt(p.getProperty("release.major", "0"));
       RELEASE_MINOR = Integer.parseInt(p.getProperty("release.minor", "0"));
       RELEASE_MICRO = Integer.parseInt(p.getProperty("release.micro", "0"));
+      RELEASE_REVISION = Integer.parseInt(p.getProperty("release.svn").split(" ", 3)[1]);
+
       RELEASE_TYPE = p.getProperty("release.type");
       RELEASE_DATE = new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.ENGLISH).parse(p.getProperty("release.date"));
-      RELEASE = new VersionSpec(RELEASE_MAJOR, RELEASE_MINOR, RELEASE_MICRO);
+      RELEASE = new VersionSpec(new int[]{RELEASE_MAJOR, RELEASE_MINOR, RELEASE_MICRO, RELEASE_REVISION});
 
       String releaseFull;
-      releaseFull = RELEASE_MAJOR + "." + RELEASE_MINOR + "." + RELEASE_MICRO;
+      releaseFull = RELEASE.toString();
       if (RELEASE_TYPE.length() > 0) {
         releaseFull += "-" + RELEASE_TYPE;
       }
@@ -60,5 +63,11 @@ public class Version
 
   private Version()
   {
+  }
+
+  public static void main(String[] args)
+  {
+    System.out.println("RELEASE_REVISION = " + RELEASE_REVISION);
+    System.out.println("RELEASE = " + RELEASE);
   }
 }
