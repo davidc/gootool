@@ -10,6 +10,12 @@
 
   <property file="ant.properties"/>
 
+  <!--Libraries required only for building are in lib/build/-->
+  <path id="build.classpath">
+    <fileset dir="lib/build" includes="*.jar"/>
+  </path>
+
+  <!-- Definitions of new tasks -->
   <taskdef name="javac2" classname="com.intellij.ant.Javac2" classpathref="build.classpath"/>
 
   <taskdef name="launch4j"
@@ -33,12 +39,6 @@
              else="${gootool.version}-${release.type}">
     <equals arg1="${release.type}" arg2=""/>
   </condition>
-
-  <!--Libraries required only for building are in lib/build/-->
-  <path id="build.classpath">
-    <fileset dir="lib/build" includes="*.jar"/>
-  </path>
-
 
   <!-- Compiler options -->
 
@@ -152,6 +152,7 @@
 
 
   <property name="dist.dir" value="dist"/>
+  <property name="dist.win32" value="${dist.dir}/win32"/>
 
   <target name="clean" description="cleanup all">
     <delete dir="${dist.dir}"/>
@@ -161,8 +162,6 @@
   <target name="recompile" depends="clean, compile" description="build all"/>
 
   <target name="jar" depends="recompile">
-    <mkdir dir="${dist.dir}"/>
-    <mkdir dir="${dist.dir}/lib"/>
     <jar jarfile="${output.jar}">
       <fileset dir="${output.dir}"/>
     </jar>
@@ -191,25 +190,30 @@
 
 
   <target name="launcher" description="builds the launcher" depends="obfuscate"><!-- depends="jar">-->
-    <mkdir dir="${dist.dir}/bin"/>
+    <mkdir dir="${dist.win32}"/>
+    <mkdir dir="${dist.win32}/bin"/>
 
     <launch4j configFile="launcher/launch4j.xml"
               jar="${obfuscated.jar}"
-              outfile="${dist.dir}/bin/gootool.exe"
-              fileversion="${gootool.version}.0"
+              outfile="${dist.win32}/bin/gootool.exe"
+              fileversion="${gootool.version}"
               txtfileversion="${gootool.version.full}"
-              productversion="${gootool.version}.0"
+              productversion="${gootool.version}"
               txtproductversion="${gootool.version.full}"
             />
   </target>
 
   <target name="dist" description="Build the distribution" depends="jar,launcher">
-    <copy todir="${dist.dir}">
+    <copy todir="${dist.win32}">
       <fileset dir="dist_src">
         <patternset refid="ignored.files"/>
         <type type="file"/>
       </fileset>
     </copy>
+
+    <zip destfile="${dist.dir}/GooTool-${gootool.version.full}.zip">
+      <zipfileset dir="${dist.win32}" prefix="GooTool-${gootool.version.full}"/>
+    </zip>
   </target>
 
 
