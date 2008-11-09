@@ -44,3 +44,21 @@ show current JRE info on about->version
 stick custom dir in user homedir or something?
 
 - Perhaps stop overrides of Drained files, to prevent cheating in goocorp?
+
+- Modify EOL scene automatically depending on resolution?
+
+addins - conflicts <addin>
+addins - provides <x>
+
+use JFormattedTextField for input field validation
+
+- Download languages from wiki? Autocreate images?
+
+- new version notification
+
+- svn build in release.properties
+
+WIshlist:
+
+- chapter support
+- Better level load crash debugging

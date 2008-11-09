@@ -3,6 +3,7 @@ package com.goofans.gootool.addins;
 import javax.xml.transform.TransformerException;
 import java.io.*;
 import java.util.Enumeration;
+import java.util.Map;
 import java.util.logging.Logger;
 import java.util.logging.Level;
 import java.util.zip.ZipEntry;
@@ -11,6 +12,9 @@ import java.util.zip.ZipFile;
 import com.goofans.gootool.io.BinFormat;
 import com.goofans.gootool.util.Utilities;
 import com.goofans.gootool.wog.WorldOfGoo;
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.w3c.dom.Element;
 
 /**
  * @author David Croft (davidc@goofans.com)
@@ -84,6 +88,11 @@ public class AddinInstaller
         }
       }
     }
+
+    if (addin.getType() == Addin.TYPE_LEVEL) {
+      installLevel(addin);
+    }
+
     log.log(Level.FINE, "Addin " + addin.getId() + " installed");
   }
 
@@ -203,4 +212,92 @@ public class AddinInstaller
     BinFormat.encodeFile(destFile, xml);
   }
 
+  private static void installLevel(Addin addin) throws IOException, AddinFormatException
+  {
+    String levelNameId = "LEVEL_NAME_" + addin.getLevelDir().toUpperCase();
+    String levelTextId = "LEVEL_TEXT_" + addin.getLevelDir().toUpperCase();
+
+    /* First add our two level strings to text.xml */
+
+    File textFile = new File(WorldOfGoo.getCustomDir(), "properties/text.xml.bin");
+    try {
+      Merger merger = new Merger(textFile, new InputStreamReader(AddinInstaller.class.getResourceAsStream("/level-text.xsl")));
+      merger.setTransformParameter("level_name_string", makeString(levelNameId, addin.getLevelNames()));
+      merger.setTransformParameter("level_text_string", makeString(levelTextId, addin.getLevelSubtitles()));
+      merger.merge();
+//      System.out.println("s = " + s);
+      merger.writeEncoded(textFile);
+    }
+    catch (TransformerException e) {
+      throw new AddinFormatException("Unable to merge level text", e);
+    }
+
+    /* Now add ourselves into the island.xml */
+
+    File islandFile = new File(WorldOfGoo.getCustomDir(), "res/islands/island1.xml.bin");
+    try {
+      Merger merger = new Merger(islandFile, new InputStreamReader(AddinInstaller.class.getResourceAsStream("/level-island.xsl")));
+
+      merger.setTransformParameter("level_id", addin.getLevelDir());
+      merger.setTransformParameter("level_name_id", levelNameId);
+      merger.setTransformParameter("level_text_id", levelTextId);
+      merger.setTransformParameter("level_ocd", addin.getLevelOcd());
+      merger.merge();
+//      System.out.println("s = " + s);
+      merger.writeEncoded(islandFile);
+    }
+    catch (TransformerException e) {
+      throw new AddinFormatException("Unable to merge level island", e);
+    }
+
+    /* Now add our buttons to island1.scene.xml */
+    File islandSceneFile = new File(WorldOfGoo.getCustomDir(), "res/levels/island1/island1.scene.bin");
+    try {
+      Merger merger = new Merger(islandSceneFile, new InputStreamReader(AddinInstaller.class.getResourceAsStream("/level-island-scene.xsl")));
+
+      merger.setTransformParameter("level_id", addin.getLevelDir());
+      merger.setTransformParameter("level_name_id", levelNameId);
+      merger.merge();
+//      System.out.println("s = " + s);
+      merger.writeEncoded(islandSceneFile);
+//		<button id="lb_GoingUp" depth="8" x="-520" y="278" scalex="1" scaley="1" rotation="0" alpha="1" colorize="255,255,255"   up="IMAGE_SCENE_ISLAND1_LEVELMARKERA_UP" over="IMAGE_SCENE_ISLAND1_LEVELMARKERA_OVER" onclick="pl_GoingUp" onmouseenter="ss_GoingUp" onmouseexit="hs_GoingUp" />
+
+      // TODO OCD flag location
+    }
+    catch (TransformerException e) {
+      throw new AddinFormatException("Unable to merge level island scene", e);
+    }
+
+
+  }
+
+  private static String makeString(String levelSubtitleId, Map<String, String> translations)
+  {
+    StringBuilder sb = new StringBuilder("<string id=\"");
+
+    sb.append(levelSubtitleId).append("\"");
+    for (String nameKey : translations.keySet()) {
+      sb.append(" ").append(nameKey).append("=\"").append(translations.get(nameKey)).append("\"");
+    }
+    sb.append(" />");
+    return sb.toString();
+  }
+
+  private static void addStringMap(Document d, Node namesNode, Map<String, String> x)
+  {
+    for (String nameKey : x.keySet()) {
+      Element nameNode = (Element) namesNode.appendChild(d.createElement("string"));
+      nameNode.setAttribute("lang", nameKey);
+      nameNode.setTextContent(x.get(nameKey));
+    }
+  }
+
+  public static void main(String[] args) throws IOException, AddinFormatException
+  {
+    WorldOfGoo.init();
+    WorldOfGoo.setCustomDir(new File("C:\\BLAH\\"));
+    Addin addin = AddinFactory.loadAddinFromDir(new File("addins/src/net.davidc.madscientist.dejavu"));
+
+    AddinInstaller.installAddin(addin);
+  }
 }

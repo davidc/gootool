@@ -108,4 +108,9 @@ public class XMLUtil
 
     return writer.toString();
   }
+
+  public static Document newDocument() throws ParserConfigurationException
+  {
+    return DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
+  }
 }
