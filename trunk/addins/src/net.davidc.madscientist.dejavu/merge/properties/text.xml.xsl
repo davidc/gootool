@@ -16,7 +16,7 @@
    <xsl:apply-templates/>
 
    <string id="SIGNPOST_MSDEJAVU_1"
-           text="The Goo Balls felt a strange sense of deja-vu. Hadn't they been here before?|They could build bridges in their sleep now. But would there be enough of them left?|I'm back! -the absentee Sign Painter"
+           text="The Goo Balls felt a strange sense of deja-vu. Hadn't they been here before?|They could build bridges in their sleep now. But would enough of them make it this time?|I'm back! -the absentee Sign Painter"
            />
 
    <string id="SIGNPOST_MSDEJAVU_2"
