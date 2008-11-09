@@ -22,11 +22,11 @@
 
 	<!-- Pipes -->
 	<pipe id="0" depth="0" >
-		<Vertex x="376" y="602" />
-		<Vertex x="376" y="710" />
-		<Vertex x="502" y="710" />
-		<Vertex x="502" y="642" />
-		<Vertex x="607" y="642" />
+		<Vertex x="376" y="652" />
+		<Vertex x="376" y="760" />
+		<Vertex x="502" y="760" />
+		<Vertex x="502" y="692" />
+		<Vertex x="607" y="692" />
 	</pipe>
 
 	<!-- Sleeping Balls -->
@@ -55,15 +55,19 @@
 	<BallInstance type="common" x="-530.74" y="535.84" id="19" angle="0" />
 	<BallInstance type="common" x="-329.74" y="411.84" id="20" angle="0" />
 	<BallInstance type="common" x="-545" y="337" id="21" angle="0" />
-	<BallInstance type="common" x="-444" y="447" id="22" angle="0" />
-	<BallInstance type="common" x="-413.88" y="361.78" id="23" angle="0" />
-	<BallInstance type="common" x="-459" y="394.01" id="24" angle="0" />
+	<!--<BallInstance type="common" x="-444" y="447" id="22" angle="0" />-->
+	<!--<BallInstance type="common" x="-413.88" y="361.78" id="23" angle="0" />-->
+	<!--<BallInstance type="common" x="-459" y="394.01" id="24" angle="0" />-->
 	<!--<BallInstance type="common" x="-511.5" y="392.51" id="25" angle="0" />-->
 	<!--<BallInstance type="common" x="-376.94" y="421.05" id="26" angle="0" />-->
 	<!--<BallInstance type="common" x="-276.45" y="346.16" id="27" angle="0" />-->
 	<!--<BallInstance type="common" x="-568" y="375" id="28" angle="0" />-->
 
-	<!-- Arms -->
+  <BallInstance type="common" x="280" y="320" id="22" discovered="false" angle="0" />
+  <BallInstance type="common" x="340" y="320.78" id="23" discovered="false" angle="0" />
+  <BallInstance type="common" x="360" y="320.01" id="24" discovered="false" angle="0" />
+
+    <!-- Arms -->
 	<Strand gb1="5" gb2="3" />
 	<Strand gb1="5" gb2="6" />
 	<Strand gb1="6" gb2="3" />
@@ -75,7 +79,7 @@
 	<!-- Level Exit -->
  <!--<levelexit id="theExit" pos="375.98828125,502.00048828125" radius="75" filter="" >-->
  <!--</levelexit>-->
- <levelexit id="theExit" pos="375.98828125,602.00048828125" radius="75" filter="" >
+ <levelexit id="theExit" pos="375.98828125,652.00048828125" radius="75" filter="" >
  </levelexit>
 
 </level>
