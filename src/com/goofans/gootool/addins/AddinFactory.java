@@ -23,7 +23,7 @@ import org.w3c.dom.NodeList;
  */
 public class AddinFactory
 {
-//  private static final Logger log = Logger.getLogger(AddinFactory.class.getName());
+  private static final Logger log = Logger.getLogger(AddinFactory.class.getName());
 
   private static final XPathExpression XPATH_ADDIN_SPECVERSION;
   private static final XPathExpression XPATH_ADDIN_ID;
@@ -70,6 +70,7 @@ public class AddinFactory
 
   public static Addin loadAddin(File file) throws AddinFormatException, IOException
   {
+    log.fine("Loading addin from goomod " + file);
     ZipFile zipFile = new ZipFile(file);
 
     try {
@@ -91,6 +92,25 @@ public class AddinFactory
       zipFile.close();
     }
   }
+
+  public static Addin loadAddinFromDir(File dir) throws AddinFormatException, IOException
+  {
+    log.fine("Loading addin from expanded dir " + dir);
+    File manifestFile = new File(dir, GOOMOD_MANIFEST);
+
+    if (!manifestFile.exists()) {
+      throw new AddinFormatException("No manifest found, is this an addin?");
+    }
+
+    InputStream is = new FileInputStream(manifestFile);
+    try {
+      return readManifest(is, dir);
+    }
+    finally {
+      is.close();
+    }
+  }
+
 
   // Synchronized since xpath expressions and patterns aren't thread safe
   private static synchronized Addin readManifest(InputStream is, File addinDiskFile) throws IOException, AddinFormatException
