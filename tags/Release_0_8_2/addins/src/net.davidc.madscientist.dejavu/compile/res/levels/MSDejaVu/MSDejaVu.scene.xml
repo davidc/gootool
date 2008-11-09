@@ -1,0 +1,65 @@
+<scene minx="-600" miny="0" maxx="600" maxy="1000" backgroundcolor="0,0,0" >
+
+	<!-- ForceFields -->
+	<linearforcefield type="gravity" force="0,-10" dampeningfactor="0" antigrav="true" geomonly="false" />
+
+	<!-- Particles -->
+	<particles effect="blackBallsRising" depth="400" pos="123.94580078125,1118.494140625" pretick="0" />
+
+	<!-- SceneLayers -->
+	<SceneLayer name="bush_fg1a" depth="200" x="468" y="116.9" scalex="1.432" scaley="1.432" rotation="0" alpha="1" colorize="255,255,255" image="IMAGE_SCENE_MSDEJAVU_BUSH_FG1A"   />
+	<SceneLayer name="bush_fg1a" depth="200" x="-444.65" y="107.75" scalex="1.432" scaley="1.432" rotation="0" alpha="1" colorize="255,255,255" image="IMAGE_SCENE_MSDEJAVU_BUSH_FG1A"   />
+	<SceneLayer name="tree_stripe1" depth="80" x="485.55" y="155.96" scalex="0.615" scaley="1.02" rotation="-32.98" alpha="1" colorize="255,255,255" image="IMAGE_SCENE_MSDEJAVU_TREE_STRIPE1"   />
+	<SceneLayer name="tree_stripe1" depth="80" x="-466.43" y="150.96" scalex="0.615" scaley="1.02" rotation="-142.78" alpha="1" colorize="255,255,255" image="IMAGE_SCENE_MSDEJAVU_TREE_STRIPE1"   />
+	<SceneLayer name="bush_fg1a" depth="80" x="381.35" y="27.75" scalex="1.432" scaley="1.432" rotation="0" alpha="1" colorize="255,255,255" image="IMAGE_SCENE_MSDEJAVU_BUSH_FG1A"   />
+	<SceneLayer name="bush_fg1a" depth="80" x="560.22" y="261.25" scalex="1.008" scaley="1.008" rotation="85.76" alpha="1" colorize="255,255,255" image="IMAGE_SCENE_MSDEJAVU_BUSH_FG1A"   />
+	<SceneLayer name="bush_fg1a" depth="80" x="-589.79" y="171.23" scalex="1.008" scaley="1.008" rotation="-71.65" alpha="1" colorize="255,255,255" image="IMAGE_SCENE_MSDEJAVU_BUSH_FG1A"   />
+	<SceneLayer name="bush_fg1a" depth="80" x="-315.65" y="39.75" scalex="1.432" scaley="1.432" rotation="0" alpha="1" colorize="255,255,255" image="IMAGE_SCENE_MSDEJAVU_BUSH_FG1A"   />
+	<SceneLayer name="cliff_left" depth="0" x="-366.46" y="138.96" scalex="1" scaley="1" rotation="0" alpha="1" colorize="255,255,255" image="IMAGE_SCENE_MSDEJAVU_CLIFF_LEFT"   />
+	<SceneLayer name="cliff_right" depth="0" x="394.04" y="153.46" scalex="1" scaley="1" rotation="0" alpha="1" colorize="255,255,255" image="IMAGE_SCENE_MSDEJAVU_CLIFF_RIGHT"   />
+	<SceneLayer name="bush_leafy_1" depth="-48" x="446.68" y="300.92" scalex="1.247" scaley="1.254" rotation="-7.44" alpha="1" colorize="255,255,255" image="IMAGE_SCENE_MSDEJAVU_BUSH_LEAFY_1"   />
+	<SceneLayer name="bush_leafy_1" depth="-48" x="-460.11" y="284.79" scalex="1.25" scaley="1.248" rotation="7.48" alpha="1" colorize="255,255,255" image="IMAGE_SCENE_MSDEJAVU_BUSH_LEAFY_1"   />
+	<SceneLayer name="signpostPole_brown" depth="-63.28" x="472.88" y="913.7" scalex="0.904" scaley="0.723" rotation="53.52" alpha="1" colorize="255,255,255" image="IMAGE_SCENE_MSDEJAVU_SIGNPOSTPOLE_BROWN"   />
+	<SceneLayer name="signpostPole_brown" depth="-63.28" x="-412" y="528.99" scalex="1" scaley="1" rotation="-56.46" alpha="1" colorize="255,255,255" image="IMAGE_SCENE_MSDEJAVU_SIGNPOSTPOLE_BROWN"   />
+	<SceneLayer name="tree_stripe1" depth="-64" x="523.88" y="565.46" scalex="0.615" scaley="1.385" rotation="-17.21" alpha="1" colorize="255,255,255" image="IMAGE_SCENE_MSDEJAVU_TREE_STRIPE1"   />
+	<SceneLayer name="tree_stripe1" depth="-64" x="469.09" y="617.48" scalex="0.615" scaley="1.595" rotation="-5.48" alpha="1" colorize="255,255,255" image="IMAGE_SCENE_MSDEJAVU_TREE_STRIPE1"   />
+	<SceneLayer name="tree_stripe1" depth="-64" x="-426.4" y="626.21" scalex="0.615" scaley="1.592" rotation="-3.93" alpha="1" colorize="255,255,255" image="IMAGE_SCENE_MSDEJAVU_TREE_STRIPE1"   />
+	<SceneLayer name="tree_stripe1" depth="-64" x="-492.17" y="615.2" scalex="0.615" scaley="1.592" rotation="3.42" alpha="1" colorize="255,255,255" image="IMAGE_SCENE_MSDEJAVU_TREE_STRIPE1"   />
+	<SceneLayer name="bush_leafy_1b" depth="-80" x="504.83" y="329.76" scalex="0.992" scaley="1.002" rotation="-12.09" alpha="1" colorize="255,255,255" image="IMAGE_SCENE_MSDEJAVU_BUSH_LEAFY_1B"   />
+	<SceneLayer name="bush_leafy_1b" depth="-80" x="-472.83" y="328.29" scalex="1.069" scaley="1.069" rotation="3.83" alpha="1" colorize="255,255,255" image="IMAGE_SCENE_MSDEJAVU_BUSH_LEAFY_1B"   />
+	<SceneLayer name="tree_sil_1" depth="-144" x="646.6" y="368.91" scalex="1.014" scaley="1.016" rotation="-17.74" alpha="1" colorize="255,255,255" image="IMAGE_SCENE_MSDEJAVU_TREE_SIL_1"   />
+	<SceneLayer name="tree_sil_1" depth="-136" x="-432.94" y="375.12" scalex="0.823" scaley="0.816" rotation="-7.81" alpha="1" colorize="255,255,255" image="IMAGE_SCENE_MSDEJAVU_TREE_SIL_1"   />
+	<SceneLayer name="tree_sil_1" depth="-120" x="-609.51" y="434.78" scalex="1.173" scaley="1.173" rotation="6.06" alpha="1" colorize="255,255,255" image="IMAGE_SCENE_MSDEJAVU_TREE_SIL_1"   />
+	<SceneLayer name="sky_pissyellowstripes" depth="-480" x="0" y="489.02" scalex="4.688" scaley="3.743" rotation="0" alpha="1" colorize="255,255,255" image="IMAGE_SCENE_MSDEJAVU_SKY_PISSYELLOWSTRIPES"   />
+
+	<!-- Buttons -->
+
+	<!-- Labels -->
+
+	<!-- Static Geometry -->
+	<compositegeom id="platform right" x="450.1484" y="103.4844" rotation="0" static="true" tag="walkable" material="verysticky" >
+		<circle id="" x="-196.9819" y="131.3491" radius="60.1665" />
+		<rectangle id="" x="61.4868" y="-21.3501" width="341.6905" height="275.5755" rotation="0.2085" />
+		<rectangle id="" x="-140.1641" y="90.7422" width="89.6629" height="148.7237" rotation="0.9414" />
+		<rectangle id="" x="17.3223" y="108.1758" width="145.9848" height="134.6969" rotation="-0.1387" />
+		<rectangle id="" x="146.5063" y="85.6099" width="130.9527" height="129.0303" rotation="-0.2573" />
+		<rectangle id="" x="-125.3105" y="137.5405" width="158.0097" height="99.3153" rotation="-0.035" />
+	</compositegeom>
+	<circle id="" static="true" tag="stopsign" material="rock" x="-148.312" y="263.7896" radius="18.7485" />
+	<circle id="" static="true" tag="stopsign" material="rock" x="200.688" y="290.7896" radius="18.7485" />
+	<line id="bound bottom" static="true" tag="deadly" material="rock" anchor="-42.1584,-23.0723" normal="-0.0023,1" />
+	<line id="bound right" static="true" tag="detaching" material="rock" anchor="602.8115,361.9094" normal="-1,-0.0018" />
+	<line id="bound left" static="true" tag="detaching" material="rock" anchor="-603.3828,387.4084" normal="1,0" />
+	<compositegeom id="platform left" x="-382.593" y="94.5176" rotation="0" static="true" tag="walkable" material="verysticky" >
+		<circle id="" x="191.093" y="117.9824" radius="53.5" />
+		<rectangle id="" x="-60.5947" y="-32.3721" width="341.6905" height="238.7556" rotation="-0.1209" />
+		<rectangle id="" x="129.6848" y="75.9116" width="124.2451" height="89.6633" rotation="0.621" />
+		<rectangle id="" x="-28.936" y="89.1426" width="145.9849" height="134.6972" rotation="0.1498" />
+		<rectangle id="" x="-151.7527" y="64.5767" width="130.9527" height="129.0297" rotation="0.3218" />
+		<rectangle id="" x="113.4307" y="118.5078" width="158.0102" height="99.3151" rotation="0.0317" />
+	</compositegeom>
+
+	<!-- Dynamic Geometry -->
+
+	<!-- Geometry Constraints -->
+</scene>
