@@ -9,6 +9,8 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Map;
+import java.util.TreeMap;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
 
@@ -33,6 +35,11 @@ public class AddinFactory
   private static final XPathExpression XPATH_ADDIN_DESCRIPTION;
   private static final XPathExpression XPATH_ADDIN_AUTHOR;
   private static final XPathExpression XPATH_ADDIN_DEPENDENCIES;
+  private static final XPathExpression XPATH_ADDIN_LEVEL;
+  private static final XPathExpression XPATH_ADDIN_LEVEL_DIR;
+  private static final XPathExpression XPATH_ADDIN_LEVEL_NAME;
+  private static final XPathExpression XPATH_ADDIN_LEVEL_SUBTITLE;
+  private static final XPathExpression XPATH_ADDIN_LEVEL_OCD;
 
   private static final Pattern PATTERN_ID = Pattern.compile("^[-\\p{Alnum}]+(\\.[-\\p{Alnum}]+)+$"); // require at least 1 domain component
   private static final Pattern PATTERN_NAME = Pattern.compile("^\\p{Alnum}[\\p{Graph} ]+$");
@@ -57,6 +64,11 @@ public class AddinFactory
       XPATH_ADDIN_DESCRIPTION = path.compile("/addin/description");
       XPATH_ADDIN_AUTHOR = path.compile("/addin/author");
       XPATH_ADDIN_DEPENDENCIES = path.compile("/addin/dependencies/depends");
+      XPATH_ADDIN_LEVEL = path.compile("/addin/level");
+      XPATH_ADDIN_LEVEL_DIR = path.compile("/addin/level/dir");
+      XPATH_ADDIN_LEVEL_NAME = path.compile("/addin/level/name");
+      XPATH_ADDIN_LEVEL_SUBTITLE = path.compile("/addin/level/subtitle");
+      XPATH_ADDIN_LEVEL_OCD = path.compile("/addin/level/ocd");
     }
     catch (XPathExpressionException e) {
       throw new ExceptionInInitializerError(e);
@@ -172,18 +184,55 @@ public class AddinFactory
       dependencies.add(new AddinDependency(ref, minVersion, maxVersion));
     }
 
-    return new Addin(addinDiskFile, id, name, type, version, description, author, dependencies);
+    Object levelNode = XPATH_ADDIN_LEVEL.evaluate(document, XPathConstants.NODE);
+
+    if (levelNode == null && type == Addin.TYPE_LEVEL) throw new AddinFormatException("Level addin doesn't have a level description in manifest");
+    if (levelNode != null && type != Addin.TYPE_LEVEL) throw new AddinFormatException("Non-level addin can't have a level description in manifest");
+
+    String levelDir = null;
+    String levelOcd = null;
+    Map<String, String> levelNames = null;
+    Map<String, String> levelSubtitles = null;
+
+    if (levelNode != null) {
+      levelDir = getStringRequired(document, XPATH_ADDIN_LEVEL_DIR, "level dir"); // TODO validate
+      levelOcd = getStringRequired(document, XPATH_ADDIN_LEVEL_OCD, "level ocd");
+
+      Node nameNode = (Node) XPATH_ADDIN_LEVEL_NAME.evaluate(document, XPathConstants.NODE);
+      if (nameNode == null) throw new AddinFormatException("Missing level name");
+
+      NamedNodeMap map = nameNode.getAttributes();
+      levelNames = new TreeMap<String, String>();
+
+      for (int i = 0; i < map.getLength(); i++) {
+        Node node = map.item(i);
+        levelNames.put(node.getNodeName(), node.getNodeValue());
+      }
+      if (levelNames.get("text") == null) throw new AddinFormatException("No text attribute on level name");
+
+      Node subtitleNode = (Node) XPATH_ADDIN_LEVEL_SUBTITLE.evaluate(document, XPathConstants.NODE);
+      if (subtitleNode == null) throw new AddinFormatException("Missing level subtitle");
+
+      levelSubtitles = new TreeMap<String, String>();
+      map = subtitleNode.getAttributes();
+      for (int i = 0; i < map.getLength(); i++) {
+        Node node = map.item(i);
+        levelSubtitles.put(node.getNodeName(), node.getNodeValue());
+      }
+      if (levelSubtitles.get("text") == null) throw new AddinFormatException("No text attribute on level subtitle");
+    }
+
+    return new Addin(addinDiskFile, id, name, type, version, description, author, dependencies, levelDir, levelNames, levelSubtitles, levelOcd);
   }
 
-  private static VersionSpec decodeVersion(String minVersionStr, String errStr)
-          throws AddinFormatException
+  private static VersionSpec decodeVersion(String minVersionStr, String errField) throws AddinFormatException
   {
     VersionSpec minVersion;
     try {
       minVersion = new VersionSpec(minVersionStr);
     }
     catch (NumberFormatException e) {
-      throw new AddinFormatException("Invalid " + errStr + " string " + minVersionStr);
+      throw new AddinFormatException("Invalid " + errField + " string " + minVersionStr);
     }
     return minVersion;
   }

@@ -3,8 +3,8 @@ package com.goofans.gootool.addins;
 import com.goofans.gootool.util.VersionSpec;
 
 import java.io.File;
-import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Logger;
 
 /**
@@ -33,10 +33,14 @@ public class Addin
   private String description;
   private String author;
   private List<AddinDependency> dependencies;
+  private String levelDir;
+  private Map<String, String> levelNames;
+  private Map<String, String> levelSubtitles;
+  private String levelOcd;
 
 //  private boolean enabled;
 
-  public Addin(File diskFile, String id, String name, int type, VersionSpec version, String description, String author, List<AddinDependency> dependencies)
+  public Addin(File diskFile, String id, String name, int type, VersionSpec version, String description, String author, List<AddinDependency> dependencies, String levelDir, Map<String, String> levelNames, Map<String, String> levelSubtitles, String levelOcd)
   {
     this.diskFile = diskFile;
     this.id = id;
@@ -45,7 +49,11 @@ public class Addin
     this.version = version;
     this.description = description;
     this.author = author;
-    this.dependencies = Collections.unmodifiableList(dependencies);
+    this.dependencies = dependencies;
+    this.levelDir = levelDir;
+    this.levelNames = levelNames;
+    this.levelSubtitles = levelSubtitles;
+    this.levelOcd = levelOcd;
   }
 
   public File getDiskFile()
@@ -104,6 +112,26 @@ public class Addin
       }
     }
     return true;
+  }
+
+  public String getLevelDir()
+  {
+    return levelDir;
+  }
+
+  public Map<String, String> getLevelNames()
+  {
+    return levelNames;
+  }
+
+  public Map<String, String> getLevelSubtitles()
+  {
+    return levelSubtitles;
+  }
+
+  public String getLevelOcd()
+  {
+    return levelOcd;
   }
 
   public String toString()

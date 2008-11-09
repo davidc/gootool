@@ -66,13 +66,10 @@ public class ConfigurationWriter
 
   public void writeConfiguration(Configuration c) throws IOException
   {
-    beginStep("Writing tool preferences", false);
     writePrivateConfig(c);
 
-    beginStep("Copying game files to custom folder", true);
     copyGameFiles();
 
-    beginStep("Writing game preferences", false);
     writeUserConfig(c);
 
     installAddins(c);
@@ -86,6 +83,8 @@ public class ConfigurationWriter
     log.info("Copying game files from " + wogDir + " to " + customDir);
 
     customDir.mkdir();
+
+    beginStep("Building list of source files", false);
 
     /* First build a list of everything to copy, so we have an estimate for the progress bar */
     List<String> filesToCopy = new ArrayList<String>(2500);
@@ -102,6 +101,8 @@ public class ConfigurationWriter
     }
 
     log.fine(filesToCopy.size() + " files in source directories");
+
+    beginStep("Copying game files to custom folder", true);
 
     /* Now copy original files from source directory */
 
@@ -159,6 +160,8 @@ public class ConfigurationWriter
 
   private void writePrivateConfig(Configuration c)
   {
+    beginStep("Writing tool preferences", false);
+
     // Tool preferences
     Preferences p = Preferences.userNodeForPackage(GooTool.class);
 
@@ -187,6 +190,8 @@ public class ConfigurationWriter
    */
   private void writeUserConfig(Configuration c) throws IOException
   {
+    beginStep("Writing game preferences", false);
+
     // Load the users's config.txt
     Document document = XMLUtil.loadDocumentFromFile(new File(WorldOfGoo.getWogDir(), WorldOfGoo.USER_CONFIG_FILE));
 

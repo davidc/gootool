@@ -74,7 +74,7 @@
         <properties>
           <labelFor value="6b0bd"/>
           <opaque value="false"/>
-          <text value="&lt;html&gt;&lt;p&gt;Addins higher on the list have priority and can override files from addins lower on the list. Drag and drop to reorder the addins.&lt;/p&gt;&lt;br/&gt;&lt;p&gt;Level addins show up as additional levels in Chapter 5, as there is currently no way to add a new chapter to the game.&lt;/p&gt;&lt;/html&gt; "/>
+          <text value="&lt;html&gt;&lt;p&gt;Addins higher on the list have priority and can override files from addins lower on the list. Drag and drop to reorder the addins.&lt;/p&gt;&lt;br/&gt;&lt;p&gt;New levels show up in the top left corner of Chapter 1, as there is currently no way to add a new chapter to the game.&lt;/p&gt;&lt;/html&gt; "/>
         </properties>
       </component>
       <scrollpane id="6b0bd">
