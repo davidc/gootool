@@ -37,7 +37,7 @@ public class Version
       RELEASE_MAJOR = Integer.parseInt(p.getProperty("release.major", "0"));
       RELEASE_MINOR = Integer.parseInt(p.getProperty("release.minor", "0"));
       RELEASE_MICRO = Integer.parseInt(p.getProperty("release.micro", "0"));
-      RELEASE_REVISION = Integer.parseInt(p.getProperty("release.svn").split(" ", 3)[1]);
+      RELEASE_REVISION = Integer.parseInt(p.getProperty("release.revision", "0"));
 
       RELEASE_TYPE = p.getProperty("release.type");
       RELEASE_DATE = new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.ENGLISH).parse(p.getProperty("release.date"));
