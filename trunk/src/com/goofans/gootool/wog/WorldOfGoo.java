@@ -45,7 +45,7 @@ public class WorldOfGoo
   private static File addinsDir;
   private static File customDir;
 
-  private static List<Addin> availableAddins;
+  private static List<Addin> availableAddins = new LinkedList<Addin>();
 
   private static final String EXE_FILENAME = "WorldOfGoo.exe";
   static final String USER_CONFIG_FILE = "properties/config.txt";
@@ -148,8 +148,6 @@ public class WorldOfGoo
     Preferences p = Preferences.userNodeForPackage(GooTool.class);
     p.put(PREF_WOG_DIR, wogDir.getAbsolutePath());
 
-    addinsDir = new File(wogDir, ADDIN_DIR);
-
     p = Preferences.userNodeForPackage(GooTool.class);
     String customDirPref = p.get(PREF_CUSTOM_DIR, null);
 
@@ -163,13 +161,15 @@ public class WorldOfGoo
     catch (IOException e) {
       log.log(Level.WARNING, "Can't use saved custom directory " + customDirPref, e);
     }
-
-    updateAvailableAddins();
   }
 
   private static void updateAvailableAddins()
   {
     availableAddins = new LinkedList<Addin>();
+
+    if (addinsDir == null) {
+      return;
+    }
 
     if (!addinsDir.exists()) {
       addinsDir.mkdir();
@@ -259,6 +259,10 @@ public class WorldOfGoo
 
     Preferences p = Preferences.userNodeForPackage(GooTool.class);
     p.put(PREF_CUSTOM_DIR, customDir.getAbsolutePath());
+
+    addinsDir = new File(customDir, ADDIN_DIR);
+
+    updateAvailableAddins();
   }
 
   public static File getCustomDir() throws IOException
@@ -370,8 +374,11 @@ public class WorldOfGoo
 //    writeConfiguration(c);
   }
 
-  private static File getAddinInstalledFile(String addinId)
+  private static File getAddinInstalledFile(String addinId) throws IOException
   {
+    if (addinsDir == null) {
+      throw new IOException("Addins directory isn't selected yet");
+    }
     return new File(addinsDir, addinId + GOOMOD_EXTENSION_WITH_DOT);
   }
 
@@ -387,7 +394,7 @@ public class WorldOfGoo
 
     File destFile = getAddinInstalledFile(addinId);
 
-    log.log(Level.INFO, "Installing addin " + addinId + " to " + addinFile);
+    log.log(Level.INFO, "Installing addin " + addinId + " from " + addinFile + " to " + destFile);
 
     Utilities.copyFile(addinFile, destFile);
 
