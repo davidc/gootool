@@ -51,8 +51,8 @@ public class WorldOfGoo
   static final String USER_CONFIG_FILE = "properties/config.txt";
 //  static final String GOOTOOL_CONFIG_FILE = "properties/gootool.txt";
 
-  private static final String ADDIN_DIR = "addins";
-  private static final String CUSTOM_DIR = "custom";
+  private static final String ADDIN_DIR = "addins";//TODO put this inside custom
+//  private static final String CUSTOM_DIR = "custom";
 
   static final String PREF_LASTVERSION = "gootool_version";
   static final String PREF_ALLOW_WIDESCREEN = "allow_widescreen";
@@ -72,6 +72,7 @@ public class WorldOfGoo
   public static final String GOOMOD_EXTENSION = "goomod";
   private static final String GOOMOD_EXTENSION_WITH_DOT = "." + GOOMOD_EXTENSION;
   private static final String PREF_WOG_DIR = "wog_dir";
+  private static final String PREF_CUSTOM_DIR = "custom_dir";
 
   static {
     XPath path = XPathFactory.newInstance().newXPath();
@@ -96,6 +97,11 @@ public class WorldOfGoo
     return wogFound;
   }
 
+  public static boolean isCustomDirSet()
+  {
+    return customDir != null;
+  }
+
   /**
    * Attempts to locate WoG in various default locations.
    */
@@ -110,7 +116,7 @@ public class WorldOfGoo
         return;
       }
     }
-    
+
     for (String searchPath : SEARCH_PATHS) {
       String newSearchPath = Utilities.expandEnvVars(searchPath);
 
@@ -141,17 +147,21 @@ public class WorldOfGoo
 
     Preferences p = Preferences.userNodeForPackage(GooTool.class);
     p.put(PREF_WOG_DIR, wogDir.getAbsolutePath());
-    
-    addinsDir = new File(wogDir, ADDIN_DIR);
-//    customDir = new File(wogDir, CUSTOM_DIR);
 
-    // try and put custom inside. TODO Don't do this in production, use a chooser always
+    addinsDir = new File(wogDir, ADDIN_DIR);
+
+    p = Preferences.userNodeForPackage(GooTool.class);
+    String customDirPref = p.get(PREF_CUSTOM_DIR, null);
 
     try {
-      setCustomDir(new File(wogDir, CUSTOM_DIR));
+      if (customDirPref != null) {
+        setCustomDir(new File(customDirPref));
+      }
+      // try and put custom inside. TODO Don't do this in production, use a chooser always
+//      setCustomDir(new File(wogDir, CUSTOM_DIR));
     }
     catch (IOException e) {
-      log.log(Level.WARNING, "Can't use custom directory inside wog: " + e.getLocalizedMessage());
+      log.log(Level.WARNING, "Can't use saved custom directory " + customDirPref, e);
     }
 
     updateAvailableAddins();
@@ -246,6 +256,9 @@ public class WorldOfGoo
 
     testFile.delete();
     WorldOfGoo.customDir = customDir;
+
+    Preferences p = Preferences.userNodeForPackage(GooTool.class);
+    p.put(PREF_CUSTOM_DIR, customDir.getAbsolutePath());
   }
 
   public static File getCustomDir() throws IOException

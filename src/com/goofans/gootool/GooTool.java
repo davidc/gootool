@@ -38,8 +38,6 @@ public class GooTool
       ProgressIndicatingTask startupTask = new StartupTask(controller);
 
       controller.runTask("Launching GooTool", startupTask);
-
-//      initControllerAndView(c);
     }
     catch (Throwable t) {
       log.log(Level.SEVERE, "Uncaught exception", t);
