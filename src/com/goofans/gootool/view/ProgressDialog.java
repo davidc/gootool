@@ -1,18 +1,15 @@
 package com.goofans.gootool.view;
 
 import javax.swing.*;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.awt.*;
 
 import com.goofans.gootool.GooTool;
-import com.goofans.gootool.wog.ConfigurationProgressListener;
+import com.goofans.gootool.util.ProgressListener;
 
 /**
  * @author David Croft (davidc@goofans.com)
  * @version $Id$
  */
-public class ProgressDialog extends JDialog implements ConfigurationProgressListener
+public class ProgressDialog extends JDialog implements ProgressListener
 {
   private JLabel task;
   private JProgressBar progressBar;

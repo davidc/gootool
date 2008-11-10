@@ -1,12 +1,12 @@
-package com.goofans.gootool.wog;
+package com.goofans.gootool.util;
 
 /**
- * Implemented by classes (i.e. a gui progress bar) that wish to be notified of the state of the compilation progress.
+ * Implemented by classes (i.e. a gui progress bar) that wish to be notified of the state of a progressing task
  *
  * @author David Croft (davidc@goofans.com)
  * @version $Id$
  */
-public interface ConfigurationProgressListener
+public interface ProgressListener
 {
   /**
    * Notification that a step has begun.

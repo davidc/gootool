@@ -4,12 +4,16 @@ import com.goofans.gootool.model.Language;
 import com.goofans.gootool.model.Resolution;
 import com.goofans.gootool.model.Configuration;
 import com.goofans.gootool.Controller;
+import com.goofans.gootool.profile.ProfileFactory;
+import com.goofans.gootool.wog.WorldOfGoo;
 
 import javax.swing.*;
 import java.awt.event.ItemListener;
 import java.awt.event.ItemEvent;
 import java.util.Set;
 import java.util.logging.Logger;
+import java.io.IOException;
+import java.io.File;
 
 /**
  * @author David Croft (davidc@goofans.com)
@@ -26,6 +30,12 @@ public class OptionsPanel implements ViewComponent
   private JTextField uiInset;
   private JCheckBox skipOpeningMovieCheckBox;
   private JTextField watermark;
+  private JTextField installDirText;
+  private JButton changeInstallDirButton;
+  private JTextField customDirText;
+  private JButton changeCustomDirButton;
+  private JTextField profileFileText;
+  private JButton changeProfileFileButton;
 
   public OptionsPanel(Controller controller)
   {
@@ -40,6 +50,15 @@ public class OptionsPanel implements ViewComponent
         updateResolutions();
       }
     });
+
+    changeInstallDirButton.addActionListener(controller);
+    changeInstallDirButton.setActionCommand(Controller.CMD_CHANGE_INSTALL_DIR);
+
+    changeCustomDirButton.addActionListener(controller);
+    changeCustomDirButton.setActionCommand(Controller.CMD_CHANGE_CUSTOM_DIR);
+
+    changeProfileFileButton.addActionListener(controller);
+    changeProfileFileButton.setActionCommand(Controller.CMD_CHANGE_PROFILE_FILE);
   }
 
   private void updateResolutions()
@@ -76,8 +95,29 @@ public class OptionsPanel implements ViewComponent
     allowWidescreen.setSelected(c.isAllowWidescreen());
     updateResolutions();
     resolutionCombo.setSelectedItem(c.getResolution());
-  }
 
+    try {
+      installDirText.setText(WorldOfGoo.getWogDir().getAbsolutePath());
+    }
+    catch (IOException e) {
+      installDirText.setText("");
+    }
+
+    try {
+      customDirText.setText(WorldOfGoo.getCustomDir().getAbsolutePath());
+    }
+    catch (IOException e) {
+      customDirText.setText("");
+    }
+
+    File file = ProfileFactory.getProfileFile();
+    if (file != null) {
+      profileFileText.setText(file.getAbsolutePath());
+    }
+    else {
+      profileFileText.setText("");
+    }
+  }
 
   public void updateModelFromView(Configuration c)
   {
@@ -93,5 +133,4 @@ public class OptionsPanel implements ViewComponent
     c.setAllowWidescreen(allowWidescreen.isSelected());
     c.setResolution((Resolution) resolutionCombo.getSelectedItem());
   }
-
 }

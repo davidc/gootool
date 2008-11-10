@@ -74,8 +74,9 @@ public class ProfilePanel implements ActionListener
 //    levelsTable.so
 // TODO sorting
 
-    loadProfiles();
-
+    if (ProfileFactory.isProfileFound()) {
+      loadProfiles();
+    }
   }
 
   public void actionPerformed(ActionEvent e)
@@ -85,7 +86,11 @@ public class ProfilePanel implements ActionListener
     log.fine("cmd " + cmd);
 
     if (cmd.equals(CMD_REFRESH)) {
-      // TODO remember current profile
+      if (!ProfileFactory.isProfileFound()) {
+        JOptionPane.showMessageDialog(rootPanel, "Sorry, GooTool couldn't find your profile. Please specify the location of your profile on the Options tab.", "Profile not found", JOptionPane.ERROR_MESSAGE);
+        return;
+      }
+
       loadProfiles();
     }
     else if (cmd.equals(CMD_PROFILE_CHANGED) && profilesCombo.getSelectedItem() != currentProfile) {
@@ -197,20 +202,23 @@ public class ProfilePanel implements ActionListener
   private void loadProfiles()
   {
     profilesCombo.removeAllItems();
-    ProfileData profileData = ProfileFactory.findProfileData();
 
-    if (profileData == null) {
-      JOptionPane.showMessageDialog(rootPanel, "Sorry, couldn't find any profile data!", "Profile not found", JOptionPane.ERROR_MESSAGE);
+    ProfileData profileData;
+    try {
+      profileData = ProfileFactory.getProfileData();
     }
-    else {
-      for (Profile profile : profileData.getProfiles()) {
-//          profilesCombo.setSelectedItem(Profile);
-        if (profile != null) {
-          profilesCombo.addItem(profile);
-        }
+    catch (IOException e) {
+      log.log(Level.SEVERE, "Unable to read profile", e);
+      JOptionPane.showMessageDialog(rootPanel, "Sorry, GooTool can't read your profile.", "Profile corrupt", JOptionPane.ERROR_MESSAGE);
+      return;
+    }
+
+    for (Profile profile : profileData.getProfiles()) {
+      if (profile != null) {
+        profilesCombo.addItem(profile);
       }
-      profilesCombo.setSelectedItem(profileData.getCurrentProfile());
     }
+    profilesCombo.setSelectedItem(profileData.getCurrentProfile());
   }
 
   private String formatTime(int secs)
