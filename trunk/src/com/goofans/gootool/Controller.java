@@ -3,24 +3,24 @@ package com.goofans.gootool;
 import com.goofans.gootool.addins.Addin;
 import com.goofans.gootool.addins.AddinFactory;
 import com.goofans.gootool.model.Configuration;
+import com.goofans.gootool.profile.ProfileFactory;
+import com.goofans.gootool.util.ProfileFileFilter;
+import com.goofans.gootool.util.ProgressIndicatingTask;
+import com.goofans.gootool.util.WogExeFileFilter;
 import com.goofans.gootool.view.AboutDialog;
 import com.goofans.gootool.view.AddinPropertiesDialog;
 import com.goofans.gootool.view.MainFrame;
 import com.goofans.gootool.view.ProgressDialog;
 import com.goofans.gootool.wog.ConfigurationWriterTask;
-import com.goofans.gootool.util.ProgressIndicatingTask;
-import com.goofans.gootool.util.WogExeFileFilter;
-import com.goofans.gootool.util.ProfileFileFilter;
 import com.goofans.gootool.wog.WorldOfGoo;
-import com.goofans.gootool.profile.ProfileFactory;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-import java.io.IOException;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -109,6 +109,9 @@ public class Controller implements ActionListener
     }
     else if (cmd.equals(CMD_CHANGE_INSTALL_DIR)) {
       changeInstallDir();
+    }
+    else if (cmd.equals(CMD_CHANGE_CUSTOM_DIR)) {
+      changeCustomDir();
     }
     else if (cmd.equals(CMD_CHANGE_PROFILE_FILE)) {
       changeProfileFile();
@@ -240,19 +243,70 @@ public class Controller implements ActionListener
 
   private void changeInstallDir()
   {
-    updateModelFromView(editorConfig);
     if (askToLocateWog() == 0) {
-      updateViewFromModel(editorConfig);
+      refreshView();
     }
+  }
+
+  private void changeCustomDir()
+  {
+    File wogDir;
+    try {
+      wogDir = WorldOfGoo.getWogDir();
+    }
+    catch (IOException e) {
+      log.log(Level.WARNING, "Can't get wogdir", e);
+      showErrorDialog("Find World of Goo first", "Please select your World of Goo installation first!");
+      return;
+    }
+
+    JFileChooser chooser = new JFileChooser();
+    chooser.setDialogTitle("Choose a directory to save into");
+    chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+
+    if (chooser.showSaveDialog(mainFrame) != JFileChooser.APPROVE_OPTION) {
+      return;
+    }
+
+    File selectedFile = chooser.getSelectedFile();
+
+    System.out.println("selectedFile = " + selectedFile);
+
+    if (selectedFile.equals(wogDir)) {
+      showErrorDialog("Bad choice", "You can't install to same directory that World of Goo's already in! Make a new directory.");
+      return;
+    }
+
+    // Check if it's not empty
+
+    if (selectedFile.list().length > 0) {
+      if (showYesNoDialog("Directory not empty", "Warning! This directory isn't empty.\nAre you sure you wish to install into " + selectedFile.getAbsolutePath() + "?\n\nALL FILES IN THIS DIRECTORY WILL BE DELETED.") != JOptionPane.YES_OPTION) {
+        return;
+      }
+    }
+    else {
+      if (showYesNoDialog("Confirm directory selection", "Are you sure you wish to install into " + selectedFile.getAbsolutePath() + "?") != JOptionPane.YES_OPTION) {
+        return;
+      }
+    }
+
+    try {
+      WorldOfGoo.setCustomDir(selectedFile);
+    }
+    catch (IOException e) {
+      log.log(Level.SEVERE, "Can't set custom dir to " + selectedFile, e);
+      showErrorDialog("Can't set custom directory", "Can't use that directory: " + e.getLocalizedMessage());
+    }
+
+    refreshView();
   }
 
   private void changeProfileFile()
   {
-
     JFileChooser chooser = new JFileChooser();
     chooser.setFileFilter(new ProfileFileFilter());
 
-    if (chooser.showOpenDialog(null) != JFileChooser.APPROVE_OPTION) {
+    if (chooser.showOpenDialog(mainFrame) != JFileChooser.APPROVE_OPTION) {
       return;
     }
 
@@ -357,6 +411,14 @@ public class Controller implements ActionListener
     updateModelFromView(editorConfig);
     // TODO validate here
 
+    if (!WorldOfGoo.isCustomDirSet()) {
+      showMessageDialog("GooTool needs a writeable directory to store your custom World of Goo. Please create a new, empty directory on the next screen.");
+      changeCustomDir();
+      if (!WorldOfGoo.isCustomDirSet()) {
+        return;
+      }
+    }
+
     try {
       if (!new File(WorldOfGoo.getCustomDir(), "WorldOfGoo.exe").exists()) {
         showMessageDialog("Since this is the first time you have run GooTool, it wiil take quite a long time for the initial save.");
@@ -365,10 +427,12 @@ public class Controller implements ActionListener
     catch (IOException e) {
       // shouldn't happen
       log.log(Level.SEVERE, "Couldn't get custom dir", e);
+      return;
     }
 
     final ConfigurationWriterTask configWriter = new ConfigurationWriterTask(editorConfig);
 
+    boolean errored = false;
 
     try {
       runTask("Building your World of Goo", configWriter);
@@ -376,6 +440,7 @@ public class Controller implements ActionListener
     catch (Exception e) {
       log.log(Level.SEVERE, "Error writing configuration", e);
       showErrorDialog("Error writing configuration", e.getMessage());
+      errored = true;
     }
 
     try {
@@ -383,15 +448,12 @@ public class Controller implements ActionListener
     }
     catch (IOException e) {
       showErrorDialog("Error re-reading configuration!", "We recommend you restart GooTool. " + e.getMessage());
+      errored = true;
     }
     editorConfig = new Configuration(liveConfig);
     updateViewFromModel(editorConfig);
 
-    // TODO refresh liveconfig from live
-
-    if (launch) {
-      // TODO must block here until
-      // if no errors
+    if (launch && !errored) {
       try {
         WorldOfGoo.launch();
       }
@@ -517,7 +579,7 @@ public class Controller implements ActionListener
     return displayAddins;
   }
 
-  /**
+  /*
    * returns 0 if found, -1 if not found, -2 if user cancelled dialog
    */
   public int askToLocateWog()
@@ -525,7 +587,7 @@ public class Controller implements ActionListener
     JFileChooser chooser = new JFileChooser();
     chooser.setFileFilter(new WogExeFileFilter());
 
-    if (chooser.showOpenDialog(null) != JFileChooser.APPROVE_OPTION) {
+    if (chooser.showOpenDialog(mainFrame) != JFileChooser.APPROVE_OPTION) {
       return -2;
     }
 
