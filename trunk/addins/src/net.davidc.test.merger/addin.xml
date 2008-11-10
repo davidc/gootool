@@ -32,7 +32,7 @@
 
   <!-- Other addins this one depends on. -->
   <dependencies>
-    <depends ref="net.davidc.test.mynewball" min-version="1.0" max-version="1.0"/>
-    <depends ref="net.davidc.test.mynewball3" min-version="15"/>
+    <!--<depends ref="net.davidc.test.mynewball" min-version="1.0" max-version="1.0"/>-->
+    <!--<depends ref="net.davidc.test.mynewball3" min-version="15"/>-->
   </dependencies>
 </addin>

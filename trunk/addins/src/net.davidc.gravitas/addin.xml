@@ -19,7 +19,7 @@
 
   <!-- Other addins this one depends on. -->
   <dependencies>
-    <depends ref="net.davidc.test.mynewball" min-version="1.0"/>
+    <!--<depends ref="net.davidc.test.mynewball" min-version="1.0"/>-->
   </dependencies>
 
   <!-- Details about this level -->
@@ -27,5 +27,6 @@
     <dir>Gravitas</dir>
     <name text="Gravitas" de="Schwerkraftas"/>
     <subtitle text="weighty matters" de="gewichtige Angelegenheiten"/>
+    <ocd>balls,100</ocd>
   </level>
 </addin>
