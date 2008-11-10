@@ -4,6 +4,7 @@ import java.util.StringTokenizer;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.logging.Logger;
+import java.util.logging.Level;
 import java.io.IOException;
 
 /**
@@ -33,6 +34,9 @@ public class Profile
 
   public Profile(String profileData) throws IOException
   {
+    Logger.getLogger("").setLevel(Level.ALL);
+    Logger.getLogger("").getHandlers()[0].setLevel(Level.ALL);
+
     log.finest("Constructing Profile from data: " + profileData);
 
     StringTokenizer tok = new StringTokenizer(profileData, ",");

@@ -20,6 +20,7 @@ public class Tower
   private transient double height;
   private transient int usedStrandBalls;
   private transient int usedNodeBalls;
+  private transient int totalBalls;
 
   public Tower(String towerStr) throws IOException
   {
@@ -33,6 +34,7 @@ public class Tower
     strands = new ArrayList<Strand>(300);
 
     usedStrandBalls = 0;
+    totalBalls = 0;
 
     StringTokenizer tok = new StringTokenizer(towerStr, ":");
     while (tok.hasMoreTokens()) {
@@ -45,6 +47,7 @@ public class Tower
         tok.nextToken(); // ignore xMomentum
         tok.nextToken(); // ignore yMomentum
         balls.add(ball);
+        totalBalls++;
       }
       else if (type.equals("s")) {
         Strand strand = new Strand();
@@ -54,7 +57,10 @@ public class Tower
         tok.nextToken(); // ignore connectionStrength
         tok.nextToken(); // ignore length
         String ballUsed = tok.nextToken(); // ignore ballUsed
-        if (ballUsed.equals("1")) usedStrandBalls++;
+        if (ballUsed.equals("1")) {
+          usedStrandBalls++;
+          totalBalls++;
+        }
         strands.add(strand);
 
         strand.firstBall.inStructure = true;
@@ -123,6 +129,12 @@ public class Tower
   public int getUsedNodeBalls()
   {
     return usedNodeBalls;
+  }
+
+  // Total balls, including those not connected
+  public int getTotalBalls()
+  {
+    return totalBalls;
   }
 
   public String toString()

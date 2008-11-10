@@ -105,7 +105,7 @@ public class ProfilePanel implements ActionListener
         Tower t = currentProfile.getTower();
 
         towerHeight.setText(formatHeight(t.getHeight()));
-        towerTotalBalls.setText(String.valueOf(t.getUsedStrandBalls() + t.getUsedNodeBalls()));
+        towerTotalBalls.setText(String.valueOf(t.getUsedStrandBalls() + t.getUsedNodeBalls()) + " of " + t.getTotalBalls());
         towerNodeBalls.setText(String.valueOf(t.getUsedNodeBalls()));
         towerStrandBalls.setText(String.valueOf(t.getUsedStrandBalls()));
 
