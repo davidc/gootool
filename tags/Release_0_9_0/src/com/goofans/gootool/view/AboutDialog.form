@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="com.goofans.gootool.view.AboutDialog">
+  <grid id="27dc6" binding="rootPanel" layout-manager="GridLayoutManager" row-count="3" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+    <margin top="4" left="4" bottom="4" right="4"/>
+    <constraints>
+      <xy x="20" y="20" width="586" height="4126"/>
+    </constraints>
+    <properties/>
+    <border type="none"/>
+    <children>
+      <grid id="dcd0a" layout-manager="GridLayoutManager" row-count="5" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+        <margin top="4" left="4" bottom="4" right="4"/>
+        <constraints>
+          <grid row="0" column="0" row-span="1" col-span="2" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties/>
+        <border type="none" title="About GooTool"/>
+        <children>
+          <component id="48f17" class="javax.swing.JLabel" binding="infoPane">
+            <constraints>
+              <grid row="0" column="0" row-span="1" col-span="2" vsize-policy="0" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false">
+                <preferred-size width="300" height="50"/>
+              </grid>
+            </constraints>
+            <properties>
+              <background swing-color="Table.background"/>
+              <enabled value="true"/>
+              <font swing-font="Label.font"/>
+              <opaque value="true"/>
+              <text value="&lt;html&gt;&#10;&lt;p&gt;For support and information on GooTool, please visit www.goofans.com&lt;/p&gt;&#10;&lt;br/&gt;&#10;&lt;p&gt;This program was built using &lt;a href=&quot;http://launch4j.sourceforge.net/&quot;&gt;launch4j&lt;/a&gt;.&lt;/p&gt;&#10;&lt;br/&gt;&#10;&lt;p&gt;This program uses cryptographic functions from the BouncyCastle library. Copyright (c) 2000 - 2008 The Legion Of The Bouncy Castle (http://www.bouncycastle.org). See LICENSE.bouncycastle.txt for the license.&lt;/p&gt;&#10;&#10;&lt;/html&gt;"/>
+            </properties>
+          </component>
+          <component id="92487" class="javax.swing.JLabel">
+            <constraints>
+              <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="4" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <text value="Version:"/>
+            </properties>
+          </component>
+          <component id="67431" class="javax.swing.JLabel" binding="versionField">
+            <constraints>
+              <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <text value=""/>
+            </properties>
+          </component>
+          <component id="51b9a" class="javax.swing.JLabel">
+            <constraints>
+              <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="4" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <text value="Author:"/>
+            </properties>
+          </component>
+          <component id="a56fb" class="javax.swing.JLabel">
+            <constraints>
+              <grid row="4" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <text value="© 2008 David Croft"/>
+            </properties>
+          </component>
+          <component id="b2f24" class="javax.swing.JLabel">
+            <constraints>
+              <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="4" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <text value="Built:"/>
+            </properties>
+          </component>
+          <component id="39503" class="javax.swing.JLabel" binding="buildField">
+            <constraints>
+              <grid row="3" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <text value=""/>
+            </properties>
+          </component>
+          <vspacer id="c39a8">
+            <constraints>
+              <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false">
+                <preferred-size width="-1" height="10"/>
+                <maximum-size width="-1" height="10"/>
+              </grid>
+            </constraints>
+          </vspacer>
+        </children>
+      </grid>
+      <component id="54d05" class="javax.swing.JButton" binding="okButton">
+        <constraints>
+          <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <text value="&amp;OK"/>
+        </properties>
+      </component>
+      <hspacer id="d386e">
+        <constraints>
+          <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+        </constraints>
+      </hspacer>
+      <vspacer id="51c33">
+        <constraints>
+          <grid row="2" column="0" row-span="1" col-span="2" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+        </constraints>
+      </vspacer>
+    </children>
+  </grid>
+  <inspectionSuppressions>
+    <suppress inspection="NoLabelFor" id="25633"/>
+    <suppress inspection="NoScrollPane" id="25633"/>
+  </inspectionSuppressions>
+</form>

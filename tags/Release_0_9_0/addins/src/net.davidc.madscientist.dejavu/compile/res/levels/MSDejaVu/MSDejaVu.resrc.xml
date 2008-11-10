@@ -1,0 +1,17 @@
+<ResourceManifest>
+	<Resources id="scene_MSDejaVu" >
+		<SetDefaults path="./" idprefix="" />
+		<Image id="IMAGE_SCENE_MSDEJAVU_SIGNPOST_BROWN" path="res/images/levelimages/signpost_brown" />
+		<Image id="IMAGE_SCENE_MSDEJAVU_BUSH_FG1A" path="res/images/levelimages/bush_fg1a" />
+		<Image id="IMAGE_SCENE_MSDEJAVU_TREE_STRIPE1" path="res/images/levelimages/tree_stripe1" />
+		<Image id="IMAGE_SCENE_MSDEJAVU_CLIFF_LEFT" path="res/levels/EconomicDivide/cliff_left" />
+		<Image id="IMAGE_SCENE_MSDEJAVU_CLIFF_RIGHT" path="res/levels/EconomicDivide/cliff_right" />
+		<Image id="IMAGE_SCENE_MSDEJAVU_BUSH_LEAFY_1" path="res/images/levelimages/bush_leafy_1" />
+		<Image id="IMAGE_SCENE_MSDEJAVU_SIGNPOSTPOLE_BROWN" path="res/images/levelimages/signpostPole_brown" />
+		<Image id="IMAGE_SCENE_MSDEJAVU_BUSH_LEAFY_1B" path="res/images/levelimages/bush_leafy_1b" />
+		<Image id="IMAGE_SCENE_MSDEJAVU_TREE_SIL_1" path="res/images/levelimages/tree_sil_1" />
+		<Image id="IMAGE_SCENE_MSDEJAVU_SKY_PISSYELLOWSTRIPES" path="res/images/levelimages/sky_pissyellowstripes" />
+		<SetDefaults path="./" idprefix="" />
+		<Sound id="SOUND_LEVEL_MSDEJAVU_TEMP_DWTD2" path="res/music/temp_DWtD2" />
+	</Resources>
+</ResourceManifest>
