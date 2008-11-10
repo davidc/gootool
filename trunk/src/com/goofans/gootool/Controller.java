@@ -203,10 +203,12 @@ public class Controller implements ActionListener
   {
     Addin addin = getSelectedAddin();
     log.info("Uninstall " + addin);
-    if (liveConfig.isEnabledAdddin(addin.getId())) {
-      showErrorDialog("Error", "This addin is currently enabled. You must disable it and save before uninstalling it.");
-      return;
-    }
+
+    // this isn't really necessary, we just won't have it there when we rebuild.
+//    if (liveConfig.isEnabledAdddin(addin.getId())) {
+//      showErrorDialog("Error", "This addin is currently enabled. You must disable it and save before uninstalling it.");
+//      return;
+//    }
 
     try {
       WorldOfGoo.uninstallAddin(addin);
@@ -219,6 +221,7 @@ public class Controller implements ActionListener
 
     showMessageDialog("Addin " + addin.getName() + " uninstalled!");
 
+    editorConfig.disableAddin(addin.getId());
     refreshView();
   }
 

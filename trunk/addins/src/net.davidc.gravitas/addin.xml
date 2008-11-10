@@ -19,7 +19,7 @@
 
   <!-- Other addins this one depends on. -->
   <dependencies>
-    <!--<depends ref="net.davidc.test.mynewball" min-version="1.0"/>-->
+    <depends ref="net.davidc.test.mynewball" min-version="1.0"/>
   </dependencies>
 
   <!-- Details about this level -->
