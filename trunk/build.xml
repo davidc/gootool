@@ -167,7 +167,8 @@
   </target>
 
   <target name="obfuscate" depends="jar">
-    <proguard printmapping="mapping/${gootool.version.full}.mapping" optimizationpasses="3" overloadaggressively="true" repackageclasses=""
+    <proguard printmapping="mapping/${gootool.version.full}.mapping" optimizationpasses="3" overloadaggressively="true"
+              flattenpackagehierarchy="com.goofans.gootool"
               allowaccessmodification="true"
               renamesourcefileattribute="SourceFile">
       <keepattribute name="SourceFile"/>
