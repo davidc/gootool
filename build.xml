@@ -211,7 +211,7 @@
       </fileset>
     </copy>
 
-    <zip destfile="${dist.dir}/GooTool-${gootool.version.full}.zip">
+    <zip destfile="${dist.dir}/GooTool-${gootool.version.full}-Windows.zip">
       <zipfileset dir="${dist.win32}" prefix="GooTool-${gootool.version.full}"/>
     </zip>
   </target>
