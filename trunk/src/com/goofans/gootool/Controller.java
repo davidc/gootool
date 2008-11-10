@@ -4,11 +4,15 @@ import com.goofans.gootool.addins.Addin;
 import com.goofans.gootool.addins.AddinFactory;
 import com.goofans.gootool.model.Configuration;
 import com.goofans.gootool.view.AboutDialog;
-import com.goofans.gootool.view.MainFrame;
 import com.goofans.gootool.view.AddinPropertiesDialog;
+import com.goofans.gootool.view.MainFrame;
 import com.goofans.gootool.view.ProgressDialog;
+import com.goofans.gootool.wog.ConfigurationWriterTask;
+import com.goofans.gootool.util.ProgressIndicatingTask;
+import com.goofans.gootool.util.WogExeFileFilter;
+import com.goofans.gootool.util.ProfileFileFilter;
 import com.goofans.gootool.wog.WorldOfGoo;
-import com.goofans.gootool.wog.ConfigurationWriter;
+import com.goofans.gootool.profile.ProfileFactory;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -16,8 +20,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -37,6 +42,10 @@ public class Controller implements ActionListener
   public static final String CMD_ADDIN_UNINSTALL = "Addin>Uninstall";
   public static final String CMD_ADDIN_ENABLE = "Addin>Enable";
   public static final String CMD_ADDIN_DISABLE = "Addin>Disable";
+
+  public static final String CMD_CHANGE_INSTALL_DIR = "Options>InstallDir";
+  public static final String CMD_CHANGE_CUSTOM_DIR = "Options>CustomDir";
+  public static final String CMD_CHANGE_PROFILE_FILE = "Options>ProfileFile";
 
   public static final String CMD_SAVE = "Save";
   public static final String CMD_SAVE_AND_LAUNCH = "Save&Launch";
@@ -97,6 +106,12 @@ public class Controller implements ActionListener
     }
     else if (cmd.equals(CMD_ADDIN_UNINSTALL)) {
       uninstallAddin();
+    }
+    else if (cmd.equals(CMD_CHANGE_INSTALL_DIR)) {
+      changeInstallDir();
+    }
+    else if (cmd.equals(CMD_CHANGE_PROFILE_FILE)) {
+      changeProfileFile();
     }
   }
 
@@ -223,6 +238,34 @@ public class Controller implements ActionListener
   }
 
 
+  private void changeInstallDir()
+  {
+    updateModelFromView(editorConfig);
+    if (askToLocateWog() == 0) {
+      updateViewFromModel(editorConfig);
+    }
+  }
+
+  private void changeProfileFile()
+  {
+
+    JFileChooser chooser = new JFileChooser();
+    chooser.setFileFilter(new ProfileFileFilter());
+
+    if (chooser.showOpenDialog(null) != JFileChooser.APPROVE_OPTION) {
+      return;
+    }
+
+    File selectedFile = chooser.getSelectedFile();
+    if (!ProfileFactory.locateProfileAtFile(selectedFile)) {
+      JOptionPane.showMessageDialog(null, "Sorry, this isn't a valid profile file", "Profile not found", JOptionPane.ERROR_MESSAGE);
+      return;
+    }
+
+    refreshView();
+  }
+
+
   private void showMessageDialog(String msg)
   {
     JOptionPane.showMessageDialog(mainFrame, msg);
@@ -315,7 +358,7 @@ public class Controller implements ActionListener
     // TODO validate here
 
     try {
-      if (!WorldOfGoo.getCustomDir().exists()) {
+      if (!new File(WorldOfGoo.getCustomDir(), "WorldOfGoo.exe").exists()) {
         showMessageDialog("Since this is the first time you have run GooTool, it wiil take quite a long time for the initial save.");
       }
     }
@@ -324,41 +367,16 @@ public class Controller implements ActionListener
       log.log(Level.SEVERE, "Couldn't get custom dir", e);
     }
 
-    final ConfigurationWriter configWriter = new ConfigurationWriter();
-
-    final ProgressDialog progressDialog = new ProgressDialog(mainFrame, "Building your World of Goo");
-    configWriter.addListener(progressDialog);
+    final ConfigurationWriterTask configWriter = new ConfigurationWriterTask(editorConfig);
 
 
-    new Thread()
-    {
-      public void run()
-      {
-        try {
-          configWriter.writeConfiguration(editorConfig);
-          SwingUtilities.invokeLater(new Runnable()
-          {
-            public void run()
-            {
-              progressDialog.setVisible(false);
-            }
-          });
-        }
-        catch (final IOException e) {
-          log.log(Level.SEVERE, "Error writing configuration", e);
-          SwingUtilities.invokeLater(new Runnable()
-          {
-            public void run()
-            {
-              showErrorDialog("Error writing configuration", e.getMessage());
-              progressDialog.setVisible(false);
-            }
-          });
-        }
-      }
-    }.start();
-
-    progressDialog.setVisible(true);
+    try {
+      runTask("Building your World of Goo", configWriter);
+    }
+    catch (Exception e) {
+      log.log(Level.SEVERE, "Error writing configuration", e);
+      showErrorDialog("Error writing configuration", e.getMessage());
+    }
 
     try {
       liveConfig = WorldOfGoo.readConfiguration();
@@ -381,6 +399,47 @@ public class Controller implements ActionListener
         log.log(Level.SEVERE, "Error launching WoG", e);
         showErrorDialog("Error launching World of Goo", e.getLocalizedMessage());
       }
+    }
+  }
+
+  void runTask(String windowTitle, final ProgressIndicatingTask task) throws Exception
+  {
+    final ProgressDialog progressDialog = new ProgressDialog(mainFrame, windowTitle);
+    task.addListener(progressDialog);
+
+    final Exception[] result = new Exception[]{null};
+
+    Thread thread = new Thread()
+    {
+      public void run()
+      {
+        try {
+          task.run();
+          result[0] = null;
+        }
+        catch (Exception e) {
+          result[0] = e;
+        }
+        finally {
+          SwingUtilities.invokeLater(new Runnable()
+          {
+            public void run()
+            {
+              progressDialog.setVisible(false);
+            }
+          });
+        }
+      }
+    };
+
+    thread.start();
+
+    progressDialog.setVisible(true); // blocks
+
+    /* Now it has exited */
+
+    if (result[0] != null) {
+      throw result[0];
     }
   }
 
@@ -456,5 +515,30 @@ public class Controller implements ActionListener
     }
 
     return displayAddins;
+  }
+
+  /**
+   * returns 0 if found, -1 if not found, -2 if user cancelled dialog
+   */
+  public int askToLocateWog()
+  {
+    JFileChooser chooser = new JFileChooser();
+    chooser.setFileFilter(new WogExeFileFilter());
+
+    if (chooser.showOpenDialog(null) != JFileChooser.APPROVE_OPTION) {
+      return -2;
+    }
+
+    File selectedFile = chooser.getSelectedFile();
+    try {
+      WorldOfGoo.init(selectedFile.getParentFile());
+      return 0;
+    }
+    catch (FileNotFoundException e) {
+      log.info("WoG not found at " + selectedFile + " (" + selectedFile.getParentFile() + ")");
+
+      JOptionPane.showMessageDialog(null, e.getLocalizedMessage(), "File not found", JOptionPane.ERROR_MESSAGE);
+      return -1;
+    }
   }
 }

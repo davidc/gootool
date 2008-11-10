@@ -15,9 +15,7 @@ import java.util.prefs.Preferences;
 import com.goofans.gootool.GooTool;
 import com.goofans.gootool.addins.*;
 import com.goofans.gootool.model.Configuration;
-import com.goofans.gootool.util.Utilities;
-import com.goofans.gootool.util.Version;
-import com.goofans.gootool.util.XMLUtil;
+import com.goofans.gootool.util.*;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 
@@ -27,52 +25,28 @@ import org.w3c.dom.Node;
  * @author David Croft (davidc@goofans.com)
  * @version $Id$
  */
-public class ConfigurationWriter
+public class ConfigurationWriterTask extends ProgressIndicatingTask
 {
-  private static final Logger log = Logger.getLogger(ConfigurationWriter.class.getName());
-
-  private List<ConfigurationProgressListener> listeners = new ArrayList<ConfigurationProgressListener>();
+  private static final Logger log = Logger.getLogger(ConfigurationWriterTask.class.getName());
 
   private static final String[] resourceDirs = new String[]{"properties", "res"};
 
-  public ConfigurationWriter()
+  private final Configuration configuration;
+
+  public ConfigurationWriterTask(Configuration configuration)
   {
+    this.configuration = configuration;
   }
 
-  public void addListener(ConfigurationProgressListener listener)
+  public void run() throws Exception
   {
-    listeners.add(listener);
-  }
-
-  public void removeListener(ConfigurationProgressListener listener)
-  {
-    listeners.remove(listener);
-  }
-
-  private void beginStep(String taskDescription, boolean progressAvailable)
-  {
-    log.log(Level.INFO, "Beginning step " + taskDescription);
-    for (ConfigurationProgressListener listener : listeners) {
-      listener.beginStep(taskDescription, progressAvailable);
-    }
-  }
-
-  private void progressStep(float percent)
-  {
-    for (ConfigurationProgressListener listener : listeners) {
-      listener.progressStep(percent);
-    }
-  }
-
-  public void writeConfiguration(Configuration c) throws IOException
-  {
-    writePrivateConfig(c);
+    writePrivateConfig(configuration);
 
     copyGameFiles();
 
-    writeUserConfig(c);
+    writeUserConfig(configuration);
 
-    installAddins(c);
+    installAddins(configuration);
   }
 
   // Writes the "custom" folder inside WoG. Might take a long time on first run.
@@ -271,32 +245,15 @@ public class ConfigurationWriter
   }
 
   @SuppressWarnings({"UseOfSystemOutOrSystemErr"})
-  public static void main(String[] args) throws IOException, AddinFormatException
+  public static void main(String[] args) throws Exception, AddinFormatException
   {
     Logger.getLogger("").setLevel(Level.ALL);
     Logger.getLogger("").getHandlers()[0].setLevel(Level.ALL);
 
     WorldOfGoo.init();
     WorldOfGoo.setCustomDir(new File("C:\\BLAH\\"));
-    ConfigurationWriter writer = new ConfigurationWriter();
-
-    writer.addListener(new ConfigurationProgressListener()
-    {
-      @SuppressWarnings({"UseOfSystemOutOrSystemErr"})
-      public void beginStep(String taskDescription, boolean progressAvailable)
-      {
-        System.out.println("beginning " + taskDescription + ", " + progressAvailable);
-      }
-
-      @SuppressWarnings({"UseOfSystemOutOrSystemErr"})
-      public void progressStep(float percent)
-      {
-        System.out.println("progress: " + percent);
-      }
-    });
 
     Configuration c = WorldOfGoo.readConfiguration();
-
     c.setSkipOpeningMovie(true);
     c.setWatermark("hi there!");
 
@@ -315,6 +272,23 @@ public class ConfigurationWriter
 //    c.enableAddin("com.2dboy.talic.basketball");
     c.enableAddin("net.davidc.madscientist.dejavu");
 
-    writer.writeConfiguration(c);
+    ConfigurationWriterTask writer = new ConfigurationWriterTask(c);
+
+    writer.addListener(new ProgressListener()
+    {
+      @SuppressWarnings({"UseOfSystemOutOrSystemErr"})
+      public void beginStep(String taskDescription, boolean progressAvailable)
+      {
+        System.out.println("beginning " + taskDescription + ", " + progressAvailable);
+      }
+
+      @SuppressWarnings({"UseOfSystemOutOrSystemErr"})
+      public void progressStep(float percent)
+      {
+        System.out.println("progress: " + percent);
+      }
+    });
+
+    writer.run();
   }
 }

@@ -71,6 +71,7 @@ public class WorldOfGoo
 
   public static final String GOOMOD_EXTENSION = "goomod";
   private static final String GOOMOD_EXTENSION_WITH_DOT = "." + GOOMOD_EXTENSION;
+  private static final String PREF_WOG_DIR = "wog_dir";
 
   static {
     XPath path = XPathFactory.newInstance().newXPath();
@@ -100,9 +101,17 @@ public class WorldOfGoo
    */
   public static void init()
   {
+    Preferences p = Preferences.userNodeForPackage(GooTool.class);
+    String userWogDir = p.get(PREF_WOG_DIR, null);
+
+    if (userWogDir != null) {
+      if (locateWogAtPath(new File(userWogDir))) {
+        log.info("Found WoG at stored location of \"" + userWogDir + "\" at: " + wogDir);
+        return;
+      }
+    }
+    
     for (String searchPath : SEARCH_PATHS) {
-//      searchPath = searchPath.replace("%ProgramFiles%", System.getenv("ProgramFiles"));
-//      searchPath = searchPath.replace("%SystemDrive%", System.getenv("SystemDrive"));
       String newSearchPath = Utilities.expandEnvVars(searchPath);
 
       if (locateWogAtPath(new File(newSearchPath))) {
@@ -130,6 +139,9 @@ public class WorldOfGoo
     wogFound = true;
     wogDir = searchPath;
 
+    Preferences p = Preferences.userNodeForPackage(GooTool.class);
+    p.put(PREF_WOG_DIR, wogDir.getAbsolutePath());
+    
     addinsDir = new File(wogDir, ADDIN_DIR);
 //    customDir = new File(wogDir, CUSTOM_DIR);
 
@@ -139,7 +151,7 @@ public class WorldOfGoo
       setCustomDir(new File(wogDir, CUSTOM_DIR));
     }
     catch (IOException e) {
-      log.log(Level.WARNING, "Can't use custom directory inside wog", e);
+      log.log(Level.WARNING, "Can't use custom directory inside wog: " + e.getLocalizedMessage());
     }
 
     updateAvailableAddins();
@@ -224,7 +236,7 @@ public class WorldOfGoo
   public static void setCustomDir(File customDir) throws IOException
   {
     if (customDir.exists() && !customDir.isDirectory()) throw new IOException(customDir + " isn't a directory");
-    if (!customDir.exists() && !customDir.mkdir()) throw new IOException("Can't create "+ customDir);
+    if (!customDir.exists() && !customDir.mkdir()) throw new IOException("Can't create " + customDir);
 
     //test write
     File testFile = new File(customDir, "writeTest");
@@ -322,7 +334,7 @@ public class WorldOfGoo
   {
     availableAddins.add(a);
   }
-  
+
   // ONLY FOR USE BY TEST CASES !!!!!
   public static void DEBUGremoveAddinById(String id)
   {
