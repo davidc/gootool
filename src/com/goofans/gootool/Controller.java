@@ -127,6 +127,14 @@ public class Controller implements ActionListener
 
   private void installAddin()
   {
+    if (!WorldOfGoo.isCustomDirSet()) {
+      showMessageDialog("GooTool needs a writeable directory to store your custom World of Goo. Please create a new, empty directory on the next screen.");
+      changeCustomDir();
+      if (!WorldOfGoo.isCustomDirSet()) {
+        return;
+      }
+    }
+
     JFileChooser chooser = new JFileChooser();
     FileNameExtensionFilter filter = new FileNameExtensionFilter("World of Goo Mods", WorldOfGoo.GOOMOD_EXTENSION);
     chooser.setFileFilter(filter);

@@ -77,7 +77,7 @@ public class AddinPropertiesDialog extends JDialog
     }
 
     if (a.getDependencies().size() == 0) {
-      depends.setText("None");
+      depends.setText("Nothing");
     }
     else {
       List<Addin> addins = WorldOfGoo.getAvailableAddins();
