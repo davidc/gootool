@@ -80,7 +80,6 @@ public class Controller implements ActionListener
     }
     else if (cmd.equals(CMD_SAVE_AND_LAUNCH)) {
       save(true);
-
     }
     else if (cmd.equals(CMD_EXIT)) {
       maybeExit();
@@ -281,11 +280,15 @@ public class Controller implements ActionListener
 
     File selectedFile = chooser.getSelectedFile();
 
-    System.out.println("selectedFile = " + selectedFile);
-
     if (selectedFile.equals(wogDir)) {
       showErrorDialog("Bad choice", "You can't install to same directory that World of Goo's already in! Make a new directory.");
       return;
+    }
+
+    if (!selectedFile.exists()) {
+      if (!selectedFile.mkdir()) {
+        showErrorDialog("Can't create directory", "Couldn't create the directory " + selectedFile.getAbsolutePath());
+      }
     }
 
     // Check if it's not empty
@@ -450,7 +453,7 @@ public class Controller implements ActionListener
     }
     catch (Exception e) {
       log.log(Level.SEVERE, "Error writing configuration", e);
-      showErrorDialog("Error writing configuration", e.getMessage());
+      showErrorDialog("Error writing configuration", e.getMessage() + " (" + e.getClass().getName() + ")");
       errored = true;
     }
 
