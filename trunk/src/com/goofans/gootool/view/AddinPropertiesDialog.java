@@ -3,10 +3,10 @@ package com.goofans.gootool.view;
 import com.goofans.gootool.addins.Addin;
 import com.goofans.gootool.addins.AddinDependency;
 import com.goofans.gootool.GooTool;
+import com.goofans.gootool.util.GUIUtil;
 import com.goofans.gootool.wog.WorldOfGoo;
 
 import javax.swing.*;
-import java.awt.event.*;
 import java.util.List;
 
 /**
@@ -26,42 +26,19 @@ public class AddinPropertiesDialog extends JDialog
 
   public AddinPropertiesDialog(JFrame mainFrame, Addin a)
   {
-    super(mainFrame, "About " + a.getTypeText() + " " + a.getName(), false);
+    super(mainFrame, "About " + a.getTypeText() + " " + a.getName(), true);
 
     setLocationByPlatform(true);
+    setResizable(false);
 
     setIconImage(GooTool.getMainIconImage());
 
     setContentPane(rootPanel);
 
+//    SwingUtil.setPackOnOpen(this);
 
-    okButton.addActionListener(new ActionListener()
-    {
-      public void actionPerformed(ActionEvent e)
-      {
-        setVisible(false);
-      }
-    });
-
-    addWindowListener(new WindowAdapter()
-    {
-      public void windowOpened(WindowEvent e)
-      {
-//        pack();
-        okButton.requestFocusInWindow();
-      }
-    });
-
-    //TODO this doesn't work.
-    addKeyListener(new KeyAdapter()
-    {
-      public void keyPressed(KeyEvent e)
-      {
-        if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
-          setVisible(false);
-        }
-      }
-    });
+    GUIUtil.setDefaultClosingOkButton(okButton, this);
+    GUIUtil.setCloseOnEscape(this);
 
     name.setText(a.getName());
     version.setText(a.getVersion().toString());
@@ -114,6 +91,5 @@ public class AddinPropertiesDialog extends JDialog
     }
 
     pack();
-    setResizable(false);
   }
 }
