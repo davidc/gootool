@@ -1,15 +1,13 @@
 package com.goofans.gootool.view;
 
 import com.goofans.gootool.util.Version;
+import com.goofans.gootool.util.GUIUtil;
 import com.goofans.gootool.GooTool;
 
 import javax.swing.*;
-import java.awt.event.*;
 import java.text.DateFormat;
 
 /**
- * TODO ESC to close dialog
- *
  * @author David Croft (davidc@goofans.com)
  * @version $Id$
  */
@@ -32,33 +30,10 @@ public class AboutDialog extends JDialog
 
     setContentPane(rootPanel);
 
-    okButton.addActionListener(new ActionListener()
-    {
-      public void actionPerformed(ActionEvent e)
-      {
-        setVisible(false);
-      }
-    });
-
-    addWindowListener(new WindowAdapter()
-    {
-      public void windowOpened(WindowEvent e)
-      {
-        pack();
-        okButton.requestFocusInWindow();
-      }
-    });
-
-    //TODO this doesn't work.
-    addKeyListener(new KeyAdapter()
-    {
-      public void keyPressed(KeyEvent e)
-      {
-        if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
-          setVisible(false);
-        }
-      }
-    });
+    GUIUtil.setPackOnOpen(this);
+    
+    GUIUtil.setDefaultClosingOkButton(okButton, this);
+    GUIUtil.setCloseOnEscape(this);
 
 //    infoPane.addHyperlinkListener(new HyperlinkLaunchingListener());
 
@@ -69,5 +44,4 @@ public class AboutDialog extends JDialog
 
     pack();
   }
-
 }
