@@ -2,6 +2,7 @@ package com.goofans.gootool;
 
 import com.goofans.gootool.util.ProgressIndicatingTask;
 import com.goofans.gootool.util.Version;
+import com.goofans.gootool.util.GUIUtil;
 
 import javax.swing.*;
 import java.awt.*;
@@ -26,7 +27,7 @@ public class GooTool
 
   public static void main(String[] args)
   {
-    setLookAndFeel();
+    GUIUtil.switchToSystemLookAndFeel();
 
     log.info("Launching gootool " + Version.RELEASE_FULL);
 
@@ -46,31 +47,22 @@ public class GooTool
     }
   }
 
-  private static void setLookAndFeel()
-  {
-    String systemLaf = UIManager.getSystemLookAndFeelClassName();
-    try {
-      UIManager.setLookAndFeel(systemLaf);
-      log.log(Level.FINER, "Changed look and feel to " + systemLaf);
-    }
-    catch (Exception e) {
-      log.log(Level.WARNING, "unable to change to look and feel to " + systemLaf, e);
-    }
-  }
-
   private static void initIcon()
   {
     icon = new ImageIcon(GooTool.class.getResource("/48x48.png"));
     log.fine("icon = " + icon);
   }
 
-  public static ImageIcon getMainIcon()
+  public static synchronized ImageIcon getMainIcon()
   {
+    if (icon == null) {
+      initIcon();
+    }
     return icon;
   }
 
   public static Image getMainIconImage()
   {
-    return icon.getImage();
+    return getMainIcon().getImage();
   }
 }
