@@ -139,7 +139,7 @@ public class Tower
 
   public String toString()
   {
-    return "Tower with " + balls.size() + " balls floating around and " + strands.size() + " strands, used " + usedNodeBalls + " node and " + usedStrandBalls + " strand balls to make height " + height;
+    return "Tower with " + totalBalls + " balls and " + strands.size() + " strands, used " + usedNodeBalls + " node and " + usedStrandBalls + " strand balls to make height " + height;
   }
 
   @SuppressWarnings({"UseOfSystemOutOrSystemErr"})

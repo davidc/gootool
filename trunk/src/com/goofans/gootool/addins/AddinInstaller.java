@@ -267,8 +267,6 @@ public class AddinInstaller
     catch (TransformerException e) {
       throw new AddinFormatException("Unable to merge level island scene", e);
     }
-
-
   }
 
   private static String makeString(String levelSubtitleId, Map<String, String> translations)
