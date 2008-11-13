@@ -1,0 +1,23 @@
+<addin spec-version="1.0">
+  <!-- The unique ID of this addin. Used to check if it's already installed or compare its version -->
+  <id>net.davidc.watermark</id>
+
+  <!-- name shown to user -->
+  <name>Watermark</name>
+
+  <!-- either "mod" or "level". For user display, and to determine whether to create a chapter 5 entry -->
+  <type>mod</type>
+
+  <!-- Version. Must be numerically comparable at each "." boundary. You could also do it without periods. 11281 is a fine version number.-->
+  <version>0.1</version>
+
+  <!-- description shown to user -->
+  <description>This mod adds a watermark to the game. It is a simple test of file merging.</description>
+
+  <!-- author shown to user -->
+  <author>davidc</author>
+  <!--
+  <level> ... level details to appear on ch 5</leve>
+  -->
+
+</addin>
