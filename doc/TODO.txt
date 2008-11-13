@@ -1,6 +1,8 @@
 - strip down bouncycastle to only needed classes
 - refreshrate in config.txt - NEW IN NEW VERSION!!!
 
+- dragging addins below last enabled addin should move it to bottom
+
 - let them save tower jpgs (and the original transparent one)
 
 - loading status windows while doing long activities (e.g. initial load, profile gen, upload, merge)
