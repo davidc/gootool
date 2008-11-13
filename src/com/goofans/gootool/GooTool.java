@@ -30,6 +30,7 @@ public class GooTool
     GUIUtil.switchToSystemLookAndFeel();
 
     log.info("Launching gootool " + Version.RELEASE_FULL);
+    log.info("Java version " + System.getProperty("java.version") + " from " + System.getProperty("java.vendor") + " in " + System.getProperty("java.home"));
 
     try {
       initIcon();
