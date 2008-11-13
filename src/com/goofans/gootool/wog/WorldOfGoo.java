@@ -363,17 +363,6 @@ public class WorldOfGoo
     }
   }
 
-  @SuppressWarnings({"UseOfSystemOutOrSystemErr"})
-  public static void main(String[] args) throws IOException
-  {
-    init();
-    init(new File("c:\\games\\world of goo"));
-    Configuration c = readConfiguration();
-    System.out.println("c = " + c);
-
-//    writeConfiguration(c);
-  }
-
   private static File getAddinInstalledFile(String addinId) throws IOException
   {
     if (addinsDir == null) {
@@ -411,5 +400,16 @@ public class WorldOfGoo
     }
 
     WorldOfGoo.updateAvailableAddins();
+  }
+
+  @SuppressWarnings({"UseOfSystemOutOrSystemErr"})
+  public static void main(String[] args) throws IOException
+  {
+    init();
+    init(new File("c:\\games\\world of goo"));
+    Configuration c = readConfiguration();
+    System.out.println("c = " + c);
+
+//    writeConfiguration(c);
   }
 }
