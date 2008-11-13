@@ -196,7 +196,7 @@ public class AddinFactory
 
     if (levelNode != null) {
       levelDir = getStringRequired(document, XPATH_ADDIN_LEVEL_DIR, "level dir"); // TODO validate
-      levelOcd = getStringRequired(document, XPATH_ADDIN_LEVEL_OCD, "level ocd");
+      levelOcd = getString(document, XPATH_ADDIN_LEVEL_OCD); // TODO validate
 
       Node nameNode = (Node) XPATH_ADDIN_LEVEL_NAME.evaluate(document, XPathConstants.NODE);
       if (nameNode == null) throw new AddinFormatException("Missing level name");
