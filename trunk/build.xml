@@ -186,11 +186,9 @@
       <!--public static void main(java.lang.String[]);-->
       <!--}-->
     </proguard>
-
   </target>
 
-
-  <target name="launcher" description="builds the launcher" depends="obfuscate"><!-- depends="jar">-->
+  <target name="launcher32" description="builds the launcher" depends="obfuscate"><!-- depends="jar">-->
     <mkdir dir="${dist.win32}"/>
     <mkdir dir="${dist.win32}/bin"/>
 
@@ -204,12 +202,15 @@
             />
   </target>
 
-  <target name="dist" description="Build the distribution" depends="jar,launcher">
+  <target name="dist32" description="Build the Win32 distribution" depends="jar, launcher32">
     <copy todir="${dist.win32}">
       <fileset dir="dist_src">
         <patternset refid="ignored.files"/>
         <type type="file"/>
       </fileset>
+    </copy>
+    <copy todir="${dist.win32}/doc">
+      <fileset file="doc/CHANGELOG.txt"/>
     </copy>
 
     <zip destfile="${dist.dir}/GooTool-${gootool.version.full}-Windows.zip">
@@ -217,6 +218,7 @@
     </zip>
   </target>
 
+  <target name="dist" description="Build the distribution" depends="dist32"/>
 
   <property name="svn.trunk" value="${svn.base}/trunk"/>
   <property name="svn.tags" value="${svn.base}/tags"/>
