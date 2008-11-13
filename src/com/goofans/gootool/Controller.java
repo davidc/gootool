@@ -5,12 +5,11 @@ import com.goofans.gootool.addins.AddinFactory;
 import com.goofans.gootool.model.Configuration;
 import com.goofans.gootool.profile.ProfileFactory;
 import com.goofans.gootool.util.ProfileFileFilter;
-import com.goofans.gootool.util.ProgressIndicatingTask;
 import com.goofans.gootool.util.WogExeFileFilter;
+import com.goofans.gootool.util.GUIUtil;
 import com.goofans.gootool.view.AboutDialog;
 import com.goofans.gootool.view.AddinPropertiesDialog;
 import com.goofans.gootool.view.MainFrame;
-import com.goofans.gootool.view.ProgressDialog;
 import com.goofans.gootool.wog.ConfigurationWriterTask;
 import com.goofans.gootool.wog.WorldOfGoo;
 
@@ -449,7 +448,7 @@ public class Controller implements ActionListener
     boolean errored = false;
 
     try {
-      runTask("Building your World of Goo", configWriter);
+      GUIUtil.runTask(mainFrame, "Building your World of Goo", configWriter);
     }
     catch (Exception e) {
       log.log(Level.SEVERE, "Error writing configuration", e);
@@ -475,47 +474,6 @@ public class Controller implements ActionListener
         log.log(Level.SEVERE, "Error launching WoG", e);
         showErrorDialog("Error launching World of Goo", e.getLocalizedMessage());
       }
-    }
-  }
-
-  void runTask(String windowTitle, final ProgressIndicatingTask task) throws Exception
-  {
-    final ProgressDialog progressDialog = new ProgressDialog(mainFrame, windowTitle);
-    task.addListener(progressDialog);
-
-    final Exception[] result = new Exception[]{null};
-
-    Thread thread = new Thread()
-    {
-      public void run()
-      {
-        try {
-          task.run();
-          result[0] = null;
-        }
-        catch (Exception e) {
-          result[0] = e;
-        }
-        finally {
-          SwingUtilities.invokeLater(new Runnable()
-          {
-            public void run()
-            {
-              progressDialog.setVisible(false);
-            }
-          });
-        }
-      }
-    };
-
-    thread.start();
-
-    progressDialog.setVisible(true); // blocks
-
-    /* Now it has exited */
-
-    if (result[0] != null) {
-      throw result[0];
     }
   }
 
