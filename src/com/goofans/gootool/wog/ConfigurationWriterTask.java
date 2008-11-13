@@ -153,7 +153,9 @@ public class ConfigurationWriterTask extends ProgressIndicatingTask
     p.putBoolean(WorldOfGoo.PREF_SKIP_OPENING_MOVIE, c.isSkipOpeningMovie());
     p.put(WorldOfGoo.PREF_WATERMARK, c.getWatermark());
 
-    p.put(WorldOfGoo.PREF_LANGUAGE, c.getLanguage().getCode());
+    if (c.getLanguage() != null) {
+      p.put(WorldOfGoo.PREF_LANGUAGE, c.getLanguage().getCode());
+    }
     // todo what if resolution is null
     p.putInt(WorldOfGoo.PREF_SCREENWIDTH, c.getResolution().getWidth());
     p.putInt(WorldOfGoo.PREF_SCREENHEIGHT, c.getResolution().getHeight());
@@ -179,8 +181,11 @@ public class ConfigurationWriterTask extends ProgressIndicatingTask
     Document document = XMLUtil.loadDocumentFromFile(new File(WorldOfGoo.getWogDir(), WorldOfGoo.USER_CONFIG_FILE));
 
     try {
-      Node n = (Node) WorldOfGoo.USER_CONFIG_XPATH_LANGUAGE.evaluate(document, XPathConstants.NODE);
-      n.setNodeValue(c.getLanguage().getCode());
+      Node n;
+      if (c.getLanguage() != null) {
+        n = (Node) WorldOfGoo.USER_CONFIG_XPATH_LANGUAGE.evaluate(document, XPathConstants.NODE);
+        n.setNodeValue(c.getLanguage().getCode());
+      }
 
       n = (Node) WorldOfGoo.USER_CONFIG_XPATH_SCREENWIDTH.evaluate(document, XPathConstants.NODE);
       n.setNodeValue(String.valueOf(c.getResolution().getWidth()));
@@ -254,7 +259,7 @@ public class ConfigurationWriterTask extends ProgressIndicatingTask
   }
 
   @SuppressWarnings({"UseOfSystemOutOrSystemErr"})
-  public static void main(String[] args) throws Exception, AddinFormatException
+  public static void main(String[] args) throws Exception
   {
     Logger.getLogger("").setLevel(Level.ALL);
     Logger.getLogger("").getHandlers()[0].setLevel(Level.ALL);
