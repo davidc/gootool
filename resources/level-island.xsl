@@ -19,11 +19,22 @@
       <xsl:copy-of select="@*"/>
       <xsl:apply-templates/>
 
-      <level id="{$level_id}"
-             name="{$level_name_id}"
-             text="{$level_text_id}"
-             ocd="{$level_ocd}"
-              />
+      <xsl:element name="level">
+        <xsl:attribute name="id">
+          <xsl:value-of select="$level_id"/>
+        </xsl:attribute>
+        <xsl:attribute name="name">
+          <xsl:value-of select="$level_name_id"/>
+        </xsl:attribute>
+        <xsl:attribute name="text">
+          <xsl:value-of select="$level_text_id"/>
+        </xsl:attribute>
+        <xsl:if test="$level_ocd">
+          <xsl:attribute name="ocd">
+            <xsl:value-of select="$level_ocd"/>
+          </xsl:attribute>
+        </xsl:if>
+      </xsl:element>
       <!--cutscene="levelFadeOut,Chapter4End,gooTransition_out" -->
 
       <!-- TODO: ability to have cutscenes, oncompletes, etc. Maybe just let them specify their own <level> element -->

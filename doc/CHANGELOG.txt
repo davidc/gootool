@@ -1,3 +1,12 @@
+0.9.3
+
+- Level OCD requirement is now optional
+
+0.9.2
+
+- Fixed bug saving when unrecognised language is selected
+- Added the missing languages to the options pane
+
 0.9.1
 
 - Profile parsing fixed for certain test cases
