@@ -162,7 +162,7 @@
 
   <target name="jar" depends="recompile">
     <jar jarfile="${output.jar}">
-      <fileset dir="${output.dir}"/>
+      <fileset dir="${output.dir}" excludes="com/goofans/gootool/leveledit/**"/>
     </jar>
   </target>
 
