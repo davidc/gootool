@@ -172,14 +172,14 @@ public class AddinFactory
     for (int i = 0; i < depends.getLength(); ++i) {
       Node node = depends.item(i);
 
-      String ref = getAttributeValue(node, ADDIN_DEPENDS_REF);
-      if (!PATTERN_ID.matcher(ref).matches()) throw new AddinFormatException("Invalid ref found in addin");
+      String ref = XMLUtil.getAttributeString(node, ADDIN_DEPENDS_REF, null);
+      if (ref == null || !PATTERN_ID.matcher(ref).matches()) throw new AddinFormatException("Invalid ref found in addin");
 
-      String minVersionStr = getAttributeValue(node, ADDIN_DEPENDS_MIN_VERSION);
-      String maxVersionStr = getAttributeValue(node, ADDIN_DEPENDS_MAX_VERSION);
+      String minVersionStr = XMLUtil.getAttributeString(node, ADDIN_DEPENDS_MIN_VERSION, null);
+      String maxVersionStr = XMLUtil.getAttributeString(node, ADDIN_DEPENDS_MAX_VERSION, null);
 
-      VersionSpec minVersion = minVersionStr.length() > 0 ? decodeVersion(minVersionStr, "min-version") : null;
-      VersionSpec maxVersion = maxVersionStr.length() > 0 ? decodeVersion(maxVersionStr, "max-version") : null;
+      VersionSpec minVersion = minVersionStr == null ? null : decodeVersion(minVersionStr, "min-version");
+      VersionSpec maxVersion = maxVersionStr == null ? null : decodeVersion(maxVersionStr, "max-version");
 
       dependencies.add(new AddinDependency(ref, minVersion, maxVersion));
     }
@@ -277,17 +277,6 @@ public class AddinFactory
     if (s == null) return "";
 
     return s.trim();
-  }
-
-  private static String getAttributeValue(Node node, String attributeName)
-  {
-    NamedNodeMap attributes = node.getAttributes();
-    if (attributes == null) return "";
-
-    Node attribute = attributes.getNamedItem(attributeName);
-    if (attribute == null) return "";
-
-    return attribute.getNodeValue().trim();
   }
 
   @SuppressWarnings({"UseOfSystemOutOrSystemErr"})

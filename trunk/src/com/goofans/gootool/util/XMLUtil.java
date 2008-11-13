@@ -9,6 +9,8 @@ import javax.xml.transform.dom.DOMSource;
 import java.io.*;
 
 import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.w3c.dom.NamedNodeMap;
 import org.xml.sax.SAXException;
 import org.xml.sax.InputSource;
 
@@ -37,7 +39,6 @@ public class XMLUtil
     }
     return document;
   }
-
 
   // Can't use this, at least one fie has weird encoding
 //  public static Document loadDocumentFromInputStream(InputStream is) throws IOException
@@ -112,5 +113,90 @@ public class XMLUtil
   public static Document newDocument() throws ParserConfigurationException
   {
     return DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
+  }
+
+  public static String getAttributeString(Node node, String attributeName, String defaultValue)
+  {
+    NamedNodeMap attributes = node.getAttributes();
+    if (attributes == null) return defaultValue;
+
+    Node attribute = attributes.getNamedItem(attributeName);
+    if (attribute == null) return defaultValue;
+
+    return attribute.getNodeValue().trim();
+  }
+
+  public static String getAttributeStringRequired(Node node, String attributeName) throws IOException
+  {
+    String s = getAttributeString(node, attributeName, null);
+    if (s == null) throw new IOException("Mandatory attribute " + attributeName + " not specified");
+    return s;
+  }
+
+  public static Double getAttributeDouble(Node node, String attributeName, Double defaultValue)
+  {
+    NamedNodeMap attributes = node.getAttributes();
+    if (attributes == null) return defaultValue;
+
+    Node attribute = attributes.getNamedItem(attributeName);
+    if (attribute == null) return defaultValue;
+
+    try {
+      Double d = Double.valueOf(attribute.getNodeValue().trim());
+      if (d.isNaN() || d.isInfinite()) return defaultValue;
+      return d;
+    }
+    catch (NumberFormatException e) {
+      return defaultValue;
+    }
+  }
+
+  public static double getAttributeDoubleRequired(Node node, String attributeName) throws IOException
+  {
+    Double d = getAttributeDouble(node, attributeName, null);
+    if (d == null) throw new IOException("Mandatory attribute " + attributeName + " not specified");
+    return d;
+  }
+
+  public static Integer getAttributeInteger(Node node, String attributeName, Integer defaultValue)
+  {
+    NamedNodeMap attributes = node.getAttributes();
+    if (attributes == null) return defaultValue;
+
+    Node attribute = attributes.getNamedItem(attributeName);
+    if (attribute == null) return defaultValue;
+
+    try {
+      return Integer.valueOf(attribute.getNodeValue().trim());
+    }
+    catch (NumberFormatException e) {
+      return defaultValue;
+    }
+  }
+
+  public static int getAttributeIntegerRequired(Node node, String attributeName) throws IOException
+  {
+    Integer integer = getAttributeInteger(node, attributeName, null);
+    if (integer == null) throw new IOException("Mandatory attribute " + attributeName + " not specified");
+    return integer;
+  }
+
+  public static Boolean getAttributeBoolean(Node node, String attributeName, Boolean defaultValue)
+  {
+    NamedNodeMap attributes = node.getAttributes();
+    if (attributes == null) return defaultValue;
+
+    Node attribute = attributes.getNamedItem(attributeName);
+    if (attribute == null) return defaultValue;
+
+    return Boolean.valueOf(attribute.getNodeValue().trim());
+  }
+
+  // TODO something better than IOException
+  public static boolean getAttributeBooleanRequired(Node node, String attributeName) throws IOException
+  {
+    Boolean b = getAttributeBoolean(node, attributeName, null);
+    if (b == null) throw new IOException("Mandatory attribute " + attributeName + " not specified");
+    return b;
   }
 }
