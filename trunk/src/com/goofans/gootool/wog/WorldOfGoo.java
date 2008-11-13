@@ -274,7 +274,7 @@ public class WorldOfGoo
   }
 
 
-  /**
+  /*
    * Loads the defaults from main config.txt. These are overwritten by our preferences if we have any.
    */
   private static void readUserConfig(Configuration c) throws IOException
@@ -289,19 +289,19 @@ public class WorldOfGoo
       }
       else {
         c.setLanguage(Language.getLanguageByCode(language));
-        log.info("Found language " + language);
+        log.fine("Found language " + language);
       }
       int screenWidth = ((Double) USER_CONFIG_XPATH_SCREENWIDTH.evaluate(document, XPathConstants.NUMBER)).intValue();
       int screenHeight = ((Double) USER_CONFIG_XPATH_SCREENHEIGHT.evaluate(document, XPathConstants.NUMBER)).intValue();
 
       Resolution res = Resolution.getResolutionByDimensions(screenWidth, screenHeight);
-      log.info("Found selected resolution " + res);
+      log.fine("Found selected resolution " + res);
       c.setResolution(res);
 
       int ui_inset = ((Double) USER_CONFIG_XPATH_UIINSET.evaluate(document, XPathConstants.NUMBER)).intValue();
       c.setUiInset(ui_inset);
 
-      log.info("Found selected ui_inset " + ui_inset);
+      log.fine("Found selected ui_inset " + ui_inset);
 
     }
     catch (XPathExpressionException e) {

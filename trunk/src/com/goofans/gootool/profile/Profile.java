@@ -34,9 +34,6 @@ public class Profile
 
   public Profile(String profileData) throws IOException
   {
-    Logger.getLogger("").setLevel(Level.ALL);
-    Logger.getLogger("").getHandlers()[0].setLevel(Level.ALL);
-
     log.finest("Constructing Profile from data: " + profileData);
 
     StringTokenizer tok = new StringTokenizer(profileData, ",");
@@ -143,6 +140,9 @@ public class Profile
   @SuppressWarnings({"UseOfSystemOutOrSystemErr"})
   public static void main(String[] args) throws IOException
   {
+    Logger.getLogger("").setLevel(Level.ALL);
+    Logger.getLogger("").getHandlers()[0].setLevel(Level.ALL);
+
     Profile newPlayer = new Profile("davidc,0,55,0,0,_,_,0");
     System.out.println("newPlayer = " + newPlayer);
     System.out.println("newPlayer.levelAchievements = " + newPlayer.levelAchievements);
