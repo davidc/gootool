@@ -424,6 +424,8 @@ public class Controller implements ActionListener
     updateModelFromView(editorConfig);
     // TODO validate here
 
+    removeUnavailableAddins(editorConfig);
+
     if (!WorldOfGoo.isCustomDirSet()) {
       showMessageDialog("GooTool needs a writeable directory to store your custom World of Goo. Please create a new, empty directory on the next screen.");
       changeCustomDir();
@@ -475,6 +477,30 @@ public class Controller implements ActionListener
         showErrorDialog("Error launching World of Goo", e.getLocalizedMessage());
       }
     }
+  }
+
+  private void removeUnavailableAddins(Configuration config)
+  {
+    // Remove any addins that are enabled but don't exist
+    List<Addin> availableAddins = WorldOfGoo.getAvailableAddins();
+    boolean foundThisAddin;
+    do {
+      foundThisAddin = false;
+      for (String enabledAddinName : config.getEnabledAddins()) {
+        // see if this addin is available
+        for (Addin availableAddin : availableAddins) {
+          if (availableAddin.getId().equals(enabledAddinName)) {
+            foundThisAddin = true;
+            break;
+          }
+        }
+        if (!foundThisAddin) {
+          log.log(Level.WARNING, "Removed unavailable enabled addin " + enabledAddinName);
+          config.disableAddin(enabledAddinName);
+          break;
+        }
+      }
+    } while (!foundThisAddin && config.getEnabledAddins().size() > 0);
   }
 
   private JDialog aboutDialog;
