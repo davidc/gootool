@@ -7,31 +7,21 @@
 
 - Don't SAVE if unmodified on LAUNCH
 
-- fullscreen
+- fullscreen?
 
-- backup/restore profile to websit e- perhaps just store their last 5 uploaded profiles?
+- backup/restore profile to website - perhaps just store their last 5 uploaded profiles?
 - mark user as cheat - requires X votes
-
 
 - reformat b5s and use as wog website server
 
-- zkm
-
 - more addin author-friendly functionality (e.g. add a directory as an addin)
-
 
 todo
 when installing make sure not existing addin with that id
 check dependencies
 
-
-store wog location in registry
-
 web report on what balls are used, by what levels, etc.
 - where is this image used?
-
-tood: It is illegal to override a file in the World of Goo directory itself, and GooTool will not load the addin if it has files directly inside override.
-
 
 remove wog references
 
@@ -40,8 +30,6 @@ can't access our formatter currently inside the jar/exe
 show current JRE info on about->version
 
 - preference, upload tower on goo exit, or upload tower continuously during play (need to detect when process exits - java.lang.Process?)
-
-stick custom dir in user homedir or something?
 
 - Perhaps stop overrides of Drained files, to prevent cheating in goocorp?
 
@@ -55,8 +43,6 @@ use JFormattedTextField for input field validation
 - Download languages from wiki? Autocreate images?
 
 - new version notification
-
-- svn build in release.properties
 
 WIshlist:
 

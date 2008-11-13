@@ -93,3 +93,18 @@ The final field is a decimal integer, representing the number of newly collected
 goo balls since the player last visited World of Goo Corporation. This number is
 displayed on the main screen.
 
+
+
+I have found that:
+
+- for most profiles, after the levels, a level named "0" indicates the end of levels, with no balls/moves/time data. After that is the tower, beginning with _.
+
+...HangLow,22,6,170,0,_b:Drained:-488.46:11.32:-1.08:0.00:...
+
+- for some players, this 0 doesn't exist. Instead is a 1 followed by a level name, followed by the tower. I'm not sure what the 1 indicates (perhaps the number of fields following), nor what the level name means. I do know that the level doesn't appear anywhere else in the list so maybe it's the level they're currently attempting.
+
+...ObservatoryObservationStation,0,12,96,1,HTInnovationCommittee,_b:Drained:-551.97:811.85:-0.87:-0.44:...
+
+I think for now I will code it so that if it receives an integer when expecting a level name, it skips over that many fields to reach the tower. Normally 0 but in this case 1, and possibly may have other values.
+
+-davidc
