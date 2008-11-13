@@ -45,9 +45,10 @@ public class Language
     languages.add(DEFAULT_LANGUAGE);
     languages.add(new Language("es", "Spanish"));
     languages.add(new Language("de", "German"));
+    languages.add(new Language("fr", "French"));
+    languages.add(new Language("it", "Italian"));
+    languages.add(new Language("nl", "Dutch"));
     LANGUAGES = Collections.unmodifiableList(languages);
-
-    // TODO populate this from http://cyanyde.com/~scaevolus/WorldOfGoo/properties/text.xml
   }
 
   public static List<Language> getSupportedLanguages()
