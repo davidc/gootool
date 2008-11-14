@@ -23,6 +23,7 @@ public class MainFrame extends JFrame implements ViewComponent
   private JPanel optionsPanelPanel;
   private JPanel addinsPanelPanel;
   private JPanel profilePanelPanel;
+  public JTabbedPane tabbedPane;
 
   private Controller controller;
 

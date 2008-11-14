@@ -49,6 +49,18 @@ public class MainMenu
 
     menuBar.add(menu);
 
+    menu = new JMenu("Advanced");
+    menu.setMnemonic(KeyEvent.VK_A);
+
+    menuItem = new JCheckBoxMenuItem("Translator mode");
+    menuItem.setMnemonic(KeyEvent.VK_T);
+    menuItem.setActionCommand(Controller.CMD_TRANSLATOR_MODE);
+    menuItem.addActionListener(controller);
+//    menuItem.setSelected(true);
+    menu.add(menuItem);
+
+    menuBar.add(menu);
+
     menu = new JMenu("Help");
     menu.setMnemonic(KeyEvent.VK_H);
 

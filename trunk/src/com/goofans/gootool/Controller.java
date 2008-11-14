@@ -12,16 +12,20 @@ import com.goofans.gootool.view.AddinPropertiesDialog;
 import com.goofans.gootool.view.MainFrame;
 import com.goofans.gootool.wog.ConfigurationWriterTask;
 import com.goofans.gootool.wog.WorldOfGoo;
+import com.goofans.gootool.i18n.ImageTool;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.*;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -50,6 +54,8 @@ public class Controller implements ActionListener
   public static final String CMD_SAVE_AND_LAUNCH = "Save&Launch";
   public static final String CMD_REVERT = "Revert";
 
+  public static final String CMD_TRANSLATOR_MODE = "ToggleTranslator";
+
   private MainFrame mainFrame;
 
   // The configuration currently live on disk.
@@ -57,6 +63,7 @@ public class Controller implements ActionListener
 
   // The configuration we're editing
   private Configuration editorConfig;
+  private JPanel translatePanel;
 
 
   public Controller()
@@ -113,6 +120,23 @@ public class Controller implements ActionListener
     }
     else if (cmd.equals(CMD_CHANGE_PROFILE_FILE)) {
       changeProfileFile();
+    }
+    else if (cmd.equals(CMD_TRANSLATOR_MODE)) {
+      if (((JCheckBoxMenuItem) event.getSource()).isSelected()) {
+        if (translatePanel == null) {
+          try {
+            translatePanel = new ImageTool(new File("C:\\Users\\david\\Downloads\\wog-translate\\"), new HashMap<String, Map<String, String>>()).rootPanel;
+          }
+          catch (Exception e) {
+            showErrorDialog("Error in translation pane", e.getClass() + ": " + e.getLocalizedMessage());
+            return;
+          }
+        }
+        mainFrame.tabbedPane.add("Translation", translatePanel);
+      }
+      else {
+        mainFrame.tabbedPane.remove(translatePanel);
+      }
     }
   }
 
