@@ -107,7 +107,7 @@ public class WorldOfGoo
    */
   public static void init()
   {
-    Preferences p = Preferences.userNodeForPackage(GooTool.class);
+    Preferences p = getPreferences();
     String userWogDir = p.get(PREF_WOG_DIR, null);
 
     if (userWogDir != null) {
@@ -125,6 +125,11 @@ public class WorldOfGoo
         return;
       }
     }
+  }
+
+  public static Preferences getPreferences()
+  {
+    return Preferences.userNodeForPackage(GooTool.class);
   }
 
   private static boolean locateWogAtPath(File searchPath)
@@ -145,7 +150,7 @@ public class WorldOfGoo
     wogFound = true;
     wogDir = searchPath;
 
-    Preferences p = Preferences.userNodeForPackage(GooTool.class);
+    Preferences p = getPreferences();
     p.put(PREF_WOG_DIR, wogDir.getAbsolutePath());
 
     p = Preferences.userNodeForPackage(GooTool.class);
@@ -257,7 +262,7 @@ public class WorldOfGoo
     testFile.delete();
     WorldOfGoo.customDir = customDir;
 
-    Preferences p = Preferences.userNodeForPackage(GooTool.class);
+    Preferences p = getPreferences();
     p.put(PREF_CUSTOM_DIR, customDir.getAbsolutePath());
 
     addinsDir = new File(customDir, ADDIN_DIR);
@@ -311,7 +316,7 @@ public class WorldOfGoo
 
   private static void readPrivateConfig(Configuration c)
   {
-    Preferences p = Preferences.userNodeForPackage(GooTool.class);
+    Preferences p = getPreferences();
 
 //    String versionStr = p.get(WorldOfGoo.PREF_LASTVERSION, null);
 //    if (versionStr != null) {
@@ -326,8 +331,17 @@ public class WorldOfGoo
     String languageStr = p.get(WorldOfGoo.PREF_LANGUAGE, null);
     if (languageStr != null) c.setLanguage(Language.getLanguageByCode(languageStr));
 
-    int width = p.getInt(WorldOfGoo.PREF_SCREENWIDTH, c.getResolution().getWidth());
-    int height = p.getInt(WorldOfGoo.PREF_SCREENHEIGHT, c.getResolution().getHeight());
+    Resolution configResolution = c.getResolution();
+    int width;
+    int height;
+    if (configResolution != null) {
+      width = p.getInt(WorldOfGoo.PREF_SCREENWIDTH, configResolution.getWidth());
+      height = p.getInt(WorldOfGoo.PREF_SCREENHEIGHT, configResolution.getHeight());
+    }
+    else {
+      width = 800;
+      height = 600;
+    }
     c.setResolution(Resolution.getResolutionByDimensions(width, height));
     c.setUiInset(p.getInt(WorldOfGoo.PREF_UIINSET, c.getUiInset()));
 
