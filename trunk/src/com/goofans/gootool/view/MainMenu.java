@@ -12,6 +12,7 @@ import java.awt.event.KeyEvent;
 public class MainMenu
 {
   private JMenuBar menuBar;
+  public JMenuItem translatorModeMenuItem;
 
   public MainMenu(Controller controller)
   {
@@ -50,14 +51,13 @@ public class MainMenu
     menuBar.add(menu);
 
     menu = new JMenu("Advanced");
-    menu.setMnemonic(KeyEvent.VK_A);
+    menu.setMnemonic(KeyEvent.VK_V);
 
-    menuItem = new JCheckBoxMenuItem("Translator mode");
-    menuItem.setMnemonic(KeyEvent.VK_T);
-    menuItem.setActionCommand(Controller.CMD_TRANSLATOR_MODE);
-    menuItem.addActionListener(controller);
-//    menuItem.setSelected(true);
-    menu.add(menuItem);
+    translatorModeMenuItem = new JCheckBoxMenuItem("Translator mode");
+    translatorModeMenuItem.setMnemonic(KeyEvent.VK_T);
+    translatorModeMenuItem.setActionCommand(Controller.CMD_TRANSLATOR_MODE);
+    translatorModeMenuItem.addActionListener(controller);
+    menu.add(translatorModeMenuItem);
 
     menuBar.add(menu);
 
