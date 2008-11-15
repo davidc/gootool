@@ -105,9 +105,18 @@ public class Resolution implements Comparable
 
     Set<Resolution> resolutions = new TreeSet<Resolution>();
 
+    boolean got800x600 = false;
+
     for (DisplayMode displayMode : displayModes) {
-      resolutions.add(new Resolution(displayMode.getWidth(), displayMode.getHeight()));
+      int w = displayMode.getWidth();
+      int h = displayMode.getHeight();
+      if (w == 800 && h == 600) got800x600 = true;
+      resolutions.add(new Resolution(w, h));
     }
+
+    // Make sure there's a 800x600 dimension!
+    if (!got800x600) resolutions.add(new Resolution(800, 600));
+
     RESOLUTIONS = Collections.unmodifiableSet(resolutions);
 
     log.finer("System resolutions " + RESOLUTIONS);
