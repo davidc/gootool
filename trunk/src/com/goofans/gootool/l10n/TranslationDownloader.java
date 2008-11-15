@@ -1,4 +1,4 @@
-package com.goofans.gootool.i18n;
+package com.goofans.gootool.l10n;
 
 import java.net.URL;
 import java.io.*;

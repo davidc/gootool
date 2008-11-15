@@ -1,20 +1,13 @@
-package com.goofans.gootool.i18n;
+package com.goofans.gootool.l10n;
 
 import javax.imageio.ImageIO;
-import javax.swing.*;
-import javax.swing.border.Border;
 import java.io.File;
 import java.io.IOException;
 import java.awt.image.BufferedImage;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.geom.Rectangle2D;
 import java.awt.geom.AffineTransform;
 import java.awt.font.GlyphVector;
-
-import org.w3c.dom.NodeList;
-import org.w3c.dom.Element;
 
 /**
  * @author David Croft (davidc@goofans.com)

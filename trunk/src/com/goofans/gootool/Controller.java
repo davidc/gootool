@@ -1,33 +1,29 @@
 package com.goofans.gootool;
 
-import com.goofans.gootool.addins.Addin;
-import com.goofans.gootool.addins.AddinFactory;
-import com.goofans.gootool.model.Configuration;
-import com.goofans.gootool.profile.ProfileFactory;
-import com.goofans.gootool.util.ProfileFileFilter;
-import com.goofans.gootool.util.WogExeFileFilter;
-import com.goofans.gootool.util.GUIUtil;
-import com.goofans.gootool.view.AboutDialog;
-import com.goofans.gootool.view.AddinPropertiesDialog;
-import com.goofans.gootool.view.MainFrame;
-import com.goofans.gootool.wog.ConfigurationWriterTask;
-import com.goofans.gootool.wog.WorldOfGoo;
-import com.goofans.gootool.i18n.ImageTool;
-
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.*;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import com.goofans.gootool.addins.Addin;
+import com.goofans.gootool.addins.AddinFactory;
+import com.goofans.gootool.model.Configuration;
+import com.goofans.gootool.profile.ProfileFactory;
+import com.goofans.gootool.util.GUIUtil;
+import com.goofans.gootool.util.ProfileFileFilter;
+import com.goofans.gootool.util.WogExeFileFilter;
+import com.goofans.gootool.view.AboutDialog;
+import com.goofans.gootool.view.AddinPropertiesDialog;
+import com.goofans.gootool.view.MainFrame;
+import com.goofans.gootool.wog.ConfigurationWriterTask;
+import com.goofans.gootool.wog.WorldOfGoo;
 
 /**
  * @author David Croft (davidc@goofans.com)
@@ -63,7 +59,8 @@ public class Controller implements ActionListener
 
   // The configuration we're editing
   private Configuration editorConfig;
-  private JPanel translatePanel;
+//  private JPanel translatePanel;
+  private static final String PREF_L10N_MODE = "l10n_enable";
 
 
   public Controller()
@@ -76,7 +73,6 @@ public class Controller implements ActionListener
   public void actionPerformed(ActionEvent event)
   {
     String cmd = event.getActionCommand();
-
 
     if (cmd.equals(CMD_ABOUT)) {
       openAboutDialog();
@@ -122,21 +118,30 @@ public class Controller implements ActionListener
       changeProfileFile();
     }
     else if (cmd.equals(CMD_TRANSLATOR_MODE)) {
-      if (((JCheckBoxMenuItem) event.getSource()).isSelected()) {
-        if (translatePanel == null) {
-          try {
-            translatePanel = new ImageTool(new File("C:\\Users\\david\\Downloads\\wog-translate\\"), new HashMap<String, Map<String, String>>()).rootPanel;
-          }
-          catch (Exception e) {
-            showErrorDialog("Error in translation pane", e.getClass() + ": " + e.getLocalizedMessage());
-            return;
-          }
-        }
-        mainFrame.tabbedPane.add("Translation", translatePanel);
-      }
-      else {
-        mainFrame.tabbedPane.remove(translatePanel);
-      }
+      boolean enabled = mainFrame.mainMenu.translatorModeMenuItem.isSelected();
+      updateImageLocalisationPanel(enabled);
+      WorldOfGoo.getPreferences().putBoolean(PREF_L10N_MODE, enabled);
+
+//        if (translatePanel == null) {
+//          try {
+//            translatePanel = new ImageTool(new File("C:\\Users\\david\\Downloads\\wog-translate\\"), new HashMap<String, Map<String, String>>()).rootPanel;
+//          }
+//          catch (Exception e) {
+//            showErrorDialog("Error in translation pane", e.getClass() + ": " + e.getLocalizedMessage());
+//            return;
+//          }
+//        }
+//        mainFrame.tabbedPane.add("Translation", translatePanel);
+    }
+  }
+
+  private void updateImageLocalisationPanel(boolean enabled)
+  {
+    if (enabled) {
+      mainFrame.tabbedPane.add("Image localisation", mainFrame.imageLocalisationPanel.rootPanel);
+    }
+    else {
+      mainFrame.tabbedPane.remove(mainFrame.imageLocalisationPanel.rootPanel);
     }
   }
 
@@ -543,6 +548,10 @@ public class Controller implements ActionListener
   {
     this.mainFrame = mainFrame;
     updateViewFromModel(editorConfig);
+
+    boolean enabled = WorldOfGoo.getPreferences().getBoolean(PREF_L10N_MODE, false);
+    updateImageLocalisationPanel(enabled);
+    mainFrame.mainMenu.translatorModeMenuItem.setSelected(enabled);
   }
 
   public void setInitialConfiguration(Configuration c)
