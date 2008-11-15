@@ -68,7 +68,7 @@
 
     <add-text>
       <string>IMG_GOINGUP_HINT[1]</string>
-      <font-name>comesinhandy.ttf</font-name>
+      <font-name>Max's Handwritin.ttf</font-name>
       <font-size>50</font-size>
       <color>#000000</color>
       <!-- TODO left align -->
@@ -78,7 +78,7 @@
     </add-text>
     <add-text>
       <string>IMG_GOINGUP_HINT[2]</string>
-      <font-name>comesinhandy.ttf</font-name>
+      <font-name>Max's Handwritin.ttf</font-name>
       <font-size>40</font-size>
       <color>#000000</color>
       <x-position>100</x-position>
@@ -87,7 +87,7 @@
     </add-text>
     <add-text>
       <string>IMG_GOINGUP_HINT[3]</string>
-      <font-name>comesinhandy.ttf</font-name>
+      <font-name>Max's Handwritin.ttf</font-name>
       <font-size>40</font-size>
       <color>#000000</color>
       <x-position>150</x-position>
@@ -96,7 +96,7 @@
     </add-text>
     <add-text>
       <string>IMG_GOINGUP_HINT[4]</string>
-      <font-name>comesinhandy.ttf</font-name>
+      <font-name>Max's Handwritin.ttf</font-name>
       <font-size>40</font-size>
       <color>#000000</color>
       <x-position>180</x-position>
@@ -105,7 +105,7 @@
     </add-text>
     <add-text>
       <string>IMG_GOINGUP_HINT[5]</string>
-      <font-name>comesinhandy.ttf</font-name>
+      <font-name>Max's Handwritin.ttf</font-name>
       <font-size>40</font-size>
       <color>#000000</color>
       <x-position>180</x-position>
