@@ -1,0 +1,54 @@
+0.9.3
+
+- Level OCD requirement is now optional
+- added image internationalisation tool
+- possible fix for pyris NPE
+
+0.9.2
+
+- Fixed bug saving when unrecognised language is selected
+- Added the missing languages to the options pane
+
+0.9.1
+
+- Profile parsing fixed for certain test cases
+- Added more debugging for NPE on "save" bug
+- Improved logging, removed redundant logging
+- Don't try to build addins that have "vanished" (deleted from addins dir)
+- ESC works to close dialogs
+- Try and create the custom directory if the user hasn't already created it
+- Less cramped GUI
+- Display available tower balls on profile
+
+0.9.0
+
+- Enabling addins. You can now enable addins and build your World of Goo!
+- You can now install level-type addins. They are now fully merged and appear as new levels at the top left of Chapter 1.
+- Better file/directory support. GooTool will now remember where it last found WorldOfGoo.exe, and it lets you manually locate your profile if it can't find it.
+- You can now choose the custom directory where GooTool will build your World. This enables Vista users with UAC restrictions to still build.
+- Progress bar added for long operations such as initial load and file merging.
+- Skip Opening Movie now works
+- Loading screen watermark now works.
+- Addins can be reordered properly.
+- Taller towers are no longer cropped in the profile pane.
+
+0.8.0
+
+- Initial release
+ -Loading current preferences (language, resolution, ui_inset).
+- Saving preferences (to config.txt.new - does not overwrite config.txt yet)
+- Loading profiles.
+- Displaying profile data. 
+- Displaying level achievements.
+- Displaying tower data.
+- Generating various images of the tower.
+- Installing mod-type addins to the addin directory (but you can't enable them yet).
+- Validating the addins.
+- Uninstalling mod-type addins from the addin directory.
+- Viewing addin properties.
+- Reordering addin priority.
+- Save and Launch.
+- Automatic detection of JRE.
+- Decrypting and encrypting .bin files.
+- Decrypting and parsing profile data.
+- Transformation/merging of XML files.
