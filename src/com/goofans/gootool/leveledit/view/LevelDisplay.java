@@ -13,7 +13,7 @@ import java.util.List;
 import com.goofans.gootool.leveledit.model.*;
 
 /**
- * @author David Croft (david.croft@infotrek.net)
+ * @author David Croft (davidc@goofans.com)
  * @version $Id$
  */
 public class LevelDisplay extends JPanel// implements Scrollable
@@ -24,8 +24,18 @@ public class LevelDisplay extends JPanel// implements Scrollable
 
   private double scale = 0.5;
 
+  private Set<LevelDisplayLayer> visibleLayers;
+
   public LevelDisplay()
   {
+    visibleLayers = new HashSet<LevelDisplayLayer>(LevelDisplayLayer.values().length);
+    for (LevelDisplayLayer layer : LevelDisplayLayer.values()) {
+      if (layer.isDefaultVisible()) {
+        visibleLayers.add(layer);
+      }
+    }
+
+
     addMouseWheelListener(new MouseWheelListener()
     {
       public void mouseWheelMoved(MouseWheelEvent e)
@@ -71,9 +81,23 @@ public class LevelDisplay extends JPanel// implements Scrollable
 
     System.out.println("scene = " + scene);
 
-    if (showImages) drawSceneLayers(g);
-    if (showGeometry) drawGeometry(g);
-    if (showBoundaries) drawLines(g);
+    if (visibleLayers.contains(LevelDisplayLayer.IMAGES)) drawSceneLayers(g);
+    if (visibleLayers.contains(LevelDisplayLayer.GEOMETRY)) drawGeometry(g);
+    if (visibleLayers.contains(LevelDisplayLayer.BOUNDARIES)) drawLines(g);
+    if (visibleLayers.contains(LevelDisplayLayer.HINGES)) drawHinges(g);
+    if (visibleLayers.contains(LevelDisplayLayer.VIEWPORT)) drawViewport(g);
+  }
+
+  private void drawViewport(Graphics2D g)
+  {
+    int x = worldToCanvasX(scene.getMinX());
+    int y = worldToCanvasY(scene.getMinY());
+    int width = worldToCanvasScaleX(scene.getMaxX() - scene.getMinX());
+    int height = worldToCanvasScaleY(scene.getMaxY() - scene.getMinY());
+
+    g.setStroke(new BasicStroke(2));
+    g.setColor(Color.BLACK);
+    g.drawRect(x, y-height, width, height);
   }
 
   private void drawSceneLayers(Graphics2D g)
@@ -158,7 +182,7 @@ public class LevelDisplay extends JPanel// implements Scrollable
 //    System.out.println("width = " + width);
 //    System.out.println("height = " + height);
 
-    drawPoint(g, x, y, Color.GREEN);
+//    drawPoint(g, x, y, Color.GREEN);
 
     g.setStroke(new BasicStroke(2));
     g.setColor(Color.BLUE);
@@ -224,7 +248,7 @@ public class LevelDisplay extends JPanel// implements Scrollable
 
     g.setTransform(identity);
 
-    drawPoint(g, x, y, Color.BLACK);
+//    drawPoint(g, x, y, Color.BLACK);
   }
 
   private void drawCircle(Graphics2D g, SceneObject sceneObject, Point2D.Double offset)
@@ -240,13 +264,12 @@ public class LevelDisplay extends JPanel// implements Scrollable
 //    System.out.println("radiusX = " + radiusX);
 //    System.out.println("radiusY = " + radiusY);
 
-    drawPoint(g, x, y, Color.RED);
+//    drawPoint(g, x, y, Color.RED);
 
     g.setStroke(new BasicStroke(2));
     g.setColor(Color.BLUE);
     g.drawOval(x - radiusX, y - radiusY, radiusX * 2, radiusY * 2);
   }
-
 
   private void drawLines(Graphics2D g)
   {
@@ -257,13 +280,14 @@ public class LevelDisplay extends JPanel// implements Scrollable
     }
   }
 
+
   private void drawLine(Graphics2D g, SceneObject sceneObject)
   {
-    Point2D.Double anchor = (Point2D.Double) sceneObject.getValue(SceneObjectType.LINE_ATTRIBUTE_ANCHOR);
+    Point2D.Double anchor = (Point2D.Double) sceneObject.getValue(SceneObjectType.ATTRIBUTE_ANCHOR);
     Point2D.Double normal = (Point2D.Double) sceneObject.getValue(SceneObjectType.LINE_ATTRIBUTE_NORMAL);
     int x = worldToCanvasX(anchor.getX());
     int y = worldToCanvasY(anchor.getY());
-    drawPoint(g, x, y, Color.RED);
+//    drawPoint(g, x, y, Color.RED);
 
     System.out.println("anchor = " + anchor);
     System.out.println("normal = " + normal);
@@ -277,6 +301,35 @@ public class LevelDisplay extends JPanel// implements Scrollable
     int y2 = (int) (y + (normal.x * 1000));
 
     g.drawLine(x1, y1, x2, y2);
+  }
+
+  private void drawHinges(Graphics2D g)
+  {
+
+    for (SceneObject sceneObject : scene.getSceneObjects()) {
+      if (sceneObject.getType() == SceneObjectType.HINGE) {
+        drawHinge(g, sceneObject);
+      }
+    }
+  }
+
+  private void drawHinge(Graphics2D g, SceneObject sceneObject)
+  {
+    System.out.println("sceneObject = " + sceneObject);
+    Point2D.Double anchor = (Point2D.Double) sceneObject.getValue(SceneObjectType.ATTRIBUTE_ANCHOR);
+    int x = worldToCanvasX(anchor.getX());
+    int y = worldToCanvasY(anchor.getY());
+    drawPoint(g, x, y, Color.RED);
+
+    System.out.println("anchor = " + anchor);
+
+    g.setStroke(new BasicStroke(2));
+    g.setColor(Color.ORANGE);
+
+    g.drawLine(x - 4, y - 4, x + 4, y + 4);
+    g.drawLine(x + 4, y - 4, x - 4, y + 4);
+
+    // TODO draw lines to body1/2
   }
 
   private void drawPoint(Graphics2D g, int x, int y, Color color)
@@ -333,13 +386,16 @@ public class LevelDisplay extends JPanel// implements Scrollable
     return (int) (y * scale);
   }
 
-  private boolean showImages = true, showGeometry = true, showBoundaries = true;
-
-  public void setLayerVisibility(boolean images, boolean geometry, boolean boundaries)
+  public boolean isLayerVisibile(LevelDisplayLayer layer)
   {
-    showImages = images;
-    showGeometry = geometry;
-    showBoundaries = boundaries;
+    return visibleLayers.contains(layer);
+  }
+
+  public void setLayerVisibile(LevelDisplayLayer layer, Boolean visible)
+  {
+    if (visible) visibleLayers.add(layer);
+    else visibleLayers.remove(layer);
+
     repaint();
   }
 

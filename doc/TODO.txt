@@ -5,8 +5,6 @@
 
 - let them save tower jpgs (and the original transparent one)
 
-- loading status windows while doing long activities (e.g. initial load, profile gen, upload, merge)
-
 - Don't SAVE if unmodified on LAUNCH
 
 - fullscreen?
@@ -19,8 +17,7 @@
 - more addin author-friendly functionality (e.g. add a directory as an addin)
 
 todo
-when installing make sure not existing addin with that id
-check dependencies
+when installing check dependencies
 
 web report on what balls are used, by what levels, etc.
 - where is this image used?
@@ -44,9 +41,16 @@ use JFormattedTextField for input field validation
 
 - Download languages from wiki? Autocreate images?
 
+- Music volume/off
+
 - new version notification
+
+- addins/ant doesn't work on linux wtf?
+
+- ant deb task: http://code.google.com/p/ant-deb-task/
 
 WIshlist:
 
 - chapter support
 - Better level load crash debugging
+

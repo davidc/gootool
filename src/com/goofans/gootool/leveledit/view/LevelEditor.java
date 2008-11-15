@@ -1,19 +1,16 @@
 package com.goofans.gootool.leveledit.view;
 
 import javax.swing.*;
-import javax.swing.tree.TreeNode;
 import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.event.TableModelEvent;
-import javax.swing.event.TableModelListener;
 import java.awt.*;
-import java.awt.geom.Point2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.geom.Point2D;
 import java.io.IOException;
-import java.util.Map;
 import java.util.HashMap;
+import java.util.Map;
 
 import com.goofans.gootool.GooTool;
 import com.goofans.gootool.leveledit.model.Level;
@@ -21,7 +18,7 @@ import com.goofans.gootool.util.GUIUtil;
 import com.goofans.gootool.wog.WorldOfGoo;
 
 /**
- * @author David Croft (david.croft@infotrek.net)
+ * @author David Croft (davidc@goofans.com)
  * @version $Id$
  */
 public class LevelEditor extends JFrame implements ActionListener
@@ -48,6 +45,7 @@ public class LevelEditor extends JFrame implements ActionListener
   private Map<String, Tool> tools;
   private Map<String, JButton> toolButtons;
 
+ 
   public LevelEditor(Level level)
   {
     super("Level Editor");
@@ -72,7 +70,7 @@ public class LevelEditor extends JFrame implements ActionListener
     addTool(panButton, CMD_TOOL_PAN, new PanTool());
     addTool(selectButton, CMD_TOOL_SELECT, new SelectTool());
 
-    final LayersTableModel layersTableModel = new LayersTableModel();
+    final LayersTableModel layersTableModel = new LayersTableModel(levelDisplay);
 
     layersTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
@@ -85,7 +83,7 @@ public class LevelEditor extends JFrame implements ActionListener
 
     layersTable.setGridColor(Color.WHITE);
 
-    layersTableModel.addTableModelListener(new TableModelListener()
+  /*  layersTableModel.addTableModelListener(new TableModelListener()
     {
       public void tableChanged(TableModelEvent e)
       {
@@ -95,7 +93,7 @@ public class LevelEditor extends JFrame implements ActionListener
                   (Boolean) layersTableModel.getValueAt(2, 0));
         }
       }
-    });
+    });*/
 
 //    levelDisplay.get
     levelDisplay.addMouseMotionListener(new MouseAdapter()
@@ -161,7 +159,7 @@ public class LevelEditor extends JFrame implements ActionListener
 
     WorldOfGoo.init();
 
-    Level level = new Level(WorldOfGoo.getWogDir(), "EconomicDivide");
+    Level level = new Level(WorldOfGoo.getWogDir(), "Chain");
 
     LevelEditor dialog = new LevelEditor(level);
     dialog.pack();

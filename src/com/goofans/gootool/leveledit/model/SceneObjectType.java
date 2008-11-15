@@ -245,6 +245,7 @@ public class SceneObjectType
           RECTANGLE_ATTRIBUTE_HEIGHT,
   };
 
+  public static final SceneObjectTypeAttribute ATTRIBUTE_ANCHOR = new SceneObjectTypeAttribute("anchor", SceneObjectTypeAttributeType.POINT_DOUBLE, true);
   /**
    * Node "line", attribute "anchor" is mandatory (137 occurrences found)
    * Node "line", attribute "id" is mandatory (137 occurrences found)
@@ -253,10 +254,9 @@ public class SceneObjectType
    * Node "line", attribute "static" is mandatory (137 occurrences found)
    * Node "line", attribute "tag" is optional, occurrences with/without attribute: 96/41
    */
-  public static final SceneObjectTypeAttribute LINE_ATTRIBUTE_ANCHOR = new SceneObjectTypeAttribute("anchor", SceneObjectTypeAttributeType.POINT_DOUBLE, true);
   public static final SceneObjectTypeAttribute LINE_ATTRIBUTE_NORMAL = new SceneObjectTypeAttribute("normal", SceneObjectTypeAttributeType.POINT_DOUBLE, true);
   private static final SceneObjectTypeAttribute[] LINE_ATTRIBUTES = new SceneObjectTypeAttribute[]{
-          LINE_ATTRIBUTE_ANCHOR,
+          ATTRIBUTE_ANCHOR,
           GEOM_ATTRIBUTE_ID,
           new SceneObjectTypeAttribute("material", SceneObjectTypeAttributeType.STRING, true),
           LINE_ATTRIBUTE_NORMAL,
@@ -265,12 +265,31 @@ public class SceneObjectType
   };
 
   /**
+   * Node "hinge", attribute "anchor" is mandatory (92 occurrences found)
+   * Node "hinge", attribute "body1" is mandatory (92 occurrences found)
+   * Node "hinge", attribute "body2" is optional, occurrences with/without attribute: 51/41
+   * Node "hinge", attribute "bounce" is optional, occurrences with/without attribute: 11/81
+   * Node "hinge", attribute "histop" is optional, occurrences with/without attribute: 12/80
+   * Node "hinge", attribute "id" is optional, occurrences with/without attribute: 11/81
+   * Node "hinge", attribute "lostop" is optional, occurrences with/without attribute: 12/80
+   */
+  private static final SceneObjectTypeAttribute[] HINGE_ATTRIBUTES = new SceneObjectTypeAttribute[]{
+          ATTRIBUTE_ANCHOR,
+          new SceneObjectTypeAttribute("body1", SceneObjectTypeAttributeType.STRING, true),
+          new SceneObjectTypeAttribute("body2", SceneObjectTypeAttributeType.STRING, false),
+          new SceneObjectTypeAttribute("bounce", SceneObjectTypeAttributeType.DOUBLE, false),
+          new SceneObjectTypeAttribute("histop", SceneObjectTypeAttributeType.INT, false),
+          new SceneObjectTypeAttribute("lostop", SceneObjectTypeAttributeType.INT, false),
+          new SceneObjectTypeAttribute("id", SceneObjectTypeAttributeType.STRING, false)
+  };
+
+  /**
    * Node "scene" have [0-86] occurrences of child tag "SceneLayer" done
    * Node "scene" have [0-3] occurrences of child tag "button"
    * Node "scene" have [0-2] occurrences of child tag "buttongroup"
    * Node "scene" have [0-15] occurrences of child tag "circle" done
    * Node "scene" have [0-5] occurrences of child tag "compositegeom" done
-   * Node "scene" have [0-17] occurrences of child tag "hinge"
+   * Node "scene" have [0-17] occurrences of child tag "hinge" done
    * Node "scene" have [0-6] occurrences of child tag "label"
    * Node "scene" have [0-4] occurrences of child tag "line" done
    * Node "scene" have [0-19] occurrences of child tag "linearforcefield" done
@@ -296,6 +315,8 @@ public class SceneObjectType
 
   public static final SceneObjectType LINE = new SceneObjectType("line", LINE_ATTRIBUTES, null, false);
 
+  public static final SceneObjectType HINGE = new SceneObjectType("hinge", HINGE_ATTRIBUTES, null, false);
+
   static {
     addSceneObjectType(RADIALFORCEFIELD);
     addSceneObjectType(LINEARFORCEFIELD);
@@ -305,6 +326,7 @@ public class SceneObjectType
     addSceneObjectType(CIRCLE);
     addSceneObjectType(RECTANGLE);
     addSceneObjectType(LINE);
+    addSceneObjectType(HINGE);
   }
 
   private static void addSceneObjectType(SceneObjectType type)
