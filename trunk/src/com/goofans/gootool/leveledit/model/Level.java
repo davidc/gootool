@@ -17,6 +17,7 @@ public class Level
 {
   private Scene scene;
   private Resources resources;
+  private LevelContents levelContents;
 
   public Level(File wogDir, String prefix) throws IOException
   {
@@ -30,8 +31,12 @@ public class Level
     File resourcesFile = new File(dir, prefix + ".resrc.bin");
     xml = BinFormat.decodeFile(resourcesFile);
     doc = XMLUtil.loadDocumentFromReader(new StringReader(xml));
-
     resources = new Resources(doc, wogDir);
+
+    File levelFile = new File(dir, prefix + ".level.bin");
+    xml = BinFormat.decodeFile(levelFile);
+    doc = XMLUtil.loadDocumentFromReader(new StringReader(xml));
+    levelContents = new LevelContents(doc);
   }
 
   public Scene getScene()
@@ -44,6 +49,12 @@ public class Level
     return resources;
   }
 
+  public LevelContents getLevelContents()
+  {
+    return levelContents;
+  }
+
+  @SuppressWarnings({"UseOfSystemOutOrSystemErr"})
   public static void main(String[] args) throws IOException
   {
     WorldOfGoo.init();

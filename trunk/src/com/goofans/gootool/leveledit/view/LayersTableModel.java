@@ -1,9 +1,6 @@
 package com.goofans.gootool.leveledit.view;
 
-import javax.swing.table.TableModel;
 import javax.swing.table.AbstractTableModel;
-import javax.swing.event.TableModelListener;
-import javax.swing.*;
 
 /**
  * @author David Croft (davidc@goofans.com)
@@ -13,24 +10,25 @@ public class LayersTableModel extends AbstractTableModel
 {
   private static final String[] COLUMNS = new String[]{"Vis", "Name"};
   private static final Class[] COLUMN_CLASSES = new Class[]{Boolean.class, String.class};
+  private LevelDisplay levelDisplay;
 
-  public static final String[] LAYERS = new String[]{"Images", "Geometry", "Boundaries"};
+//  public static final String[] LAYERS = new String[]{"Images", "Geometry", "Boundaries"};
 
-  private boolean visibility[] = new boolean[LAYERS.length];
-//  private JLabel labels[] = new JLabel[LAYERS.length];
+//  private boolean visibility[] = new boolean[LevelDisplayLayer.values().length];
 
-  public LayersTableModel()
+  public LayersTableModel(LevelDisplay levelDisplay)
   {
-    for (int i = 0; i < LAYERS.length; i++) {
-      String layerName = LAYERS[i];
-      visibility[i] = true;
+    this.levelDisplay = levelDisplay;
+//    for (int i = 0; i < LAYERS.length; i++) {
+//      String layerName = LAYERS[i];
+//      visibility[i] = true;
 //      labels[i] = new JLabel(layerName);
-    }
+//    }
   }
 
   public int getRowCount()
   {
-    return LAYERS.length;
+    return LevelDisplayLayer.values().length;
   }
 
   public int getColumnCount()
@@ -51,8 +49,8 @@ public class LayersTableModel extends AbstractTableModel
 
   public Object getValueAt(int rowIndex, int columnIndex)
   {
-    if (columnIndex == 0) return visibility[rowIndex];
-    if (columnIndex == 1) return LAYERS[rowIndex];
+    if (columnIndex == 0) return levelDisplay.isLayerVisibile(LevelDisplayLayer.values()[rowIndex]);
+    if (columnIndex == 1) return LevelDisplayLayer.values()[rowIndex].toString();
     return null;
   }
 
@@ -65,7 +63,7 @@ public class LayersTableModel extends AbstractTableModel
   {
     if (columnIndex != 0) return;
 
-    visibility[rowIndex] = (Boolean) aValue;
-    fireTableCellUpdated(rowIndex, columnIndex);
+    levelDisplay.setLayerVisibile(LevelDisplayLayer.values()[rowIndex], (Boolean) aValue);
+//    fireTableCellUpdated(rowIndex, columnIndex);
   }
 }
