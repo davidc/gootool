@@ -1,6 +1,8 @@
 0.9.3
 
 - Level OCD requirement is now optional
+- added image internationalisation tool
+- possible fix for pyris NPE
 
 0.9.2
 
