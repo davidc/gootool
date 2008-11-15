@@ -2,6 +2,7 @@ package com.goofans.gootool.view;
 
 import com.goofans.gootool.Controller;
 import com.goofans.gootool.GooTool;
+import com.goofans.gootool.l10n.ImageL10nPanel;
 import com.goofans.gootool.model.Configuration;
 
 import javax.swing.*;
@@ -29,6 +30,8 @@ public class MainFrame extends JFrame implements ViewComponent
 
   public AddinsPanel addinsPanel;
   private OptionsPanel optionsPanel;
+  public ImageL10nPanel imageLocalisationPanel;
+  public MainMenu mainMenu;
 
   public MainFrame(final Controller controller)
   {
@@ -38,7 +41,6 @@ public class MainFrame extends JFrame implements ViewComponent
     setLocationByPlatform(true);
     setMinimumSize(new Dimension(800, 500));
     setIconImage(GooTool.getMainIconImage());
-
 
     setContentPane(rootPanel);
     setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
@@ -57,7 +59,7 @@ public class MainFrame extends JFrame implements ViewComponent
     saveButton.setActionCommand(Controller.CMD_SAVE);
     saveButton.addActionListener(controller);
 
-    MainMenu mainMenu = new MainMenu(controller);
+    mainMenu = new MainMenu(controller);
     setJMenuBar(mainMenu.getJMenuBar());
   }
 
@@ -65,10 +67,12 @@ public class MainFrame extends JFrame implements ViewComponent
   {
     addinsPanel = new AddinsPanel(controller);
     optionsPanel = new OptionsPanel(this.controller);
-    
+    imageLocalisationPanel = new ImageL10nPanel();
+
     optionsPanelPanel = optionsPanel.rootPanel;
     addinsPanelPanel = addinsPanel.rootPanel;
     profilePanelPanel = new ProfilePanel().rootPanel;
+//    imageLocalisationPanelPanel = imageLocalisationPanel.rootPanel;
   }
 
   public void updateViewFromModel(Configuration c)

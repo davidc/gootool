@@ -5,7 +5,6 @@ import javax.swing.border.Border;
 import javax.imageio.ImageIO;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.Map;
 import java.util.Random;
 import java.util.HashMap;
@@ -33,10 +32,11 @@ public class ImageTool implements ActionListener
   private JPanel contentPanel;
   public JPanel rootPanel;
 
-  public ImageTool(File sourceDir, Map<String, Map<String, String>> languages) throws IOException, FontFormatException
+  public ImageTool(File sourceDir, Map<String, Map<String, String>> languages, Color background) throws IOException, FontFormatException
   {
     GridBagLayout layout = new GridBagLayout();
     contentPanel = new JPanel(layout);
+    contentPanel.setBackground(background);
 //    JViewport viewport = new JViewport();
     JScrollPane scroller = new JScrollPane(contentPanel);
 //    viewport.a
@@ -44,7 +44,7 @@ public class ImageTool implements ActionListener
 //    scroller.add(contentPanel);
 
     rootPanel = new JPanel(new GridBagLayout());
-    JButton button = new JButton("Color");
+    JButton button = new JButton("Random background");
     button.setActionCommand(CHANGE_COLOR);
     button.addActionListener(this);
 
@@ -70,7 +70,8 @@ public class ImageTool implements ActionListener
 //    contentPanel.add(new JLabel(new ImageIcon(ImageIO.read(sourceFile))));
 
 
-    Document d = XMLUtil.loadDocumentFromReader(new InputStreamReader(ImageGenerator.class.getResourceAsStream("/i18n_images.xml")));
+//    Document d = XMLUtil.loadDocumentFromReader(new InputStreamReader(ImageGenerator.class.getResourceAsStream("/i18n_images.xml")));
+    Document d = XMLUtil.loadDocumentFromFile(new File(sourceDir, "l10n_images.xml"));
 
     NodeList processImageNodes = d.getDocumentElement().getChildNodes();
     for (int i = 0; i < processImageNodes.getLength(); i++) {
@@ -103,7 +104,7 @@ public class ImageTool implements ActionListener
 
               String string = addTextEl.getElementsByTagName("string").item(0).getTextContent().trim();
               String fontName = addTextEl.getElementsByTagName("font-name").item(0).getTextContent().trim();
-              Font font = getFont(fontName);
+              Font font = getFont(sourceDir, fontName);
               float fontSize = getOptionalFloat(addTextEl, "font-size");
               float stretch = getOptionalFloat(addTextEl, "stretch");
               float outline = getOptionalFloat(addTextEl, "outline");
@@ -151,10 +152,10 @@ public class ImageTool implements ActionListener
 
   }
 
-  private void showWindow() throws IOException, FontFormatException
+  public void showWindow() throws IOException, FontFormatException
   {
     JFrame frame = new JFrame("i18n Test");
-    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     frame.setLocationByPlatform(true);
     frame.add(rootPanel);
 
@@ -184,10 +185,10 @@ public class ImageTool implements ActionListener
     return label;
   }
 
-  private static Font getFont(String filename) throws FontFormatException, IOException
+  private static Font getFont(File path, String filename) throws FontFormatException, IOException
   {
     // TODO cache
-    return Font.createFont(Font.TRUETYPE_FONT, new File("C:\\Users\\david\\Downloads\\wog-translate\\" + filename));
+    return Font.createFont(Font.TRUETYPE_FONT, new File(path, filename));
   }
 
   // TODO make getElementRequired etc in XMLUtil
@@ -259,7 +260,7 @@ public class ImageTool implements ActionListener
     languages.put("it", TranslationDownloader.getTranslations(wikiBase, "Italian_translation", true));
 //    languages.put("nl", nl);
 
-    new ImageTool(new File("C:\\Users\\david\\Downloads\\wog-translate\\"), languages).showWindow();
+    new ImageTool(new File("C:\\Users\\david\\Downloads\\wog-translate\\"), languages, Color.WHITE).showWindow();
 
   }
 }

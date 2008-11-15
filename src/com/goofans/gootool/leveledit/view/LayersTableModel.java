@@ -33,7 +33,7 @@ public class LayersTableModel extends AbstractTableModel
 
   public int getColumnCount()
   {
-    return 2;
+    return COLUMNS.length;
   }
 
   public String getColumnName(int columnIndex)
