@@ -1,8 +1,14 @@
+0.9.4
+
+- added layers and gaussian blur effects to image localisation tool
+- make sure 800x600 resolution is always available
+- fixed charset on wiki downloads (e.g. Cyrillic)
+
 0.9.3
 
-- Level OCD requirement is now optional
-- added image internationalisation tool
-- possible fix for pyris NPE
+- added image localisation tool for translators
+- Addin level OCD requirement is now optional
+- possible fix for pyris NPE (unselected resolution)
 
 0.9.2
 

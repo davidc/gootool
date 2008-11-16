@@ -129,7 +129,7 @@ public class XMLUtil
   public static String getAttributeStringRequired(Node node, String attributeName) throws IOException
   {
     String s = getAttributeString(node, attributeName, null);
-    if (s == null) throw new IOException("Mandatory attribute " + attributeName + " not specified");
+    if (s == null) throw new IOException("Mandatory attribute " + attributeName + " not specified on " + node.getNodeName());
     return s;
   }
 
@@ -154,7 +154,7 @@ public class XMLUtil
   public static double getAttributeDoubleRequired(Node node, String attributeName) throws IOException
   {
     Double d = getAttributeDouble(node, attributeName, null);
-    if (d == null) throw new IOException("Mandatory attribute " + attributeName + " not specified");
+    if (d == null) throw new IOException("Mandatory attribute " + attributeName + " not specified on " + node.getNodeName());
     return d;
   }
 
@@ -177,7 +177,7 @@ public class XMLUtil
   public static int getAttributeIntegerRequired(Node node, String attributeName) throws IOException
   {
     Integer integer = getAttributeInteger(node, attributeName, null);
-    if (integer == null) throw new IOException("Mandatory attribute " + attributeName + " not specified");
+    if (integer == null) throw new IOException("Mandatory attribute " + attributeName + " not specified on " + node.getNodeName());
     return integer;
   }
 
@@ -196,7 +196,7 @@ public class XMLUtil
   public static boolean getAttributeBooleanRequired(Node node, String attributeName) throws IOException
   {
     Boolean b = getAttributeBoolean(node, attributeName, null);
-    if (b == null) throw new IOException("Mandatory attribute " + attributeName + " not specified");
+    if (b == null) throw new IOException("Mandatory attribute " + attributeName + " not specified on " + node.getNodeName());
     return b;
   }
 }

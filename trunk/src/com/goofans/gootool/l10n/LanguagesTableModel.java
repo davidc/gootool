@@ -18,7 +18,21 @@ public class LanguagesTableModel extends AbstractTableModel
 
   public LanguagesTableModel()
   {
-    languages.add(new L10nLanguage("de", "German_translation", true));
+    languages.add(new L10nLanguage("nl", "Dutch_translation", true));
+    languages.add(new L10nLanguage("fr", "French_translation", true));
+    languages.add(new L10nLanguage("de", "German_translation", false));
+    languages.add(new L10nLanguage("it", "Italian_translation", false));
+    languages.add(new L10nLanguage("pl", "Polish_translation", false));
+    languages.add(new L10nLanguage("ru", "Russian_translation", false));
+    languages.add(new L10nLanguage("es", "Spanish_translation", false));
+    languages.add(new L10nLanguage("sv", "Swedish_translation", false));
+    languages.add(new L10nLanguage("cs", "Czech_translation", false));
+    languages.add(new L10nLanguage("da", "Danish_translation", false));
+    languages.add(new L10nLanguage("eo", "Esperanto_translation", false));
+    languages.add(new L10nLanguage("he", "Hebrew_translation", false));
+    languages.add(new L10nLanguage("hu", "Hungarian_translation", false));
+    languages.add(new L10nLanguage("ja", "Japanese_translation", false));
+    languages.add(new L10nLanguage("no", "Norwegian_translation", false));
   }
 
   public int getRowCount()
