@@ -4,6 +4,7 @@ import java.net.URL;
 import java.io.*;
 import java.util.Map;
 import java.util.HashMap;
+import java.nio.charset.Charset;
 
 /**
  * @author David Croft (davidc@goofans.com)
@@ -17,7 +18,7 @@ public class TranslationDownloader
 
   public static Map<String, String> getTranslations(String wikiBase, String wikiPage, boolean getTranslation) throws IOException
   {
-    BufferedReader r = new BufferedReader(new InputStreamReader(new URL(wikiBase + "index.php?title=" + wikiPage + "&action=raw").openStream()));
+    BufferedReader r = new BufferedReader(new InputStreamReader(new URL(wikiBase + "index.php?title=" + wikiPage + "&action=raw").openStream(), Charset.forName("UTF-8")));
 
     /**
      * 0 = outside everything
@@ -84,7 +85,7 @@ public class TranslationDownloader
 
   public static void main(String[] args) throws IOException
   {
-    Map<String, String> translations = getTranslations("http://hell.student.utwente.nl/wog/mediawiki/", "German_translation", true);
+    Map<String, String> translations = getTranslations("http://hell.student.utwente.nl/wog/mediawiki/", "Russian_translation", true);
     for (Map.Entry<String, String> entry : translations.entrySet()) {
       System.out.println(entry.getKey() + " = " + entry.getValue());
     }

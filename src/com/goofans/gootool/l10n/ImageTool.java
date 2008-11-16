@@ -3,11 +3,14 @@ package com.goofans.gootool.l10n;
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.imageio.ImageIO;
+import javax.xml.xpath.XPathExpressionException;
 import java.io.File;
 import java.io.IOException;
 import java.util.Map;
 import java.util.Random;
 import java.util.HashMap;
+import java.util.regex.Pattern;
+import java.util.regex.Matcher;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.awt.event.ActionListener;
@@ -32,7 +35,7 @@ public class ImageTool implements ActionListener
   private JPanel contentPanel;
   public JPanel rootPanel;
 
-  public ImageTool(File sourceDir, Map<String, Map<String, String>> languages, Color background) throws IOException, FontFormatException
+  public ImageTool(File sourceDir, Map<String, Map<String, String>> languages, Color background) throws IOException, FontFormatException, XPathExpressionException
   {
     GridBagLayout layout = new GridBagLayout();
     contentPanel = new JPanel(layout);
@@ -69,6 +72,7 @@ public class ImageTool implements ActionListener
 
 //    contentPanel.add(new JLabel(new ImageIcon(ImageIO.read(sourceFile))));
 
+    FontManager fm = new FontManager(sourceDir);
 
 //    Document d = XMLUtil.loadDocumentFromReader(new InputStreamReader(ImageGenerator.class.getResourceAsStream("/i18n_images.xml")));
     Document d = XMLUtil.loadDocumentFromFile(new File(sourceDir, "l10n_images.xml"));
@@ -82,7 +86,7 @@ public class ImageTool implements ActionListener
           String sourceFileName = el.getElementsByTagName("source").item(0).getTextContent().trim();
           String destFileName = el.getElementsByTagName("dest").item(0).getTextContent().trim();
 
-          ImageGenerator generator = new ImageGenerator(new File(sourceDir, sourceFileName));
+          ImageGenerator generator = new ImageGenerator(new File(sourceDir, sourceFileName), el, fm);
 
           constraints.gridy++;
           constraints.gridx = 0;
@@ -95,56 +99,10 @@ public class ImageTool implements ActionListener
 
           for (String language : languages.keySet()) {
 
-            generator.reset();
-
-            NodeList addTextNodes = el.getElementsByTagName("add-text");
-
-            for (int j = 0; j < addTextNodes.getLength(); j++) {
-              Element addTextEl = (Element) addTextNodes.item(j);
-
-              String string = addTextEl.getElementsByTagName("string").item(0).getTextContent().trim();
-              String fontName = addTextEl.getElementsByTagName("font-name").item(0).getTextContent().trim();
-              Font font = getFont(sourceDir, fontName);
-              float fontSize = getOptionalFloat(addTextEl, "font-size");
-              float stretch = getOptionalFloat(addTextEl, "stretch");
-              float outline = getOptionalFloat(addTextEl, "outline");
-              Color color = parseColor(addTextEl.getElementsByTagName("color").item(0).getTextContent().trim());
-              int xPos = Integer.parseInt(addTextEl.getElementsByTagName("x-position").item(0).getTextContent().trim());
-              int yPos = Integer.parseInt(addTextEl.getElementsByTagName("y-position").item(0).getTextContent().trim());
-              float rotation = getOptionalFloat(addTextEl, "rotation");
-
-              String text = null;
-              int openBracketsPos = string.indexOf('[');
-              if (openBracketsPos > 0) {
-                String realString = string.substring(0, openBracketsPos);
-                String wholeText = languages.get(language).get(realString);
-                if (wholeText != null) {
-                  String[] bits = wholeText.split("\\|");
-
-                  int offset = Integer.valueOf(string.substring(openBracketsPos + 1, string.indexOf(']')));
-                  System.out.println("offset = " + offset);
-
-                  if (offset > bits.length) {
-                    text = "!!offset " + offset + "!!";
-                  }
-                  else {
-                    text = bits[offset - 1];
-                  }
-                }
-              }
-              else {
-                text = languages.get(language).get(string);
-              }
-              if (text == null) text = "!!" + language + "!!";
-
-              generator.drawText(text, font, fontSize, stretch, outline, color, new Point(xPos, yPos), rotation);
-            }
-
-            generator.finish();
+            generator.process(el, languages.get(language));
 
             constraints.gridx++;
             contentPanel.add(makeLabel(generator.getFinalImage()), constraints);
-
           }
         }
       }
@@ -154,7 +112,7 @@ public class ImageTool implements ActionListener
 
   public void showWindow() throws IOException, FontFormatException
   {
-    JFrame frame = new JFrame("i18n Test");
+    JFrame frame = new JFrame("Image l10n Test");
     frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     frame.setLocationByPlatform(true);
     frame.add(rootPanel);
@@ -185,29 +143,7 @@ public class ImageTool implements ActionListener
     return label;
   }
 
-  private static Font getFont(File path, String filename) throws FontFormatException, IOException
-  {
-    // TODO cache
-    return Font.createFont(Font.TRUETYPE_FONT, new File(path, filename));
-  }
-
-  // TODO make getElementRequired etc in XMLUtil
-  private static float getOptionalFloat(Element addTextEl, String tagName)
-  {
-    NodeList list = addTextEl.getElementsByTagName(tagName);
-    if (list.getLength() == 0) return 0;
-    return Float.parseFloat(list.item(0).getTextContent().trim());
-  }
-
-  private static Color parseColor(String s)
-  {
-    if (s.startsWith("#")) s = s.substring(1);
-    return new Color(Integer.valueOf(s.substring(0, 2), 16),
-            Integer.valueOf(s.substring(2, 4), 16),
-            Integer.valueOf(s.substring(4, 6), 16));
-  }
-
-  public static void main(String[] args) throws IOException, FontFormatException
+  public static void main(String[] args) throws IOException, FontFormatException, XPathExpressionException
   {
     WorldOfGoo.init();
 //    File sourceFile = new File("C:\\Users\\david\\Downloads\\wog-translate\\images_continue.png");
@@ -254,7 +190,7 @@ public class ImageTool implements ActionListener
 
     String wikiBase = "http://hell.student.utwente.nl/wog/mediawiki/";
     languages.put("en", TranslationDownloader.getTranslations(wikiBase, "Italian_translation", false));
-    languages.put("es", TranslationDownloader.getTranslations(wikiBase, "Spanish_translation", false));
+    languages.put("ru", TranslationDownloader.getTranslations(wikiBase, "Russian_translation", true));
 //    languages.put("fr", fr);
     languages.put("de", TranslationDownloader.getTranslations(wikiBase, "German_translation", true));
     languages.put("it", TranslationDownloader.getTranslations(wikiBase, "Italian_translation", true));
