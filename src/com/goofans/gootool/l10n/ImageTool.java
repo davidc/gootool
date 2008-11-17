@@ -3,6 +3,7 @@ package com.goofans.gootool.l10n;
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.imageio.ImageIO;
+import javax.imageio.IIOException;
 import javax.xml.xpath.XPathExpressionException;
 import java.io.File;
 import java.io.IOException;
@@ -21,45 +22,46 @@ import org.w3c.dom.NodeList;
 import org.w3c.dom.Node;
 import org.w3c.dom.Element;
 import com.goofans.gootool.util.XMLUtil;
+import com.goofans.gootool.util.ProgressIndicatingTask;
 import com.goofans.gootool.wog.WorldOfGoo;
+import com.goofans.gootool.GooTool;
 
 /**
  * @author David Croft (davidc@goofans.com)
  * @version $Id$
  */
-public class ImageTool implements ActionListener
+public class ImageTool extends ProgressIndicatingTask
 {
-  private static final String CHANGE_COLOR = "Color";
   private static final Border TABLE_BORDER = BorderFactory.createLineBorder(Color.BLACK);
 
   private JPanel contentPanel;
   public JPanel rootPanel;
 
-  public ImageTool(File sourceDir, Map<String, Map<String, String>> languages, Color background) throws IOException, FontFormatException, XPathExpressionException
+  private boolean debug;
+  private Map<String, Map<String, String>> languages;
+  private File sourceDir;
+
+  public ImageTool(File sourceDir, Map<String, Map<String, String>> languages, Color background, boolean debug) throws IOException, FontFormatException, XPathExpressionException
   {
     GridBagLayout layout = new GridBagLayout();
     contentPanel = new JPanel(layout);
     contentPanel.setBackground(background);
-//    JViewport viewport = new JViewport();
     JScrollPane scroller = new JScrollPane(contentPanel);
-//    viewport.a
-//    scroller.setViewport(viewport);
-//    scroller.add(contentPanel);
+    scroller.getVerticalScrollBar().setUnitIncrement(20);
+    scroller.getHorizontalScrollBar().setUnitIncrement(20);
 
-    rootPanel = new JPanel(new GridBagLayout());
-    JButton button = new JButton("Random background");
-    button.setActionCommand(CHANGE_COLOR);
-    button.addActionListener(this);
+    rootPanel = new JPanel(new BorderLayout());
 
-    GridBagConstraints rootContraints = new GridBagConstraints();
-    rootContraints.gridx = 0;
-    rootContraints.gridy = 0;
-    rootPanel.add(button, rootContraints);
+    rootPanel.add(scroller, BorderLayout.CENTER);
 
-    rootContraints.gridx = 0;
-    rootContraints.gridy = 1;
-    rootPanel.add(scroller, rootContraints);
+    this.languages = languages;
+    this.debug = debug;
+    this.sourceDir = sourceDir;
+  }
 
+  public void run() throws Exception
+  {
+    beginStep("Initialising GUI", false);
     GridBagConstraints constraints = new GridBagConstraints();
 
     constraints.gridy = 0;
@@ -70,11 +72,8 @@ public class ImageTool implements ActionListener
       contentPanel.add(new JLabel(language), constraints);
     }
 
-//    contentPanel.add(new JLabel(new ImageIcon(ImageIO.read(sourceFile))));
-
     FontManager fm = new FontManager(sourceDir);
 
-//    Document d = XMLUtil.loadDocumentFromReader(new InputStreamReader(ImageGenerator.class.getResourceAsStream("/i18n_images.xml")));
     Document d = XMLUtil.loadDocumentFromFile(new File(sourceDir, "l10n_images.xml"));
 
     NodeList processImageNodes = d.getDocumentElement().getChildNodes();
@@ -86,20 +85,25 @@ public class ImageTool implements ActionListener
           String sourceFileName = el.getElementsByTagName("source").item(0).getTextContent().trim();
           String destFileName = el.getElementsByTagName("dest").item(0).getTextContent().trim();
 
-          ImageGenerator generator = new ImageGenerator(new File(sourceDir, sourceFileName), el, fm);
+          beginStep("Processing " + sourceFileName, false);
+
+          ImageGenerator generator = new ImageGenerator(new File(sourceDir, sourceFileName), el, fm, debug);
 
           constraints.gridy++;
           constraints.gridx = 0;
           contentPanel.add(new JLabel("<html>" + sourceFileName + " -&gt;<br>" + destFileName), constraints);
 
-          constraints.gridx++;
-          System.out.println("constraints.gridx = " + constraints.gridx);
-          System.out.println("constraints.gridy = " + constraints.gridy);
-          contentPanel.add(makeLabel(ImageIO.read(new File(WorldOfGoo.getWogDir(), destFileName + ".png"))), constraints);
+          try {
+            constraints.gridx++;
+            contentPanel.add(makeLabel(ImageIO.read(new File(WorldOfGoo.getWogDir(), destFileName + ".png"))), constraints);
+          }
+          catch (IIOException e) {
+            // don't care, e.g. test image
+          }
 
           for (String language : languages.keySet()) {
-
-            generator.process(el, languages.get(language));
+            beginStep("Processing " + sourceFileName + " in " + language, false);
+            generator.process(languages.get(language));
 
             constraints.gridx++;
             contentPanel.add(makeLabel(generator.getFinalImage()), constraints);
@@ -108,14 +112,25 @@ public class ImageTool implements ActionListener
       }
     }
 
+    SwingUtilities.invokeLater(new Runnable()
+    {
+      public void run()
+      {
+        showWindow();
+      }
+    });
+//    contentPanel.validate();
   }
 
-  public void showWindow() throws IOException, FontFormatException
+  private void showWindow()
   {
     JFrame frame = new JFrame("Image l10n Test");
     frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     frame.setLocationByPlatform(true);
     frame.add(rootPanel);
+    frame.setIconImage(GooTool.getMainIconImage());
+
+    frame.setPreferredSize(new Dimension(1024, 768));
 
     frame.validate();
     frame.pack();
@@ -126,13 +141,6 @@ public class ImageTool implements ActionListener
   {
     Random r = new Random();
     return new Color(r.nextInt(256), r.nextInt(256), r.nextInt(256));
-  }
-
-  public void actionPerformed(ActionEvent e)
-  {
-    if (e.getActionCommand().equals(CHANGE_COLOR)) {
-      contentPanel.setBackground(ImageTool.randomColor());
-    }
   }
 
   private static JLabel makeLabel(BufferedImage image) throws IOException, FontFormatException
@@ -196,7 +204,7 @@ public class ImageTool implements ActionListener
     languages.put("it", TranslationDownloader.getTranslations(wikiBase, "Italian_translation", true));
 //    languages.put("nl", nl);
 
-    new ImageTool(new File("C:\\Users\\david\\Downloads\\wog-translate\\"), languages, Color.WHITE).showWindow();
+    new ImageTool(new File("C:\\Users\\david\\Downloads\\wog-translate\\"), languages, Color.WHITE, true).showWindow();
 
   }
 }

@@ -1,5 +1,17 @@
 /*
-** Copyright 2005 Huxtable.com. All rights reserved.
+Copyright 2006 Jerry Huxtable
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
 */
 
 package com.goofans.gootool.image;
@@ -9,9 +21,24 @@ package com.goofans.gootool.image;
  */
 public class ImageMath {
 
+    /**
+     * The value of pi as a float.
+     */
 	public final static float PI = (float)Math.PI;
+
+    /**
+     * The value of half pi as a float.
+     */
 	public final static float HALF_PI = (float)Math.PI/2.0f;
+
+    /**
+     * The value of quarter pi as a float.
+     */
 	public final static float QUARTER_PI = (float)Math.PI/4.0f;
+
+    /**
+     * The value of two pi as a float.
+     */
 	public final static float TWO_PI = (float)Math.PI*2.0f;
 
 	/**
@@ -259,24 +286,24 @@ public class ImageMath {
 	 * @param rgb array of four ARGB values in the order NW, NE, SW, SE
 	 * @return the interpolated value
 	 */
-	public static int bilinearInterpolate(float x, float y, int[] p) {
+	public static int bilinearInterpolate(float x, float y, int nw, int ne, int sw, int se) {
 		float m0, m1;
-		int a0 = (p[0] >> 24) & 0xff;
-		int r0 = (p[0] >> 16) & 0xff;
-		int g0 = (p[0] >> 8) & 0xff;
-		int b0 = p[0] & 0xff;
-		int a1 = (p[1] >> 24) & 0xff;
-		int r1 = (p[1] >> 16) & 0xff;
-		int g1 = (p[1] >> 8) & 0xff;
-		int b1 = p[1] & 0xff;
-		int a2 = (p[2] >> 24) & 0xff;
-		int r2 = (p[2] >> 16) & 0xff;
-		int g2 = (p[2] >> 8) & 0xff;
-		int b2 = p[2] & 0xff;
-		int a3 = (p[3] >> 24) & 0xff;
-		int r3 = (p[3] >> 16) & 0xff;
-		int g3 = (p[3] >> 8) & 0xff;
-		int b3 = p[3] & 0xff;
+		int a0 = (nw >> 24) & 0xff;
+		int r0 = (nw >> 16) & 0xff;
+		int g0 = (nw >> 8) & 0xff;
+		int b0 = nw & 0xff;
+		int a1 = (ne >> 24) & 0xff;
+		int r1 = (ne >> 16) & 0xff;
+		int g1 = (ne >> 8) & 0xff;
+		int b1 = ne & 0xff;
+		int a2 = (sw >> 24) & 0xff;
+		int r2 = (sw >> 16) & 0xff;
+		int g2 = (sw >> 8) & 0xff;
+		int b2 = sw & 0xff;
+		int a3 = (se >> 24) & 0xff;
+		int r3 = (se >> 16) & 0xff;
+		int g3 = (se >> 8) & 0xff;
+		int b3 = se & 0xff;
 
 		float cx = 1.0f-x;
 		float cy = 1.0f-y;
@@ -517,7 +544,6 @@ public class ImageMath {
 	 */
 	public static void resample(int[] source, int[] dest, int length, int offset, int stride, float[] out) {
 		int i, j;
-		float intensity;
 		float sizfac;
 		float inSegment;
 		float outSegment;
@@ -529,14 +555,16 @@ public class ImageMath {
 		int lastIndex = source.length;
 		int rgb;
 
-		in = new float[length+1];
+		in = new float[length+2];
 		i = 0;
 		for (j = 0; j < length; j++) {
 			while (out[i+1] < j)
 				i++;
 			in[j] = i + (float) (j - out[i]) / (out[i + 1] - out[i]);
+//			in[j] = ImageMath.clamp( in[j], 0, length-1 );
 		}
 		in[length] = length;
+		in[length+1] = length;
 
 		inSegment  = 1.0f;
 		outSegment = in[1];
@@ -556,7 +584,7 @@ public class ImageMath {
 		srcIndex += stride;
 		i = 1;
 
-		while (i < length) {
+		while (i <= length) {
 			float aIntensity = inSegment * a + (1.0f - inSegment) * nextA;
 			float rIntensity = inSegment * r + (1.0f - inSegment) * nextR;
 			float gIntensity = inSegment * g + (1.0f - inSegment) * nextG;
@@ -590,7 +618,7 @@ public class ImageMath {
 					((int)Math.min(gSum/sizfac, 255) << 8) |
 					(int)Math.min(bSum/sizfac, 255);
 				destIndex += stride;
-				rSum = gSum = bSum = 0.0f;
+				aSum = rSum = gSum = bSum = 0.0f;
 				inSegment -= outSegment;
 				outSegment = in[i+1] - in[i];
 				sizfac = outSegment;
@@ -599,4 +627,49 @@ public class ImageMath {
 		}
 	}
 
+    /**
+	 * Premultiply a block of pixels
+	 */
+	public static void premultiply( int[] p, int offset, int length ) {
+        length += offset;
+		for ( int i = offset; i < length; i ++ ) {
+            int rgb = p[i];
+            int a = (rgb >> 24) & 0xff;
+            int r = (rgb >> 16) & 0xff;
+            int g = (rgb >> 8) & 0xff;
+            int b = rgb & 0xff;
+            float f = a * (1.0f / 255.0f);
+            r *= f;
+            g *= f;
+            b *= f;
+            p[i] = (a << 24) | (r << 16) | (g << 8) | b;
+        }
+    }
+
+    /**
+	 * Premultiply a block of pixels
+	 */
+	public static void unpremultiply( int[] p, int offset, int length ) {
+        length += offset;
+		for ( int i = offset; i < length; i ++ ) {
+            int rgb = p[i];
+            int a = (rgb >> 24) & 0xff;
+            int r = (rgb >> 16) & 0xff;
+            int g = (rgb >> 8) & 0xff;
+            int b = rgb & 0xff;
+            if ( a != 0 && a != 255 ) {
+                float f = 255.0f / a;
+                r *= f;
+                g *= f;
+                b *= f;
+                if ( r > 255 )
+                    r = 255;
+                if ( g > 255 )
+                    g = 255;
+                if ( b > 255 )
+                    b = 255;
+                p[i] = (a << 24) | (r << 16) | (g << 8) | b;
+            }
+        }
+    }
 }

@@ -1,8 +1,13 @@
 0.9.4
 
-- added layers and gaussian blur effects to image localisation tool
 - make sure 800x600 resolution is always available
 - fixed charset on wiki downloads (e.g. Cyrillic)
+- added layers and gaussian blur effects to image localisation tool
+- added arched text to l10n tool
+- added fit-to-box (bounding box) positioning to l10n tool
+- added justification to l10n tool
+- added debug boundary drawing to imagegenerator and checkbox to GUI
+- GUI l10n usage shows a progress dialog
 
 0.9.3
 
