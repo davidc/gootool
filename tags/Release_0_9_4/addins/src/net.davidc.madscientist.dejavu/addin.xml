@@ -1,0 +1,20 @@
+<addin spec-version="1.0">
+  <id>net.davidc.madscientist.dejavu</id>
+  <name>Deja Vu</name>
+  <type>level</type>
+  <version>0.1</version>
+  <description>The Goo Balls felt they'd been here before...</description>
+  <author>davidc</author>
+
+  <!--
+  <level> ... level details to appear on ch 5</leve>
+  -->
+
+  <level>
+    <dir>MSDejaVu</dir>
+    <name text="Deja Vu"/>
+    <subtitle text="old goo dogs, new goo tricks"/>
+    <ocd>time,40</ocd>
+  </level>
+
+</addin>

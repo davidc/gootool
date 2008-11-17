@@ -1,0 +1,56 @@
+- strip down bouncycastle to only needed classes
+- refreshrate in config.txt - NEW IN NEW VERSION!!!
+
+- dragging addins below last enabled addin should move it to bottom
+
+- let them save tower jpgs (and the original transparent one)
+
+- Don't SAVE if unmodified on LAUNCH
+
+- fullscreen?
+
+- backup/restore profile to website - perhaps just store their last 5 uploaded profiles?
+- mark user as cheat - requires X votes
+
+- reformat b5s and use as wog website server
+
+- more addin author-friendly functionality (e.g. add a directory as an addin)
+
+todo
+when installing check dependencies
+
+web report on what balls are used, by what levels, etc.
+- where is this image used?
+
+remove wog references
+
+can't access our formatter currently inside the jar/exe
+
+show current JRE info on about->version
+
+- preference, upload tower on goo exit, or upload tower continuously during play (need to detect when process exits - java.lang.Process?)
+
+- Perhaps stop overrides of Drained files, to prevent cheating in goocorp?
+
+- Modify EOL scene automatically depending on resolution?
+
+addins - conflicts <addin>
+addins - provides <x>
+
+use JFormattedTextField for input field validation
+
+- Download languages from wiki? Autocreate images?
+
+- Music volume/off
+
+- new version notification
+
+- addins/ant doesn't work on linux wtf?
+
+- ant deb task: http://code.google.com/p/ant-deb-task/
+
+WIshlist:
+
+- chapter support
+- Better level load crash debugging
+

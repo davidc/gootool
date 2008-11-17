@@ -1,0 +1,9 @@
+- Bouncycastle
+
+- intellij javac2 etc
+- only used for building
+- check license for generated files (com.intellij.uiDesigner.core.blah_
+
+- jdom/asm in lib/build
+- only used for building
+- check redist policy
