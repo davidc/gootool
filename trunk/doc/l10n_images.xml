@@ -22,7 +22,6 @@
         <rotation>180</rotation>
       </text>
     </draw>
-
   </process-image>
 
   <process-image>
@@ -69,7 +68,6 @@
     <dest>res/levels/wogc/buttonConnect_over</dest>
 
     <draw>
-      <!--<fixed-position x="54" y="52"/>-->
       <fit-to-box x="8" y="43" width="90" height="24" allow-grow="false"/>
       <text>
         <string>IMG_WOGC_SIGN1_CONNECT</string>
@@ -78,7 +76,6 @@
         <rotation>-2</rotation>
       </text>
     </draw>
-
   </process-image>
 
   <process-image>
@@ -86,7 +83,7 @@
     <dest>res/levels/wogc/buttonConnect_up</dest>
 
     <draw>
-      <fixed-position x="54" y="52"/>
+      <fit-to-box x="8" y="43" width="90" height="24" allow-grow="false"/>
       <text>
         <string>IMG_WOGC_SIGN1_CONNECT</string>
         <font name="TCCEB.TTF" size="25"/>
@@ -94,7 +91,6 @@
         <rotation>-2</rotation>
       </text>
     </draw>
-
   </process-image>
 
   <!-- SassyFrassy.ttf from http://1000wordsphotography.typepad.com/allie/s.html -->
@@ -151,9 +147,7 @@
         <rotation>-20</rotation>
       </text>
     </draw>
-
   </process-image>
-
 
   <process-image>
     <source>levels_island1_title.png</source>
