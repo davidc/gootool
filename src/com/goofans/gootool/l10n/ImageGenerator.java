@@ -117,12 +117,12 @@ public class ImageGenerator
 
     if (debug) {
       pos.debugDrawBounds(g, Color.RED);
-      if (archHeight > 0) {
-        g.setColor(Color.RED);
-        int dx = (int) (x + (bounds.getWidth() / 2));
-        g.setStroke(new BasicStroke(2));
-        g.drawLine(dx, (int) y, dx, (int) (y-archHeight));
-      }
+//      if (archHeight > 0) {
+//        g.setColor(Color.RED);
+//        int dx = (int) (x + (bounds.getWidth() / 2));
+//        g.setStroke(new BasicStroke(2));
+//        g.drawLine(dx, (int) y, dx, (int) (y-archHeight));
+//      }
     }
 
     g.translate(x, y);
