@@ -151,7 +151,7 @@ public class ImageTool extends ProgressIndicatingTask
     return label;
   }
 
-  public static void main(String[] args) throws IOException, FontFormatException, XPathExpressionException
+  public static void main(String[] args) throws Exception, FontFormatException, XPathExpressionException
   {
     WorldOfGoo.init();
 //    File sourceFile = new File("C:\\Users\\david\\Downloads\\wog-translate\\images_continue.png");
@@ -204,7 +204,6 @@ public class ImageTool extends ProgressIndicatingTask
     languages.put("it", TranslationDownloader.getTranslations(wikiBase, "Italian_translation", true));
 //    languages.put("nl", nl);
 
-    new ImageTool(new File("C:\\Users\\david\\Downloads\\wog-translate\\"), languages, Color.WHITE, true).showWindow();
-
+    new ImageTool(new File("C:\\Users\\david\\Downloads\\wog-translate\\"), languages, Color.WHITE, true).run();
   }
 }
