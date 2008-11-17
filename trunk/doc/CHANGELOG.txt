@@ -7,7 +7,10 @@
 - added fit-to-box (bounding box) positioning to l10n tool
 - added justification to l10n tool
 - added debug boundary drawing to imagegenerator and checkbox to GUI
+- added alpha channel to color spec in l10n tool
+- major refactor of XML format in l10n tool 
 - GUI l10n usage shows a progress dialog
+- building images to output directory added
 
 0.9.3
 
