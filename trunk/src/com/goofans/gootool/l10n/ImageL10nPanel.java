@@ -11,6 +11,9 @@ import java.awt.*;
 import java.io.File;
 
 import com.goofans.gootool.wog.WorldOfGoo;
+import com.goofans.gootool.Controller;
+import com.goofans.gootool.util.GUIUtil;
+import com.goofans.gootool.util.ProgressIndicatingTask;
 
 /**
  * @author David Croft (davidc@goofans.com)
@@ -30,6 +33,7 @@ public class ImageL10nPanel implements ActionListener
   public JPanel rootPanel;
   private JButton languageAddButton;
   private JButton languageRemoveButton;
+  private JCheckBox debugModeCheckBox;
   public LanguagesTableModel languagesDataModel;
 
   private static final String PREF_L10N_WIKI_BASE = "l10n_wiki_base";
@@ -85,24 +89,21 @@ public class ImageL10nPanel implements ActionListener
     }
     else if (cmd.equals(CMD_BUILD_AND_VIEW)) {
 
-      Map<String, Map<String, String>> languages = new HashMap<String, Map<String, String>>();
+      File inputDirectory = new File(inputDirectoryTextField.getText());
+      if (!inputDirectory.exists()) {
+        JOptionPane.showMessageDialog(rootPanel, "Input directory doesn't exist: " + inputDirectory, "Directory not found", JOptionPane.ERROR_MESSAGE);
+        return;
+      }
 
       try {
+        Map<String, Map<String, String>> languages = downloadTranslations();
 
-        String wikiBase = wikiBaseURLTextField.getText();
-        for (LanguagesTableModel.L10nLanguage language : languagesDataModel.getLanguages()) {
-          if (language.enabled) {
-            Map<String, String> translations = TranslationDownloader.getTranslations(wikiBase, language.wikiPage, true);
-            languages.put(language.code, translations);
-          }
-        }
-        ImageTool imageTool = new ImageTool(new File(inputDirectoryTextField.getText()), languages, colorChooser.getBackground());
-        imageTool.showWindow();
+        ImageTool imageTool = new ImageTool(inputDirectory, languages, colorChooser.getBackground(), debugModeCheckBox.isSelected());
 
+        GUIUtil.runTask(null, "Preparing images", imageTool);
       }
       catch (Exception e) {
         JOptionPane.showMessageDialog(rootPanel, "Exception: " + e.getClass() + ": " + e.getLocalizedMessage());
-        return;
       }
     }
     else if (cmd.equals(CMD_CHANGE_INPUT)) {
@@ -131,5 +132,26 @@ public class ImageL10nPanel implements ActionListener
       colorChooser.setBackground(color);
       colorChooser.setForeground(color);
     }
+  }
+
+  private Map<String, Map<String, String>> downloadTranslations() throws Exception
+  {
+    final String wikiBase = wikiBaseURLTextField.getText();
+    final Map<String, Map<String, String>> languages = new HashMap<String, Map<String, String>>();
+
+    GUIUtil.runTask(null, "Downloading translations", new ProgressIndicatingTask()
+    {
+      public void run() throws Exception
+      {
+        for (LanguagesTableModel.L10nLanguage language : languagesDataModel.getLanguages()) {
+          if (language.enabled) {
+            beginStep("Downloading " + language.wikiPage, false);
+            Map<String, String> translations = TranslationDownloader.getTranslations(wikiBase, language.wikiPage, true);
+            languages.put(language.code, translations);
+          }
+        }
+      }
+    });
+    return languages;
   }
 }
