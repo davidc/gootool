@@ -1,30 +1,26 @@
 package com.goofans.gootool.l10n;
 
+import javax.imageio.IIOException;
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.Border;
-import javax.imageio.ImageIO;
-import javax.imageio.IIOException;
 import javax.xml.xpath.XPathExpressionException;
-import java.io.File;
-import java.io.IOException;
-import java.util.Map;
-import java.util.Random;
-import java.util.HashMap;
-import java.util.regex.Pattern;
-import java.util.regex.Matcher;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
+import java.io.File;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Random;
 
-import org.w3c.dom.Document;
-import org.w3c.dom.NodeList;
-import org.w3c.dom.Node;
-import org.w3c.dom.Element;
-import com.goofans.gootool.util.XMLUtil;
-import com.goofans.gootool.util.ProgressIndicatingTask;
-import com.goofans.gootool.wog.WorldOfGoo;
 import com.goofans.gootool.GooTool;
+import com.goofans.gootool.util.ProgressIndicatingTask;
+import com.goofans.gootool.util.XMLUtil;
+import com.goofans.gootool.wog.WorldOfGoo;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 /**
  * @author David Croft (davidc@goofans.com)
@@ -40,36 +36,44 @@ public class ImageTool extends ProgressIndicatingTask
   private boolean debug;
   private Map<String, Map<String, String>> languages;
   private File sourceDir;
+  private File outputDir;
+  public static ImageTool imageTool;
 
-  public ImageTool(File sourceDir, Map<String, Map<String, String>> languages, Color background, boolean debug) throws IOException, FontFormatException, XPathExpressionException
+  public ImageTool(File sourceDir, File outputDir, Map<String, Map<String, String>> languages, Color background, boolean debug) throws IOException, FontFormatException, XPathExpressionException
   {
-    GridBagLayout layout = new GridBagLayout();
-    contentPanel = new JPanel(layout);
-    contentPanel.setBackground(background);
-    JScrollPane scroller = new JScrollPane(contentPanel);
-    scroller.getVerticalScrollBar().setUnitIncrement(20);
-    scroller.getHorizontalScrollBar().setUnitIncrement(20);
+    if (outputDir == null) {
+      GridBagLayout layout = new GridBagLayout();
+      contentPanel = new JPanel(layout);
+      contentPanel.setBackground(background);
+      JScrollPane scroller = new JScrollPane(contentPanel);
+      scroller.getVerticalScrollBar().setUnitIncrement(20);
+      scroller.getHorizontalScrollBar().setUnitIncrement(20);
 
-    rootPanel = new JPanel(new BorderLayout());
+      rootPanel = new JPanel(new BorderLayout());
 
-    rootPanel.add(scroller, BorderLayout.CENTER);
+      rootPanel.add(scroller, BorderLayout.CENTER);
+    }
 
     this.languages = languages;
     this.debug = debug;
     this.sourceDir = sourceDir;
+    this.outputDir = outputDir;
   }
 
   public void run() throws Exception
   {
-    beginStep("Initialising GUI", false);
     GridBagConstraints constraints = new GridBagConstraints();
 
-    constraints.gridy = 0;
-    constraints.gridx = 1;
-    contentPanel.add(new JLabel("Original"), constraints);
-    for (String language : languages.keySet()) {
-      constraints.gridx++;
-      contentPanel.add(new JLabel(language), constraints);
+    if (outputDir == null) {
+      beginStep("Initialising GUI", false);
+
+      constraints.gridy = 0;
+      constraints.gridx = 1;
+      contentPanel.add(new JLabel("Original"), constraints);
+      for (String language : languages.keySet()) {
+        constraints.gridx++;
+        contentPanel.add(new JLabel(language), constraints);
+      }
     }
 
     FontManager fm = new FontManager(sourceDir);
@@ -89,40 +93,37 @@ public class ImageTool extends ProgressIndicatingTask
 
           ImageGenerator generator = new ImageGenerator(new File(sourceDir, sourceFileName), el, fm, debug);
 
-          constraints.gridy++;
-          constraints.gridx = 0;
-          contentPanel.add(new JLabel("<html>" + sourceFileName + " -&gt;<br>" + destFileName), constraints);
+          if (outputDir == null) {
+            constraints.gridy++;
+            constraints.gridx = 0;
+            contentPanel.add(new JLabel("<html>" + sourceFileName + " -&gt;<br>" + destFileName), constraints);
 
-          try {
-            constraints.gridx++;
-            contentPanel.add(makeLabel(ImageIO.read(new File(WorldOfGoo.getWogDir(), destFileName + ".png"))), constraints);
-          }
-          catch (IIOException e) {
-            // don't care, e.g. test image
+            try {
+              constraints.gridx++;
+              contentPanel.add(makeLabel(ImageIO.read(new File(WorldOfGoo.getWogDir(), destFileName + ".png"))), constraints);
+            }
+            catch (IIOException e) {
+              // don't care, e.g. test image
+            }
           }
 
           for (String language : languages.keySet()) {
-            beginStep("Processing " + sourceFileName + " in " + language, false);
             generator.process(languages.get(language));
 
-            constraints.gridx++;
-            contentPanel.add(makeLabel(generator.getFinalImage()), constraints);
+            if (outputDir == null) {
+              constraints.gridx++;
+              contentPanel.add(makeLabel(generator.getFinalImage()), constraints);
+            }
+            else {
+              generator.writeImage(new File(outputDir, destFileName + "." + language + ".png"));
+            }
           }
         }
       }
     }
-
-    SwingUtilities.invokeLater(new Runnable()
-    {
-      public void run()
-      {
-        showWindow();
-      }
-    });
-//    contentPanel.validate();
   }
 
-  private void showWindow()
+  public void showWindow()
   {
     JFrame frame = new JFrame("Image l10n Test");
     frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -151,7 +152,7 @@ public class ImageTool extends ProgressIndicatingTask
     return label;
   }
 
-  public static void main(String[] args) throws Exception, FontFormatException, XPathExpressionException
+  public static void main(String[] args) throws Exception
   {
     WorldOfGoo.init();
 //    File sourceFile = new File("C:\\Users\\david\\Downloads\\wog-translate\\images_continue.png");
@@ -204,6 +205,8 @@ public class ImageTool extends ProgressIndicatingTask
     languages.put("it", TranslationDownloader.getTranslations(wikiBase, "Italian_translation", true));
 //    languages.put("nl", nl);
 
-    new ImageTool(new File("C:\\Users\\david\\Downloads\\wog-translate\\"), languages, Color.WHITE, true).run();
+    imageTool = new ImageTool(new File("C:\\Users\\david\\Downloads\\wog-translate\\"), null, languages, Color.WHITE, true);
+    imageTool.run();
+    imageTool.showWindow();
   }
 }

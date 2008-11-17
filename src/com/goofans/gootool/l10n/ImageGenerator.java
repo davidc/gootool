@@ -128,7 +128,6 @@ public class ImageGenerator
     g.translate(x, y);
     g.scale(scale * stretch, scale);
 
-
 //    g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
 //            RenderingHints.VALUE_ANTIALIAS_ON);
     g.setColor(color);
@@ -211,10 +210,13 @@ public class ImageGenerator
     return finalImage;
   }
 
-  public void writeImage(String name) throws IOException
+  public void writeImage(File file) throws IOException
   {
-    ImageIO.write(finalImage, "PNG", new File(name));
-
+    File parentDir = file.getParentFile();
+    if (!parentDir.exists() && !parentDir.mkdirs()) {
+      throw new IOException("Unable to create " + parentDir);
+    }
+    ImageIO.write(finalImage, "PNG", file);
   }
 
   private void drawPoint(Graphics2D g, int x, int y, Color color)

@@ -2,18 +2,17 @@ package com.goofans.gootool.l10n;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileFilter;
-import java.util.prefs.Preferences;
-import java.util.Map;
-import java.util.HashMap;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.prefs.Preferences;
 
-import com.goofans.gootool.wog.WorldOfGoo;
-import com.goofans.gootool.Controller;
 import com.goofans.gootool.util.GUIUtil;
 import com.goofans.gootool.util.ProgressIndicatingTask;
+import com.goofans.gootool.wog.WorldOfGoo;
 
 /**
  * @author David Croft (davidc@goofans.com)
@@ -41,7 +40,9 @@ public class ImageL10nPanel implements ActionListener
   private static final String CMD_ADD_LANGUAGE = "AddLanguage";
   private static final String CMD_REMOVE_LANGUAGE = "RemoveLanguage";
   private static final String CMD_BUILD_AND_VIEW = "BuildAndView";
+  private static final String CMD_BUILD_AND_SAVE = "BuildAndSave";
   private static final String CMD_CHANGE_INPUT = "ChangeInputDir";
+  private static final String CMD_CHANGE_OUTPUT = "ChangeOutputDir";
   private static final String CMD_CHANGE_COLOR = "ChangeColor";
 
   public ImageL10nPanel()
@@ -66,6 +67,9 @@ public class ImageL10nPanel implements ActionListener
     buildAndViewButton.setActionCommand(CMD_BUILD_AND_VIEW);
     buildAndViewButton.addActionListener(this);
 
+    buildAndSaveButton.setActionCommand(CMD_BUILD_AND_SAVE);
+    buildAndSaveButton.addActionListener(this);
+
     Preferences p = WorldOfGoo.getPreferences();
     wikiBaseURLTextField.setText(p.get(PREF_L10N_WIKI_BASE, "http://hell.student.utwente.nl/wog/mediawiki/"));
 
@@ -73,6 +77,9 @@ public class ImageL10nPanel implements ActionListener
     colorChooser.setForeground(Color.WHITE);
     colorChooser.setActionCommand(CMD_CHANGE_COLOR);
     colorChooser.addActionListener(this);
+
+    outputDirectoryChangeButton.setActionCommand(CMD_CHANGE_OUTPUT);
+    outputDirectoryChangeButton.addActionListener(this);
   }
 
   public void actionPerformed(ActionEvent event)
@@ -82,56 +89,111 @@ public class ImageL10nPanel implements ActionListener
       languagesDataModel.addRow();
     }
     else if (cmd.equals(CMD_REMOVE_LANGUAGE)) {
-      System.out.println("languagesTable.getSelectedRow() = " + languagesTable.getSelectedRow());
+//      System.out.println("languagesTable.getSelectedRow() = " + languagesTable.getSelectedRow());
       if (languagesTable.getSelectedRow() != -1) {
         languagesDataModel.removeRow(languagesTable.getSelectedRow());
       }
     }
     else if (cmd.equals(CMD_BUILD_AND_VIEW)) {
-
-      File inputDirectory = new File(inputDirectoryTextField.getText());
-      if (!inputDirectory.exists()) {
-        JOptionPane.showMessageDialog(rootPanel, "Input directory doesn't exist: " + inputDirectory, "Directory not found", JOptionPane.ERROR_MESSAGE);
-        return;
-      }
-
-      try {
-        Map<String, Map<String, String>> languages = downloadTranslations();
-
-        ImageTool imageTool = new ImageTool(inputDirectory, languages, colorChooser.getBackground(), debugModeCheckBox.isSelected());
-
-        GUIUtil.runTask(null, "Preparing images", imageTool);
-      }
-      catch (Exception e) {
-        JOptionPane.showMessageDialog(rootPanel, "Exception: " + e.getClass() + ": " + e.getLocalizedMessage());
-      }
+      buildAndView();
+    }
+    else if (cmd.equals(CMD_BUILD_AND_SAVE)) {
+      buildAndSave();
     }
     else if (cmd.equals(CMD_CHANGE_INPUT)) {
-
-      JFileChooser chooser = new JFileChooser();
-      chooser.setFileFilter(new FileFilter()
-      {
-        public boolean accept(File f)
-        {
-          return (f.getName().equals("l10n_images.xml")) || f.isDirectory();
-        }
-
-        public String getDescription()
-        {
-          return "l10n_images.xml file";
-        }
-      });
-
-      if (chooser.showOpenDialog(rootPanel) != JFileChooser.APPROVE_OPTION) {
-        return;
-      }
-      inputDirectoryTextField.setText(chooser.getSelectedFile().getParentFile().getAbsolutePath());
+      selectInputDirectory();
+    }
+    else if (cmd.equals(CMD_CHANGE_OUTPUT)) {
+      selectOutputDirectory();
     }
     else if (cmd.equals(CMD_CHANGE_COLOR)) {
       Color color = JColorChooser.showDialog(rootPanel, "Choose background color", colorChooser.getBackground());
       colorChooser.setBackground(color);
       colorChooser.setForeground(color);
     }
+  }
+
+  private void buildAndView()
+  {
+    File inputDirectory = new File(inputDirectoryTextField.getText());
+    if (!inputDirectory.exists()) {
+      JOptionPane.showMessageDialog(rootPanel, "Input directory doesn't exist: " + inputDirectory, "Directory not found", JOptionPane.ERROR_MESSAGE);
+      return;
+    }
+
+    try {
+      Map<String, Map<String, String>> languages = downloadTranslations();
+
+      ImageTool imageTool = new ImageTool(inputDirectory, null, languages, colorChooser.getBackground(), debugModeCheckBox.isSelected());
+
+      GUIUtil.runTask(null, "Preparing images", imageTool);
+
+      imageTool.showWindow();
+    }
+    catch (Exception e) {
+      JOptionPane.showMessageDialog(rootPanel, "Exception: " + e.getClass() + ": " + e.getLocalizedMessage());
+    }
+  }
+
+  private void buildAndSave()
+  {
+    File inputDirectory = new File(inputDirectoryTextField.getText());
+    if (!inputDirectory.exists()) {
+      JOptionPane.showMessageDialog(rootPanel, "Input directory doesn't exist: " + inputDirectory, "Directory not found", JOptionPane.ERROR_MESSAGE);
+      return;
+    }
+
+    File outputDirectory = new File(outputDirectoryTextField.getText());
+    if (!outputDirectory.exists()) {
+      JOptionPane.showMessageDialog(rootPanel, "Output directory doesn't exist: " + outputDirectory, "Directory not found", JOptionPane.ERROR_MESSAGE);
+      return;
+    }
+
+    try {
+      Map<String, Map<String, String>> languages = downloadTranslations();
+
+      ImageTool imageTool = new ImageTool(inputDirectory, outputDirectory, languages, null, false);
+
+      GUIUtil.runTask(null, "Preparing images", imageTool);
+
+      JOptionPane.showMessageDialog(rootPanel, "Build complete in " + outputDirectory + "!", "Build complete", JOptionPane.INFORMATION_MESSAGE);
+    }
+    catch (Exception e) {
+      JOptionPane.showMessageDialog(rootPanel, "Exception: " + e.getClass() + ": " + e.getLocalizedMessage());
+    }
+  }
+
+  private void selectInputDirectory()
+  {
+    JFileChooser chooser = new JFileChooser(inputDirectoryTextField.getText());
+    chooser.setFileFilter(new FileFilter()
+    {
+      public boolean accept(File f)
+      {
+        return (f.getName().equals("l10n_images.xml")) || f.isDirectory();
+      }
+
+      public String getDescription()
+      {
+        return "l10n_images.xml file";
+      }
+    });
+
+    if (chooser.showOpenDialog(rootPanel) != JFileChooser.APPROVE_OPTION) {
+      return;
+    }
+    inputDirectoryTextField.setText(chooser.getSelectedFile().getParentFile().getAbsolutePath());
+  }
+
+  private void selectOutputDirectory()
+  {
+    JFileChooser chooser = new JFileChooser(outputDirectoryTextField.getText());
+    chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+
+    if (chooser.showOpenDialog(rootPanel) != JFileChooser.APPROVE_OPTION) {
+      return;
+    }
+    outputDirectoryTextField.setText(chooser.getSelectedFile().getAbsolutePath());
   }
 
   private Map<String, Map<String, String>> downloadTranslations() throws Exception
