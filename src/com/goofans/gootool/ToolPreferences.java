@@ -22,6 +22,7 @@ public class ToolPreferences
   private static final Preferences PREFS = Preferences.userNodeForPackage(GooTool.class);
   private static final String PREF_GOOTOOL_ID = "gootool_random_id";
   private static final String PREF_IGNORE_UPDATE = "gootool_ignore_update";
+  private static final String PREF_L10N_MODE = "gootool_l10n_enabled";
 
   private ToolPreferences()
   {
@@ -72,6 +73,16 @@ public class ToolPreferences
   {
     log.fine("Ignoring update " + version);
     PREFS.put(PREF_IGNORE_UPDATE, version.toString());
+  }
+
+  public static boolean isL10nEnabled()
+  {
+    return PREFS.getBoolean(PREF_L10N_MODE, false);
+  }
+
+  public static void setL10nEnabled(boolean enabled)
+  {
+    PREFS.putBoolean(PREF_L10N_MODE, enabled);
   }
 
   @SuppressWarnings({"UseOfSystemOutOrSystemErr"})

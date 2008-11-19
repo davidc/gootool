@@ -63,8 +63,6 @@ public class Controller implements ActionListener
 
   // The configuration we're editing
   private Configuration editorConfig;
-  //  private JPanel translatePanel;
-  private static final String PREF_L10N_MODE = "l10n_enable";
 
 
   public Controller()
@@ -124,7 +122,7 @@ public class Controller implements ActionListener
     else if (cmd.equals(CMD_TRANSLATOR_MODE)) {
       boolean enabled = mainFrame.mainMenu.translatorModeMenuItem.isSelected();
       updateImageLocalisationPanel(enabled);
-      WorldOfGoo.getPreferences().putBoolean(PREF_L10N_MODE, enabled);
+      ToolPreferences.setL10nEnabled(enabled);
     }
     else if (cmd.equals(CMD_CHECK_FOR_UPDATES)) {
       VersionCheck versionCheck = null;
@@ -561,7 +559,7 @@ public class Controller implements ActionListener
     this.mainFrame = mainFrame;
     updateViewFromModel(editorConfig);
 
-    boolean enabled = WorldOfGoo.getPreferences().getBoolean(PREF_L10N_MODE, false);
+    boolean enabled = ToolPreferences.isL10nEnabled();
     updateImageLocalisationPanel(enabled);
     mainFrame.mainMenu.translatorModeMenuItem.setSelected(enabled);
   }
