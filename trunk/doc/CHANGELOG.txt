@@ -4,6 +4,7 @@
 - better error description when l10n source image can't be loaded
 - added new version notification on startup and via help menu
 - added new version ignore option
+- added menu items for various help webpages
 
 0.9.4
 
