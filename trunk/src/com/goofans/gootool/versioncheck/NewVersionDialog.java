@@ -31,7 +31,6 @@ public class NewVersionDialog extends JDialog
     setContentPane(contentPane);
     getRootPane().setDefaultButton(yesButton);
 
-    setLocationByPlatform(true);
     setIconImage(GooTool.getMainIconImage());
     setModal(true);
     setResizable(false);
@@ -60,11 +59,12 @@ public class NewVersionDialog extends JDialog
       }
     });
 
-    curVersionLabel.setText("Your version: " + Version.RELEASE_FULL);
+    curVersionLabel.setText("Your version: " + Version.RELEASE_MAJOR + "." + Version.RELEASE_MINOR + "." + Version.RELEASE_MICRO);
     latestVersionLabel.setText("Latest version: " + latestVersion);
     message.setText("<html>" + messageText + "</html>");
 
     pack();
+    setLocationRelativeTo(parentWindow);
   }
 
   public static void main(String[] args)
