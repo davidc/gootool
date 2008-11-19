@@ -212,6 +212,13 @@ public class XMLUtil
     return foundEl;
   }
 
+  public static String getElementString(Element el, String tagName) throws IOException
+  {
+    Element foundEl = getElement(el, tagName);
+    if (foundEl == null) return "";
+    return foundEl.getTextContent().trim();
+  }
+
   public static String getElementStringRequired(Element el, String tagName) throws IOException
   {
     return getElementRequired(el, tagName).getTextContent().trim();

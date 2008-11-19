@@ -64,6 +64,12 @@ public class MainMenu
     menu = new JMenu("Help");
     menu.setMnemonic(KeyEvent.VK_H);
 
+    menuItem = new JMenuItem("Check for Updates");
+    menuItem.setMnemonic(KeyEvent.VK_U);
+    menuItem.setActionCommand(Controller.CMD_CHECK_FOR_UPDATES);
+    menuItem.addActionListener(controller);
+    menu.add(menuItem);
+
     menuItem = new JMenuItem("About...");
     menuItem.setMnemonic(KeyEvent.VK_A);
     menuItem.setActionCommand(Controller.CMD_ABOUT);

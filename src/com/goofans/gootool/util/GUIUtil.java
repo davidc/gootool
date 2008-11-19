@@ -37,6 +37,17 @@ public class GUIUtil
     });
   }
 
+  public static void setFocusOnOpen(final JDialog dialog, final JComponent component)
+  {
+    dialog.addWindowListener(new WindowAdapter()
+    {
+      public void windowOpened(WindowEvent e)
+      {
+        component.requestFocusInWindow();
+      }
+    });
+  }
+
   public static void setDefaultClosingOkButton(JButton okButton, final JDialog dialog)
   {
     dialog.getRootPane().setDefaultButton(okButton);

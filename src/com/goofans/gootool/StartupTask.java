@@ -5,12 +5,13 @@ import com.goofans.gootool.profile.ProfileFactory;
 import com.goofans.gootool.util.ProgressIndicatingTask;
 import com.goofans.gootool.view.MainFrame;
 import com.goofans.gootool.wog.WorldOfGoo;
+import com.goofans.gootool.versioncheck.VersionCheck;
 
 import javax.swing.*;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.lang.reflect.InvocationTargetException;
+import java.net.MalformedURLException;
 
 /**
  * @author David Croft (davidc@goofans.com)
@@ -38,7 +39,15 @@ public class StartupTask extends ProgressIndicatingTask
     Configuration c = initModel();
 
     beginStep("Initialising GUI", false);
-    initControllerAndView(c);
+    MainFrame mainFrame = initControllerAndView(c);
+
+    // Launch a new thread to check for new version
+    try {
+      new Thread(new VersionCheck(mainFrame, false)).start();
+    }
+    catch (MalformedURLException e) {
+      log.log(Level.WARNING, "Unable to check version on startup", e);
+    }
   }
 
   private void initWog()
@@ -92,9 +101,7 @@ public class StartupTask extends ProgressIndicatingTask
     return c;
   }
 
-
-
-  private void initControllerAndView(Configuration c)
+  private MainFrame initControllerAndView(Configuration c)
   {
     controller.setInitialConfiguration(c);
 
@@ -103,6 +110,8 @@ public class StartupTask extends ProgressIndicatingTask
 
     mainFrame.pack();
     mainFrame.setVisible(true);
+
+    return mainFrame;
   }
 
 }
