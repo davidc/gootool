@@ -74,7 +74,12 @@ public class ImageGenerator
   public ImageGenerator(File sourceFile, Element el, FontManager fontManager, boolean debug) throws IOException, FontFormatException
   {
 //    System.out.println("sourceFile = " + sourceFile);
-    srcImage = ImageIO.read(sourceFile);
+    try {
+      srcImage = ImageIO.read(sourceFile);
+    }
+    catch (IOException e) {
+      throw new IOException("Can't read " + sourceFile + ": " + e.getLocalizedMessage(), e);
+    }
 
     srcWidth = srcImage.getWidth();
     srcHeight = srcImage.getHeight();

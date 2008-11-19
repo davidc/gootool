@@ -59,7 +59,7 @@ public class Controller implements ActionListener
 
   // The configuration we're editing
   private Configuration editorConfig;
-//  private JPanel translatePanel;
+  //  private JPanel translatePanel;
   private static final String PREF_L10N_MODE = "l10n_enable";
 
 
@@ -163,6 +163,7 @@ public class Controller implements ActionListener
     }
 
     JFileChooser chooser = new JFileChooser();
+    chooser.setMultiSelectionEnabled(true);
     FileNameExtensionFilter filter = new FileNameExtensionFilter("World of Goo Mods", WorldOfGoo.GOOMOD_EXTENSION);
     chooser.setFileFilter(filter);
     int returnVal = chooser.showOpenDialog(mainFrame);
@@ -172,7 +173,17 @@ public class Controller implements ActionListener
       return;
     }
 
-    File addinFile = chooser.getSelectedFile();
+    File[] selectedFiles = chooser.getSelectedFiles();
+
+    for (File addinFile : selectedFiles) {
+      installAddin(addinFile);
+    }
+
+    refreshView();
+  }
+
+  private void installAddin(File addinFile)
+  {
     if (!addinFile.exists()) {
       log.info("File not found: " + addinFile);
       showErrorDialog("File not found", addinFile + " not found");
@@ -206,7 +217,7 @@ public class Controller implements ActionListener
     msg.append("Author: ").append(addin.getAuthor()).append("\n");
     msg.append("Version: ").append(addin.getVersion()).append("\n");
 
-    returnVal = showYesNoDialog("Install Addin?", msg.toString());
+    int returnVal = showYesNoDialog("Install Addin?", msg.toString());
     if (returnVal != JOptionPane.YES_OPTION) {
       log.info("User cancelled installation of " + addin);
       return;
@@ -222,8 +233,6 @@ public class Controller implements ActionListener
     }
 
     showMessageDialog("Addin " + addin.getName() + " installed!");
-
-    refreshView();
   }
 
   private void uninstallAddin()

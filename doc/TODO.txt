@@ -1,6 +1,14 @@
 - strip down bouncycastle to only needed classes
 - refreshrate in config.txt - NEW IN NEW VERSION!!!
 
+- file association for .goomod
+
+Drag and Drop installing of Addons. So you can drag a file from your desktop to mod list and install it
+
+* Also, perhaps make it more clear that what this does is duplicate your world of goo install, and modify that, and that it does not harm your original in any way. (i hope ;P )
+
+Make checkboxes in addin list work
+
 - dragging addins below last enabled addin should move it to bottom
 
 - let them save tower jpgs (and the original transparent one)
@@ -53,4 +61,58 @@ WIshlist:
 
 - chapter support
 - Better level load crash debugging
+
+
+
+
+Hey Ron and Kyle
+
+I know you're probably busy preparing for the EU release at the moment, but I assume you've been following the forums enough
+to see what I've been doing and know that I'm not just a fan-boy begging favours :-)
+
+I've got a few requests for you that hopefully are easy to implement and will make modding and GooTool easier to use:
+
+- Versioning. Currently GooTool has no way to tell what version of WoG is installed, so it has to look at WorldOfGoo.exe
+file modification time (yuck!) to determine what features are available (e.g. refresh rate, level load from cmdline). I know
+you've started added 1.20 etc to the download link, so maybe you could just add a simple version.txt into the install directory
+that contains this version number? (Please pass this on to the Mac/Linux developers too!)
+
+- Chapter support. I'm sure you're aware that the game can't support extra chapters at the moment. It would be nice to add
+chapters to the root
+
+- level design competition with some kind of reward
+
+- christmas level with 2dboy promo
+
+beta test moon
+
+- Would you be willing to share the .binltl movie format so we can create new movies?
+In particular in my chapter I'm interested in a "found mad scientist" movie and an "end credits" movie.
+
+
+So I was thinking...
+
+I run goofans.com as you already know. It has GooTool and will have mods/levels downloads as and when those start happening. GooTool will also have an automatic profile upload option when it leaves beta.
+
+I'd quite like to make a central site for WoG fans to go to.
+
+Just to recap what we have:
+
+- Translation wiki, standalone, on your site
+- File format description, on the WogEdit wiki (only a little) plus various knowledge in the 2dboy forums
+- GooTool: addin installer, profile viewer/tower viewer
+- Maks(your friend?)'s pages: tower viewer
+
+I'd really like to integrate all these things into one site for players.
+
+I would like to create a master wiki including all things: translations, reverse-engineering efforts, user documentation.
+
+I would like to create a central place for profile/tower uploads. You have this, I have this, no sense duplication.
+
+I think we can create a site together building on both our work and centralising on a central community site that does everything for WoG players.
+
+Obviously I'm not commercially driven and neither are you, we're both just big WoG fans. (Indeed the site probably never will be, since I own an ISP and so hosting bills are non-existant). So in this respect I'm happy to work with you to create the master site (as much or as little as you desire - I'm already committed to building the goofans.com site per spec)
+
+At the moment I'm using Drupal, though I'm not especially happy with it, it got me up and running quickly. I think it'll suffice. It just needs a download module writing, and a WoG profile module - both of which I'm already intendign to do alone but would welcome you to join me in.
+
 

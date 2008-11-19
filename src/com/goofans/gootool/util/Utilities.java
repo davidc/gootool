@@ -116,7 +116,7 @@ public class Utilities
     }
   }
 
-  public static String readStreamInfoString(InputStream is) throws IOException
+  public static String readStreamIntoString(InputStream is) throws IOException
   {
     StringBuilder sb = new StringBuilder();
 

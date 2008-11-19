@@ -204,7 +204,7 @@ public class AddinInstaller
 
     String xml;
     try {
-      xml = Utilities.readStreamInfoString(is);
+      xml = Utilities.readStreamIntoString(is);
     }
     finally {
       is.close();
