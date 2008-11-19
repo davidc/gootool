@@ -1,6 +1,7 @@
 package com.goofans.gootool.view;
 
 import com.goofans.gootool.Controller;
+import com.goofans.gootool.util.HyperlinkLaunchingListener;
 
 import javax.swing.*;
 import java.awt.event.KeyEvent;
@@ -20,6 +21,7 @@ public class MainMenu
 
     JMenu menu;
     JMenuItem menuItem;
+    HyperlinkLaunchingListener hyperlinkListener = new HyperlinkLaunchingListener();
 
     menu = new JMenu("File");
     menu.setMnemonic(KeyEvent.VK_F);
@@ -64,13 +66,39 @@ public class MainMenu
     menu = new JMenu("Help");
     menu.setMnemonic(KeyEvent.VK_H);
 
+    menuItem = new JMenuItem("Manual");
+    menuItem.setMnemonic(KeyEvent.VK_M);
+    menuItem.setActionCommand("http://goofans.com/gootool/about");
+    menuItem.addActionListener(hyperlinkListener);
+    menu.add(menuItem);
+
+    menuItem = new JMenuItem("FAQ");
+    menuItem.setMnemonic(KeyEvent.VK_F);
+    menuItem.setActionCommand("http://goofans.com/gootool/faq");
+    menuItem.addActionListener(hyperlinkListener);
+    menu.add(menuItem);
+
+    menuItem = new JMenuItem("Troubleshooting");
+    menuItem.setMnemonic(KeyEvent.VK_T);
+    menuItem.setActionCommand("http://goofans.com/gootool/troubleshooting");
+    menuItem.addActionListener(hyperlinkListener);
+    menu.add(menuItem);
+
+    menuItem = new JMenuItem("Forum");
+    menuItem.setMnemonic(KeyEvent.VK_O);
+    menuItem.setActionCommand("http://goofans.com/forum");
+    menuItem.addActionListener(hyperlinkListener);
+    menu.add(menuItem);
+
+    menu.add(new JSeparator());
+
     menuItem = new JMenuItem("Check for Updates");
     menuItem.setMnemonic(KeyEvent.VK_U);
     menuItem.setActionCommand(Controller.CMD_CHECK_FOR_UPDATES);
     menuItem.addActionListener(controller);
     menu.add(menuItem);
 
-    menuItem = new JMenuItem("About...");
+    menuItem = new JMenuItem("About GooTool");
     menuItem.setMnemonic(KeyEvent.VK_A);
     menuItem.setActionCommand(Controller.CMD_ABOUT);
     menuItem.addActionListener(controller);
