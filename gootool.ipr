@@ -74,13 +74,13 @@
   <component name="IdProvider" IDEtalkID="B2C21A5452E2E453C59DC88F0040274D" />
   <component name="InspectionProjectProfileManager">
     <option name="PROJECT_PROFILE" value="Project Default" />
-    <option name="USE_PROJECT_LEVEL_SETTINGS" value="false" />
+    <option name="USE_PROJECT_LEVEL_SETTINGS" value="true" />
     <scopes />
     <profiles>
       <profile version="1.0" is_locked="false">
         <option name="myName" value="Project Default" />
         <option name="myLocal" value="false" />
-        <inspection_tool class="HardCodedStringLiteral" level="WARNING" enabled="false">
+        <inspection_tool class="HardCodedStringLiteral" level="WARNING" enabled="true">
           <option name="ignoreForAssertStatements" value="true" />
           <option name="ignoreForExceptionConstructors" value="true" />
           <option name="ignoreForSpecifiedExceptionConstructors" value="" />
@@ -108,7 +108,12 @@
         </inspection_tool>
       </profile>
     </profiles>
-    <list size="0" />
+    <list size="4">
+      <item index="0" class="java.lang.String" itemvalue="SERVER PROBLEM" />
+      <item index="1" class="java.lang.String" itemvalue="INFO" />
+      <item index="2" class="java.lang.String" itemvalue="WARNING" />
+      <item index="3" class="java.lang.String" itemvalue="ERROR" />
+    </list>
   </component>
   <component name="JavacSettings">
     <option name="DEBUGGING_INFO" value="true" />
