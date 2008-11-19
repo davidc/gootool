@@ -4,8 +4,9 @@ import java.util.StringTokenizer;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.logging.Logger;
-import java.util.logging.Level;
 import java.io.IOException;
+
+import com.goofans.gootool.util.DebugUtil;
 
 /**
  * @author David Croft (davidc@goofans.com)
@@ -140,8 +141,7 @@ public class Profile
   @SuppressWarnings({"UseOfSystemOutOrSystemErr"})
   public static void main(String[] args) throws IOException
   {
-    Logger.getLogger("").setLevel(Level.ALL);
-    Logger.getLogger("").getHandlers()[0].setLevel(Level.ALL);
+    DebugUtil.setAllLogging();
 
     Profile newPlayer = new Profile("davidc,0,55,0,0,_,_,0");
     System.out.println("newPlayer = " + newPlayer);
@@ -170,4 +170,5 @@ public class Profile
     System.out.println("jonas.levelAchievements = " + jonas.levelAchievements);
     System.out.println("jonas.tower = " + jonas.tower);
   }
+
 }

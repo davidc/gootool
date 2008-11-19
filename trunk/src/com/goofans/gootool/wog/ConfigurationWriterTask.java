@@ -261,8 +261,7 @@ public class ConfigurationWriterTask extends ProgressIndicatingTask
   @SuppressWarnings({"UseOfSystemOutOrSystemErr"})
   public static void main(String[] args) throws Exception
   {
-    Logger.getLogger("").setLevel(Level.ALL);
-    Logger.getLogger("").getHandlers()[0].setLevel(Level.ALL);
+    DebugUtil.setAllLogging();
 
     WorldOfGoo.init();
     WorldOfGoo.setCustomDir(new File("C:\\BLAH\\"));
