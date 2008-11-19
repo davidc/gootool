@@ -63,10 +63,12 @@ public class Controller implements ActionListener
 
   // The configuration we're editing
   private Configuration editorConfig;
+  private TextProvider textProvider;
 
 
   public Controller()
   {
+    textProvider = GooTool.getTextProvider();
   }
 
   /**
@@ -155,13 +157,7 @@ public class Controller implements ActionListener
 
   private void installAddin()
   {
-    if (!WorldOfGoo.isCustomDirSet()) {
-      showMessageDialog("GooTool needs a writeable directory to store your custom World of Goo. Please create a new, empty directory on the next screen.");
-      changeCustomDir();
-      if (!WorldOfGoo.isCustomDirSet()) {
-        return;
-      }
-    }
+    if (!ensureCustomDirIsSet()) return;
 
     JFileChooser chooser = new JFileChooser();
     chooser.setMultiSelectionEnabled(true);
@@ -181,6 +177,18 @@ public class Controller implements ActionListener
     }
 
     refreshView();
+  }
+
+  private boolean ensureCustomDirIsSet()
+  {
+    if (!WorldOfGoo.isCustomDirSet()) {
+      showMessageDialog(textProvider.getText("customdir.select.title"), textProvider.getText("customdir.select.message"));
+      changeCustomDir();
+      if (!WorldOfGoo.isCustomDirSet()) {
+        return false;
+      }
+    }
+    return true;
   }
 
   private void installAddin(File addinFile)
@@ -233,7 +241,7 @@ public class Controller implements ActionListener
       return;
     }
 
-    showMessageDialog("Addin " + addin.getName() + " installed!");
+    showMessageDialog("Addin installed", "Addin " + addin.getName() + " installed!");
   }
 
   private void uninstallAddin()
@@ -256,7 +264,7 @@ public class Controller implements ActionListener
       return;
     }
 
-    showMessageDialog("Addin " + addin.getName() + " uninstalled!");
+    showMessageDialog("Addin uninstalled", "Addin " + addin.getName() + " uninstalled!");
 
     editorConfig.disableAddin(addin.getId());
     refreshView();
@@ -372,9 +380,9 @@ public class Controller implements ActionListener
   }
 
 
-  private void showMessageDialog(String msg)
+  private void showMessageDialog(String title, String msg)
   {
-    JOptionPane.showMessageDialog(mainFrame, msg);
+    JOptionPane.showMessageDialog(mainFrame, msg, title, JOptionPane.INFORMATION_MESSAGE);
   }
 
   private void showErrorDialog(String title, String msg)
@@ -465,17 +473,11 @@ public class Controller implements ActionListener
 
     removeUnavailableAddins(editorConfig);
 
-    if (!WorldOfGoo.isCustomDirSet()) {
-      showMessageDialog("GooTool needs a writeable directory to store your custom World of Goo. Please create a new, empty directory on the next screen.");
-      changeCustomDir();
-      if (!WorldOfGoo.isCustomDirSet()) {
-        return;
-      }
-    }
+    if (!ensureCustomDirIsSet()) return;
 
     try {
       if (!new File(WorldOfGoo.getCustomDir(), "WorldOfGoo.exe").exists()) {
-        showMessageDialog("Since this is the first time you have run GooTool, it wiil take quite a long time for the initial save.");
+        showMessageDialog(textProvider.getText("firstbuild.title"), textProvider.getText("firstbuild.message"));
       }
     }
     catch (IOException e) {
