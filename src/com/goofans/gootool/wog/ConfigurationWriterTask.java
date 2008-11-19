@@ -35,25 +35,20 @@ public class ConfigurationWriterTask extends ProgressIndicatingTask
 
   public ConfigurationWriterTask(Configuration configuration)
   {
-    log.log(Level.INFO, "ConfigurationWriterTask instantiated: " + this);
     this.configuration = configuration;
   }
 
   public void run() throws Exception
   {
-    log.log(Level.INFO, "ConfigurationWriterTask in run(), step 1: " + this);
     writePrivateConfig(configuration);
 
-    log.log(Level.INFO, "ConfigurationWriterTask step 2: " + this);
     copyGameFiles();
 
-    log.log(Level.INFO, "ConfigurationWriterTask step 3: " + this);
     writeUserConfig(configuration);
 
-    log.log(Level.INFO, "ConfigurationWriterTask step 4: " + this);
     installAddins(configuration);
 
-    log.log(Level.INFO, "ConfigurationWriterTask work complete: " + this);
+    log.log(Level.INFO, "Configuration writer work complete");
   }
 
   // Writes the "custom" folder inside WoG. Might take a long time on first run.
@@ -141,12 +136,11 @@ public class ConfigurationWriterTask extends ProgressIndicatingTask
 
   private void writePrivateConfig(Configuration c)
   {
-    log.log(Level.INFO, "ConfigurationWriterTask in writePrivateConfig: " + this);
     beginStep("Writing tool preferences", false);
 
     // Tool preferences
     Preferences p = Preferences.userNodeForPackage(GooTool.class);
-    log.log(Level.INFO, "ConfigurationWriterTask got p: " + this);
+    log.log(Level.FINEST, "ConfigurationWriterTask got p: " + this);
 
     p.put(WorldOfGoo.PREF_LASTVERSION, Version.RELEASE.toString());
     p.putBoolean(WorldOfGoo.PREF_ALLOW_WIDESCREEN, c.isAllowWidescreen());
