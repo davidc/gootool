@@ -75,8 +75,6 @@ public class GUIUtil
 
   public static void runTask(JFrame parent, String windowTitle, final ProgressIndicatingTask task) throws Exception
   {
-    log.log(Level.INFO, "runTask initiated on: " + task);
-
     final ProgressDialog progressDialog = new ProgressDialog(parent, windowTitle);
     task.addListener(progressDialog);
 
@@ -87,9 +85,7 @@ public class GUIUtil
       public void run()
       {
         try {
-          log.log(Level.INFO, "runTask thread (" + this + ") about to run: " + task);
           task.run();
-          log.log(Level.INFO, "runTask thread (" + this + ") completed run: " + task);
           result[0] = null;
         }
         catch (Exception e) {

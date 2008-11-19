@@ -5,6 +5,7 @@
 - added new version notification on startup and via help menu
 - added new version ignore option
 - added menu items for various help webpages
+- some initial internationalisation of GooTool itself
 
 0.9.4
 
