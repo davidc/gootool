@@ -8,6 +8,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.ResourceBundle;
 
 /**
  * Responsible for launching the application, creating the view and controller, and linking them together.
@@ -20,6 +21,7 @@ public class GooTool
   private static final Logger log = Logger.getLogger(GooTool.class.getName());
 
   private static ImageIcon icon;
+  public static TextProvider textProvider;
 
   private GooTool()
   {
@@ -34,12 +36,13 @@ public class GooTool
 
     try {
       initIcon();
+      initTextProvider();
 
       Controller controller = new Controller();
 
       ProgressIndicatingTask startupTask = new StartupTask(controller);
 
-      GUIUtil.runTask(null, "Launching GooTool", startupTask);
+      GUIUtil.runTask(null, textProvider.getText("launcher.title", Version.RELEASE_FULL), startupTask);
     }
     catch (Throwable t) {
       log.log(Level.SEVERE, "Uncaught exception", t);
@@ -65,5 +68,15 @@ public class GooTool
   public static Image getMainIconImage()
   {
     return getMainIcon().getImage();
+  }
+
+  private static void initTextProvider()
+  {
+    textProvider = new TextProvider("text");
+  }
+
+  public static TextProvider getTextProvider()
+  {
+    return textProvider;
   }
 }

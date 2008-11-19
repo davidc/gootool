@@ -21,24 +21,26 @@ public class StartupTask extends ProgressIndicatingTask
 {
   private static final Logger log = Logger.getLogger(Controller.class.getName());
   private Controller controller;
+  private TextProvider textProvider;
 
   public StartupTask(Controller controller)
   {
     this.controller = controller;
+    textProvider = GooTool.getTextProvider();
   }
 
   public void run() throws Exception
   {
-    beginStep("Locating World of Goo", false);
+    beginStep(textProvider.getText("launcher.locatewog"), false);
     initWog();
 
-    beginStep("Locating profile", false);
+    beginStep(textProvider.getText("launcher.profile"), false);
     initProfile();
 
-    beginStep("Loading configuration", false);
+    beginStep(textProvider.getText("launcher.loadconfig"), false);
     Configuration c = initModel();
 
-    beginStep("Initialising GUI", false);
+    beginStep(textProvider.getText("launcher.initgui"), false);
     MainFrame mainFrame = initControllerAndView(c);
 
     // Launch a new thread to check for new version
@@ -63,7 +65,7 @@ public class StartupTask extends ProgressIndicatingTask
         {
           public void run()
           {
-            JOptionPane.showMessageDialog(null, "GooTool couldn't automatically find World of Goo. Please locate WorldOfGoo.exe on the next screen", "World of Goo not found", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(null, textProvider.getText("launcher.locatewog.notfound.message"), textProvider.getText("launcher.locatewog.notfound.title"), JOptionPane.WARNING_MESSAGE);
 
             while (!WorldOfGoo.isWogFound()) {
               int result = controller.askToLocateWog();
@@ -94,7 +96,7 @@ public class StartupTask extends ProgressIndicatingTask
     }
     catch (IOException e) {
       log.log(Level.SEVERE, "Error reading configuration", e);
-      JOptionPane.showMessageDialog(null, "Error reading current WoG configuration: " + e.getLocalizedMessage(), "GooTool Error", JOptionPane.ERROR_MESSAGE);
+      JOptionPane.showMessageDialog(null, textProvider.getText("launcher.loadconfig.error.message", e.getLocalizedMessage()), textProvider.getText("launcher.loadconfig.error.title"), JOptionPane.ERROR_MESSAGE);
       System.exit(2);
       return null;
     }
@@ -113,5 +115,4 @@ public class StartupTask extends ProgressIndicatingTask
 
     return mainFrame;
   }
-
 }
