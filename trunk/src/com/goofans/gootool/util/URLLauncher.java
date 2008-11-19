@@ -92,7 +92,7 @@ public class URLLauncher
       if (checkCommandExists(cmd)) {
         log.finer("Unix found " + cmd);
         Runtime.getRuntime().exec(new String[]{cmd, url.toString()});
-        break;
+        return;
       }
     }
     throw new IOException("Could not find a suitable web browser");
@@ -121,7 +121,7 @@ public class URLLauncher
     DebugUtil.setAllLogging();
 
     URL url = new URL("http://goofans.com/");
-//    URLLauncher.launch(url);
-    URLLauncher.launchAndWarn(url);
+    URLLauncher.launch(url);
+//    URLLauncher.launchAndWarn(url);
   }
 }
