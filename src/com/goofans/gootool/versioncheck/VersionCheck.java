@@ -1,19 +1,15 @@
 package com.goofans.gootool.versioncheck;
 
-import net.infotrek.util.EncodingUtil;
-
 import javax.swing.*;
-import java.net.URL;
-import java.net.MalformedURLException;
-import java.net.URLConnection;
-import java.io.*;
-import java.util.logging.Logger;
-import java.util.logging.Level;
 import java.awt.*;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-import com.goofans.gootool.util.*;
 import com.goofans.gootool.ToolPreferences;
-import com.goofans.gootool.GooFansAPI;
+import com.goofans.gootool.siteapi.APIRequest;
+import com.goofans.gootool.util.*;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -25,8 +21,6 @@ public class VersionCheck implements Runnable
 {
   private static final Logger log = Logger.getLogger(VersionCheck.class.getName());
 
-  private URL url;
-
   private boolean completed = false;
   private Exception failureReason = null;
   private boolean upToDate = false;
@@ -36,20 +30,20 @@ public class VersionCheck implements Runnable
 
   public VersionCheck(Window parentWindow, boolean alwaysAlertUser) throws MalformedURLException
   {
-    this.url = new URL("http://api.goofans.com/gootool-version-check?version=" + EncodingUtil.urlEncode(Version.RELEASE.toString()));
     this.alwaysAlertUser = alwaysAlertUser;
     this.parentWindow = parentWindow;
   }
 
   public void run()
   {
-    log.log(Level.FINE, "Checking " + url);
     try {
-      URLConnection urlConn = GooFansAPI.createAPIConnection(url);
+      APIRequest request = new APIRequest(APIRequest.API_CHECKVERSION);
+      request.addParameter("version", Version.RELEASE.toString());
 
-      Document doc = XMLUtil.loadDocumentFromReader(new InputStreamReader(urlConn.getInputStream()));
+      log.log(Level.FINE, "Checkversion " + request);
 
-      if (findError(doc)) return;
+      Document doc = request.doRequest();
+
       if (findUpToDate(doc)) return;
       if (findUpdateAvailable(doc)) return;
 
@@ -61,19 +55,6 @@ public class VersionCheck implements Runnable
       completed = true;
       failureReason = e;
     }
-  }
-
-  private boolean findError(Document doc) throws IOException
-  {
-    if (doc.getDocumentElement().getNodeName().equals("error")) {
-      String message = XMLUtil.getElementStringRequired(doc.getDocumentElement(), "message");
-      log.log(Level.WARNING, "Unable to check version. Message from server: " + message);
-
-      completed = true;
-      failureReason = new Exception("Server message: " + message);
-      return true;
-    }
-    return false;
   }
 
   private boolean findUpToDate(Document doc)
