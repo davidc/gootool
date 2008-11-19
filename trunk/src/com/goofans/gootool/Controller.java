@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.net.MalformedURLException;
 
 import com.goofans.gootool.addins.Addin;
 import com.goofans.gootool.addins.AddinFactory;
@@ -24,6 +25,7 @@ import com.goofans.gootool.view.AddinPropertiesDialog;
 import com.goofans.gootool.view.MainFrame;
 import com.goofans.gootool.wog.ConfigurationWriterTask;
 import com.goofans.gootool.wog.WorldOfGoo;
+import com.goofans.gootool.versioncheck.VersionCheck;
 
 /**
  * @author David Croft (davidc@goofans.com)
@@ -34,7 +36,9 @@ public class Controller implements ActionListener
   private static final Logger log = Logger.getLogger(Controller.class.getName());
 
   public static final String CMD_EXIT = "Exit";
-  public static final String CMD_ABOUT = "About";
+
+  public static final String CMD_ABOUT = "Help>About";
+  public static final String CMD_CHECK_FOR_UPDATES = "Help>CheckForUpdates";
 
   public static final String CMD_ADDIN_INSTALL = "Addin>Install";
   public static final String CMD_ADDIN_PROPERTIES = "Addin>Properties";
@@ -121,17 +125,16 @@ public class Controller implements ActionListener
       boolean enabled = mainFrame.mainMenu.translatorModeMenuItem.isSelected();
       updateImageLocalisationPanel(enabled);
       WorldOfGoo.getPreferences().putBoolean(PREF_L10N_MODE, enabled);
-
-//        if (translatePanel == null) {
-//          try {
-//            translatePanel = new ImageTool(new File("C:\\Users\\david\\Downloads\\wog-translate\\"), new HashMap<String, Map<String, String>>()).rootPanel;
-//          }
-//          catch (Exception e) {
-//            showErrorDialog("Error in translation pane", e.getClass() + ": " + e.getLocalizedMessage());
-//            return;
-//          }
-//        }
-//        mainFrame.tabbedPane.add("Translation", translatePanel);
+    }
+    else if (cmd.equals(CMD_CHECK_FOR_UPDATES)) {
+      VersionCheck versionCheck = null;
+      try {
+        versionCheck = new VersionCheck(mainFrame, true);
+      }
+      catch (MalformedURLException e) {
+        showErrorDialog("Error checking version", e.getLocalizedMessage());
+      }
+      new Thread(versionCheck).start();
     }
   }
 

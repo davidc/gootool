@@ -17,12 +17,7 @@ public class HyperlinkLaunchingListener implements HyperlinkListener
   public void hyperlinkUpdate(HyperlinkEvent event)
   {
     if (event.getEventType() == HyperlinkEvent.EventType.ACTIVATED) {
-      try {
-        Runtime.getRuntime().exec(event.getURL().toString());
-      }
-      catch (IOException e) {
-        log.log(Level.WARNING, "Couldn't launch hyperlink " + event.getURL(), e);
-      }
+      URLLauncher.launchAndWarn(event.getURL(), null); // TODO not null
     }
   }
 }

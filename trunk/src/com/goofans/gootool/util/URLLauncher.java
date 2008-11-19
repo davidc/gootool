@@ -6,8 +6,11 @@ import java.lang.reflect.Method;
 import java.net.URL;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.awt.*;
 
 /**
+ * Launches a web browser to the given URL, in an OS-specific manner.
+ * 
  * @author David Croft (davidc@goofans.com)
  * @version $Id$
  */
@@ -19,10 +22,10 @@ public class URLLauncher
           "www-browser", // debian update-alternatives target
           "firefox", "opera", "konqueror", "epiphany", "mozilla", "netscape"};
 
+
   private URLLauncher()
   {
   }
-
 
   /**
    * Launches the given URL and throws an exception if it couldn't be launched.
@@ -51,18 +54,49 @@ public class URLLauncher
    * Launches the given URL and shows a dialog to the user if a browser couldn't be found or if the URL failed to launch.
    *
    * @param url the URL to open
+   * @param parentComponent The parent Component over which the error dialog should be shown
    */
-  public static void launchAndWarn(URL url)
+  public static void launchAndWarn(URL url, final Component parentComponent)
   {
     try {
       launch(url);
     }
-    catch (IOException e) {
+    catch (final IOException e) {
       log.log(Level.SEVERE, "Unable to launch " + url, e);
-      JOptionPane.showMessageDialog(null, "Couldn't open a web browser:\n" + e.getLocalizedMessage(), "Unable to launch web browser", JOptionPane.ERROR_MESSAGE);
+      SwingUtilities.invokeLater(new Runnable()
+      {
+        public void run()
+        {
+          JOptionPane.showMessageDialog(parentComponent, "Couldn't open a web browser:\n" + e.getLocalizedMessage(), "Unable to launch web browser", JOptionPane.ERROR_MESSAGE);
+        }
+      });
     }
   }
 
+  /**
+   * Launches the given URL and shows a dialog to the user if a browser couldn't be found or if the URL failed to launch.
+   * This version takes a String and handles the warning of malformed URLs where needed
+   *
+   * @param url the URL to open
+   * @param parentComponent The parent Component over which the error dialog should be shown
+  
+   */
+  public static void launchAndWarn(String url, final Component parentComponent)
+  {
+    try {
+      launch(new URL(url));
+    }
+    catch (final IOException e) {
+      log.log(Level.SEVERE, "Unable to launch " + url, e);
+      SwingUtilities.invokeLater(new Runnable()
+      {
+        public void run()
+        {
+          JOptionPane.showMessageDialog(parentComponent, "Couldn't open a web browser:\n" + e.getLocalizedMessage(), "Unable to launch web browser", JOptionPane.ERROR_MESSAGE);
+        }
+      });
+    }
+  }
 
   private static void launchMac(URL url) throws IOException
   {
