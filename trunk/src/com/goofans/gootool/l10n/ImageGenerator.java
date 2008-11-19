@@ -50,6 +50,11 @@ public class ImageGenerator
   private static final String XML_DRAW_TEXT_FONT_ATTR_SIZE = "size";
   private static final String XML_DRAW_TEXT_FONT_ATTR_STRETCH = "stretch";
   private static final String XML_DRAW_TEXT_FONT_ATTR_OUTLINE = "outline";
+  private static final String XML_DRAW_TEXT_COLOR = "color";
+  private static final String XML_DRAW_TEXT_ROTATION = "rotation";
+  private static final String XML_DRAW_TEXT_ARCH = "arch";
+  private static final String XML_DRAW_TEXT_ARCH_ATTR_HEIGHT = "height";
+  private static final String XML_DRAW_TEXT_ARCH_ATTR_ANGLE = "angle";
 
   private static final String XML_LAYER = "layer";
   private static final String XML_GAUSSIANBLUR = "gaussian-blur";
@@ -336,7 +341,7 @@ public class ImageGenerator
 
   private Position getPosition(Element drawEl) throws IOException
   {
-    Element fixedPositionElement = getElement(drawEl, XML_DRAW_FIXEDPOSITION);
+    Element fixedPositionElement = XMLUtil.getElement(drawEl, XML_DRAW_FIXEDPOSITION);
     if (fixedPositionElement != null) {
       double xPos = XMLUtil.getAttributeIntegerRequired(fixedPositionElement, XML_DRAW_POS_ATTR_X);
       double yPos = XMLUtil.getAttributeIntegerRequired(fixedPositionElement, XML_DRAW_POS_ATTR_Y);
@@ -345,7 +350,7 @@ public class ImageGenerator
       return new FixedPosition(xPos, yPos, xJustify, yJustify);
     }
 
-    Element fitToBoxElement = getElement(drawEl, XML_DRAW_FITTOBOX);
+    Element fitToBoxElement = XMLUtil.getElement(drawEl, XML_DRAW_FITTOBOX);
     if (fitToBoxElement != null) {
       double xPos = XMLUtil.getAttributeIntegerRequired(fitToBoxElement, XML_DRAW_POS_ATTR_X);
       double yPos = XMLUtil.getAttributeIntegerRequired(fitToBoxElement, XML_DRAW_POS_ATTR_Y);
@@ -378,7 +383,7 @@ public class ImageGenerator
 
   private void doTextNode(Element addTextEl, Graphics2D g, Position pos) throws XPathExpressionException, IOException, FontFormatException
   {
-    Element fontElement = getElementRequired(addTextEl, XML_DRAW_TEXT_FONT);
+    Element fontElement = XMLUtil.getElementRequired(addTextEl, XML_DRAW_TEXT_FONT);
 
     String fontName = XMLUtil.getAttributeStringRequired(fontElement, XML_DRAW_TEXT_FONT_ATTR_NAME);
     Font font = fontManager.getFont(fontName);
@@ -386,18 +391,18 @@ public class ImageGenerator
     double stretch = XMLUtil.getAttributeDouble(fontElement, XML_DRAW_TEXT_FONT_ATTR_STRETCH, 1d);
     float outline = XMLUtil.getAttributeDouble(fontElement, XML_DRAW_TEXT_FONT_ATTR_OUTLINE, 0d).floatValue();
 
-    String string = getElementStringRequired(addTextEl, XML_DRAW_TEXT_STRING);
+    String string = XMLUtil.getElementStringRequired(addTextEl, XML_DRAW_TEXT_STRING);
 
-    Color color = parseColor(addTextEl.getElementsByTagName("color").item(0).getTextContent().trim());
+    Color color = parseColor(XMLUtil.getElementStringRequired(addTextEl, XML_DRAW_TEXT_COLOR));
 
-    float rotation = getOptionalFloat(addTextEl, "rotation");
+    double rotation = XMLUtil.getElementDouble(addTextEl, XML_DRAW_TEXT_ROTATION, 0);
 
-    Element archElement = getElement(addTextEl, "arch");
+    Element archElement = XMLUtil.getElement(addTextEl, XML_DRAW_TEXT_ARCH);
     double archHeight = 0;
     double archAngle = 0;
     if (archElement != null) {
-      archHeight = XMLUtil.getAttributeDoubleRequired(archElement, "height");
-      archAngle = XMLUtil.getAttributeDoubleRequired(archElement, "angle");
+      archHeight = XMLUtil.getAttributeDoubleRequired(archElement, XML_DRAW_TEXT_ARCH_ATTR_HEIGHT);
+      archAngle = XMLUtil.getAttributeDoubleRequired(archElement, XML_DRAW_TEXT_ARCH_ATTR_ANGLE);
     }
 
 
@@ -425,36 +430,6 @@ public class ImageGenerator
     if (text == null) text = "!!MISSING!!";
 
     drawText(g, text, font, fontSize, stretch, outline, color, pos, rotation, archHeight, archAngle);
-  }
-
-
-  private Element getElementRequired(Element el, String tagName) throws IOException
-  {
-    NodeList nodes = el.getElementsByTagName(tagName);
-    if (nodes.getLength() == 0) throw new IOException("element " + tagName + " not found");
-    return (Element) nodes.item(0);
-  }
-
-  private Element getElement(Element el, String tagName)
-  {
-    NodeList nodes = el.getElementsByTagName(tagName);
-    if (nodes.getLength() > 0) return (Element) nodes.item(0);
-    return null;
-  }
-
-
-  private String getElementStringRequired(Element el, String tagName) throws IOException
-  {
-    return getElementRequired(el, tagName).getTextContent().trim();
-  }
-
-
-  // TODO make getElementRequired etc in XMLUtil
-  private static float getOptionalFloat(Element addTextEl, String tagName)
-  {
-    NodeList list = addTextEl.getElementsByTagName(tagName);
-    if (list.getLength() == 0) return 0;
-    return Float.parseFloat(list.item(0).getTextContent().trim());
   }
 
   private static Color parseColor(String s) throws IOException

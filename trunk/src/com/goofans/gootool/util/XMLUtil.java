@@ -8,9 +8,7 @@ import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.dom.DOMSource;
 import java.io.*;
 
-import org.w3c.dom.Document;
-import org.w3c.dom.Node;
-import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.*;
 import org.xml.sax.SAXException;
 import org.xml.sax.InputSource;
 
@@ -198,5 +196,39 @@ public class XMLUtil
     Boolean b = getAttributeBoolean(node, attributeName, null);
     if (b == null) throw new IOException("Mandatory attribute " + attributeName + " not specified on " + node.getNodeName());
     return b;
+  }
+
+  public static Element getElement(Element el, String tagName)
+  {
+    NodeList nodes = el.getElementsByTagName(tagName);
+    if (nodes.getLength() > 0) return (Element) nodes.item(0);
+    return null;
+  }
+
+  public static Element getElementRequired(Element el, String tagName) throws IOException
+  {
+    Element foundEl = getElement(el, tagName);
+    if (foundEl == null) throw new IOException("element " + tagName + " not found");
+    return foundEl;
+  }
+
+  public static String getElementStringRequired(Element el, String tagName) throws IOException
+  {
+    return getElementRequired(el, tagName).getTextContent().trim();
+  }
+
+  public static double getElementDouble(Element addTextEl, String tagName, double defaultValue) throws IOException
+  {
+    NodeList list = addTextEl.getElementsByTagName(tagName);
+    if (list.getLength() == 0) return defaultValue;
+
+    try {
+      Double d = Double.valueOf(list.item(0).getTextContent().trim());
+      if (d.isNaN() || d.isInfinite()) return defaultValue;
+      return d;
+    }
+    catch (NumberFormatException e) {
+      throw new IOException("Invalid " + tagName + " double value: " + list.item(0));
+    }
   }
 }
