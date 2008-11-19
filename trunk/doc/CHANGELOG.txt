@@ -1,3 +1,8 @@
+0.9.5
+
+- allow selection of multiple addins to install - TODO TEST THIS
+- better error description when l10n source image can't be loaded
+
 0.9.4
 
 - make sure 800x600 resolution is always available
