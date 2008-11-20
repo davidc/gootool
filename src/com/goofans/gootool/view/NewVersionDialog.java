@@ -1,4 +1,4 @@
-package com.goofans.gootool.versioncheck;
+package com.goofans.gootool.view;
 
 import net.infotrek.util.EncodingUtil;
 
