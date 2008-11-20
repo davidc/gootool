@@ -5,7 +5,7 @@ import com.goofans.gootool.profile.ProfileFactory;
 import com.goofans.gootool.util.ProgressIndicatingTask;
 import com.goofans.gootool.view.MainFrame;
 import com.goofans.gootool.wog.WorldOfGoo;
-import com.goofans.gootool.versioncheck.VersionCheck;
+import com.goofans.gootool.siteapi.VersionCheck;
 
 import javax.swing.*;
 import java.io.IOException;

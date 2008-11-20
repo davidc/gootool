@@ -25,7 +25,7 @@ import com.goofans.gootool.view.AddinPropertiesDialog;
 import com.goofans.gootool.view.MainFrame;
 import com.goofans.gootool.wog.ConfigurationWriterTask;
 import com.goofans.gootool.wog.WorldOfGoo;
-import com.goofans.gootool.versioncheck.VersionCheck;
+import com.goofans.gootool.siteapi.VersionCheck;
 
 /**
  * @author David Croft (davidc@goofans.com)

@@ -1,4 +1,4 @@
-package com.goofans.gootool.versioncheck;
+package com.goofans.gootool.siteapi;
 
 import javax.swing.*;
 import java.awt.*;
@@ -8,7 +8,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.goofans.gootool.ToolPreferences;
-import com.goofans.gootool.siteapi.APIRequest;
+import com.goofans.gootool.view.NewVersionDialog;
 import com.goofans.gootool.util.*;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -69,7 +69,7 @@ public class VersionCheck implements Runnable
         {
           public void run()
           {
-            JOptionPane.showMessageDialog(parentWindow, "You are running the latest version " + Version.RELEASE_FULL, "GooTool up to date", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(parentWindow, "You are running the latest version " + Version.RELEASE_FULL, "GooTool is up to date", JOptionPane.INFORMATION_MESSAGE);
           }
         });
       }
