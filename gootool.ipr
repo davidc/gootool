@@ -118,9 +118,6 @@
         <inspection_tool class="SizeReplaceableByIsEmpty" level="WARNING" enabled="true">
           <option name="ignoreNegations" value="false" />
         </inspection_tool>
-        <inspection_tool class="StringConcatenationInLoops" level="WARNING" enabled="true">
-          <option name="m_ignoreUnlessAssigned" value="false" />
-        </inspection_tool>
         <inspection_tool class="StringEqualsEmptyString" level="WARNING" enabled="true" />
         <inspection_tool class="StringBufferReplaceableByStringBuilder" level="WARNING" enabled="true" />
         <inspection_tool class="StringBufferToStringInConcatenation" level="WARNING" enabled="true" />

@@ -7,6 +7,7 @@
 - added menu items for various help webpages
 - some initial internationalisation of GooTool itself
 - fixed NPE on save when no resolution selected
+- added java JRE/JVM information to About dialog
 
 0.9.4
 

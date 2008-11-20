@@ -2,6 +2,7 @@ package net.infotrek.util;
 
 import java.io.*;
 import java.nio.charset.Charset;
+import java.text.NumberFormat;
 
 /**
  * Base64 coding from: http://iharder.sourceforge.net/current/java/base64/
@@ -225,6 +226,26 @@ public class TextUtil
       return 3;
     }
   }   // end decodeToBytes
+
+
+  private static final long BP_K = 1024;
+  private static final long BP_M = 1024*1024;
+  private static final long BP_G = 1024*1024*1024;
+
+  public static String binaryNumToString(long num)
+  {
+    NumberFormat nf = NumberFormat.getNumberInstance();
+    if (num > BP_G) {
+      return nf.format(((double)num) / BP_G) + "G";
+    }
+    if (num > BP_M) {
+      return nf.format(((double)num) / BP_M) + "M";
+    }
+    if (num > BP_K) {
+      return nf.format(((double)num) / BP_K) + "K";
+    }
+    return nf.format(num);
+  }
 
 
   @SuppressWarnings({"UseOfSystemOutOrSystemErr"})
