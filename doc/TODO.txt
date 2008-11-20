@@ -1,32 +1,46 @@
+MILESTONE 0.9.5
+
 - centre about dialog to parent window
 
 - NEW VERSION DOWNLOAD URL IN VERSION REPLY
 
-- strip down bouncycastle to only needed classes
-- refreshrate in config.txt - NEW IN NEW VERSION!!!
+- Also, perhaps make it more clear that what this does is duplicate your world of goo install, and modify that, and that it does not harm your original in any way. (i hope ;P )
 
+MILESTONE 0.10.0
+
+- installer
+- mac/linux versions
 - file association for .goomod
-
-Drag and Drop installing of Addons. So you can drag a file from your desktop to mod list and install it
-
-* Also, perhaps make it more clear that what this does is duplicate your world of goo install, and modify that, and that it does not harm your original in any way. (i hope ;P )
-
-Make checkboxes in addin list work
-
+- let them save tower jpgs (and the original transparent one)
+- Don't SAVE if unmodified on LAUNCH
+- Make checkboxes in addin list work
 - dragging addins below last enabled addin should move it to bottom
 
-- let them save tower jpgs (and the original transparent one)
-
-- Don't SAVE if unmodified on LAUNCH
-
-- fullscreen?
-
+- upload profile
+- preference, upload tower on goo exit, or upload tower continuously during play (need to detect when process exits - java.lang.Process?)
 - backup/restore profile to website - perhaps just store their last 5 uploaded profiles?
 - mark user as cheat - requires X votes
 
+MILESTONE 1.0.0
+
+- strip down bouncycastle to only needed classes
+- more addin author-friendly functionality (e.g. add a directory as an addin)
+
+MILESTONE 1.1.0
+
+- refreshrate in config.txt - NEW IN NEW VERSION!!!
+- ball editor
+- level editor
+
+NO MILESTONE SET
+
+- Drag and Drop installing of Addons. So you can drag a file from your desktop to mod list and install it
+
+- fullscreen?
+
+
 - reformat b5s and use as wog website server
 
-- more addin author-friendly functionality (e.g. add a directory as an addin)
 
 todo
 when installing check dependencies
@@ -38,9 +52,6 @@ remove wog references
 
 can't access our formatter currently inside the jar/exe
 
-show current JRE info on about->version
-
-- preference, upload tower on goo exit, or upload tower continuously during play (need to detect when process exits - java.lang.Process?)
 
 - Perhaps stop overrides of Drained files, to prevent cheating in goocorp?
 
@@ -56,12 +67,6 @@ use JFormattedTextField for input field validation
 - addins/ant doesn't work on linux wtf?
 
 - ant deb task: http://code.google.com/p/ant-deb-task/
-
-WIshlist:
-
-- chapter support
-- Better level load crash debugging
-
 
 
 
@@ -88,6 +93,9 @@ beta test moon
 
 - Would you be willing to share the .binltl movie format so we can create new movies?
 In particular in my chapter I'm interested in a "found mad scientist" movie and an "end credits" movie.
+
+- Better level load crash debugging
+
 
 
 So I was thinking...
