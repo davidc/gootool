@@ -1,3 +1,7 @@
+- centre about dialog to parent window
+
+- NEW VERSION DOWNLOAD URL IN VERSION REPLY
+
 - strip down bouncycastle to only needed classes
 - refreshrate in config.txt - NEW IN NEW VERSION!!!
 

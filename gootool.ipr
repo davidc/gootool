@@ -106,6 +106,29 @@
         <inspection_tool class="MissortedModifiers" level="WARNING" enabled="true">
           <option name="m_requireAnnotationsFirst" value="true" />
         </inspection_tool>
+        <inspection_tool class="DuplicateStringLiteralInspection" level="WARNING" enabled="true">
+          <option name="MIN_STRING_LENGTH" value="5" />
+          <option name="IGNORE_PROPERTY_KEYS" value="false" />
+        </inspection_tool>
+        <inspection_tool class="StringConcatenation" level="WARNING" enabled="true">
+          <option name="ignoreAsserts" value="false" />
+          <option name="ignoreSystemOuts" value="true" />
+          <option name="ignoreSystemErrs" value="true" />
+        </inspection_tool>
+        <inspection_tool class="SizeReplaceableByIsEmpty" level="WARNING" enabled="true">
+          <option name="ignoreNegations" value="false" />
+        </inspection_tool>
+        <inspection_tool class="StringConcatenationInLoops" level="WARNING" enabled="true">
+          <option name="m_ignoreUnlessAssigned" value="false" />
+        </inspection_tool>
+        <inspection_tool class="StringEqualsEmptyString" level="WARNING" enabled="true" />
+        <inspection_tool class="StringBufferReplaceableByStringBuilder" level="WARNING" enabled="true" />
+        <inspection_tool class="StringBufferToStringInConcatenation" level="WARNING" enabled="true" />
+        <inspection_tool class="HardcodedFileSeparators" level="WARNING" enabled="true">
+          <option name="m_recognizeExampleMediaType" value="false" />
+        </inspection_tool>
+        <inspection_tool class="HardcodedLineSeparators" level="WARNING" enabled="true" />
+        <inspection_tool class="UseOfSunClasses" level="WARNING" enabled="true" />
       </profile>
     </profiles>
     <list size="4">

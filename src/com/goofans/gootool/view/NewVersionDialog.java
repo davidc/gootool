@@ -9,6 +9,7 @@ import java.awt.*;
 
 import com.goofans.gootool.GooTool;
 import com.goofans.gootool.ToolPreferences;
+import com.goofans.gootool.TextProvider;
 import com.goofans.gootool.util.GUIUtil;
 import com.goofans.gootool.util.URLLauncher;
 import com.goofans.gootool.util.Version;
@@ -25,9 +26,11 @@ public class NewVersionDialog extends JDialog
   private JLabel curVersionLabel;
   private JLabel latestVersionLabel;
 
+  private static TextProvider textProvider = GooTool.getTextProvider();
+
   public NewVersionDialog(final Window parentWindow, final VersionSpec latestVersion, String messageText)
   {
-    super(parentWindow, "New version available!");
+    super(parentWindow, textProvider.getText("newVersion.title"));
     setContentPane(contentPane);
     getRootPane().setDefaultButton(yesButton);
 
@@ -59,14 +62,20 @@ public class NewVersionDialog extends JDialog
       }
     });
 
-    curVersionLabel.setText("Your version: " + Version.RELEASE_MAJOR + "." + Version.RELEASE_MINOR + "." + Version.RELEASE_MICRO);
-    latestVersionLabel.setText("Latest version: " + latestVersion);
+    curVersionLabel.setText(textProvider.getText("newVersion.curVersion", Version.RELEASE_MAJOR, Version.RELEASE_MINOR, Version.RELEASE_MICRO));
+    latestVersionLabel.setText(textProvider.getText("newVersion.latestVersion", latestVersion));
     message.setText("<html>" + messageText + "</html>");
 
     pack();
     setLocationRelativeTo(parentWindow);
   }
 
+  private void createUIComponents()
+  {
+    icon = new JLabel(GooTool.getMainIcon());
+  }
+
+  @SuppressWarnings({"HardCodedStringLiteral"})
   public static void main(String[] args)
   {
     GUIUtil.switchToSystemLookAndFeel();
@@ -74,10 +83,5 @@ public class NewVersionDialog extends JDialog
     NewVersionDialog dialog = new NewVersionDialog(null, new VersionSpec(5, 6, 7), "Please upgrade!");
     dialog.setVisible(true);
     System.exit(0);
-  }
-
-  private void createUIComponents()
-  {
-    icon = new JLabel(GooTool.getMainIcon());
   }
 }
