@@ -4,19 +4,24 @@ import javax.swing.*;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.net.URL;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.awt.*;
 
 /**
  * Launches a web browser to the given URL, in an OS-specific manner.
- * 
+ *
  * @author David Croft (davidc@goofans.com)
  * @version $Id$
  */
 public class URLLauncher
 {
   private static final Logger log = Logger.getLogger(URLLauncher.class.getName());
+
+  private static final String OS_MACOS = "Mac OS";
+  private static final String OS_WINDOWS = "Windows";
 
   private static final String[] UNIX_BROWSER_CMDS = {
           "www-browser", // debian update-alternatives target
@@ -35,13 +40,30 @@ public class URLLauncher
    */
   public static void launch(URL url) throws IOException
   {
+    /* Try Java 1.6 Desktop class if supported */
+
+    if (Desktop.isDesktopSupported()) {
+      log.finer("Launching " + url + " using Desktop");
+      try {
+        Desktop.getDesktop().browse(new URI(url.toExternalForm()));
+        return;
+      }
+      catch (URISyntaxException e) {
+        throw new IOException(e);
+      }
+      catch (UnsupportedOperationException e) {
+        log.warning("Desktop.browse() wasn't supported after all");
+        // fall through to previous methods
+      }
+    }
+
     String osName = System.getProperty("os.name");
     log.finer("Launching " + url + " for OS " + osName);
 
-    if (osName.startsWith("Mac OS")) {
+    if (osName.startsWith(OS_MACOS)) {
       launchMac(url);
     }
-    else if (osName.startsWith("Windows")) {
+    else if (osName.startsWith(OS_WINDOWS)) {
       launchWindows(url);
     }
     else {
@@ -53,7 +75,7 @@ public class URLLauncher
   /**
    * Launches the given URL and shows a dialog to the user if a browser couldn't be found or if the URL failed to launch.
    *
-   * @param url the URL to open
+   * @param url             the URL to open
    * @param parentComponent The parent Component over which the error dialog should be shown
    */
   public static void launchAndWarn(URL url, final Component parentComponent)
@@ -77,9 +99,8 @@ public class URLLauncher
    * Launches the given URL and shows a dialog to the user if a browser couldn't be found or if the URL failed to launch.
    * This version takes a String and handles the warning of malformed URLs where needed
    *
-   * @param url the URL to open
+   * @param url             the URL to open
    * @param parentComponent The parent Component over which the error dialog should be shown
-  
    */
   public static void launchAndWarn(String url, final Component parentComponent)
   {
