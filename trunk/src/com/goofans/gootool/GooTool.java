@@ -70,13 +70,16 @@ public class GooTool
     return getMainIcon().getImage();
   }
 
-  private static void initTextProvider()
+  private static synchronized void initTextProvider()
   {
-    textProvider = new TextProvider("text");
+    if (textProvider == null) {
+      textProvider = new TextProvider("text");
+    }
   }
 
   public static TextProvider getTextProvider()
   {
+    if (textProvider == null) initTextProvider();
     return textProvider;
   }
 }
