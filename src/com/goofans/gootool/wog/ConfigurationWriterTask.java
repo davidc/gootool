@@ -15,6 +15,7 @@ import java.util.prefs.Preferences;
 import com.goofans.gootool.GooTool;
 import com.goofans.gootool.addins.*;
 import com.goofans.gootool.model.Configuration;
+import com.goofans.gootool.model.Resolution;
 import com.goofans.gootool.util.*;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
@@ -150,9 +151,12 @@ public class ConfigurationWriterTask extends ProgressIndicatingTask
     if (c.getLanguage() != null) {
       p.put(WorldOfGoo.PREF_LANGUAGE, c.getLanguage().getCode());
     }
-    // todo what if resolution is null
-    p.putInt(WorldOfGoo.PREF_SCREENWIDTH, c.getResolution().getWidth());
-    p.putInt(WorldOfGoo.PREF_SCREENHEIGHT, c.getResolution().getHeight());
+
+    Resolution resolution = c.getResolution();
+    if (resolution != null) {
+      p.putInt(WorldOfGoo.PREF_SCREENWIDTH, resolution.getWidth());
+      p.putInt(WorldOfGoo.PREF_SCREENHEIGHT, resolution.getHeight());
+    }
     p.putInt(WorldOfGoo.PREF_UIINSET, c.getUiInset());
 
     StringBuilder sb = new StringBuilder();
@@ -181,11 +185,14 @@ public class ConfigurationWriterTask extends ProgressIndicatingTask
         n.setNodeValue(c.getLanguage().getCode());
       }
 
-      n = (Node) WorldOfGoo.USER_CONFIG_XPATH_SCREENWIDTH.evaluate(document, XPathConstants.NODE);
-      n.setNodeValue(String.valueOf(c.getResolution().getWidth()));
+      Resolution resolution = c.getResolution();
+      if (resolution != null) {
+        n = (Node) WorldOfGoo.USER_CONFIG_XPATH_SCREENWIDTH.evaluate(document, XPathConstants.NODE);
+        n.setNodeValue(String.valueOf(resolution.getWidth()));
 
-      n = (Node) WorldOfGoo.USER_CONFIG_XPATH_SCREENHEIGHT.evaluate(document, XPathConstants.NODE);
-      n.setNodeValue(String.valueOf(c.getResolution().getHeight()));
+        n = (Node) WorldOfGoo.USER_CONFIG_XPATH_SCREENHEIGHT.evaluate(document, XPathConstants.NODE);
+        n.setNodeValue(String.valueOf(resolution.getHeight()));
+      }
 
       n = (Node) WorldOfGoo.USER_CONFIG_XPATH_UIINSET.evaluate(document, XPathConstants.NODE);
       n.setNodeValue(String.valueOf(c.getUiInset()));
