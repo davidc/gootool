@@ -6,6 +6,7 @@
 - added new version ignore option
 - added menu items for various help webpages
 - some initial internationalisation of GooTool itself
+- fixed NPE on save when no resolution selected
 
 0.9.4
 
