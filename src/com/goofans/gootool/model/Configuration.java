@@ -53,6 +53,7 @@ public class Configuration
 
   public Resolution getResolution()
   {
+    if (resolution == null) return Resolution.DEFAULT_RESOLUTION;
     return resolution;
   }
 

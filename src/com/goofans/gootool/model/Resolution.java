@@ -99,23 +99,22 @@ public class Resolution implements Comparable
 
 
   private static final Set<Resolution> RESOLUTIONS;
+  public static final Resolution DEFAULT_RESOLUTION;
 
   static {
     DisplayMode[] displayModes = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().getDisplayModes();
 
     Set<Resolution> resolutions = new TreeSet<Resolution>();
 
-    boolean got800x600 = false;
+    // Make sure there's always a 800x600 resolution!
+    resolutions.add(DEFAULT_RESOLUTION = new Resolution(800, 600));
 
     for (DisplayMode displayMode : displayModes) {
       int w = displayMode.getWidth();
       int h = displayMode.getHeight();
-      if (w == 800 && h == 600) got800x600 = true;
-      resolutions.add(new Resolution(w, h));
+      Resolution resolution = new Resolution(w, h);
+      resolutions.add(resolution);
     }
-
-    // Make sure there's a 800x600 dimension!
-    if (!got800x600) resolutions.add(new Resolution(800, 600));
 
     RESOLUTIONS = Collections.unmodifiableSet(resolutions);
 
