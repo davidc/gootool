@@ -18,6 +18,7 @@ import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.io.IOException;
 import java.util.logging.Logger;
+import java.util.logging.Level;
 
 /**
  * @author David Croft (davidc@goofans.com)
@@ -266,11 +267,11 @@ public class AddinsPanel implements ViewComponent
         }
       }
       catch (UnsupportedFlavorException e) {
-        e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        log.log(Level.FINER, "Unsupported flavour for import", e);
         return false;
       }
       catch (IOException e) {
-        e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        log.log(Level.WARNING, "IOException on import", e);
         return false;
       }
 
