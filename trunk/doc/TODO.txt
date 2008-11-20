@@ -47,11 +47,7 @@ addins - provides <x>
 
 use JFormattedTextField for input field validation
 
-- Download languages from wiki? Autocreate images?
-
-- Music volume/off
-
-- new version notification
+- Notify of new WoG releases?
 
 - addins/ant doesn't work on linux wtf?
 
