@@ -21,7 +21,7 @@
               <grid row="0" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
-              <text value="&amp;Enable"/>
+              <text resource-bundle="text" key="addins.enable"/>
             </properties>
           </component>
           <component id="b946d" class="javax.swing.JButton" binding="disableButton" default-binding="true">
@@ -29,7 +29,7 @@
               <grid row="0" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
-              <text value="&amp;Disable"/>
+              <text resource-bundle="text" key="addins.disable"/>
             </properties>
           </component>
           <component id="718a9" class="javax.swing.JButton" binding="installButton">
@@ -37,7 +37,7 @@
               <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
-              <text value="&amp;Install new addin..."/>
+              <text resource-bundle="text" key="addins.install"/>
             </properties>
           </component>
           <hspacer id="9e2b6">
@@ -52,7 +52,7 @@
               <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
-              <text value="P&amp;roperties"/>
+              <text resource-bundle="text" key="addins.properties"/>
             </properties>
           </component>
           <component id="9dd" class="javax.swing.JButton" binding="uninstallButton" default-binding="true">
@@ -60,7 +60,7 @@
               <grid row="0" column="5" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
-              <text value="&amp;Uninstall"/>
+              <text resource-bundle="text" key="addins.uninstall"/>
             </properties>
           </component>
         </children>
@@ -74,7 +74,7 @@
         <properties>
           <labelFor value="6b0bd"/>
           <opaque value="false"/>
-          <text value="&lt;html&gt;&lt;p&gt;Addins higher on the list have priority and can override files from addins lower on the list. Drag and drop to reorder the addins.&lt;/p&gt;&lt;br/&gt;&lt;p&gt;New levels show up in the top left corner of Chapter 1, as there is currently no way to add a new chapter to the game.&lt;/p&gt;&lt;/html&gt; "/>
+          <text resource-bundle="text" key="addins.message"/>
         </properties>
       </component>
       <scrollpane id="6b0bd">
@@ -94,4 +94,7 @@
       </scrollpane>
     </children>
   </grid>
+  <inspectionSuppressions>
+    <suppress inspection="MissingMnemonic" id="3f296"/>
+  </inspectionSuppressions>
 </form>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="com.goofans.gootool.view.OptionsPanel">
-  <grid id="27dc6" binding="rootPanel" layout-manager="GridLayoutManager" row-count="5" column-count="4" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+  <grid id="27dc6" binding="rootPanel" layout-manager="GridLayoutManager" row-count="5" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
     <margin top="4" left="4" bottom="4" right="4"/>
     <constraints>
       <xy x="20" y="20" width="693" height="602"/>
@@ -8,18 +8,13 @@
     <properties/>
     <border type="none"/>
     <children>
-      <vspacer id="b91cd">
-        <constraints>
-          <grid row="4" column="1" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
-        </constraints>
-      </vspacer>
-      <grid id="9b01c" layout-manager="GridLayoutManager" row-count="1" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+      <grid id="9b01c" layout-manager="GridLayoutManager" row-count="1" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
         <margin top="4" left="4" bottom="4" right="4"/>
         <constraints>
-          <grid row="0" column="0" row-span="1" col-span="3" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="true"/>
+          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="true"/>
         </constraints>
         <properties/>
-        <border type="none" title="Language"/>
+        <border type="none" title-resource-bundle="text" title-key="options.language.title"/>
         <children>
           <component id="79831" class="javax.swing.JLabel">
             <constraints>
@@ -27,13 +22,13 @@
             </constraints>
             <properties>
               <labelFor value="dad8e"/>
-              <text value="&amp;Language"/>
+              <text resource-bundle="text" key="options.language.language"/>
             </properties>
           </component>
           <grid id="f053c" layout-manager="GridLayoutManager" row-count="1" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
             <margin top="0" left="0" bottom="0" right="0"/>
             <constraints>
-              <grid row="0" column="1" row-span="1" col-span="2" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+              <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties/>
             <border type="none"/>
@@ -55,13 +50,13 @@
           </grid>
         </children>
       </grid>
-      <grid id="3237b" layout-manager="GridLayoutManager" row-count="3" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+      <grid id="3237b" layout-manager="GridLayoutManager" row-count="3" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
         <margin top="4" left="4" bottom="4" right="4"/>
         <constraints>
-          <grid row="2" column="0" row-span="1" col-span="3" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="true"/>
+          <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="true"/>
         </constraints>
         <properties/>
-        <border type="none" title="Display (buggy)"/>
+        <border type="none" title-resource-bundle="text" title-key="options.display.title"/>
         <children>
           <component id="e6d1c" class="javax.swing.JLabel">
             <constraints>
@@ -69,7 +64,7 @@
             </constraints>
             <properties>
               <labelFor value="6f92a"/>
-              <text value="&amp;Resolution"/>
+              <text resource-bundle="text" key="options.display.resolution"/>
             </properties>
           </component>
           <component id="c35b6" class="javax.swing.JLabel">
@@ -78,13 +73,13 @@
             </constraints>
             <properties>
               <labelFor value="99ade"/>
-              <text value="&amp;UI Inset"/>
+              <text resource-bundle="text" key="options.display.uiInset"/>
             </properties>
           </component>
           <grid id="ec2ed" layout-manager="GridLayoutManager" row-count="1" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
             <margin top="0" left="0" bottom="0" right="0"/>
             <constraints>
-              <grid row="2" column="1" row-span="1" col-span="2" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+              <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties/>
             <border type="none"/>
@@ -109,7 +104,7 @@
           <grid id="bd77c" layout-manager="GridLayoutManager" row-count="1" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
             <margin top="0" left="0" bottom="0" right="0"/>
             <constraints>
-              <grid row="1" column="1" row-span="1" col-span="2" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+              <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties/>
             <border type="none"/>
@@ -129,26 +124,26 @@
           </grid>
           <component id="82655" class="javax.swing.JCheckBox" binding="allowWidescreen">
             <constraints>
-              <grid row="0" column="0" row-span="1" col-span="3" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+              <grid row="0" column="0" row-span="1" col-span="2" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
-              <text value="Allow &amp;widescreen resolutions"/>
+              <text resource-bundle="text" key="options.display.widescreen"/>
             </properties>
           </component>
         </children>
       </grid>
       <hspacer id="84324">
         <constraints>
-          <grid row="0" column="3" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+          <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
         </constraints>
       </hspacer>
       <grid id="83619" layout-manager="GridLayoutManager" row-count="4" column-count="4" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
         <margin top="4" left="4" bottom="4" right="4"/>
         <constraints>
-          <grid row="3" column="0" row-span="1" col-span="3" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+          <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties/>
-        <border type="none" title="File Locations"/>
+        <border type="none" title-resource-bundle="text" title-key="options.locations.title"/>
         <children>
           <component id="512b7" class="javax.swing.JLabel">
             <constraints>
@@ -156,7 +151,7 @@
             </constraints>
             <properties>
               <labelFor value="f88e1"/>
-              <text value="World of Goo Installation"/>
+              <text resource-bundle="text" key="options.locations.wogDir"/>
             </properties>
           </component>
           <hspacer id="67022">
@@ -193,7 +188,7 @@
             </constraints>
             <properties>
               <labelFor value="fe976"/>
-              <text value="Custom World of Goo"/>
+              <text resource-bundle="text" key="options.locations.customDir"/>
             </properties>
           </component>
           <component id="fe976" class="javax.swing.JTextField" binding="customDirText">
@@ -220,7 +215,7 @@
             </constraints>
             <properties>
               <labelFor value="9b00"/>
-              <text value="Profile"/>
+              <text resource-bundle="text" key="options.locations.profile"/>
             </properties>
           </component>
           <component id="9b00" class="javax.swing.JTextField" binding="profileFileText">
@@ -243,20 +238,20 @@
           </component>
         </children>
       </grid>
-      <grid id="4bca3" layout-manager="GridLayoutManager" row-count="2" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+      <grid id="4bca3" layout-manager="GridLayoutManager" row-count="2" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
         <margin top="4" left="4" bottom="4" right="4"/>
         <constraints>
-          <grid row="1" column="0" row-span="1" col-span="3" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+          <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties/>
-        <border type="none" title="Loading Screen"/>
+        <border type="none" title-resource-bundle="text" title-key="options.loadScreen.title"/>
         <children>
           <component id="3c257" class="javax.swing.JCheckBox" binding="skipOpeningMovieCheckBox" default-binding="true">
             <constraints>
-              <grid row="0" column="0" row-span="1" col-span="3" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+              <grid row="0" column="0" row-span="1" col-span="2" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
-              <text value="&amp;Skip Opening Movie"/>
+              <text resource-bundle="text" key="options.loadScreen.skipMovie"/>
             </properties>
           </component>
           <component id="1153d" class="javax.swing.JLabel">
@@ -264,8 +259,8 @@
               <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
-              <labelFor value="86a50"/>
-              <text value="Water&amp;mark"/>
+              <labelFor value="763fe"/>
+              <text resource-bundle="text" key="options.loadScreen.watermark"/>
             </properties>
           </component>
           <grid id="5cfb6" layout-manager="GridLayoutManager" row-count="1" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
@@ -293,6 +288,11 @@
           </grid>
         </children>
       </grid>
+      <vspacer id="b91cd">
+        <constraints>
+          <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+        </constraints>
+      </vspacer>
     </children>
   </grid>
   <inspectionSuppressions>
