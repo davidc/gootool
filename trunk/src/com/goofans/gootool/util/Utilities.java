@@ -13,6 +13,11 @@ public class Utilities
 {
   private static final Logger log = Logger.getLogger(Utilities.class.getName());
 
+  /**
+   * Expands the string with any %envvars% expanded.
+   * @param s the string to expand, with env vars enclosed within % signs
+   * @return The expanded string, or null of any env var wasn't found
+   */
   public static String expandEnvVars(String s)
   {
     int first, second;
@@ -23,8 +28,9 @@ public class Utilities
 
       String var = s.substring(first + 1, second);
       StringBuilder sb = new StringBuilder(s.substring(0, first));
-//      sb.append("XX").append(var).append("XX");
-      sb.append(System.getenv(var));
+      String envVar = System.getenv(var);
+      if (envVar == null) return null;
+      sb.append(envVar);
 
       sb.append(s.substring(second + 1));
       s = sb.toString();

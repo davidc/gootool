@@ -37,7 +37,9 @@ public class WorldOfGoo
 
   private static final String[] SEARCH_PATHS = {"%ProgramFiles%\\WorldOfGoo", "%ProgramFiles%\\World Of Goo",
           "%SystemDrive%\\Program Files\\WorldOfGoo", "%SystemDrive%\\Program Files\\World Of Goo",
-          "%SystemDrive%\\Games\\WorldOfGoo", "%SystemDrive%\\Games\\World Of Goo"
+          "%SystemDrive%\\Games\\WorldOfGoo", "%SystemDrive%\\Games\\World Of Goo",
+          "%HOME%/.PlayOnLinux/wineprefix/WorldOfGoo/drive_c/Program Files/WorldOfGoo", // PlayOnLinux
+          "%HOME%/.wine/drive_c/Program Files/WorldOfGoo" // wine
   };
 
   private static boolean wogFound;
@@ -120,7 +122,7 @@ public class WorldOfGoo
     for (String searchPath : SEARCH_PATHS) {
       String newSearchPath = Utilities.expandEnvVars(searchPath);
 
-      if (locateWogAtPath(new File(newSearchPath))) {
+      if (newSearchPath != null && locateWogAtPath(new File(newSearchPath))) {
         log.info("Found WoG through default search of \"" + searchPath + "\" at: " + wogDir);
         return;
       }
