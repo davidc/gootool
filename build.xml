@@ -229,7 +229,12 @@
     </copy>
 
     <tar destfile="${dist.dir}/gootool-${gootool.version.full}-linux.tar.bz2" compression="bzip2">
-      <tarfileset dir="${dist.linux}" prefix="gootool-${gootool.version.full}"/>
+      <tarfileset dir="${dist.linux}" prefix="gootool-${gootool.version.full}" mode="755" username="root" group="root">
+        <include name="bin/"/>
+      </tarfileset>
+      <tarfileset dir="${dist.linux}" prefix="gootool-${gootool.version.full}" username="root" group="root">
+        <exclude name="bin/"/>
+      </tarfileset>
     </tar>
   </target>
 
