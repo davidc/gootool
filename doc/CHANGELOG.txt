@@ -1,6 +1,6 @@
 0.9.5
 
-- allow selection of multiple addins to install - TODO TEST THIS
+- allow selection of multiple addins to install
 - better error description when l10n source image can't be loaded
 - added new version notification on startup and via help menu
 - added new version ignore option
@@ -9,6 +9,7 @@
 - fixed NPE on save when no resolution selected, various fixes to make sure 800x600 always appears as default 
 - added java JRE/JVM information to About dialog
 - added Linux build
+- clarify that GooTool doesn't modify existing WoG installation
 
 0.9.4
 
