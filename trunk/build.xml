@@ -224,9 +224,7 @@
     <copy todir="${dist.linux}/doc">
       <fileset file="doc/CHANGELOG.txt"/>
     </copy>
-    <copy todir="${dist.linux}/lib">
-      <fileset file="${obfuscated.jar}"/>
-    </copy>
+    <copy file="${obfuscated.jar}" tofile="${dist.linux}/lib/gootool.jar"/>
 
     <tar destfile="${dist.dir}/gootool-${gootool.version.full}-linux.tar.bz2" compression="bzip2">
       <tarfileset dir="${dist.linux}" prefix="gootool-${gootool.version.full}" mode="755" username="root" group="root">
