@@ -1,3 +1,9 @@
+MILESTONE 0.9.6
+
+- command line image l10n tool
+- dev releases should have the actual svn version in their build filename/about version - may need to separate svn revision into an svn:ignored file
+- addin merging doesn't always work due to windows line endings
+
 MILESTONE 0.10.0
 
 - installer

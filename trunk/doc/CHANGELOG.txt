@@ -1,5 +1,6 @@
 0.9.5
 
+- added Linux version, also look in .wine and .PlayOnLinux
 - allow selection of multiple addins to install
 - better error description when l10n source image can't be loaded
 - added new version notification on startup and via help menu
@@ -8,7 +9,6 @@
 - some initial internationalisation of GooTool itself
 - fixed NPE on save when no resolution selected, various fixes to make sure 800x600 always appears as default 
 - added java JRE/JVM information to About dialog
-- added Linux build
 - clarify that GooTool doesn't modify existing WoG installation
 
 0.9.4
