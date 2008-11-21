@@ -77,17 +77,9 @@
   <property name="project.jdk.classpath" value="jdk.classpath.1.6"/>
 
 
-  <!-- Project Libraries -->
-
-  <path id="library.bouncycastle.classpath">
-    <pathelement location="${basedir}/dist_src/lib/lcrypto-jdk16-141.jar"/>
-  </path>
-
-
   <!-- Module gootool -->
 
   <dirname property="basedir" file="${ant.file}"/>
-
 
   <property name="build.dir" value="${basedir}/build"/>
   <property name="output.dir" value="${build.dir}/compiled"/>
@@ -97,20 +89,18 @@
   <property name="build.properties" value="${output.dir}/build.properties"/>
 
 
-  <path id="gootool.module.classpath">
+  <path id="gootool.module.runtime.classpath">
     <path refid="${project.jdk.classpath}"/>
+    <!--<pathelement location="${output.dir}"/>-->
     <pathelement location="${basedir}/resources"/>
-    <path refid="library.bouncycastle.classpath"/>
-    <fileset dir="lib/build/"/>
-    <!-- DC-->
+    <fileset dir="${basedir}/dist_src/common/lib/"/>
   </path>
 
-  <path id="gootool.runtime.module.classpath">
-    <path refid="${project.jdk.classpath}"/>
-    <pathelement location="${output.dir}"/>
-    <pathelement location="${basedir}/resources"/>
-    <path refid="library.bouncycastle.classpath"/>
+  <path id="gootool.module.build.classpath">
+    <path refid="gootool.module.runtime.classpath"/>
+    <path refid="build.classpath"/>
   </path>
+
 
   <path id="gootool.module.sourcepath">
     <dirset dir="${basedir}">
@@ -136,7 +126,7 @@
             fork="true" executable="${project.jdk.bin}/javac">
       <compilerarg line="${compiler.args}"/>
       <!--<bootclasspath refid="gootool.module.bootclasspath"/>-->
-      <classpath refid="gootool.module.classpath"/>
+      <classpath refid="gootool.module.build.classpath"/>
       <src refid="gootool.module.sourcepath"/>
       <patternset refid="ignored.files"/>
     </javac2>
@@ -152,6 +142,7 @@
 
   <property name="dist.dir" value="dist"/>
   <property name="dist.win32" value="${dist.dir}/win32"/>
+  <property name="dist.linux" value="${dist.dir}/linux"/>
 
   <target name="clean" description="cleanup all">
     <delete dir="${dist.dir}"/>
@@ -168,12 +159,14 @@
 
   <target name="obfuscate" depends="jar">
     <proguard printmapping="mapping/${gootool.version.full}.mapping" optimizationpasses="3" overloadaggressively="true"
-              flattenpackagehierarchy="com.goofans.gootool"
+              repackageclasses="com.goofans.gootool"
               allowaccessmodification="true"
               renamesourcefileattribute="SourceFile">
+      -dontskipnonpubliclibraryclasses <!-- needed to fix DataTransferHandler errors in jdk--> 
+      
       <keepattribute name="SourceFile"/>
       <keepattribute name="LineNumberTable"/>
-      <libraryjar file="${jdk.home.1.6}/jre/lib/rt.jar"/>
+      <libraryjar refid="gootool.module.runtime.classpath"/>
       <injar file="${output.jar}"/>
       <outjar file="${obfuscated.jar}"/>
 
@@ -182,13 +175,10 @@
         <!--public static void main(java.lang.String[]);-->
       </keep>
       <keep name="net.infotrek.util.logging.jdk14.TerseFormatter"/>
-      <!---keepclasseswithmembers public class * {-->
-      <!--public static void main(java.lang.String[]);-->
-      <!--}-->
     </proguard>
   </target>
 
-  <target name="launcher32" description="builds the launcher" depends="obfuscate"><!-- depends="jar">-->
+  <target name="launcher-win32" description="builds the launcher" depends="obfuscate"><!-- depends="jar">-->
     <mkdir dir="${dist.win32}"/>
     <mkdir dir="${dist.win32}/bin"/>
 
@@ -202,9 +192,9 @@
             />
   </target>
 
-  <target name="dist32" description="Build the Win32 distribution" depends="jar, launcher32">
+  <target name="dist-win32" description="Build the Win32 distribution" depends="obfuscate, launcher-win32">
     <copy todir="${dist.win32}">
-      <fileset dir="dist_src">
+      <fileset dir="dist_src/common">
         <patternset refid="ignored.files"/>
         <type type="file"/>
       </fileset>
@@ -218,7 +208,33 @@
     </zip>
   </target>
 
-  <target name="dist" description="Build the distribution" depends="dist32"/>
+  <target name="dist-linux" description="Build the Linux distribution" depends="obfuscate">
+    <copy todir="${dist.linux}">
+      <fileset dir="dist_src/common">
+        <patternset refid="ignored.files"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+    <copy todir="${dist.linux}">
+      <fileset dir="dist_src/linux">
+        <patternset refid="ignored.files"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+    <copy todir="${dist.linux}/doc">
+      <fileset file="doc/CHANGELOG.txt"/>
+    </copy>
+    <copy todir="${dist.linux}/lib">
+      <fileset file="${obfuscated.jar}"/>
+    </copy>
+
+    <tar destfile="${dist.dir}/gootool-${gootool.version.full}-linux.tar.bz2" compression="bzip2">
+      <tarfileset dir="${dist.linux}" prefix="gootool-${gootool.version.full}"/>
+    </tar>
+  </target>
+
+  <target name="dist" description="Build the distribution" depends="dist-win32, dist-linux"/>
+
 
   <property name="svn.trunk" value="${svn.base}/trunk"/>
   <property name="svn.tags" value="${svn.base}/tags"/>

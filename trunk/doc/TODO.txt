@@ -124,3 +124,9 @@ Obviously I'm not commercially driven and neither are you, we're both just big W
 At the moment I'm using Drupal, though I'm not especially happy with it, it got me up and running quickly. I think it'll suffice. It just needs a download module writing, and a WoG profile module - both of which I'm already intendign to do alone but would welcome you to join me in.
 
 
+
+
+WoG 1.20
+ - added refreshrate (or was this 1.10?)
+
+WoG  1.30

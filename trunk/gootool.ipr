@@ -321,7 +321,7 @@
   <component name="libraryTable">
     <library name="bouncycastle">
       <CLASSES>
-        <root url="jar://$PROJECT_DIR$/dist_src/lib/lcrypto-jdk16-141.jar!/" />
+        <root url="jar://$PROJECT_DIR$/dist_src/common/lib/lcrypto-jdk16-141.jar!/" />
       </CLASSES>
       <JAVADOC>
         <root url="file://$PROJECT_DIR$/../src/lcrypto-jdk16-141/docs" />
@@ -332,7 +332,7 @@
     </library>
     <library name="uiruntime">
       <CLASSES>
-        <root url="jar://$PROJECT_DIR$/dist_src/lib/uiruntime.jar!/" />
+        <root url="jar://$PROJECT_DIR$/dist_src/common/lib/uiruntime.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES />
