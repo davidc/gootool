@@ -2,8 +2,6 @@ MILESTONE 0.9.5
 
 - centre about dialog to parent window
 
-- NEW VERSION DOWNLOAD URL IN VERSION REPLY
-
 - Also, perhaps make it more clear that what this does is duplicate your world of goo install, and modify that, and that it does not harm your original in any way. (i hope ;P )
 
 MILESTONE 0.10.0

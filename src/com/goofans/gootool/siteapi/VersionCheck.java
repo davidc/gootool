@@ -88,8 +88,9 @@ public class VersionCheck implements Runnable
 
     final VersionSpec newVersion = new VersionSpec(XMLUtil.getElementStringRequired(updateAvailableEl, "version"));
     final String message = XMLUtil.getElementString(updateAvailableEl, "message");
+    final String downloadUrl = XMLUtil.getElementString(updateAvailableEl, "download-url");
 
-    log.log(Level.FINE, "New version available, ver=" + newVersion + ", message=" + message);
+    log.log(Level.FINE, "New version available, ver=" + newVersion + ", message=" + message + ", downloadUrl=" + downloadUrl);
     completed = true;
     upToDate = false;
 
@@ -98,7 +99,7 @@ public class VersionCheck implements Runnable
       {
         public void run()
         {
-          new NewVersionDialog(parentWindow, newVersion, message).setVisible(true);
+          new NewVersionDialog(parentWindow, newVersion, message, downloadUrl).setVisible(true);
         }
       });
     }

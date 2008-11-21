@@ -28,7 +28,7 @@ public class NewVersionDialog extends JDialog
 
   private static TextProvider textProvider = GooTool.getTextProvider();
 
-  public NewVersionDialog(final Window parentWindow, final VersionSpec latestVersion, String messageText)
+  public NewVersionDialog(final Window parentWindow, final VersionSpec latestVersion, String messageText, final String downloadUrl)
   {
     super(parentWindow, textProvider.getText("newVersion.title"));
     setContentPane(contentPane);
@@ -57,7 +57,7 @@ public class NewVersionDialog extends JDialog
     {
       public void actionPerformed(ActionEvent e)
       {
-        URLLauncher.launchAndWarn("http://goofans.com/gootool/download?from=" + EncodingUtil.urlEncode(Version.RELEASE_FULL), parentWindow);
+        URLLauncher.launchAndWarn(downloadUrl, parentWindow);
         setVisible(false);
       }
     });
@@ -80,7 +80,7 @@ public class NewVersionDialog extends JDialog
   {
     GUIUtil.switchToSystemLookAndFeel();
 
-    NewVersionDialog dialog = new NewVersionDialog(null, new VersionSpec(5, 6, 7), "Please upgrade!");
+    NewVersionDialog dialog = new NewVersionDialog(null, new VersionSpec(5, 6, 7), "Please upgrade!", "http://goofans.com/blah");
     dialog.setVisible(true);
     System.exit(0);
   }
