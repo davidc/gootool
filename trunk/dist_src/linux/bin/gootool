@@ -52,6 +52,4 @@ for i in $GOOTOOL_DIR/lib/*.jar; do
     CLASSPATH=${CLASSPATH}$i
 done
 
-echo $CLASSPATH
-
-$JAVA -cp $CLASSPATH -Djava.util.logging.config.file=$GOOTOOL_DIR/etc/logger_properties.txt com.goofans.gootool.GooTool
+$JAVA -cp $CLASSPATH -Djava.util.logging.config.file=$GOOTOOL_DIR/etc/logger_properties.txt com.goofans.gootool.GooTool &
