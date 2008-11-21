@@ -21,9 +21,6 @@ public class ProgressDialog extends JDialog implements ProgressListener
   {
     super(mainFrame, title, true);
 
-//    setLocationByPlatform(true);
-    setLocationRelativeTo(mainFrame);
-
     setResizable(false);
 
     setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
@@ -44,6 +41,7 @@ public class ProgressDialog extends JDialog implements ProgressListener
     iconLabel.setIcon(GooTool.getMainIcon());
 
     pack();
+    setLocationRelativeTo(mainFrame);
   }
 
   public void beginStep(final String taskDescription, final boolean progressAvailable)

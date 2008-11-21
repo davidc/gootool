@@ -38,7 +38,6 @@ public class AboutDialog extends JDialog
   {
     super(mainFrame, textProvider.getText("about.title"), true);
 
-    setLocationByPlatform(true);
     setResizable(false);
 
     setIconImage(GooTool.getMainIconImage());
@@ -68,6 +67,7 @@ public class AboutDialog extends JDialog
     vmMemory.setText(textProvider.getText("about.vmMemory.value", TextUtil.binaryNumToString(usedMem), TextUtil.binaryNumToString(totalMem)));
 
     pack();
+    setLocationRelativeTo(mainFrame);
   }
 
   @SuppressWarnings({"UseOfSystemOutOrSystemErr"})
