@@ -8,6 +8,7 @@
 - some initial internationalisation of GooTool itself
 - fixed NPE on save when no resolution selected, various fixes to make sure 800x600 always appears as default 
 - added java JRE/JVM information to About dialog
+- added Linux build
 
 0.9.4
 

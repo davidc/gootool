@@ -123,7 +123,10 @@ public class URLLauncher
   {
     try {
       log.finer("Mac looking for com.apple.eio.FileManager");
-      Class fileMgr = Class.forName("com.apple.eio.FileManager");
+
+      // NB The following String is intentionally not inlined to prevent ProGuard trying to locate the unknown class.
+      String appleClass = "com.apple.eio.FileManager";
+      Class fileMgr = Class.forName(appleClass);
       Method openURL = fileMgr.getDeclaredMethod("openURL", new Class[]{String.class});
 
       log.finer("Mac invoking");
