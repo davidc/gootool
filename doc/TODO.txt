@@ -3,13 +3,13 @@ MILESTONE 0.9.6
 - command line image l10n tool
 - dev releases should have the actual svn version in their build filename/about version - may need to separate svn revision into an svn:ignored file
 - addin merging doesn't always work due to windows line endings
+- let them save tower jpgs (and the original transparent one)
 
 MILESTONE 0.10.0
 
 - installer
 - mac/linux versions
 - file association for .goomod
-- let them save tower jpgs (and the original transparent one)
 - Don't SAVE if unmodified on LAUNCH
 - Make checkboxes in addin list work
 - dragging addins below last enabled addin should move it to bottom

@@ -177,7 +177,6 @@ public class AddinInstaller
 
     if (!mergeFile.exists()) throw new AddinFormatException("Addin tries to merge a nonexistent file: " + fileName);
 
-
     try {
       Merger merger = new Merger(mergeFile, new InputStreamReader(is));
       merger.merge();

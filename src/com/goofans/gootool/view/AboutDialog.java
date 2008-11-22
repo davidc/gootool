@@ -38,6 +38,8 @@ public class AboutDialog extends JDialog
   {
     super(mainFrame, textProvider.getText("about.title"), true);
 
+    setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+
     setResizable(false);
 
     setIconImage(GooTool.getMainIconImage());

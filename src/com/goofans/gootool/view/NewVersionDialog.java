@@ -39,6 +39,7 @@ public class NewVersionDialog extends JDialog
     setResizable(false);
 
     setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+
     GUIUtil.setCloseOnEscape(this);
     GUIUtil.setFocusOnOpen(this, yesButton);
 
