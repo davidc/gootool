@@ -544,13 +544,10 @@ public class Controller implements ActionListener
     } while (!foundThisAddin && config.getEnabledAddins().size() > 0);
   }
 
-  private JDialog aboutDialog;
 
   private void openAboutDialog()
   {
-    if (aboutDialog == null) {
-      aboutDialog = new AboutDialog(mainFrame);
-    }
+    JDialog aboutDialog = new AboutDialog(mainFrame);
 
     aboutDialog.setVisible(true);
   }

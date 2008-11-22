@@ -260,4 +260,38 @@ public class TextUtil
     System.out.println("decodedStr = " + decodedStr);
     System.out.println("(original.equals(decodedStr)) = " + (original.equals(decodedStr)));
   }
+
+  public static String formatTime(int secs)
+  {
+    StringBuilder sb = new StringBuilder();
+
+    int days = secs / 86400;
+    if (days > 0) {
+      sb.append(days).append(" day");
+      if (days != 1) sb.append("s");
+      sb.append(", ");
+      secs %= 86400;
+    }
+
+    int hours = secs / 3600;
+    if (days > 0 || hours > 0) {
+      sb.append(hours).append(" hour");
+      if (hours != 1) sb.append("s");
+      sb.append(", ");
+      secs %= 3600;
+    }
+
+    int minutes = secs / 60;
+    if (days > 0 || hours > 0 || minutes > 0) {
+      sb.append(minutes).append(" minute");
+      if (minutes != 1) sb.append("s");
+      sb.append(", ");
+      secs %= 60;
+    }
+    sb.append(secs).append(" second");
+    if (secs != 1) sb.append("s");
+    sb.append(".");
+
+    return sb.toString();
+  }
 }

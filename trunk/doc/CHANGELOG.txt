@@ -1,6 +1,11 @@
+0.9.6
+
+- Memory usage in About dialog is now updated each time you open the window
+- Some dialog memory leaks plugged
+
 0.9.5
 
-- added Linux version, also look in .wine and .PlayOnLinux
+- added Linux build, also look in .wine and .PlayOnLinux for exe/profile
 - allow selection of multiple addins to install
 - better error description when l10n source image can't be loaded
 - added new version notification on startup and via help menu

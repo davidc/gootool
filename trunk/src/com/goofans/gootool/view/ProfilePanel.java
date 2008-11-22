@@ -1,5 +1,7 @@
 package com.goofans.gootool.view;
 
+import net.infotrek.util.TextUtil;
+
 import com.goofans.gootool.GooTool;
 import com.goofans.gootool.profile.*;
 
@@ -99,7 +101,7 @@ public class ProfilePanel implements ActionListener
 
       if (currentProfile != null) {
         profileName.setText(currentProfile.getName());
-        playTime.setText(formatTime(currentProfile.getPlayTime()));
+        playTime.setText(TextUtil.formatTime(currentProfile.getPlayTime()));
         levelsPlayed.setText(String.valueOf(currentProfile.getLevels()));
 
         Tower t = currentProfile.getTower();
@@ -219,40 +221,6 @@ public class ProfilePanel implements ActionListener
       }
     }
     profilesCombo.setSelectedItem(profileData.getCurrentProfile());
-  }
-
-  private String formatTime(int secs)
-  {
-    StringBuilder sb = new StringBuilder();
-
-    int days = secs / 86400;
-    if (days > 0) {
-      sb.append(days).append(" day");
-      if (days != 1) sb.append("s");
-      sb.append(", ");
-      secs %= 86400;
-    }
-
-    int hours = secs / 3600;
-    if (days > 0 || hours > 0) {
-      sb.append(hours).append(" hour");
-      if (hours != 1) sb.append("s");
-      sb.append(", ");
-      secs %= 3600;
-    }
-
-    int minutes = secs / 60;
-    if (days > 0 || hours > 0 || minutes > 0) {
-      sb.append(minutes).append(" minute");
-      if (minutes != 1) sb.append("s");
-      sb.append(", ");
-      secs %= 60;
-    }
-    sb.append(secs).append(" second");
-    if (secs != 1) sb.append("s");
-    sb.append(".");
-
-    return sb.toString();
   }
 
   private String formatHeight(double height)

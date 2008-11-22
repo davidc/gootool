@@ -28,14 +28,14 @@ public class AddinPropertiesDialog extends JDialog
   {
     super(mainFrame, "About " + a.getTypeText() + " " + a.getName(), true);
 
+    setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+
     setLocationByPlatform(true);
     setResizable(false);
 
     setIconImage(GooTool.getMainIconImage());
 
     setContentPane(rootPanel);
-
-//    SwingUtil.setPackOnOpen(this);
 
     GUIUtil.setDefaultClosingOkButton(okButton, this);
     GUIUtil.setCloseOnEscape(this);
