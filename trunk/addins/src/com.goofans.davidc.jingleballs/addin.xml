@@ -1,0 +1,22 @@
+<addin spec-version="1.0">
+  <id>com.goofans.davidc.jingleballs</id>
+  <name>Jingle Balls</name>
+  <type>level</type>
+  <version>0.1</version>
+  <description>A fun little Christmas level of medium-to-advanced difficulty. 
+
+    Level design: David Croft (davidc)
+    Graphics: xanax
+    Music: Cosmin Marza
+
+  </description>
+  <author>davidc/xanax/cosminmarza</author>
+
+  <level>
+    <dir>JingleBalls</dir>
+    <name text="Jingle Balls"/>
+    <subtitle text="goo balls roasting on an open fire"/>
+    <ocd>balls,35</ocd>
+  </level>
+
+</addin>
