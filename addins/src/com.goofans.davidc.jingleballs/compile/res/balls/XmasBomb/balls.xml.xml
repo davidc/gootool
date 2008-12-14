@@ -1,0 +1,253 @@
+<ball name="XmasBomb"
+      shape="circle,60,0"
+      walkforce="0" 
+      mass="60"
+      towermass="30.0" 
+      strands="4" 
+      walkspeed="0"
+      climbspeed="0.0"
+      speedvariance="0" 
+      detachable="true" 
+      jump="0,0"
+      explosionparticles="BallExplode_Bomb" 
+	  collidewithattached="false"
+	  collideattached="false"
+	  
+	  suckable="false"
+	  climber="false"
+      draggable="true"
+	  material="rock"
+	  isbehindstrands="false"
+	  grumpy="false"
+	  invulnerable="true"
+	  
+	  stickyattached="true"
+	  stickyunattached="true"
+	  stuckattachment="false"
+      
+      burntime="3.0"
+      detonateforce="500"
+      detonateradius="350"
+	  
+	  attenuationselect="0.05, 1.0, 1.2"
+	  attenuationdeselect="0.05, 1.2, 1.0"
+	  attenuationdrop="0.05, 1.2, 1.0"
+	  attenuationdrag="0.05, 1.2, 1.0"
+	  
+	  statescales="attached,1.25"
+      
+      blinkcolor="0,0,0"
+	  hideeyes="false"
+	  alwayslookatmouse="true"
+	  
+	  wakedist="30"
+      >
+
+  <marker drag="IMAGE_BALL_XMASBOMB_DRAGMARKER"
+          detach="IMAGE_BALL_XMASBOMB_DETACHMARKER"
+          rotspeed="2"/>
+		  
+  <strand type="spring" 
+          image="IMAGE_BALL_XMASBOMB_STRAND"
+          inactiveimage="IMAGE_BALL_XMASBOMB_STRAND"
+          springconstmin="10" springconstmax="10" 
+          dampfac="0.9" 
+          maxlen2="140"
+          maxforce="800"
+          minlen="130"
+          thickness="40"
+		  walkable="false"
+		  
+		  ignitedelay="0"
+          burnspeed="3"
+          fireparticles="fireArmBurn"
+          burntimage="IMAGE_BALL_XMASBOMB_STRAND_BURNT"
+		  />
+		  
+	<detachstrand image="IMAGE_BALL_XMASBOMB_STRAND" maxlen="60" />
+	
+	<shadow image="IMAGE_BALL_XMASBOMB_SHADOW"/>
+
+  <particles id="sleepyZzz" states="sleeping" overball="true" />
+  <particles id="fireRobotHead" states="onfire" overball="true" />
+
+  <splat image="IMAGE_FX_SMOKEBLACK"/>
+
+  <part name="spikes"
+        layer="1" 
+        x="0" y="0" 
+        image="IMAGE_BALL_XMASBOMB_SPIKES"
+        rotate="true"
+        scale="0.62"
+		state="climbing,walking,falling,dragging,detaching,standing,tank,sleeping,stuck,stuck_attached,stuck_detaching"
+		/>
+
+	<part name="spikesStuck"
+        layer="1" 
+        x="0" y="0" 
+        image="IMAGE_BALL_XMASBOMB_SPIKES"
+        rotate="true"
+        scale="0.69"
+		state="attached"
+		/>
+		
+  <part name="body"
+        layer="2" 
+        x="0" y="0" 
+        image="IMAGE_BALL_XMASBOMB_BODY"
+        rotate="false"
+        scale="0.5" />
+		
+	<part name="valve"
+        layer="3" 
+        x="24" y="24" 
+        image="IMAGE_BALL_XMASBOMB_VALVE"
+        rotate="true"
+        scale="0.60" />
+		
+	<part name="eyeLid1"
+        layer="4" 
+        x="-19" y="-2.5" 
+        image="IMAGE_BALL_XMASBOMB_EYELID1"
+        rotate="true"
+        scale="0.50"
+		
+		state="sleeping"
+		/>
+		
+	<part name="eyeLid2"
+        layer="4" 
+        x="22" y="-7.5" 
+        image="IMAGE_BALL_XMASBOMB_EYELID2"
+        rotate="true"
+        scale="0.50"
+		
+		state="sleeping"
+		/>
+		
+	<part name="lefteye"
+        layer="2"
+        rotate="true"
+        eye="true" 
+        pupil="IMAGE_BALL_GENERIC_PUPIL1"
+        pupilinset="13"
+        x="-18,-12" y="0,7"
+        xrange="-20,-10" yrange="-12,12"  
+        image="IMAGE_BALL_GENERIC_EYE_GLASS_1,IMAGE_BALL_GENERIC_EYE_GLASS_2"
+        scale="0.75"
+		state="climbing,walking,falling,dragging,detaching,standing,tank,stuck,stuck_attached,stuck_detaching"
+        />
+  <part name="righteye"
+        layer="2"
+        rotate="true"
+        eye="true" 
+        pupil="IMAGE_BALL_GENERIC_PUPIL1"
+        pupilinset="13"
+        x="12,18" y="0,7"
+        xrange="10,20" yrange="-12,12"
+        image="IMAGE_BALL_GENERIC_EYE_GLASS_1,IMAGE_BALL_GENERIC_EYE_GLASS_2"
+        scale="0.75"
+		state="climbing,walking,falling,dragging,detaching,standing,tank,stuck,stuck_attached,stuck_detaching"
+        />
+		
+	<part name="lefteyeStuck"
+        layer="2"
+        rotate="true"
+        eye="true" 
+        pupil="IMAGE_BALL_GENERIC_PUPIL1"
+        pupilinset="13"
+        x="-32,-32" y="0,0"
+        xrange="-32,-22" yrange="-12,12"  
+        image="IMAGE_BALL_GENERIC_EYE_GLASS_1,IMAGE_BALL_GENERIC_EYE_GLASS_2"
+        scale="0.95"
+		state="attached"
+        />
+  <part name="righteyeStuck"
+        layer="2"
+        rotate="true"
+        eye="true" 
+        pupil="IMAGE_BALL_GENERIC_PUPIL1"
+        pupilinset="13"
+        x="32,32" y="0,0"
+        xrange="22,32" yrange="-12,12"
+        image="IMAGE_BALL_GENERIC_EYE_GLASS_1,IMAGE_BALL_GENERIC_EYE_GLASS_2"
+        scale="0.95"
+		state="attached"
+        />
+
+		
+		
+		
+
+  <!-- attached -->
+  <sinvariance freq="0.3" amp="0.03" shift="0">
+    <sinanim part="body" state="attached" type="scale" axis="x" freq="1.0" amp="0.025" shift="0" />
+    <sinanim part="body" state="attached" type="scale" axis="y" freq="1.0" amp="0.025" shift="0" />
+	<sinanim part="spikesStuck" state="attached" type="scale" axis="x" freq="1.0" amp="0.05" shift="0.1" />
+    <sinanim part="spikesStuck" state="attached" type="scale" axis="y" freq="1.0" amp="0.05" shift="0.1" />
+	<sinanim part="valve" state="attached" type="translate" axis="x" freq="1.0" amp="1" shift="0" />
+	<sinanim part="valve" state="attached" type="translate" axis="y" freq="1.0" amp="-1" shift="0" />
+	<sinanim part="lefteyeStuck" state="attached" type="translate" axis="x" freq="1.0" amp="-0.75" shift="0" />
+	<sinanim part="righteyeStuck" state="attached" type="translate" axis="x" freq="1.0" amp="0.75" shift="0" />
+  </sinvariance>
+  
+  <!-- dragging -->
+  <sinvariance freq="0.3" amp="0.03" shift="0">
+    <sinanim part="body" state="dragging" type="scale" axis="x" freq="2.0" amp="0.05" shift="0" />
+    <sinanim part="body" state="dragging" type="scale" axis="y" freq="2.0" amp="0.05" shift="0" />
+	<sinanim part="spikes" state="dragging" type="scale" axis="x" freq="2.0" amp="0.075" shift="0.1" />
+    <sinanim part="spikes" state="dragging" type="scale" axis="y" freq="2.0" amp="0.075" shift="0.1" />
+	<sinanim part="valve" state="dragging" type="translate" axis="x" freq="2.0" amp="2" shift="0" />
+	<sinanim part="valve" state="dragging" type="translate" axis="y" freq="2.0" amp="-2" shift="0" />
+	<sinanim part="lefteye" state="dragging" type="translate" axis="x" freq="2.0" amp="-0.5" shift="0" />
+	<sinanim part="righteye" state="dragging" type="translate" axis="x" freq="2.0" amp="0.5" shift="0" />
+  </sinvariance>
+  
+  <!-- falling -->
+  <sinvariance freq="0.3" amp="0.03" shift="0">
+    <sinanim part="body" state="falling" type="scale" axis="x" freq="1.0" amp="0.075" shift="0" />
+    <sinanim part="body" state="falling" type="scale" axis="y" freq="1.0" amp="0.075" shift="0" />
+	<sinanim part="spikes" state="falling" type="scale" axis="x" freq="1.0" amp="0.1" shift="0.1" />
+    <sinanim part="spikes" state="falling" type="scale" axis="y" freq="1.0" amp="0.1" shift="0.1" />
+	<sinanim part="lefteye" state="falling" type="translate" axis="x" freq="1.0" amp="-0.5" shift="0" />
+	<sinanim part="righteye" state="falling" type="translate" axis="x" freq="1.0" amp="0.5" shift="0" />
+	<sinanim part="valve" state="falling" type="translate" axis="x" freq="1.0" amp="2" shift="0" />
+	<sinanim part="valve" state="falling" type="translate" axis="y" freq="1.0" amp="-2" shift="0" />
+  </sinvariance>
+  <!-- walking -->
+  <sinvariance freq="0.3" amp="0.03" shift="0">
+    <sinanim part="body" state="walking" type="scale" axis="x" freq="1.0" amp="0.05" shift="0" />
+    <sinanim part="body" state="walking" type="scale" axis="y" freq="1.0" amp="0.05" shift="0" />
+	<sinanim part="spikes" state="walking" type="scale" axis="x" freq="1.0" amp="0.1" shift="0.1" />
+    <sinanim part="spikes" state="walking" type="scale" axis="y" freq="1.0" amp="0.1" shift="0.1" />
+	<sinanim part="lefteye" state="walking" type="translate" axis="x" freq="1.0" amp="-0.5" shift="0" />
+	<sinanim part="righteye" state="walking" type="translate" axis="x" freq="1.0" amp="0.5" shift="0" />
+	<sinanim part="valve" state="walking" type="translate" axis="x" freq="1.0" amp="2" shift="0" />
+	<sinanim part="valve" state="walking" type="translate" axis="y" freq="1.0" amp="-2" shift="0" />
+  </sinvariance>
+
+  
+
+  <!-- Sound FX -->
+
+  <sound event="marker"       id="SOUND_BALL_GENERIC_ROLLOVER1,SOUND_BALL_GENERIC_ROLLOVER2,SOUND_BALL_GENERIC_ROLLOVER3,SOUND_BALL_GENERIC_ROLLOVER4,SOUND_BALL_GENERIC_ROLLOVER5,SOUND_BALL_GENERIC_ROLLOVER6,SOUND_BALL_GENERIC_ROLLOVER7,SOUND_BALL_GENERIC_ROLLOVER8"/>
+  <sound event="pickup"       id="SOUND_BALL_GENERIC_STICK1,SOUND_BALL_GENERIC_STICK2,SOUND_BALL_GENERIC_STICK3,SOUND_BALL_GENERIC_STICK4,SOUND_BALL_GENERIC_STICK5,SOUND_BALL_GENERIC_STICK6"/>
+
+  <sound event="drop"         id="SOUND_BALL_GENERIC_MUMBLE1,SOUND_BALL_GENERIC_MUMBLE2,SOUND_BALL_GENERIC_MUMBLE3,SOUND_BALL_GENERIC_MUMBLE4,SOUND_BALL_GENERIC_MUMBLE5,SOUND_BALL_GENERIC_MUMBLE6,SOUND_BALL_GENERIC_MUMBLE7"/>
+  <sound event="throw"        id="SOUND_BALL_GENERIC_MUMBLE1,SOUND_BALL_GENERIC_MUMBLE2,SOUND_BALL_GENERIC_MUMBLE3,SOUND_BALL_GENERIC_MUMBLE4,SOUND_BALL_GENERIC_MUMBLE5,SOUND_BALL_GENERIC_MUMBLE6,SOUND_BALL_GENERIC_MUMBLE7"/>
+
+  <sound event="bounce"       id="SOUND_BALL_GENERIC_BOUNCE1,SOUND_BALL_GENERIC_BOUNCE2,SOUND_BALL_GENERIC_BOUNCE3,SOUND_BALL_GENERIC_BOUNCE4"/>
+  <sound event="land"         id="SOUND_BALL_GENERIC_STICK1,SOUND_BALL_GENERIC_STICK2,SOUND_BALL_GENERIC_STICK3,SOUND_BALL_GENERIC_STICK4,SOUND_BALL_GENERIC_STICK5,SOUND_BALL_GENERIC_STICK6"/>
+
+  <sound event="attach"       id="SOUND_BALL_GENERIC_STICK1,SOUND_BALL_GENERIC_STICK2,SOUND_BALL_GENERIC_STICK3,SOUND_BALL_GENERIC_STICK4,SOUND_BALL_GENERIC_STICK5,SOUND_BALL_GENERIC_STICK6"/>
+  <sound event="attachcloser" id="SOUND_BALL_GENERIC_GLEE1,SOUND_BALL_GENERIC_GLEE2,SOUND_BALL_GENERIC_GLEE3,SOUND_BALL_GENERIC_GLEE4,SOUND_BALL_GENERIC_GLEE5,SOUND_BALL_GENERIC_GLEE6,SOUND_BALL_GENERIC_GLEE7,SOUND_BALL_GENERIC_GLEE8,SOUND_BALL_GENERIC_GLEE9,SOUND_BALL_GENERIC_GLEE10,SOUND_BALL_GENERIC_GLEE11"/>
+  <sound event="detaching"    id="SOUND_BALL_GENERIC_DETACHING1"/>
+  <sound event="detached"     id="SOUND_BALL_GENERIC_DETACHED1"/>
+
+  <sound event="death"        id="SOUND_BALL_GENERIC_DEATH1,SOUND_BALL_GENERIC_DEATH2,SOUND_BALL_GENERIC_DEATH3,SOUND_BALL_GENERIC_DEATH4,SOUND_BALL_GENERIC_DEATH5"/>
+  <sound event="deathfall"    id="SOUND_BALL_GENERIC_DEATH1,SOUND_BALL_GENERIC_DEATH2,SOUND_BALL_GENERIC_DEATH3,SOUND_BALL_GENERIC_DEATH4,SOUND_BALL_GENERIC_DEATH5"/>
+
+  <sound event="ignite"       id="SOUND_BALL_XMASBOMB_IGNITE01,SOUND_BALL_XMASBOMB_IGNITE02,SOUND_BALL_XMASBOMB_IGNITE03,SOUND_BALL_XMASBOMB_IGNITE04"/>
+  <sound event="detonate"     id="SOUND_BALL_XMASBOMB_DETONATE1"/>
+
+</ball>
