@@ -25,6 +25,13 @@
 
     
     <!-- Unique Sounds -->
+    <SetDefaults path="res/balls/XmasIvy/" idprefix="SOUND_BALL_XMASIVY_" />
+
+    <Sound id="GLEE2" path="glee2"/>
+    <Sound id="GLEE7" path="glee7"/>
+    <Sound id="GLEE9" path="glee9"/>
+
+    <!-- Unique Sounds from Ivy -->
     <SetDefaults path="res/balls/Ivy/" idprefix="SOUND_BALL_XMASIVY_" />
 
     <Sound id="CHIRP01" path="chirp01"/>

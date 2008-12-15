@@ -18,7 +18,7 @@
   <signpost alpha="1" colorize="255,255,255" depth="-4" image="IMAGE_SCENE_JINGLEBALLS_SIGNPOST_BROWN" name="signpost2" rotation="10" scalex="0.823"
             scaley="0.912" text="SIGNPOST_JINGLEBALLS_2" x="-597.376" y="246.7724"/>
   <signpost alpha="1" colorize="255,255,255" depth="-24" image="IMAGE_SCENE_JINGLEBALLS_SIGNPOST_BROWN" name="signpost3" rotation="80" scalex="0.823"
-            scaley="0.912" text="SIGNPOST_JINGLEBALLS_3" x="665.389827263" y="1387.17190052"/>
+            scaley="0.912" text="SIGNPOST_JINGLEBALLS_3" x="665.389827263" y="1420.17190052"/>
   <pipe depth="0" id="0">
     <Vertex x="600" y="1320"/>
     <Vertex x="600" y="2000"/>
