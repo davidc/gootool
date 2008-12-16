@@ -183,7 +183,7 @@ public class AddinInstaller
       merger.writeEncoded(mergeFile);
     }
     catch (TransformerException e) {
-      throw new AddinFormatException("Error transforming " + fileName, e);
+      throw new AddinFormatException("Error transforming " + fileName + ":\n" + e.getMessage(), e);
     }
     finally {
       is.close();
@@ -195,7 +195,7 @@ public class AddinInstaller
     log.log(Level.FINER, "Compile " + fileName);
     checkDirOk(fileName);
 
-    if (!fileName.endsWith(".xml")) throw new AddinFormatException("Addin has a non-XML file in the compile directory" + fileName);
+    if (!fileName.endsWith(".xml")) throw new AddinFormatException("Addin has a non-XML file in the compile directory " + fileName);
 
     File destFile = new File(WorldOfGoo.getCustomDir(), fileName.substring(0, fileName.length() - 4) + ".bin");
 

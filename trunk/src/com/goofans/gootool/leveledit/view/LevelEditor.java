@@ -159,7 +159,7 @@ public class LevelEditor extends JFrame implements ActionListener
 
     WorldOfGoo.init();
 
-    Level level = new Level(WorldOfGoo.getWogDir(), "Chain");
+    Level level = new Level(WorldOfGoo.getWogDir(), "MapWorldView");
 
     LevelEditor dialog = new LevelEditor(level);
     dialog.pack();

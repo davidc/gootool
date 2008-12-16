@@ -159,7 +159,7 @@ public class Controller implements ActionListener
   {
     if (!ensureCustomDirIsSet()) return;
 
-    JFileChooser chooser = new JFileChooser();
+    JFileChooser chooser = new JFileChooser(ToolPreferences.getMruAddinDir());
     chooser.setMultiSelectionEnabled(true);
     FileNameExtensionFilter filter = new FileNameExtensionFilter("World of Goo Mods", WorldOfGoo.GOOMOD_EXTENSION);
     chooser.setFileFilter(filter);
@@ -169,6 +169,8 @@ public class Controller implements ActionListener
       log.finer("User cancelled chooser");
       return;
     }
+
+    ToolPreferences.setMruAddinDir(chooser.getCurrentDirectory().getPath());
 
     File[] selectedFiles = chooser.getSelectedFiles();
 

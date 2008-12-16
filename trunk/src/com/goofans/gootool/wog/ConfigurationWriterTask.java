@@ -247,7 +247,7 @@ public class ConfigurationWriterTask extends ProgressIndicatingTask
             AddinInstaller.installAddin(addin);
           }
           catch (AddinFormatException e) {
-            throw new IOException("Addin format exception", e);
+            throw new IOException("Addin format exception in " + addin.getName() + ":\n" + e.getMessage(), e);
           }
           addinFound = true;
           break;
@@ -259,7 +259,7 @@ public class ConfigurationWriterTask extends ProgressIndicatingTask
     }
   }
 
-  @SuppressWarnings({"UseOfSystemOutOrSystemErr"})
+  @SuppressWarnings({"UseOfSystemOutOrSystemErr", "HardCodedStringLiteral", "HardcodedFileSeparator", "DuplicateStringLiteralInspection"})
   public static void main(String[] args) throws Exception
   {
     DebugUtil.setAllLogging();
@@ -276,7 +276,8 @@ public class ConfigurationWriterTask extends ProgressIndicatingTask
     }
 
     // Remove any installed net.davidc.madscientist.dejavu
-    WorldOfGoo.DEBUGremoveAddinById("net.davidc.madscientist.dejavu");
+    String addinId = "net.davidc.madscientist.dejavu";
+    WorldOfGoo.DEBUGremoveAddinById(addinId);
 
     Addin addin = AddinFactory.loadAddinFromDir(new File("addins/src/net.davidc.madscientist.dejavu"));
     WorldOfGoo.DEBUGaddAvailableAddin(addin);
@@ -284,7 +285,7 @@ public class ConfigurationWriterTask extends ProgressIndicatingTask
     // Should end up as a football, since earlier is priority
 //    c.enableAddin("com.2dboy.talic.football");
 //    c.enableAddin("com.2dboy.talic.basketball");
-    c.enableAddin("net.davidc.madscientist.dejavu");
+    c.enableAddin(addinId);
 
     ConfigurationWriterTask writer = new ConfigurationWriterTask(c);
 

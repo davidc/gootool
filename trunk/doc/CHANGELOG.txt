@@ -2,6 +2,8 @@
 
 - Memory usage in About dialog is now updated each time you open the window
 - Some dialog memory leaks plugged
+- More descriptive errors when saving with an invalid addin enabled
+- Remember the most recently used addin installation folder
 
 0.9.5
 

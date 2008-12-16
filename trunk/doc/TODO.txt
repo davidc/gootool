@@ -1,70 +1,76 @@
+ask if they want to enable the mod they just added
+
 MILESTONE 0.9.6
 
-- command line image l10n tool
-- dev releases should have the actual svn version in their build filename/about version - may need to separate svn revision into an svn:ignored file
-- addin merging doesn't always work due to windows line endings
-- let them save tower jpgs (and the original transparent one)
+- Enable new addin installed
+- BUG FIX: addin merging doesn't work on Linux due to windows line endings
+- IMPROVEMENT: Better error display for Addin installation IOException (xanax@forum)
 
-MILESTONE 0.10.0
+MILESTONE 0.9.7
 
-- installer
-- mac/linux versions
-- file association for .goomod
-- Don't SAVE if unmodified on LAUNCH
-- Make checkboxes in addin list work
-- dragging addins below last enabled addin should move it to bottom
+- NEW FEATURE: command line interface to image l10n tool for the wiki site, no gui
+- IMPROVEMENT: dev releases should have the actual svn version in their build filename/about version - may need to separate svn revision into an svn:ignored file
+- NEW FEATURE: let user save the tower jpgs (and the original transparent one)
+- IMPROVEMENT: Rename all remaining uses of the potential racial slur "wog" to "goo"
 
-- upload profile
-- preference, upload tower on goo exit, or upload tower continuously during play (need to detect when process exits - java.lang.Process?)
-- backup/restore profile to website - perhaps just store their last 5 uploaded profiles?
-- mark user as cheat - requires X votes
+MILESTONE 0.10.0 (Final beta version)
 
-MILESTONE 1.0.0
+- NEW FEATURE: Windows installer
+- NEW FEATURE: Supported mac version
+- NEW FEATURE: File association for .goomod
+- IMPROVEMENT: Don't SAVE if unmodified on LAUNCH
 
-- strip down bouncycastle to only needed classes
-- more addin author-friendly functionality (e.g. add a directory as an addin)
+- NEW FEATURE: Addin author tool: create addin from directory/create addin from wogeditor
+- IMPROVEMENT: Make checkboxes in addin list actually enable/disable the addin
+- BUG FIX: Dragging addins below last enabled addin should move it to bottom
+
+- NEW FEATURE: Upload profile/tower to goofans.com
+- NEW FEATURE: preference: upload tower on goo exit, or upload tower continuously during play (need to detect when process exits - java.lang.Process?)
+- NEW FEATURE: backup/restore profile to website - perhaps just store their last 5 uploaded profiles?
+- NEW FEATURE: mark user as cheat - requires X votes or something
+
+MILESTONE 1.0.0 (First public release)
+
+- All bugs from 0.10 series fixed, no new features
 
 MILESTONE 1.1.0
 
-- refreshrate in config.txt - NEW IN NEW VERSION!!!
-- ball editor
-- level editor
+- NEW FEATURE: Option to check mods for updates on goofans.com from within GooTool
+- NEW FEATURE: Auto-download required dependencies from goofans.com
+
+- IMPROVEMENT: strip down bouncycastle to only needed classes
+- NEW FEATURE: Integrated ball editor
+- NEW FEATURE: Finalise the level editor
+- NEW FEATURE: Changing refreshrate in config.txt - NEW IN 1.10? 1.20?
 
 NO MILESTONE SET
 
-- Drag and Drop installing of Addons. So you can drag a file from your desktop to mod list and install it
-
-- fullscreen?
-
+- NEW FEATURE: Check for new WorldOfGoo releases
+- NEW FEATURE: Drag and Drop installing of Addons. So you can drag a file from your desktop to mod list and install it
+- NEW FEATURE: fullscreen preference? Involves editing pers2.dat so maybe not
+- NEW FEATURE: Perhaps stop overrides of Drained files, to prevent cheating in goocorp?
+- NEW FEATURE: Addin XML: conflicts <addin>
+- NEW FEATURE: Addin XML: provides <x> (to include mods in a packaged download)
+- BUGFIX: Addins build.xml ANT task doesn't work under Linux.
+- NEW FEATURE: .deb build: http://code.google.com/p/ant-deb-task/
+- NEW FEATURE: mute music/mute all sound
 
 - reformat b5s and use as wog website server
 
 
 todo
-when installing check dependencies
 
 web report on what balls are used, by what levels, etc.
 - where is this image used?
 
-remove wog references
 
 can't access our formatter currently inside the jar/exe
 
 
-- Perhaps stop overrides of Drained files, to prevent cheating in goocorp?
-
 - Modify EOL scene automatically depending on resolution?
 
-addins - conflicts <addin>
-addins - provides <x>
 
 use JFormattedTextField for input field validation
-
-- Notify of new WoG releases?
-
-- addins/ant doesn't work on linux wtf?
-
-- ant deb task: http://code.google.com/p/ant-deb-task/
 
 
 
@@ -125,6 +131,13 @@ At the moment I'm using Drupal, though I'm not especially happy with it, it got 
 
 
 WoG 1.20
- - added refreshrate (or was this 1.10?)
+- added refreshrate (or was this 1.10?)
+- added launch level from command line
 
 WoG  1.30
+
+
+
+
+<xanax`> sebastienkerguen@free.fr
+for christmas level design perhaps

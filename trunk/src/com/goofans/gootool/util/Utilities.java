@@ -136,4 +136,18 @@ public class Utilities
 
     return sb.toString();
   }
+
+  public static String readReaderIntoString(Reader r) throws IOException
+  {
+    StringBuilder sb = new StringBuilder();
+
+    char[] buf = new char[BUFSIZ];
+
+    int numRead;
+    while ((numRead = r.read(buf, 0, BUFSIZ)) != -1) {
+      sb.append(buf, 0, numRead);
+    }
+
+    return sb.toString();
+  }
 }
