@@ -283,6 +283,56 @@ public class SceneObjectType
           new SceneObjectTypeAttribute("id", SceneObjectTypeAttributeType.STRING, false)
   };
 
+
+  /**
+   * Node "buttongroup", attribute "id" is mandatory (16 occurrences found)
+   * Node "buttongroup", attribute "osx" is mandatory (16 occurrences found)
+   * 2 attributes found
+   * Node "buttongroup" have [1-12] occurrences of child tag "button"
+   * 1 child tags found for node "buttongroup"
+   */
+  private static final SceneObjectTypeAttribute[] BUTTONGROUP_ATTRIBUTES = new SceneObjectTypeAttribute[]{
+          new SceneObjectTypeAttribute("id", SceneObjectTypeAttributeType.STRING, true),
+          new SceneObjectTypeAttribute("osx", SceneObjectTypeAttributeType.POINT_DOUBLE, true),
+  };
+
+  /**
+   * Node "button", attribute "alpha" is optional, occurrences with/without attribute: 70/7
+   * Node "button", attribute "anchor" is optional, occurrences with/without attribute: 1/76
+   * Node "button", attribute "armed" is optional, occurrences with/without attribute: 2/75
+   * Node "button", attribute "colorize" is optional, occurrences with/without attribute: 70/7
+   * Node "button", attribute "context" is optional, occurrences with/without attribute: 2/75
+   * Node "button", attribute "depth" is mandatory (77 occurrences found)
+   * Node "button", attribute "disabled" is optional, occurrences with/without attribute: 6/71
+   * Node "button", attribute "down" is optional, occurrences with/without attribute: 1/76
+   * Node "button", attribute "downarmed" is optional, occurrences with/without attribute: 1/76
+   * Node "button", attribute "downover" is optional, occurrences with/without attribute: 1/76
+   * Node "button", attribute "font" is optional, occurrences with/without attribute: 8/69
+   * Node "button", attribute "id" is mandatory (77 occurrences found)
+   * Node "button", attribute "latch" is optional, occurrences with/without attribute: 1/76
+   * Node "button", attribute "onclick" is mandatory (77 occurrences found)
+   * Node "button", attribute "onmouseenter" is optional, occurrences with/without attribute: 59/18
+   * Node "button", attribute "onmouseexit" is optional, occurrences with/without attribute: 59/18
+   * Node "button", attribute "over" is optional, occurrences with/without attribute: 76/1
+   * Node "button", attribute "overlay" is optional, occurrences with/without attribute: 6/71
+   * Node "button", attribute "rotation" is optional, occurrences with/without attribute: 75/2
+   * Node "button", attribute "scalex" is mandatory (77 occurrences found)
+   * Node "button", attribute "scaley" is mandatory (77 occurrences found)
+   * Node "button", attribute "screenspace" is optional, occurrences with/without attribute: 3/74
+   * Node "button", attribute "text" is optional, occurrences with/without attribute: 8/69
+   * Node "button", attribute "textcolorup" is optional, occurrences with/without attribute: 1/76
+   * Node "button", attribute "textcolorupover" is optional, occurrences with/without attribute: 1/76
+   * Node "button", attribute "tooltip" is optional, occurrences with/without attribute: 3/74
+   * Node "button", attribute "up" is mandatory (77 occurrences found)
+   * Node "button", attribute "visible" is optional, occurrences with/without attribute: 1/76
+   * Node "button", attribute "x" is mandatory (77 occurrences found)
+   * Node "button", attribute "y" is mandatory (77 occurrences found)
+   * 30 attributes found
+   */
+  private static final SceneObjectTypeAttribute[] BUTTON_ATTRIBUTES = new SceneObjectTypeAttribute[]{
+          //TODO
+  };
+
   /**
    * Node "scene" have [0-86] occurrences of child tag "SceneLayer" done
    * Node "scene" have [0-3] occurrences of child tag "button"
@@ -316,6 +366,9 @@ public class SceneObjectType
   public static final SceneObjectType LINE = new SceneObjectType("line", LINE_ATTRIBUTES, null, false);
 
   public static final SceneObjectType HINGE = new SceneObjectType("hinge", HINGE_ATTRIBUTES, null, false);
+
+  public static final SceneObjectType BUTTONGROUP = new SceneObjectType("buttongroup", BUTTONGROUP_ATTRIBUTES, null, true);
+  public static final SceneObjectType BUTTON = new SceneObjectType("button", BUTTON_ATTRIBUTES, null, false);
 
   static {
     addSceneObjectType(RADIALFORCEFIELD);

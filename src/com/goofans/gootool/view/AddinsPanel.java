@@ -102,7 +102,7 @@ public class AddinsPanel implements ViewComponent
   {
     int row = addinTable.getSelectedRow();
 
-    if (row < 0) {
+    if (row < 0 || controller.getDisplayAddins().size() == 0) {
       propertiesButton.setEnabled(false);
       enableButton.setEnabled(false);
       disableButton.setEnabled(false);

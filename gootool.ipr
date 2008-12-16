@@ -7,6 +7,7 @@
       <antReference projectDefault="true" />
       <customJdkName value="" />
       <maximumHeapSize value="128" />
+      <maximumStackSize value="32" />
       <properties />
     </buildFile>
     <buildFile url="file://$PROJECT_DIR$/build.xml">
@@ -14,7 +15,11 @@
       <antReference projectDefault="true" />
       <customJdkName value="" />
       <maximumHeapSize value="128" />
+      <maximumStackSize value="32" />
       <properties />
+      <executeOn event="beforeRun" target="compile" />
+      <executeOn event="beforeRun" target="compile" />
+      <executeOn event="beforeRun" target="compile" />
       <executeOn event="beforeRun" target="compile" runConfigurationType="Application" runConfigurationName="GooTool" />
     </buildFile>
   </component>
@@ -26,7 +31,64 @@
     <option name="USE_PROJECT_LEVEL_SETTINGS" value="false" />
   </component>
   <component name="CodeStyleSettingsManager">
-    <option name="PER_PROJECT_SETTINGS" />
+    <option name="PER_PROJECT_SETTINGS">
+      <value>
+        <ADDITIONAL_INDENT_OPTIONS fileType="groovy">
+          <option name="INDENT_SIZE" value="2" />
+          <option name="CONTINUATION_INDENT_SIZE" value="8" />
+          <option name="TAB_SIZE" value="4" />
+          <option name="USE_TAB_CHARACTER" value="false" />
+          <option name="SMART_TABS" value="false" />
+          <option name="LABEL_INDENT_SIZE" value="0" />
+          <option name="LABEL_INDENT_ABSOLUTE" value="false" />
+        </ADDITIONAL_INDENT_OPTIONS>
+        <ADDITIONAL_INDENT_OPTIONS fileType="gsp">
+          <option name="INDENT_SIZE" value="2" />
+          <option name="CONTINUATION_INDENT_SIZE" value="8" />
+          <option name="TAB_SIZE" value="4" />
+          <option name="USE_TAB_CHARACTER" value="false" />
+          <option name="SMART_TABS" value="false" />
+          <option name="LABEL_INDENT_SIZE" value="0" />
+          <option name="LABEL_INDENT_ABSOLUTE" value="false" />
+        </ADDITIONAL_INDENT_OPTIONS>
+        <ADDITIONAL_INDENT_OPTIONS fileType="java">
+          <option name="INDENT_SIZE" value="4" />
+          <option name="CONTINUATION_INDENT_SIZE" value="8" />
+          <option name="TAB_SIZE" value="4" />
+          <option name="USE_TAB_CHARACTER" value="false" />
+          <option name="SMART_TABS" value="false" />
+          <option name="LABEL_INDENT_SIZE" value="0" />
+          <option name="LABEL_INDENT_ABSOLUTE" value="false" />
+        </ADDITIONAL_INDENT_OPTIONS>
+        <ADDITIONAL_INDENT_OPTIONS fileType="js">
+          <option name="INDENT_SIZE" value="4" />
+          <option name="CONTINUATION_INDENT_SIZE" value="8" />
+          <option name="TAB_SIZE" value="4" />
+          <option name="USE_TAB_CHARACTER" value="false" />
+          <option name="SMART_TABS" value="false" />
+          <option name="LABEL_INDENT_SIZE" value="0" />
+          <option name="LABEL_INDENT_ABSOLUTE" value="false" />
+        </ADDITIONAL_INDENT_OPTIONS>
+        <ADDITIONAL_INDENT_OPTIONS fileType="jsp">
+          <option name="INDENT_SIZE" value="4" />
+          <option name="CONTINUATION_INDENT_SIZE" value="8" />
+          <option name="TAB_SIZE" value="4" />
+          <option name="USE_TAB_CHARACTER" value="false" />
+          <option name="SMART_TABS" value="false" />
+          <option name="LABEL_INDENT_SIZE" value="0" />
+          <option name="LABEL_INDENT_ABSOLUTE" value="false" />
+        </ADDITIONAL_INDENT_OPTIONS>
+        <ADDITIONAL_INDENT_OPTIONS fileType="xml">
+          <option name="INDENT_SIZE" value="4" />
+          <option name="CONTINUATION_INDENT_SIZE" value="8" />
+          <option name="TAB_SIZE" value="4" />
+          <option name="USE_TAB_CHARACTER" value="false" />
+          <option name="SMART_TABS" value="false" />
+          <option name="LABEL_INDENT_SIZE" value="0" />
+          <option name="LABEL_INDENT_ABSOLUTE" value="false" />
+        </ADDITIONAL_INDENT_OPTIONS>
+      </value>
+    </option>
     <option name="USE_PER_PROJECT_SETTINGS" value="false" />
   </component>
   <component name="CompilerConfiguration">
@@ -68,6 +130,7 @@
     <option name="ADDITIONAL_OPTIONS_STRING" value="" />
     <option name="MAXIMUM_HEAP_SIZE" value="128" />
   </component>
+  <component name="Encoding" useUTFGuessing="true" native2AsciiForPropertiesFiles="false" />
   <component name="EntryPointsManager">
     <entry_points version="2.0" />
   </component>
@@ -288,13 +351,16 @@
       </item>
     </group>
   </component>
+  <component name="ProjectDetails">
+    <option name="projectName" value="gootool" />
+  </component>
   <component name="ProjectFileVersion" converted="true" />
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/gootool.iml" filepath="$PROJECT_DIR$/gootool.iml" />
     </modules>
   </component>
-  <component name="ProjectRootManager" version="2" assert-keyword="true" jdk-15="true" project-jdk-name="1.6" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_5" assert-keyword="true" jdk-15="true" project-jdk-name="1.6" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build" />
   </component>
   <component name="ResourceManagerContainer">
@@ -312,7 +378,24 @@
     <option name="ADDITIONAL_OPTIONS_STRING" value="" />
   </component>
   <component name="SvnBranchConfigurationManager">
-    <option name="myVersion" value="123" />
+    <option name="myConfigurationMap">
+      <map>
+        <entry key="$PROJECT_DIR$">
+          <value>
+            <SvnBranchConfiguration>
+              <option name="branchUrls">
+                <list>
+                  <option value="svn+ssh://david@svn.sargasso.net/svn/gootool/branches" />
+                  <option value="svn+ssh://david@svn.sargasso.net/svn/gootool/tags" />
+                </list>
+              </option>
+              <option name="trunkUrl" value="svn+ssh://david@svn.sargasso.net/svn/gootool/trunk" />
+            </SvnBranchConfiguration>
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="myVersion" value="124" />
   </component>
   <component name="VcsDirectoryMappings">
     <mapping directory="" vcs="svn" />

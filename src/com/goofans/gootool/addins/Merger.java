@@ -2,6 +2,8 @@ package com.goofans.gootool.addins;
 
 import com.goofans.gootool.wog.WorldOfGoo;
 import com.goofans.gootool.io.BinFormat;
+import com.goofans.gootool.io.FinalNewlineRemovingReader;
+import com.goofans.gootool.util.Utilities;
 
 import javax.xml.transform.*;
 import javax.xml.transform.stream.StreamSource;
@@ -18,17 +20,30 @@ public class Merger
   private String result;
   private Transformer transformer;
 
+//  static {
+//    System.setProperty("javax.xml.transform.TransformerFactory", "net.sf.saxon.TransformerFactoryImpl");
+//  }
+
   public Merger(File encryptedFile, Reader transform) throws IOException, TransformerException
   {
     this(new StringReader(BinFormat.decodeFile(encryptedFile)), transform);
+    System.out.println("encryptedFile = " + encryptedFile);
+    System.out.println(">>"+Utilities.readReaderIntoString(new FinalNewlineRemovingReader(new StringReader(BinFormat.decodeFile(encryptedFile))))+"<<");
+
   }
 
   public Merger(Reader input, Reader transform) throws TransformerException
   {
+    System.out.println("input = " + input);
     this.input = input;
 
-    Source transformSource = new StreamSource(transform);
-    transformer = TransformerFactory.newInstance().newTransformer(transformSource);
+    Source transformSource = new StreamSource(new FinalNewlineRemovingReader(transform));
+    try {
+      transformer = TransformerFactory.newInstance().newTransformer(transformSource);
+    }
+    catch (TransformerFactoryConfigurationError e) {
+      throw new TransformerException(e.getMessage(), e);
+    }
   }
 
   public void setTransformParameter(String name, Object value)
@@ -38,7 +53,14 @@ public class Merger
 
   public String merge() throws TransformerException
   {
-    Source src = new StreamSource(input);
+//    try {
+//      System.out.println(">>"+Utilities.readReaderIntoString(new FinalNewlineRemovingReader(input))+"<<");
+//    }
+//    catch (IOException e) {
+//      e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+//    }
+
+    Source src = new StreamSource(new FinalNewlineRemovingReader(input));
     StringWriter writer = new StringWriter();
     Result res = new StreamResult(writer);
     transformer.transform(src, res);

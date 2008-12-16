@@ -390,7 +390,7 @@ public class WorldOfGoo
   public static void installAddin(File addinFile, String addinId) throws IOException
   {
     // Check we don't already have an addin with this ID
-
+//TODO replace it
     for (Addin availableAddin : availableAddins) {
       if (availableAddin.getId().equals(addinId)) {
         throw new IOException("An addin with id " + addinId + " already exists!");

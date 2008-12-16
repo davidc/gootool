@@ -18,12 +18,14 @@
   </component>
   <component name="NewModuleRootManager" inherit-compiler-output="false">
     <output url="file://$MODULE_DIR$/build/compiled" />
-    <exclude-output />
     <output-test url="file://$MODULE_DIR$/build/compiled" />
+    <exclude-output />
     <content url="file://$MODULE_DIR$">
       <sourceFolder url="file://$MODULE_DIR$/resources" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" />
+      <excludeFolder url="file://$MODULE_DIR$/dist" />
     </content>
+    <content url="file://$MODULE_DIR$/../wog-extracted" />
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module-library">
@@ -37,7 +39,6 @@
     </orderEntry>
     <orderEntry type="library" name="bouncycastle" level="project" />
     <orderEntry type="library" name="uiruntime" level="project" />
-    <orderEntryProperties />
   </component>
 </module>
 

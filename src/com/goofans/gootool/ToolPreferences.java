@@ -23,6 +23,7 @@ public class ToolPreferences
   private static final String PREF_GOOTOOL_ID = "gootool_random_id";
   private static final String PREF_IGNORE_UPDATE = "gootool_ignore_update";
   private static final String PREF_L10N_MODE = "gootool_l10n_enabled";
+  private static final String PREF_MRU_ADDIN_DIR = "gootool_mru_addin_dir";
 
   private ToolPreferences()
   {
@@ -83,6 +84,16 @@ public class ToolPreferences
   public static void setL10nEnabled(boolean enabled)
   {
     PREFS.putBoolean(PREF_L10N_MODE, enabled);
+  }
+
+  public static String getMruAddinDir()
+  {
+    return PREFS.get(PREF_MRU_ADDIN_DIR, null);
+  }
+
+  public static void setMruAddinDir(String mruDir)
+  {
+    PREFS.put(PREF_MRU_ADDIN_DIR, mruDir);
   }
 
   @SuppressWarnings({"UseOfSystemOutOrSystemErr"})
