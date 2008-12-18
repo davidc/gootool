@@ -1,0 +1,43 @@
+<ball name="XmasGift"
+      shape="rectangle,180,140"
+      walkforce="0"
+      mass="2000"
+      towermass="200"
+      strands="0"
+      walkspeed="0"
+      climbspeed="0"
+      speedvariance="0"
+      detachable="false"
+      draggable="false"
+      climber="false"
+      blinkcolor="0,0,0"
+	  hideeyes="true"
+	  alwayslookatmouse="true"
+      jump="0.0,0.0"
+      collideattached="true"
+      material="BlockBall"
+
+	  autoboundsunattached="true"
+      grumpy="true"
+
+      popsound="" 
+      popduration="0"
+      popparticles="beautypop"
+      contains="14,XmasProduct"
+      >
+  <!--stacking="true"-->
+  <!--autodisable="true"-->
+  <!--hingedrag="true"-->
+  <!--collidewithattached="true"-->
+  <!--suckable="false"-->
+
+
+  <part name="body"
+        layer="0"
+        rotate="false"
+        x="0" y="0"
+        image="IMAGE_BALL_XMASGIFT_BODY"
+        scale="1.5"
+        />
+
+</ball>
