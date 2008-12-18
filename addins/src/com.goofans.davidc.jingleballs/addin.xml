@@ -2,21 +2,25 @@
   <id>com.goofans.davidc.jingleballs</id>
   <name>Jingle Balls</name>
   <type>level</type>
-  <version>0.3</version>
-  <description>A fun little Christmas level of medium-to-advanced difficulty. 
+  <version>0.4</version>
+  <description><![CDATA[
+  <html>
+  <p>A fun little Christmas level of medium-to-advanced difficulty.</p>
 
-    Level design: David Croft (davidc)
-    Graphics: Sebastien Kerguen (xanax)
-    Music: Cosmin Marza
-
-  </description>
+  <ul>
+    <li>Level design: David Croft (davidc)</li>
+    <li>Graphics: S&eacute;bastien Kerguen (xanax)</li>
+    <li>Music: Cosmin Marza</li>
+  </ul>
+  </html>
+  ]]></description>
   <author>davidc/xanax/cosminmarza</author>
 
   <level>
     <dir>JingleBalls</dir>
     <name text="Jingle Balls"/>
     <subtitle text="goo balls roasting on an open fire"/>
-    <ocd>balls,41</ocd>
+    <ocd>balls,43</ocd>
   </level>
 
   <!-- Changelog:
@@ -38,6 +42,15 @@
    - added mantel above fireplace for building on
    - added smoke particle effect up chimney
    - moved sleeping balls right to avoid waking them too early
+  0.4
+   - added an XmasGift ball type that produces 14 XmasProducts when it is busted
+   - added a ballbuster under the gift geom to bust the XmasGift
+   - Adjusted chimney width
+   - Brought level walls closer in and angled them to nudge balls down
+   - Added stopsign to right side of chimney
+   - made treeBase walkable
+   - upped OCD to 43 balls
+   - more new graphics from Sebastien
   -->
 
 </addin>
