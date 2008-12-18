@@ -4,6 +4,7 @@
 - Some dialog memory leaks plugged
 - More descriptive errors when saving with an invalid addin enabled
 - Remember the most recently used addin installation folder
+- Automatically enable an addin after installing it
 
 0.9.5
 

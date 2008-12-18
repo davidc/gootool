@@ -243,7 +243,9 @@ public class Controller implements ActionListener
       return;
     }
 
-    showMessageDialog("Addin installed", "Addin " + addin.getName() + " installed!");
+    editorConfig.enableAddin(addin.getId());
+
+    showMessageDialog("Addin installed", "Addin " + addin.getName() + " installed and enabled!");
   }
 
   private void uninstallAddin()

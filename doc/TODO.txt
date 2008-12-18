@@ -1,10 +1,6 @@
-ask if they want to enable the mod they just added
-
 MILESTONE 0.9.6
 
-- Enable new addin installed
 - BUG FIX: addin merging doesn't work on Linux due to windows line endings
-- IMPROVEMENT: Better error display for Addin installation IOException (xanax@forum)
 
 MILESTONE 0.9.7
 
