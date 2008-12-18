@@ -1,39 +1,56 @@
 <scene backgroundcolor="0,0,0" maxx="900" maxy="1500" minx="-800" miny="0">
   <linearforcefield antigrav="true" dampeningfactor="0" force="0,-10" geomonly="false" type="gravity"/>
+  <linearforcefield antigrav="true" center="595.2,1094.92" dampeningfactor="0" enabled="true" force="0,2" geomonly="false" height="1200" id="chimneyHelper"
+                    type="gravity" water="false" width="330"/>
   <particles depth="-8" effect="blackBallsRising" pos="0.0,0.0" pretick="0"/>
-  <SceneLayer alpha="1" colorize="255,255,255" depth="-500" image="IMAGE_SCENE_JINGLEBALLS_WINDOWSCENE" name="windowscene" rotation="0" scalex="2" scaley="2"
-              x="-347.35515367" y="904.06898647"/>
-  <particles depth="-20" effect="snowStormWindow" pos="-483.018405331,978.90653034"/>
-  <SceneLayer alpha="1" colorize="255,255,255" depth="-200" image="IMAGE_SCENE_JINGLEBALLS_BG" name="bg" rotation="0" scalex="3" scaley="3" x="109.188776523"
-              y="876.503680271"/>
-  <SceneLayer alpha="1" colorize="255,255,255" depth="-10" image="IMAGE_SCENE_JINGLEBALLS_FLOOR" name="floor" rotation="0" scalex="2.6" scaley="1.308"
-              x="148.148228489" y="75.3694823623"/>
+  <SceneLayer alpha="1" colorize="255,255,255" depth="-500" image="IMAGE_SCENE_JINGLEBALLS_WINDOWSCENE" name="windowscene" rotation="0" scalex="1.5"
+              scaley="1.5" x="-331.97915367" y="887.15538647"/>
+  <particles depth="-500" effect="snowStormWindow" pos="-483.018405331,978.90653034"/>
+  <SceneLayer alpha="1" colorize="255,255,255" depth="-200" image="IMAGE_SCENE_JINGLEBALLS_BG" name="bg" rotation="0" scalex="2.2" scaley="2.2"
+              x="30.0348998382" y="1017.22168327"/>
+  <SceneLayer alpha="1" colorize="255,255,255" depth="-10" image="IMAGE_SCENE_JINGLEBALLS_FLOOR" name="floor" rotation="0" scalex="2" scaley="1.5"
+              x="146.535325263" y="66.2367886134"/>
   <SceneLayer alpha="1" colorize="128,128,128" depth="-4" image="IMAGE_SCENE_JINGLEBALLS_SIGNPOSTPOLE_BROWN" name="signpost1post" rotation="30" scalex="0.869"
               scaley="1.046" x="354.5592" y="315.0528"/>
   <SceneLayer alpha="1" colorize="128,128,128" depth="-4" image="IMAGE_SCENE_JINGLEBALLS_SIGNPOSTPOLE_BROWN" name="signpost2post" rotation="10" scalex="0.869"
               scaley="1.046" x="-590.2808" y="199.8928"/>
-  <SceneLayer alpha="1" colorize="128,128,128" depth="-24.8" image="IMAGE_SCENE_JINGLEBALLS_SIGNPOSTPOLE_BROWN" name="signpost3post" rotation="80"
-              scalex="0.869" scaley="1.046" x="706.566484079" y="1399.62720166"/>
-  <SceneLayer alpha="1" colorize="255,255,255" depth="-6" image="IMAGE_SCENE_JINGLEBALLS_RUG" name="rug" rotation="0" scalex="1" scaley="1" x="326.148228489"
-              y="63.3694823623"/>
-  <rectangle height="10" id="treebase" material="verysticky" rotation="0.0" static="true" tag="" width="200" x="0.0" y="150.0"/>
-  <rectangle height="100" id="chimneyleft" material="IvyTower" rotation="-1.4835298642" static="true" width="1000" x="427.52" y="1087.48"/>
-  <rectangle height="100" id="chimneyright" material="IvyTower" rotation="1.4835298642" static="true" width="1000" x="758.64" y="1086.2"/>
+  <SceneLayer alpha="1" colorize="128,128,128" depth="-1" image="IMAGE_SCENE_JINGLEBALLS_SIGNPOSTPOLE_BROWN" name="signpost3post" rotation="80" scalex="0.869"
+              scaley="1.046" x="706.566484079" y="1399.62720166"/>
+  <SceneLayer alpha="1" colorize="255,255,255" depth="-6" image="IMAGE_SCENE_JINGLEBALLS_RUG" name="rug" rotation="0" scalex="1" scaley="1" x="377.09943877"
+              y="-383.073971408"/>
   <line anchor="-57,155" id="floor" material="rock" normal="0,1" static="true" tag="walkable"/>
-  <line anchor="900,500" id="right" material="rock" normal="-1,-0.0056" static="true" tag="detaching"/>
-  <line anchor="-1200,500" id="left" material="rock" normal="1,-0.0046" static="true" tag="detaching"/>
-  <SceneLayer alpha="1" colorize="255,255,255" depth="0" image="IMAGE_SCENE_JINGLEBALLS_CHIMWALL" rotation="-85" x="425.04" y="1089.2"/>
-  <SceneLayer alpha="1" colorize="255,255,255" depth="0" image="IMAGE_SCENE_JINGLEBALLS_CHIMWALL" rotation="85" x="761.4" y="1084.72"/>
-  <SceneLayer alpha="1" colorize="255,255,255" depth="-8" image="IMAGE_SCENE_JINGLEBALLS_FIREPLACE" rotation="0" x="600.0" y="338.0"/>
-  <compositegeom id="giftbox" image="IMAGE_SCENE_JINGLEBALLS_GIFTBOX" imagepos="-550,360" imagerot="0.0" imagescale="1,1" material="rock" rotation="0.0"
+  <line anchor="2000,500" id="right" material="rock" normal="-1,-0.0056" static="true" tag="detaching"/>
+  <line anchor="-1000,500" id="left" material="rock" normal="1,0" static="true" tag="detaching"/>
+  <rectangle height="10" id="treebase" material="verysticky" rotation="0.0" static="true" tag="" width="200" x="0.0" y="150.0"/>
+  <SceneLayer alpha="1" colorize="255,255,255" depth="-2" image="IMAGE_SCENE_JINGLEBALLS_CHIMNEYLEFT" rotation="0" scalex="3" scaley="3" x="354.1135872"
+              y="1082.10735872"/>
+  <SceneLayer alpha="1" colorize="255,255,255" depth="-2" image="IMAGE_SCENE_JINGLEBALLS_CHIMNEYRIGHT" rotation="0" scalex="3" scaley="3" x="825.23377152"
+              y="1087.08421376"/>
+  <rectangle height="100" id="chimneyleft1" material="IvyTower" rotation="-1.43586995151" static="true" width="800" x="394.04" y="1259.84"/>
+  <rectangle height="100" id="chimneyright1" material="IvyTower" rotation="1.4255115486" static="true" width="800" x="787.16" y="1267.24"/>
+  <rectangle height="100" id="chimneyleft2" material="IvyTower" rotation="1.36513966138" static="true" width="350" x="414.16" y="748.96"/>
+  <rectangle height="100" id="chimneyright2" material="IvyTower" rotation="-1.36135681656" static="true" width="350" x="762.6" y="748.96"/>
+  <rectangle height="80" id="fireplaceMantel" rotation="0.0" static="true" tag="walkable" width="470" x="612.76086016" y="423.19426304"/>
+  <rectangle height="100" id="chimneyCap" material="rock" rotation="0.0822933158028" static="true" width="500" x="598.304" y="1611.7104"/>
+  <SceneLayer alpha="1" colorize="255,255,255" depth="-8" image="IMAGE_SCENE_JINGLEBALLS_CHIMNEYBACK" rotation="0" scalex="2.5" scaley="2.5" x="614.18528256"
+              y="832.12067584"/>
+  <rectangle height="100" id="fireplaceStopSign" rotation="0.0" static="true" tag="stopsign" width="5" x="438.672" y="202.9248"/>
+  <compositegeom id="giftbox" image="IMAGE_SCENE_JINGLEBALLS_GIFTBOX" imagepos="-550,240" imagerot="0.0" imagescale="1.5,1.5" material="rock" rotation="0.0"
                  static="false" tag="break=1" x="-550" y="275">
-    <rectangle height="240" id="geometry1" mass="500" rotation="0.0" width="20" x="100" y="0"/>
-    <rectangle height="240" id="geometry2" mass="500" rotation="0.0" width="20" x="-100" y="0"/>
-    <rectangle height="20" id="geometry3" mass="5000" rotation="0.0" width="220" x="0.0" y="-110.0"/>
-    <rectangle height="70" id="geometry4" mass="500" rotation="0.0" width="250" x="0" y="95"/>
+    <rectangle height="20" id="giftboxTop" mass="500" rotation="0.0" width="180" x="0" y="50"/>
+    <rectangle height="160" id="giftboxLeft" mass="500" rotation="0.0" width="20" x="-100" y="-40"/>
+    <rectangle height="160" id="giftboxRight" mass="500" rotation="0.0" width="20" x="100" y="-40"/>
+    <rectangle height="20" id="giftboxBottom" mass="5000" rotation="0.0" width="220" x="0.0" y="-110.0"/>
   </compositegeom>
   <hinge anchor="-550,280" body1="giftbox"/>
-  <rectangle height="100" id="geometry5" rotation="0.0" static="true" tag="stopsign" width="5" x="438.672" y="202.9248"/>
-  <linearforcefield antigrav="false" center="595.2,1094.92" dampeningfactor="0" enabled="true" force="0,-1" geomonly="false" height="1000" type="gravity"
-                    water="false" width="350"/>
+  <SceneLayer alpha="1" colorize="255,255,255" depth="-6" image="IMAGE_SCENE_JINGLEBALLS_TREE" name="tree" rotation="0" scalex="1.7" scaley="1.7" x="-1.24"
+              y="496.5670272"/>
+  <SceneLayer alpha="1" colorize="255,255,255" depth="-4" image="IMAGE_SCENE_JINGLEBALLS_STAR" name="star" rotation="0" x="-4.61264128" y="757.68745728"/>
+  <SceneLayer alpha="1" colorize="255,255,255" depth="-4" image="IMAGE_SCENE_JINGLEBALLS_FIREPLACESIDE" name="star" rotation="0" scalex="2" scaley="2"
+              x="421.60690432" y="281.34143744"/>
+  <SceneLayer alpha="1" colorize="255,255,255" depth="-4" image="IMAGE_SCENE_JINGLEBALLS_FIREPLACESIDE" name="star" rotation="0" scalex="2" scaley="2"
+              x="806.394816" y="282.4656512"/>
+  <SceneLayer alpha="1" colorize="255,255,255" depth="-3" image="IMAGE_SCENE_JINGLEBALLS_FIREPLACEMANTEL" name="star" rotation="0" scalex="4" scaley="2"
+              x="628.88086016" y="425.5584768"/>
+  <particles depth="0" effect="blackSmokeRising" pos="593.048744186,471.113488372"/>
 </scene>

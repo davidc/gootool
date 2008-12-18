@@ -1,24 +1,24 @@
 <level allowskip="true" autobounds="true" ballsrequired="16" letterboxed="false" strandgeom="false" textcolor="255,255,255" texteffects="true"
        timebugprobability="0.333" visualdebug="false">
   <camera aspect="normal" endpos="0,450" endzoom="0.571">
-    <poi pause="1" pos="600,300" traveltime="0" zoom="1.3"/>
-    <poi pause="0.7" pos="0,500" traveltime="3" zoom="0.6"/>
-    <poi pause="0.2" pos="0,450" traveltime="2" zoom="0.941"/>
+    <poi pause="1" pos="600,300" traveltime="0" zoom="1.2"/>
+    <poi pause="2" pos="0,480" traveltime="3" zoom="0.58"/>
+    <poi pause="0.2" pos="0,450" traveltime="1.5" zoom="0.941"/>
   </camera>
-  <camera aspect="widescreen" endpos="0,450" endzoom="0.684">
-    <poi pause="1" pos="600,300" traveltime="0" zoom="1.3"/>
-    <poi pause="0.7" pos="0,500" traveltime="3" zoom="0.6"/>
-    <poi pause="0.2" pos="0,450" traveltime="2" zoom="0.941"/>
+  <camera aspect="widescreen" endpos="0,450" endzoom="0.571">
+    <poi pause="1" pos="600,300" traveltime="0" zoom="1.2"/>
+    <poi pause="2" pos="0,480" traveltime="3" zoom="0.58"/>
+    <poi pause="0.2" pos="0,450" traveltime="1.5" zoom="0.941"/>
   </camera>
   <music id="SOUND_LEVEL_JINGLEBALLS_MUSIC"/>
   <loopsound id="SOUND_LEVEL_JINGLEBALLS_LOOP_FIRE"/>
-  <fire depth="0" particles="fireStackSquat" radius="180" x="600.0" y="200.0"/>
+  <fire depth="0" particles="fireStackSquat" radius="160" x="600.0" y="200.0"/>
   <signpost alpha="1" colorize="255,255,255" depth="-4" image="IMAGE_SCENE_JINGLEBALLS_SIGNPOST_BROWN" name="signpost1" rotation="30" scalex="0.823"
             scaley="0.912" text="SIGNPOST_JINGLEBALLS_1" x="332.104" y="354.8124"/>
   <signpost alpha="1" colorize="255,255,255" depth="-4" image="IMAGE_SCENE_JINGLEBALLS_SIGNPOST_BROWN" name="signpost2" rotation="10" scalex="0.823"
             scaley="0.912" text="SIGNPOST_JINGLEBALLS_2" x="-597.376" y="246.7724"/>
-  <signpost alpha="1" colorize="255,255,255" depth="-24" image="IMAGE_SCENE_JINGLEBALLS_SIGNPOST_BROWN" name="signpost3" rotation="80" scalex="0.823"
-            scaley="0.912" text="SIGNPOST_JINGLEBALLS_3" x="665.389827263" y="1420.17190052"/>
+  <signpost alpha="1" colorize="255,255,255" depth="-1" image="IMAGE_SCENE_JINGLEBALLS_SIGNPOST_BROWN" name="signpost3" rotation="80" scalex="0.823"
+            scaley="0.912" text="SIGNPOST_JINGLEBALLS_3" x="676.153027263" y="1418.63430052"/>
   <pipe depth="0" id="0">
     <Vertex x="600" y="1320"/>
     <Vertex x="600" y="2000"/>
@@ -57,7 +57,7 @@
   <BallInstance angle="0" discovered="false" id="dozer1" type="XmasProduct" x="315.349677419" y="218.767741935"/>
   <BallInstance angle="0" discovered="false" id="dozer2" type="XmasProduct" x="339.397960458" y="177.621810614"/>
   <BallInstance angle="0" discovered="false" id="dozer3" type="XmasProduct" x="372.050322581" y="221.107096774"/>
-  <BallInstance angle="0" discovered="false" id="dozer4" type="XmasProduct" x="287.101935484" y="173.500645161"/>
+  <BallInstance angle="0" discovered="false" id="dozer4" type="XmasProduct" x="418.541935484" y="210.700645161"/>
   <BallInstance angle="0" discovered="false" id="dozer5" type="XmasProduct" x="397.971612903" y="174.358709677"/>
   <Strand gb1="0" gb2="1"/>
   <Strand gb1="1" gb2="2"/>
