@@ -2,10 +2,10 @@
   <id>com.goofans.davidc.jingleballs</id>
   <name>Jingle Balls</name>
   <type>level</type>
-  <version>0.5</version>
+  <version>0.6</version>
   <description><![CDATA[
   <html>
-  <p>A fun little Christmas level of medium-to-advanced difficulty.</p>
+  <p>The night before Christmas. The Goo Balls are nestled all snug by the fire, but Ebenezer Sign Painter has other ideas...</p>
 
   <ul>
     <li>Level design: David Croft (davidc)</li>
@@ -59,6 +59,14 @@
    - adjusted particle effect to suit window
    - added de, ru, es translations
    - made the bomb explosion zone smaller
+  0.6
+   - center fireplace and all related elements around x-coord 600
+   - new fireplace and chimney graphics
+   - merge chimney into compositegeom
+   - reduce time bug prob from 0.33 to 0.25
+   - put giftbox ball at back so bomb is in front of it
+   - moved snow effect back behind wall
+   - sent to beta testers
   -->
 
 </addin>
