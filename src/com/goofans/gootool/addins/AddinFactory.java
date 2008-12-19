@@ -127,7 +127,7 @@ public class AddinFactory
   // Synchronized since xpath expressions and patterns aren't thread safe
   private static synchronized Addin readManifest(InputStream is, File addinDiskFile) throws IOException, AddinFormatException
   {
-    Document document = XMLUtil.loadDocumentFromReader(new InputStreamReader(is));
+    Document document = XMLUtil.loadDocumentFromReader(new InputStreamReader(is, "UTF-8"));
 
     try {
       String specVersionStr = getString(document, XPATH_ADDIN_SPECVERSION);
@@ -218,6 +218,8 @@ public class AddinFactory
       for (int i = 0; i < map.getLength(); i++) {
         Node node = map.item(i);
         levelSubtitles.put(node.getNodeName(), node.getNodeValue());
+        System.out.println("node.getNodeName() = " + node.getNodeName());
+        System.out.println("node.getNodeValue() = " + node.getNodeValue());
       }
       if (levelSubtitles.get("text") == null) throw new AddinFormatException("No text attribute on level subtitle");
     }
@@ -282,7 +284,7 @@ public class AddinFactory
   @SuppressWarnings({"UseOfSystemOutOrSystemErr"})
   public static void main(String[] args) throws IOException, AddinFormatException
   {
-    String file = "addins/src/net.davidc.test.merger/addin.xml";
+    String file = "addins/src/com.goofans.davidc.jingleballs/addin.xml";
     Addin addin = readManifest(new FileInputStream(file), null);
 
     System.out.println("addin = " + addin);

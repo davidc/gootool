@@ -6,6 +6,7 @@
 - More descriptive errors when saving with an invalid addin enabled
 - Remember the most recently used addin installation folder
 - Automatically enable an addin after installing it
+- addin.xml assumed to be in UTF-8, fixes non-latin characters
 
 0.9.5
 
