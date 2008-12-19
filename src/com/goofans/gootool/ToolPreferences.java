@@ -24,6 +24,7 @@ public class ToolPreferences
   private static final String PREF_IGNORE_UPDATE = "gootool_ignore_update";
   private static final String PREF_L10N_MODE = "gootool_l10n_enabled";
   private static final String PREF_MRU_ADDIN_DIR = "gootool_mru_addin_dir";
+  private static final String PREF_MRU_TOWER_DIR = "gootool_mru_tower_dir";
 
   private ToolPreferences()
   {
@@ -89,6 +90,16 @@ public class ToolPreferences
   public static String getMruAddinDir()
   {
     return PREFS.get(PREF_MRU_ADDIN_DIR, null);
+  }
+
+  public static void setMruTowerDir(String mruDir)
+  {
+    PREFS.put(PREF_MRU_TOWER_DIR, mruDir);
+  }
+
+  public static String getMruTowerDir()
+  {
+    return PREFS.get(PREF_MRU_TOWER_DIR, null);
   }
 
   public static void setMruAddinDir(String mruDir)

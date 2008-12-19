@@ -3,16 +3,20 @@ package com.goofans.gootool.view;
 import net.infotrek.util.TextUtil;
 
 import com.goofans.gootool.GooTool;
+import com.goofans.gootool.ToolPreferences;
 import com.goofans.gootool.profile.*;
 
 import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.border.LineBorder;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableColumnModel;
+import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.io.File;
 import java.text.NumberFormat;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -38,14 +42,23 @@ public class ProfilePanel implements ActionListener
   private JLabel towerNodeBalls;
   private JLabel towerStrandBalls;
   private JLabel towerHeight;
+  //  private JButton viewTowerButton;
+  private JButton saveTowerButton;
 
   private static final String CMD_REFRESH = "REFRESH";
   private static final String CMD_PROFILE_CHANGED = "PROFILE_CHANGED";
-  private Profile currentProfile;
+  private static final String CMD_VIEW_TOWER = "ViewTower";
+  private static final String CMD_SAVE_TOWER = "SaveTower";
+  private static final String CMD_SAVE_TOWER_THUMB = "SaveTowerThumb";
+  private static final String CMD_SAVE_TOWER_FULL = "SaveTowerFull";
+  private static final String CMD_SAVE_TOWER_TRANS = "SaveTowerTrans";
 
+  private Profile currentProfile;
 
   private static final String[] COLUMN_NAMES;
   private ProfilePanel.LevelsTableModel levelsModel;
+  private TowerRenderer tr;
+  private JPopupMenu saveTowerMenu;
 
   static {
     // TODO load from resources
@@ -57,6 +70,12 @@ public class ProfilePanel implements ActionListener
   {
     refreshButton.setActionCommand(CMD_REFRESH);
     refreshButton.addActionListener(this);
+
+//    viewTowerButton.setActionCommand(CMD_VIEW_TOWER);
+//    viewTowerButton.addActionListener(this);
+
+    saveTowerButton.setActionCommand(CMD_SAVE_TOWER);
+    saveTowerButton.addActionListener(this);
 
     profilesCombo.setActionCommand(CMD_PROFILE_CHANGED);
     profilesCombo.addActionListener(this);
@@ -76,14 +95,16 @@ public class ProfilePanel implements ActionListener
 //    levelsTable.so
 // TODO sorting
 
+    createSaveTowerMenu();
+
     if (ProfileFactory.isProfileFound()) {
       loadProfiles();
     }
   }
 
-  public void actionPerformed(ActionEvent e)
+  public void actionPerformed(ActionEvent event)
   {
-    String cmd = e.getActionCommand();
+    String cmd = event.getActionCommand();
 
     log.fine("cmd " + cmd);
 
@@ -147,7 +168,7 @@ public class ProfilePanel implements ActionListener
         towerPanel.removeAll();
 
         try {
-          final TowerRenderer tr = new TowerRenderer(currentProfile.getTower());
+          tr = new TowerRenderer(currentProfile.getTower());
           tr.render();
 
           BufferedImage thumbImg = tr.getThumbnail();
@@ -163,42 +184,119 @@ public class ProfilePanel implements ActionListener
           {
             public void mouseClicked(MouseEvent e)
             {
-              // TODO make this a proper gui frame, with scrollbars etc.
-              // TODO parent frame
-              final JDialog d = new JDialog();
-              d.setTitle("Tower");
-              BufferedImage prettyImg = tr.getPretty();
-              d.setPreferredSize(new Dimension(prettyImg.getWidth(), prettyImg.getHeight()));
-              d.setIconImage(GooTool.getMainIconImage());
-              JLabel jLabel = new JLabel(new ImageIcon(prettyImg));
-              jLabel.setBorder(new LineBorder(Color.BLACK));
-              d.add(jLabel);
-              d.setModal(true);
-              d.pack();
-              d.setLocationByPlatform(true);
-
-              d.addKeyListener(new KeyAdapter()
-              {
-                public void keyPressed(KeyEvent e)
-                {
-                  if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
-                    d.setVisible(false);
-                  }
-                }
-              });
-
-              d.setVisible(true);
+              showTower();
             }
           });
           towerPanel.add(thumb);
+//          viewTowerButton.setEnabled(true);
+          saveTowerButton.setEnabled(true);
         }
         catch (IOException e1) {
-          log.log(Level.SEVERE, "Unable to render tower", e);
+          log.log(Level.SEVERE, "Unable to render tower", event);
           towerPanel.add(new JLabel("Sorry, couldn't render your tower."));
+//          viewTowerButton.setEnabled(false);
+          saveTowerButton.setEnabled(false);
         }
 
       }
     }
+    else if (cmd.equals(CMD_VIEW_TOWER) && tr != null) {
+      showTower();
+    }
+    else if (cmd.equals(CMD_SAVE_TOWER) && tr != null) {
+      saveTowerMenu.show((Component) event.getSource(), 0, saveTowerButton.getHeight());
+    }
+    else if (cmd.equals(CMD_SAVE_TOWER_THUMB) && tr != null) {
+      saveTower(tr.getThumbnail());
+    }
+    else if (cmd.equals(CMD_SAVE_TOWER_FULL) && tr != null) {
+      saveTower(tr.getPretty());
+    }
+    else if (cmd.equals(CMD_SAVE_TOWER_TRANS) && tr != null) {
+      saveTower(tr.getFullSize());
+    }
+  }
+
+  private void saveTower(BufferedImage image)
+  {
+    JFileChooser chooser = new JFileChooser(ToolPreferences.getMruTowerDir());
+    chooser.setFileFilter(new FileNameExtensionFilter("PNG Image", "png"));
+    int returnVal = chooser.showSaveDialog(this.rootPanel);
+
+    // TODO : Do you want to overwrite?
+
+    if (returnVal == JFileChooser.APPROVE_OPTION) {
+
+      File file = chooser.getSelectedFile();
+
+      if (!file.getName().endsWith(".png")) {
+        file = new File(file.getParentFile(), file.getName() + ".png");
+      }
+
+      if (file.exists()) {
+        returnVal = JOptionPane.showConfirmDialog(this.rootPanel, file.getName() + " already exists, would you like to overwrite it?", "Overwrite file?", JOptionPane.YES_NO_OPTION);
+        if (returnVal != JOptionPane.YES_OPTION) return;
+      }
+
+      log.info("Saving tower to " + file);
+      try {
+        ImageIO.write(image, "PNG", file);
+      }
+      catch (IOException e) {
+        log.log(Level.WARNING, "Unable to save tower", e);
+        JOptionPane.showMessageDialog(this.rootPanel, "Unable to save file: " + e.getLocalizedMessage(), "Unable to save tower", JOptionPane.ERROR_MESSAGE);
+      }
+
+      ToolPreferences.setMruTowerDir(chooser.getCurrentDirectory().getPath());
+    }
+  }
+
+  private void createSaveTowerMenu()
+  {
+    saveTowerMenu = new JPopupMenu();
+    JMenuItem menuItem;
+    menuItem = new JMenuItem("Save full-size");
+    menuItem.setActionCommand(CMD_SAVE_TOWER_FULL);
+    menuItem.addActionListener(this);
+    saveTowerMenu.add(menuItem);
+    menuItem = new JMenuItem("Save thumbnail");
+    menuItem.setActionCommand(CMD_SAVE_TOWER_THUMB);
+    menuItem.addActionListener(this);
+    saveTowerMenu.add(menuItem);
+    menuItem = new JMenuItem("Save transparent");
+    menuItem.setActionCommand(CMD_SAVE_TOWER_TRANS);
+    menuItem.addActionListener(this);
+    saveTowerMenu.add(menuItem);
+  }
+
+  private void showTower()
+  {
+    // TODO make this a proper gui frame, with scrollbars etc.
+    // TODO parent frame
+    final JDialog d = new JDialog();
+    d.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+    d.setTitle("Tower");
+    BufferedImage prettyImg = tr.getPretty();
+    d.setPreferredSize(new Dimension(prettyImg.getWidth(), prettyImg.getHeight()));
+    d.setIconImage(GooTool.getMainIconImage());
+    JLabel jLabel = new JLabel(new ImageIcon(prettyImg));
+    jLabel.setBorder(new LineBorder(Color.BLACK));
+    d.add(jLabel);
+    d.setModal(true);
+    d.pack();
+    d.setLocationByPlatform(true);
+
+    d.addKeyListener(new KeyAdapter()
+    {
+      public void keyPressed(KeyEvent e)
+      {
+        if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+          d.setVisible(false);
+        }
+      }
+    });
+
+    d.setVisible(true);
   }
 
   private void loadProfiles()
