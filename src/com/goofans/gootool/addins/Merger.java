@@ -27,14 +27,13 @@ public class Merger
   public Merger(File encryptedFile, Reader transform) throws IOException, TransformerException
   {
     this(new StringReader(BinFormat.decodeFile(encryptedFile)), transform);
-    System.out.println("encryptedFile = " + encryptedFile);
-    System.out.println(">>"+Utilities.readReaderIntoString(new FinalNewlineRemovingReader(new StringReader(BinFormat.decodeFile(encryptedFile))))+"<<");
-
+//    System.out.println("encryptedFile = " + encryptedFile);
+//    System.out.println(">>"+Utilities.readReaderIntoString(new FinalNewlineRemovingReader(new StringReader(BinFormat.decodeFile(encryptedFile))))+"<<");
   }
 
   public Merger(Reader input, Reader transform) throws TransformerException
   {
-    System.out.println("input = " + input);
+//    System.out.println("input = " + input);
     this.input = input;
 
     Source transformSource = new StreamSource(new FinalNewlineRemovingReader(transform));

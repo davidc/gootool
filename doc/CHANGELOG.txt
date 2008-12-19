@@ -1,3 +1,8 @@
+0.9.7
+
+- fixed addin transform files to be UTF-8, fixes translated texts
+- Added OCD flags for custom levels
+
 0.9.6
 
 - You can now save the image of your tower (transparent, full-size, or thumbnail)

@@ -5,9 +5,9 @@
   <xsl:param name="level_name_id"/>
 
   <xsl:variable name="firstLevelX" select="-630"/>
-  <xsl:variable name="firstLevelY" select="920"/>
+  <xsl:variable name="firstLevelY" select="910"/>
 
-  <xsl:variable name="offsetY" select="-50"/>
+  <xsl:variable name="offsetY" select="-70"/>
 
   <xsl:variable name="addedLevels">
     <xsl:choose>
@@ -32,6 +32,7 @@
   </xsl:template>
 
   <xsl:template match="/scene/buttongroup[@id='levelMarkerGroup']">
+
     <xsl:copy>
       <xsl:copy-of select="@*"/>
       <xsl:apply-templates/>
@@ -42,10 +43,10 @@
               onclick="pl_{$level_id}"/>
       <!--onmouseenter="ss_{$level_id}" onmouseexit="hs_{$level_id}"-->
 
-      <!-- TODO have the position of the button as a param, so levels don't overlap -->
-      <!-- TODO add ocd flag location too -->
     </xsl:copy>
   </xsl:template>
+
+  <!-- Add the text label and the OCD flag -->
 
   <xsl:template match="/scene">
     <xsl:copy>
@@ -58,6 +59,11 @@
       <label id="txt_{$level_id}" depth="8" x="{$ourLevelX + 30}" y="{$ourLevelY}" align="left"
              rotation="6.337" scale="0.7" overlay="false" screenspace="false"
              font="FONT_INGAME36" text="{$level_name_id}"/>
+
+      <SceneLayer id="ocd_{$level_id}" name="OCD_flag1" depth="7.2" x="{$ourLevelX}" y="{$ourLevelY + 20}"
+                  scalex="0.7" scaley="0.7" rotation="17.59" alpha="1" colorize="255,255,255" image="IMAGE_SCENE_ISLAND1_OCD_FLAG1"
+                  anim="ocdFlagWave" animspeed="1"/>
+
     </xsl:copy>
   </xsl:template>
 </xsl:transform>

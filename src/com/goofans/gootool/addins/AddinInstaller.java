@@ -178,7 +178,7 @@ public class AddinInstaller
     if (!mergeFile.exists()) throw new AddinFormatException("Addin tries to merge a nonexistent file: " + fileName);
 
     try {
-      Merger merger = new Merger(mergeFile, new InputStreamReader(is));
+      Merger merger = new Merger(mergeFile, new InputStreamReader(is, "UTF-8"));
       merger.merge();
       merger.writeEncoded(mergeFile);
     }
@@ -220,7 +220,7 @@ public class AddinInstaller
 
     File textFile = new File(WorldOfGoo.getCustomDir(), "properties/text.xml.bin");
     try {
-      Merger merger = new Merger(textFile, new InputStreamReader(AddinInstaller.class.getResourceAsStream("/level-text.xsl")));
+      Merger merger = new Merger(textFile, new InputStreamReader(AddinInstaller.class.getResourceAsStream("/level-text.xsl"), "UTF-8"));
       merger.setTransformParameter("level_name_string", makeString(levelNameId, addin.getLevelNames()));
       merger.setTransformParameter("level_text_string", makeString(levelTextId, addin.getLevelSubtitles()));
       merger.merge();
@@ -235,7 +235,7 @@ public class AddinInstaller
 
     File islandFile = new File(WorldOfGoo.getCustomDir(), "res/islands/island1.xml.bin");
     try {
-      Merger merger = new Merger(islandFile, new InputStreamReader(AddinInstaller.class.getResourceAsStream("/level-island.xsl")));
+      Merger merger = new Merger(islandFile, new InputStreamReader(AddinInstaller.class.getResourceAsStream("/level-island.xsl"), "UTF-8"));
 
       merger.setTransformParameter("level_id", addin.getLevelDir());
       merger.setTransformParameter("level_name_id", levelNameId);
@@ -252,7 +252,7 @@ public class AddinInstaller
     /* Now add our buttons to island1.scene.xml */
     File islandSceneFile = new File(WorldOfGoo.getCustomDir(), "res/levels/island1/island1.scene.bin");
     try {
-      Merger merger = new Merger(islandSceneFile, new InputStreamReader(AddinInstaller.class.getResourceAsStream("/level-island-scene.xsl")));
+      Merger merger = new Merger(islandSceneFile, new InputStreamReader(AddinInstaller.class.getResourceAsStream("/level-island-scene.xsl"), "UTF-8"));
 
       merger.setTransformParameter("level_id", addin.getLevelDir());
       merger.setTransformParameter("level_name_id", levelNameId);

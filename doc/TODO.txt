@@ -1,5 +1,6 @@
 MILESTONE 0.10.0 (Final beta version)
 
+- NEW FEATURE: OCD flags on the island
 - BUG FIX: addin merging doesn't work on Linux due to windows line endings
 - NEW FEATURE: command line interface to image l10n tool for the wiki site, no gui
 - NEW FEATURE: Windows installer
@@ -129,3 +130,12 @@ WoG  1.30
 
 <xanax`> sebastienkerguen@free.fr
 for christmas level design perhaps
+
+
+Jingle Balls testers:
+
+Vials - ruswog@gmail.com (RU)
+Mincus - phillmwebster@gmail.com
+herminator - herman@hiddema.com
+Decar - tehill@gmail.com
+tek - teknorat@gmail.com
