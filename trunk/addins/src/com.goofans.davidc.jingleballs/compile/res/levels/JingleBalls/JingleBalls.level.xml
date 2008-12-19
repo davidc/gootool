@@ -1,5 +1,5 @@
 <level allowskip="true" autobounds="true" ballsrequired="16" letterboxed="false" strandgeom="false" textcolor="255,255,255" texteffects="true"
-       timebugprobability="0.25" visualdebug="false">
+       timebugprobability="0.15" visualdebug="false">
   <camera aspect="normal" endpos="0,450" endzoom="0.571">
     <poi pause="1" pos="600,300" traveltime="0" zoom="1.2"/>
     <poi pause="2" pos="0,480" traveltime="3" zoom="0.58"/>
@@ -16,7 +16,7 @@
   <signpost alpha="1" colorize="255,255,255" depth="-3" image="IMAGE_SCENE_JINGLEBALLS_SIGNPOST_BROWN" name="signpost1" rotation="30" scalex="0.823"
             scaley="0.912" text="SIGNPOST_JINGLEBALLS_1" x="385.111284079" y="332.105844329"/>
   <signpost alpha="1" colorize="255,255,255" depth="-4" image="IMAGE_SCENE_JINGLEBALLS_SIGNPOST_BROWN" name="signpost2" rotation="10" scalex="0.823"
-            scaley="0.912" text="SIGNPOST_JINGLEBALLS_2" x="-545.244872613" y="228.939833117"/>
+            scaley="0.912" text="SIGNPOST_JINGLEBALLS_2" x="-560.244872613" y="228.939833117"/>
   <signpost alpha="1" colorize="255,255,255" depth="-1" image="IMAGE_SCENE_JINGLEBALLS_SIGNPOST_BROWN" name="signpost3" rotation="80" scalex="0.823"
             scaley="0.912" text="SIGNPOST_JINGLEBALLS_3" x="675.628540002" y="1407.09558077"/>
   <pipe depth="0" id="0">
@@ -24,7 +24,7 @@
     <Vertex x="600" y="2000"/>
   </pipe>
   <levelexit filter="" id="theExit" pos="600,1320" radius="75"/>
-  <BallInstance angle="0" id="giftbox" type="XmasGift" x="-500" y="290"/>
+  <BallInstance angle="0" id="giftbox" type="XmasGift" x="-500" y="245"/>
   <BallInstance angle="0" id="0" type="AnchorFriendly" x="0" y="880"/>
   <BallInstance angle="0" id="1" type="XmasBomb" x="0" y="750"/>
   <BallInstance angle="0" id="2" type="XmasIvy" x="-52.0" y="710.0"/>

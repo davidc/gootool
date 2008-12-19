@@ -2,7 +2,7 @@
   <id>com.goofans.davidc.jingleballs</id>
   <name>Jingle Balls</name>
   <type>level</type>
-  <version>0.6</version>
+  <version>0.7</version>
   <description><![CDATA[
   <html>
   <p>The night before Christmas. The Goo Balls are nestled all snug by the fire, but Ebenezer Sign Painter has other ideas...</p>
@@ -21,9 +21,10 @@
     <name text="Jingle Balls"
             ru="Рождественские бубенцы"/>
     <subtitle text="goo balls roasting on an open fire"
-            de="Die Goo-Bälle rösten über dem offenen Feuer"
+            de="Die Goo-Bälle rösten über dem Feuer"
             ru="шарики, поджаривающиеся на открытом огне"
-            es="las bolas de goo tocan a fuego"/>
+            es="las bolas de goo tocan a fuego"
+            nl="goo-ballen bij de open haard"/>
     <ocd>balls,43</ocd>
   </level>
 
@@ -67,6 +68,14 @@
    - put giftbox ball at back so bomb is in front of it
    - moved snow effect back behind wall
    - sent to beta testers
+  0.7
+   - Made the gift box walls much thicker to prevent balls being thrown inside, fit gift box ball snugly in center
+   - Made the gift box background image the same size and position as the foreground ball image to prevent ball shrinking when off screen
+   - Moved ballbuster up above floor level so that it busts quicker and made it smaller
+   - timebug prob reduced from 0.25 to 0.15
+   - moved left wall slightly off-screen, move right wall slightly in
+   - updated german subtitle, added dutch translation
+   - fixed text.xml.xsl charset to fix russian translation
   -->
 
 </addin>

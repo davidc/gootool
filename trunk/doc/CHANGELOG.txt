@@ -1,6 +1,6 @@
 0.9.7
 
-- fixed addin transform files to be UTF-8, fixes translated texts
+- fixed addin transform files to be UTF-8, fixes translated texts with non-ASCII characters
 - Added OCD flags for custom levels
 
 0.9.6
