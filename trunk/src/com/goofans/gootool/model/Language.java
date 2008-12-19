@@ -48,6 +48,7 @@ public class Language
     languages.add(new Language("fr", "French"));
     languages.add(new Language("it", "Italian"));
     languages.add(new Language("nl", "Dutch"));
+    languages.add(new Language("ru", "Russian"));
     LANGUAGES = Collections.unmodifiableList(languages);
   }
 
