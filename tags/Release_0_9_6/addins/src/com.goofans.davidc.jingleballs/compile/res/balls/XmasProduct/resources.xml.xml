@@ -1,0 +1,24 @@
+<?xml version="1.0" ?>
+<ResourceManifest>
+
+  <Resources id="ball_XmasProduct">
+    <!-- Unique Images -->
+    <SetDefaults path="res/balls/XmasProduct/" idprefix="IMAGE_BALL_XMASPRODUCT_" />
+    <Image id="BODY"  path="body"/>
+    <Image id="HAT"	  path="hat"/>
+
+    <!-- Images from GooProduct-->
+    <SetDefaults path="res/balls/GooProduct/" idprefix="IMAGE_BALL_XMASPRODUCT_" />
+
+    <Image id="STRAND"	path="spring_goo"/>
+    <Image id="SPLAT1"	path="splat1"/>
+    <Image id="SPLAT2"	path="splat2"/>
+
+
+    <!-- Unique Sounds -->
+    <SetDefaults path="res/balls/GooProduct/" idprefix="SOUND_BALL_XMASPRODUCT_" />
+
+
+  </Resources>
+
+</ResourceManifest>

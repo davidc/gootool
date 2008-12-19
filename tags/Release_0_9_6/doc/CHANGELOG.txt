@@ -1,0 +1,95 @@
+0.9.6
+
+- You can now save the image of your tower (transparent, full-size, or thumbnail)
+- addin.xml assumed to be in UTF-8, fixes non-latin characters in addins
+- Allow user to install an addin that already exists, prompting to downgrade/replace/upgrade it
+- When installing a level addin, notify them again that the level appears on chapter 1.
+- Memory usage in About dialog is now updated each time you open the window
+- Some dialog memory leaks plugged
+- More descriptive errors when saving with an invalid addin enabled
+- Remember the most recently used addin installation folder
+- Automatically enable an addin after installing it
+- Renamed all remaining uses of "wog" abbreviation
+- Layout improvements in profile and addins panels
+
+0.9.5
+
+- added Linux build, also look in .wine and .PlayOnLinux for exe/profile
+- allow selection of multiple addins to install
+- better error description when l10n source image can't be loaded
+- added new version notification on startup and via help menu
+- added new version ignore option
+- added menu items for various help webpages
+- some initial internationalisation of GooTool itself
+- fixed NPE on save when no resolution selected, various fixes to make sure 800x600 always appears as default 
+- added java JRE/JVM information to About dialog
+- clarify that GooTool doesn't modify existing WoG installation
+
+0.9.4
+
+- make sure 800x600 resolution is always available
+- fixed charset on wiki downloads (e.g. Cyrillic)
+- added layers and gaussian blur effects to image localisation tool
+- added arched text to l10n tool
+- added fit-to-box (bounding box) positioning to l10n tool
+- added justification to l10n tool
+- added debug boundary drawing to imagegenerator and checkbox to GUI
+- added alpha channel to color spec in l10n tool
+- major refactor of XML format in l10n tool 
+- GUI l10n usage shows a progress dialog
+- building images to output directory added
+
+0.9.3
+
+- added image localisation tool for translators
+- Addin level OCD requirement is now optional
+- possible fix for pyris NPE (unselected resolution)
+
+0.9.2
+
+- Fixed bug saving when unrecognised language is selected
+- Added the missing languages to the options pane
+
+0.9.1
+
+- Profile parsing fixed for certain test cases
+- Added more debugging for NPE on "save" bug
+- Improved logging, removed redundant logging
+- Don't try to build addins that have "vanished" (deleted from addins dir)
+- ESC works to close dialogs
+- Try and create the custom directory if the user hasn't already created it
+- Less cramped GUI
+- Display available tower balls on profile
+
+0.9.0
+
+- Enabling addins. You can now enable addins and build your World of Goo!
+- You can now install level-type addins. They are now fully merged and appear as new levels at the top left of Chapter 1.
+- Better file/directory support. GooTool will now remember where it last found WorldOfGoo.exe, and it lets you manually locate your profile if it can't find it.
+- You can now choose the custom directory where GooTool will build your World. This enables Vista users with UAC restrictions to still build.
+- Progress bar added for long operations such as initial load and file merging.
+- Skip Opening Movie now works
+- Loading screen watermark now works.
+- Addins can be reordered properly.
+- Taller towers are no longer cropped in the profile pane.
+
+0.8.0
+
+- Initial release
+ -Loading current preferences (language, resolution, ui_inset).
+- Saving preferences (to config.txt.new - does not overwrite config.txt yet)
+- Loading profiles.
+- Displaying profile data. 
+- Displaying level achievements.
+- Displaying tower data.
+- Generating various images of the tower.
+- Installing mod-type addins to the addin directory (but you can't enable them yet).
+- Validating the addins.
+- Uninstalling mod-type addins from the addin directory.
+- Viewing addin properties.
+- Reordering addin priority.
+- Save and Launch.
+- Automatic detection of JRE.
+- Decrypting and encrypting .bin files.
+- Decrypting and parsing profile data.
+- Transformation/merging of XML files.
