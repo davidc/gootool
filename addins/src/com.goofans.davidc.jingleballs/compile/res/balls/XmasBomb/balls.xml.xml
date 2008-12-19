@@ -27,7 +27,7 @@
       
       burntime="3.0"
       detonateforce="500"
-      detonateradius="350"
+      detonateradius="100"
 	  
 	  attenuationselect="0.05, 1.0, 1.2"
 	  attenuationdeselect="0.05, 1.2, 1.0"

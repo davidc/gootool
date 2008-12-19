@@ -2,7 +2,7 @@
   <id>com.goofans.davidc.jingleballs</id>
   <name>Jingle Balls</name>
   <type>level</type>
-  <version>0.4</version>
+  <version>0.5</version>
   <description><![CDATA[
   <html>
   <p>A fun little Christmas level of medium-to-advanced difficulty.</p>
@@ -18,8 +18,12 @@
 
   <level>
     <dir>JingleBalls</dir>
-    <name text="Jingle Balls"/>
-    <subtitle text="goo balls roasting on an open fire"/>
+    <name text="Jingle Balls"
+            ru="Рождественские бубенцы"/>
+    <subtitle text="goo balls roasting on an open fire"
+            de="Die Goo-Bälle rösten über dem offenen Feuer"
+            ru="шарики, поджаривающиеся на открытом огне"
+            es="las bolas de goo tocan a fuego"/>
     <ocd>balls,43</ocd>
   </level>
 
@@ -51,6 +55,10 @@
    - made treeBase walkable
    - upped OCD to 43 balls
    - more new graphics from Sebastien
+  0.5
+   - adjusted particle effect to suit window
+   - added de, ru, es translations
+   - made the bomb explosion zone smaller
   -->
 
 </addin>
