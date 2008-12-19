@@ -1,5 +1,6 @@
 0.9.6
 
+- You can now save the image of your tower (transparent, full-size, or thumbnail)
 - Memory usage in About dialog is now updated each time you open the window
 - Some dialog memory leaks plugged
 - More descriptive errors when saving with an invalid addin enabled
