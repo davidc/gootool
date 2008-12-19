@@ -1,9 +1,7 @@
-MILESTONE 0.9.6
-
-- BUG FIX: addin merging doesn't work on Linux due to windows line endings
-
 MILESTONE 0.9.7
 
+- BUG FIX: addin merging doesn't work on Linux due to windows line endings
+- IMPROVEMENT: Ask to automatically overwrite old addins when reinstalling?
 - NEW FEATURE: command line interface to image l10n tool for the wiki site, no gui
 - IMPROVEMENT: dev releases should have the actual svn version in their build filename/about version - may need to separate svn revision into an svn:ignored file
 

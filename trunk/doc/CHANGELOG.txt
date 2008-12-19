@@ -8,6 +8,7 @@
 - Automatically enable an addin after installing it
 - addin.xml assumed to be in UTF-8, fixes non-latin characters
 - Renamed all remaining uses of "wog" abbreviation
+- Layout improvements in profile and addins panels
 
 0.9.5
 
