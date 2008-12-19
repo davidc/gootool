@@ -134,34 +134,34 @@ public class ProfilePanel implements ActionListener
 
         StringBuilder flagInfo = new StringBuilder();
         if (currentProfile.hasFlag(Profile.FLAG_ONLINE)) {
-          flagInfo.append("Online Enabled. ");
+          flagInfo.append("Online Enabled.<br/>");
         }
         if (currentProfile.hasFlag(Profile.FLAG_GOOCORP_UNLOCKED)) {
-          flagInfo.append("GooCorp Unlocked. ");
+          flagInfo.append("GooCorp Unlocked.<br/>");
         }
         if (currentProfile.hasFlag(Profile.FLAG_GOOCORP_DESTROYED)) {
-          flagInfo.append("GooCorp Destroyed. ");
+          flagInfo.append("GooCorp Destroyed.<br/>");
         }
         if (currentProfile.hasFlag(Profile.FLAG_WHISTLE)) {
-          flagInfo.append("Whistle Found. ");
+          flagInfo.append("Whistle Found.<br/>");
         }
         if (currentProfile.hasFlag(Profile.FLAG_TERMS)) {
-          flagInfo.append("Terms Accepted. ");
+          flagInfo.append("Terms Accepted.<br/>");
         }
         if (currentProfile.hasFlag(32)) {
-          flagInfo.append("Flag32. ");
+          flagInfo.append("Flag32.<br/>");
         }
         if (currentProfile.hasFlag(64)) {
-          flagInfo.append("Flag64. ");
+          flagInfo.append("Flag64.<br/>");
         }
         if (currentProfile.hasFlag(128)) {
-          flagInfo.append("Flag128. ");
+          flagInfo.append("Flag128.<br/>");
         }
 
         if (flagInfo.length() == 0) {
           flagInfo.append("None.");
         }
-        flags.setText(flagInfo.toString());
+        flags.setText("<html>" + flagInfo.toString() + "</html>");
 
         levelsModel.fireTableDataChanged();
 

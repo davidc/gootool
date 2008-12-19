@@ -30,7 +30,6 @@ public class AddinPropertiesDialog extends JDialog
 
     setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 
-    setLocationByPlatform(true);
     setResizable(false);
 
     setIconImage(GooTool.getMainIconImage());
@@ -91,5 +90,7 @@ public class AddinPropertiesDialog extends JDialog
     }
 
     pack();
+
+    setLocationRelativeTo(mainFrame);
   }
 }
