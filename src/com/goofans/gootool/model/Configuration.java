@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Represents the current WoG configuration.
+ * Represents the current World of Goo configuration.
  * <p/>
  * There's an "active" instance (what is currently configured on disk) and a "pending" instance (what will be applied).
  * <p/>

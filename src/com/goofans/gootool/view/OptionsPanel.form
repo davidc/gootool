@@ -151,7 +151,7 @@
             </constraints>
             <properties>
               <labelFor value="f88e1"/>
-              <text resource-bundle="text" key="options.locations.wogDir"/>
+              <text resource-bundle="text" key="options.locations.gooDir"/>
             </properties>
           </component>
           <hspacer id="67022">

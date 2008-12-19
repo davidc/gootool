@@ -315,7 +315,7 @@ public class Controller implements ActionListener
       wogDir = WorldOfGoo.getWogDir();
     }
     catch (IOException e) {
-      log.log(Level.WARNING, "Can't get wogdir", e);
+      log.log(Level.WARNING, "Can't get World of Goo dir", e);
       showErrorDialog("Find World of Goo first", "Please select your World of Goo installation first!");
       return;
     }
@@ -518,7 +518,7 @@ public class Controller implements ActionListener
         WorldOfGoo.launch();
       }
       catch (IOException e) {
-        log.log(Level.SEVERE, "Error launching WoG", e);
+        log.log(Level.SEVERE, "Error launching World of Goo", e);
         showErrorDialog("Error launching World of Goo", e.getLocalizedMessage());
       }
     }
@@ -641,7 +641,7 @@ public class Controller implements ActionListener
       return 0;
     }
     catch (FileNotFoundException e) {
-      log.info("WoG not found at " + selectedFile + " (" + selectedFile.getParentFile() + ")");
+      log.info("World of Goo not found at " + selectedFile + " (" + selectedFile.getParentFile() + ")");
 
       JOptionPane.showMessageDialog(null, e.getLocalizedMessage(), "File not found", JOptionPane.ERROR_MESSAGE);
       return -1;
