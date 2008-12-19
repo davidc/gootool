@@ -1,12 +1,14 @@
 0.9.6
 
 - You can now save the image of your tower (transparent, full-size, or thumbnail)
+- addin.xml assumed to be in UTF-8, fixes non-latin characters in addins
+- Allow user to install an addin that already exists, prompting to downgrade/replace/upgrade it
+- When installing a level addin, notify them again that the level appears on chapter 1.
 - Memory usage in About dialog is now updated each time you open the window
 - Some dialog memory leaks plugged
 - More descriptive errors when saving with an invalid addin enabled
 - Remember the most recently used addin installation folder
 - Automatically enable an addin after installing it
-- addin.xml assumed to be in UTF-8, fixes non-latin characters
 - Renamed all remaining uses of "wog" abbreviation
 - Layout improvements in profile and addins panels
 

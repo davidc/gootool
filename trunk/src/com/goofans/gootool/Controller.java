@@ -20,6 +20,7 @@ import com.goofans.gootool.profile.ProfileFactory;
 import com.goofans.gootool.util.GUIUtil;
 import com.goofans.gootool.util.ProfileFileFilter;
 import com.goofans.gootool.util.WogExeFileFilter;
+import com.goofans.gootool.util.VersionSpec;
 import com.goofans.gootool.view.AboutDialog;
 import com.goofans.gootool.view.AddinPropertiesDialog;
 import com.goofans.gootool.view.MainFrame;
@@ -235,6 +236,36 @@ public class Controller implements ActionListener
     }
 
     try {
+      for (Addin installedAddin : WorldOfGoo.getAvailableAddins()) {
+        if (installedAddin.getId().equals(addin.getId())) {
+          msg = new StringBuilder();
+          msg.append("Addin ").append(installedAddin.getName()).append(" version ").append(installedAddin.getVersion());
+          msg.append(" already exists.\n");
+
+          VersionSpec installedVersion = installedAddin.getVersion();
+          VersionSpec newVersion = addin.getVersion();
+
+          if (installedVersion.compareTo(newVersion) < 0) {
+            msg.append("Would you like to upgrade it to version ").append(addin.getVersion());
+          }
+          else if (installedVersion.compareTo(newVersion) > 0) {
+            msg.append("Would you like to replace it with the earlier version ").append(addin.getVersion());
+          }
+          else {
+            msg.append("Would you like to replace it");
+          }
+          msg.append("?");
+          
+          returnVal = showYesNoDialog("Replace Addin?", msg.toString());
+          if (returnVal != JOptionPane.YES_OPTION) {
+            log.info("User cancelled overwriting installation of " + addin);
+            return;
+          }
+          WorldOfGoo.uninstallAddin(installedAddin);
+          break;
+        }
+      }
+
       WorldOfGoo.installAddin(addinFile, addin.getId());
     }
     catch (IOException e) {
@@ -245,7 +276,13 @@ public class Controller implements ActionListener
 
     editorConfig.enableAddin(addin.getId());
 
-    showMessageDialog("Addin installed", "Addin " + addin.getName() + " installed and enabled!");
+    msg = new StringBuilder();
+    msg.append("Addin ").append(addin.getName()).append(" installed and enabled!");
+    if (addin.getType() == Addin.TYPE_LEVEL) {
+      msg.append("\nYour new level will appear in Chapter 1, at the far top-left.");
+    }
+    
+    showMessageDialog("Addin installed", msg.toString());
   }
 
   private void uninstallAddin()

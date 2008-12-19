@@ -1,12 +1,7 @@
-MILESTONE 0.9.7
-
-- BUG FIX: addin merging doesn't work on Linux due to windows line endings
-- IMPROVEMENT: Ask to automatically overwrite old addins when reinstalling?
-- NEW FEATURE: command line interface to image l10n tool for the wiki site, no gui
-- IMPROVEMENT: dev releases should have the actual svn version in their build filename/about version - may need to separate svn revision into an svn:ignored file
-
 MILESTONE 0.10.0 (Final beta version)
 
+- BUG FIX: addin merging doesn't work on Linux due to windows line endings
+- NEW FEATURE: command line interface to image l10n tool for the wiki site, no gui
 - NEW FEATURE: Windows installer
 - NEW FEATURE: Supported mac version
 - NEW FEATURE: File association for .goomod
@@ -37,6 +32,7 @@ MILESTONE 1.1.0
 
 NO MILESTONE SET
 
+- IMPROVEMENT: dev releases should have the actual svn version in their build filename/about version - may need to separate svn revision into an svn:ignored file
 - NEW FEATURE: Check for new WorldOfGoo releases
 - NEW FEATURE: Drag and Drop installing of Addons. So you can drag a file from your desktop to mod list and install it
 - NEW FEATURE: fullscreen preference? Involves editing pers2.dat so maybe not
