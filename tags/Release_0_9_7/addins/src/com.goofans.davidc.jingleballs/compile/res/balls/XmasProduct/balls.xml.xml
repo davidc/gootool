@@ -1,0 +1,94 @@
+<ball name="XmasProduct"
+      shape="circle,24,0.25"
+      mass="20"
+      towermass="5"
+      strands="2"
+      walkspeed="0.05"
+      climbspeed="1.8"
+      speedvariance="0.2"
+      draggable="false"
+	  detachable="false"
+      jump="0,0"
+      grumpy="true"
+
+	  wakedist="10"
+	  autoboundsunattached="true"
+      >
+
+  <shadow image="IMAGE_BALL_GENERIC_SHADOW0"/>
+
+  <splat image="IMAGE_BALL_XMASPRODUCT_SPLAT1,IMAGE_BALL_XMASPRODUCT_SPLAT2"/>
+
+  <particles id="sleepyZzz" states="sleeping" overball="true" />
+
+  <strand type="spring"
+          image="IMAGE_BALL_XMASPRODUCT_STRAND"
+          inactiveimage="IMAGE_BALL_XMASPRODUCT_STRAND"
+          springconstmin="9" springconstmax="9"
+          dampfac="0.9"
+          maxlen2="140" maxlen1="200"
+          maxforce="600"
+          minlen="100"
+          />
+
+  <part name="body"
+        layer="1"
+        x="0" y="0"
+        image="IMAGE_BALL_XMASPRODUCT_BODY"
+        stretch="16,2,0.5"
+        scale="0.5390625"
+        />
+  <part name="hilite1" layer="2"
+        x="-5,0" y="6,10"
+        image="IMAGE_BALL_GENERIC_HILITE1"
+        scale="0.5"
+        state="climbing,walking,falling,attached,dragging,detaching,standing,tank,stuck,stuck_attached,stuck_detaching"
+         />
+  <part name="hilite2" layer="2"
+        x="-10,-6" y="0,5"
+        image="IMAGE_BALL_GENERIC_HILITE2"
+        scale="0.5"
+        state="climbing,walking,falling,attached,dragging,detaching,standing,tank,stuck,stuck_attached,stuck_detaching"
+          />
+  <part name="hat" layer="2"
+        x="2" y="18"
+        image="IMAGE_BALL_XMASPRODUCT_HAT"
+        scale="0.7"
+          />
+  <!--state="climbing,walking,falling,attached,dragging,detaching,standing,tank,stuck,stuck_attached,stuck_detaching,sleeping"-->
+
+  <sound event="throw"     id="SOUND_BALL_GENERIC_GLEE1,SOUND_BALL_GENERIC_GLEE2,SOUND_BALL_GENERIC_GLEE3,SOUND_BALL_GENERIC_GLEE4,SOUND_BALL_GENERIC_GLEE5,SOUND_BALL_GENERIC_GLEE6,SOUND_BALL_GENERIC_GLEE7,SOUND_BALL_GENERIC_GLEE8,SOUND_BALL_GENERIC_GLEE9,SOUND_BALL_GENERIC_GLEE10,SOUND_BALL_GENERIC_GLEE11"/>
+  <sound event="drop"      id="SOUND_BALL_GENERIC_GLEE1,SOUND_BALL_GENERIC_GLEE2,SOUND_BALL_GENERIC_GLEE3,SOUND_BALL_GENERIC_GLEE4,SOUND_BALL_GENERIC_GLEE5,SOUND_BALL_GENERIC_GLEE6,SOUND_BALL_GENERIC_GLEE7,SOUND_BALL_GENERIC_GLEE8,SOUND_BALL_GENERIC_GLEE9,SOUND_BALL_GENERIC_GLEE10,SOUND_BALL_GENERIC_GLEE11"/>
+  <sound event="bounce"    id="SOUND_BALL_GENERIC_BOUNCE1,SOUND_BALL_GENERIC_BOUNCE2,SOUND_BALL_GENERIC_BOUNCE3,SOUND_BALL_GENERIC_BOUNCE4"/>
+  <sound event="land"      id="SOUND_BALL_GENERIC_STICK1,SOUND_BALL_GENERIC_STICK2,SOUND_BALL_GENERIC_STICK3,SOUND_BALL_GENERIC_STICK4,SOUND_BALL_GENERIC_STICK5,SOUND_BALL_GENERIC_STICK6"/>
+  <sound event="pickup"    id="SOUND_BALL_GENERIC_PICKUP1,SOUND_BALL_GENERIC_PICKUP2,SOUND_BALL_GENERIC_PICKUP3,SOUND_BALL_GENERIC_PICKUP4,SOUND_BALL_GENERIC_PICKUP5,SOUND_BALL_GENERIC_PICKUP6,SOUND_BALL_GENERIC_PICKUP7,SOUND_BALL_GENERIC_PICKUP8,SOUND_BALL_GENERIC_PICKUP9,SOUND_BALL_GENERIC_PICKUP10"/>
+  <sound event="attach"    id="SOUND_BALL_GENERIC_STICK1,SOUND_BALL_GENERIC_STICK2,SOUND_BALL_GENERIC_STICK3,SOUND_BALL_GENERIC_STICK4,SOUND_BALL_GENERIC_STICK5,SOUND_BALL_GENERIC_STICK6"/>
+  <sound event="detaching" id="SOUND_BALL_GENERIC_DETACHING1"/>
+  <sound event="detached"  id="SOUND_BALL_GENERIC_DETACHED1"/>
+  <sound event="snap"      id="SOUND_BALL_GENERIC_SNAP1"/>
+  <sound event="death"     id="SOUND_BALL_GENERIC_DEATH1"/>
+  <sound event="suction"   id="SOUND_BALL_GENERIC_DETACHED1"/>
+  <sound event="exit"      id=""/>
+
+  <!-- walking animations -->
+  <sinvariance freq="0.2" amp="0.1" shift="0.0">
+    <sinanim part="body,hilite1,hilite2"    state="walking" type="scale"     axis="x" freq="1.0" amp="0.1" shift="0"   />
+    <sinanim part="body,hilite1,hilite2"    state="walking" type="scale"     axis="y" freq="1.0" amp="0.1" shift="0.5" />
+    <sinanim part="body"                    state="walking" type="translate" axis="y" freq="1.0" amp="2"   shift="0"   />
+    <sinanim part="hilite1,hilite2"         state="walking" type="translate" axis="y" freq="1.0" amp="-2"   shift="0.5"   />
+    <sinanim part="goop1,goop2"             state="walking" type="scale"     axis="x" freq="1.0" amp="0.1"   shift="0.3"   />
+    <sinanim part="goop1,goop2"             state="walking" type="scale"     axis="y" freq="1.0" amp="0.1"   shift="0.8"   />
+  </sinvariance>
+
+  <!-- climbing animations -->
+  <sinvariance freq="0.8" amp="0.1" shift="0.0">
+    <sinanim part="body,hilite1,hilite2"    state="climbing" type="scale"     axis="x" freq="2.0" amp="0.1" shift="0"   />
+    <sinanim part="body,hilite1,hilite2"    state="climbing" type="scale"     axis="y" freq="2.0" amp="0.1" shift="0.5" />
+    <sinanim part="body"                    state="climbing" type="translate" axis="y" freq="2.0" amp="2"   shift="0"   />
+    <sinanim part="hilite1,hilite2"         state="climbing" type="translate" axis="y" freq="2.0" amp="-2"   shift="0.5"   />
+    <sinanim part="goop1,goop2"             state="climbing" type="scale"     axis="x" freq="2.0" amp="0.1"   shift="0.3"   />
+    <sinanim part="goop1,goop2"             state="climbing" type="scale"     axis="y" freq="2.0" amp="0.1"   shift="0.8"   />
+  </sinvariance>
+
+
+</ball>

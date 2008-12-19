@@ -1,0 +1,146 @@
+<ball
+  name="XmasIvy"
+  shape="circle,26,0.25"
+  mass="20"
+  towermass="5" 
+  strands="3" 
+  walkspeed="0.1"
+  climbspeed="2.5"
+  speedvariance="0.2" 
+  blinkcolor="0,0,0"
+  jump="0.4,1.2"
+  
+  detonateforce="0"
+  detonateradius="0"
+	  
+  >
+<!-- Same as Ivy except   burntime="2.0" removed and burning strands removed -->
+
+  <marker drag="IMAGE_BALL_XMASIVY_DRAGMARKER_P1"
+          detach="IMAGE_BALL_XMASIVY_DETACHMARKER_P1"
+          rotspeed="2" />
+
+  <shadow image="IMAGE_BALL_GENERIC_SHADOW0"/>
+
+  <particles id="sleepyZzz" states="sleeping" overball="true" />
+
+  <strand type="spring" 
+          image="IMAGE_BALL_XMASIVY_STRAND"
+          inactiveimage="IMAGE_BALL_GENERIC_ARM_INACTIVE" 
+          springconstmin="7" springconstmax="7" 
+          dampfac="0.2" 
+          maxlen2="140" maxlen1="180" 
+          maxforce="300"
+          minlen="110"
+          shrinklen="130"
+		  />
+
+  <detachstrand image="IMAGE_BALL_XMASIVY_DSTRAND" maxlen="60" />
+
+  <splat image="IMAGE_BALL_XMASIVY_SPLAT1,IMAGE_BALL_XMASIVY_SPLAT2"/>
+
+
+  <part name="body"
+        layer="1" 
+        x="0" y="0" 
+        image="IMAGE_BALL_XMASIVY_BODY"
+        stretch="16,2,0.5"
+        scale="0.51"
+        state="climbing,walking,falling,dragging,detaching,standing,tank,sleeping,stuck,stuck_attached,stuck_detaching,pipe"
+        />
+  <part name="bodyAttached"
+        layer="1" 
+        x="0" y="0" 
+        image="IMAGE_BALL_XMASIVY_BODYATTACHED"
+        stretch="16,2,0.5"
+        scale="0.51"
+        state="attached"
+        />
+  <part name="lefteye"
+        layer="2"
+        rotate="true"
+        eye="true" 
+        pupil="IMAGE_BALL_GENERIC_PUPIL1"
+        pupilinset="14"
+        x="-16,-10" y="0,7"
+        xrange="-14,-8" yrange="-8,8"  
+        image="IMAGE_BALL_GENERIC_EYE_FEM_L1,IMAGE_BALL_GENERIC_EYE_FEM_L2"
+        scale="0.5"
+        state="climbing,walking,falling,attached,dragging,detaching,standing,tank,stuck,stuck_attached,stuck_detaching"
+        />
+  <part name="righteye"
+        layer="2"
+        rotate="true"
+        eye="true" 
+        pupil="IMAGE_BALL_GENERIC_PUPIL1"
+        pupilinset="14"
+        x="10,16" y="0,7"
+        xrange="8,14" yrange="-8,8"
+        image="IMAGE_BALL_GENERIC_EYE_FEM_R1,IMAGE_BALL_GENERIC_EYE_FEM_R2"
+        scale="0.5"
+        state="climbing,walking,falling,attached,dragging,detaching,standing,tank,stuck,stuck_attached,stuck_detaching"
+        />
+  <part name="leaves"
+        layer="3" 
+        rotate="true"
+        x="-12,12" y="12,17"
+        xrange="-12,12" yrange="12,18"
+        image="IMAGE_BALL_XMASIVY_LEAVES1,IMAGE_BALL_XMASIVY_LEAVES2"
+        scale="0.71875"
+        state="climbing,walking,falling,attached,dragging,detaching,standing,tank,stuck,stuck_attached,stuck_detaching"
+        />
+
+  <!-- walking animations -->
+  <sinvariance freq="0.8" amp="0.1" shift="0.0">
+    <sinanim part="body"             state="walking" type="scale"     axis="x" freq="2.0" amp="0.1" shift="0"   />
+    <sinanim part="body"             state="walking" type="scale"     axis="y" freq="2.0" amp="0.1" shift="0.5" />
+    <sinanim part="body"             state="walking" type="translate" axis="y" freq="2.0" amp="2"   shift="0"   />
+    <sinanim part="lefteye,righteye" state="walking" type="translate" axis="y" freq="2.0" amp="2"   shift="0" />
+    <sinanim part="righteye"         state="walking" type="translate" axis="x" freq="2.0" amp="0.5" shift="0" />
+    <sinanim part="lefteye"          state="walking" type="translate" axis="x" freq="2.0" amp="0.5" shift="0.5" />
+  </sinvariance>
+
+  <!-- climbing animations -->
+  <sinvariance freq="0.8" amp="0.1" shift="0.0">
+    <sinanim part="body"             state="climbing" type="scale"     axis="x" freq="2.0" amp="0.1" shift="0"   />
+    <sinanim part="body"             state="climbing" type="scale"     axis="y" freq="2.0" amp="0.1" shift="0.5" />
+    <sinanim part="body"             state="climbing" type="translate" axis="y" freq="2.0" amp="2"   shift="0"   />
+    <sinanim part="lefteye,righteye" state="climbing" type="translate" axis="y" freq="2.0" amp="2"   shift="0" />
+    <sinanim part="righteye"         state="climbing" type="translate" axis="x" freq="2.0" amp="0.5" shift="0" />
+    <sinanim part="lefteye"          state="climbing" type="translate" axis="x" freq="2.0" amp="0.5" shift="0.5" />
+  </sinvariance>
+
+  <!-- dragging animations -->
+  <sinvariance freq="0.3" amp="0.03" shift="0">
+    <sinanim part="body" state="dragging" type="scale" axis="x" freq="1.0" amp="0.05" shift="0" />
+    <sinanim part="body" state="dragging" type="scale" axis="y" freq="1.0" amp="0.05" shift="0" />
+  </sinvariance>
+
+  
+  
+  <!-- Sound FX -->
+
+  <sound event="marker"       id="SOUND_BALL_GENERIC_ROLLOVER1,SOUND_BALL_GENERIC_ROLLOVER2,SOUND_BALL_GENERIC_ROLLOVER3,SOUND_BALL_GENERIC_ROLLOVER4,SOUND_BALL_GENERIC_ROLLOVER5,SOUND_BALL_GENERIC_ROLLOVER6,SOUND_BALL_GENERIC_ROLLOVER7,SOUND_BALL_GENERIC_ROLLOVER8"/>
+  <sound event="pickup"       id="SOUND_BALL_XMASIVY_CHIRP01,SOUND_BALL_XMASIVY_CHIRP02,SOUND_BALL_XMASIVY_CHIRP03,SOUND_BALL_XMASIVY_CHIRP04,SOUND_BALL_XMASIVY_CHIRP05"/>
+
+  <sound event="drop"         id="SOUND_BALL_XMASIVY_CHIRP01,SOUND_BALL_XMASIVY_CHIRP02,SOUND_BALL_XMASIVY_CHIRP03,SOUND_BALL_XMASIVY_CHIRP04,SOUND_BALL_XMASIVY_CHIRP05"/>
+  <sound event="throw"        id="SOUND_BALL_XMASIVY_CHIRP01,SOUND_BALL_XMASIVY_CHIRP02,SOUND_BALL_XMASIVY_CHIRP03,SOUND_BALL_XMASIVY_CHIRP04,SOUND_BALL_XMASIVY_CHIRP05"/>
+
+  <sound event="bounce"       id="SOUND_BALL_GENERIC_BOUNCE1,SOUND_BALL_GENERIC_BOUNCE2,SOUND_BALL_GENERIC_BOUNCE3,SOUND_BALL_GENERIC_BOUNCE4"/>
+  <sound event="land"         id="SOUND_BALL_GENERIC_STICK1,SOUND_BALL_GENERIC_STICK2,SOUND_BALL_GENERIC_STICK3,SOUND_BALL_GENERIC_STICK4,SOUND_BALL_GENERIC_STICK5,SOUND_BALL_GENERIC_STICK6"/>
+
+  <sound event="attach"       id="SOUND_BALL_GENERIC_ATTACH01,SOUND_BALL_GENERIC_ATTACH02,SOUND_BALL_GENERIC_ATTACH03,SOUND_BALL_GENERIC_STICK1,SOUND_BALL_GENERIC_STICK2,SOUND_BALL_GENERIC_STICK3,SOUND_BALL_GENERIC_STICK4,SOUND_BALL_GENERIC_STICK5,SOUND_BALL_GENERIC_STICK6"/>
+  <sound event="attachcloser" id="SOUND_BALL_GENERIC_GLEE1,SOUND_BALL_XMASIVY_GLEE2,SOUND_BALL_GENERIC_GLEE3,SOUND_BALL_GENERIC_GLEE4,SOUND_BALL_GENERIC_GLEE5,SOUND_BALL_GENERIC_GLEE6,SOUND_BALL_XMASIVY_GLEE7,SOUND_BALL_GENERIC_GLEE8,SOUND_BALL_XMASIVY_GLEE9,SOUND_BALL_GENERIC_GLEE10,SOUND_BALL_GENERIC_GLEE11"/>
+  <sound event="detaching"    id="SOUND_BALL_GENERIC_DETACHING1"/>
+  <sound event="detached"     id="SOUND_BALL_GENERIC_ATTACH01,SOUND_BALL_GENERIC_ATTACH02,SOUND_BALL_GENERIC_ATTACH03,SOUND_BALL_GENERIC_DETACHED1"/>
+
+  <sound event="snap"         id="SOUND_BALL_GENERIC_SNAP1"/>
+
+  <sound event="death"        id="SOUND_BALL_GENERIC_DEATH1,SOUND_BALL_GENERIC_DEATH2,SOUND_BALL_GENERIC_DEATH3,SOUND_BALL_GENERIC_DEATH4,SOUND_BALL_GENERIC_DEATH5"/>
+  <sound event="deathfall"    id="SOUND_BALL_GENERIC_DEATH1,SOUND_BALL_GENERIC_DEATH2,SOUND_BALL_GENERIC_DEATH3,SOUND_BALL_GENERIC_DEATH4,SOUND_BALL_GENERIC_DEATH5"/>
+
+  <sound event="suction"      id="SOUND_BALL_GENERIC_DETACHED1"/>
+  <sound event="exit"         id=""/>
+
+
+</ball>

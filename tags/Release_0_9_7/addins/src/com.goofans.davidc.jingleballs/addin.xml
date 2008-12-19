@@ -1,0 +1,72 @@
+<addin spec-version="1.0">
+  <id>com.goofans.davidc.jingleballs</id>
+  <name>Jingle Balls</name>
+  <type>level</type>
+  <version>0.6</version>
+  <description><![CDATA[
+  <html>
+  <p>The night before Christmas. The Goo Balls are nestled all snug by the fire, but Ebenezer Sign Painter has other ideas...</p>
+
+  <ul>
+    <li>Level design: David Croft (davidc)</li>
+    <li>Graphics: S&eacute;bastien Kerguen (xanax)</li>
+    <li>Music: Cosmin Marza</li>
+  </ul>
+  </html>
+  ]]></description>
+  <author>davidc/xanax/cosminmarza</author>
+
+  <level>
+    <dir>JingleBalls</dir>
+    <name text="Jingle Balls"
+            ru="Рождественские бубенцы"/>
+    <subtitle text="goo balls roasting on an open fire"
+            de="Die Goo-Bälle rösten über dem offenen Feuer"
+            ru="шарики, поджаривающиеся на открытом огне"
+            es="las bolas de goo tocan a fuego"/>
+    <ocd>balls,43</ocd>
+  </level>
+
+  <!-- Changelog:
+
+  0.1
+   - initial release to sebastien and cosmin
+  0.2
+   - added 3 unique "glee" sounds for XmasIvy balls
+   - moved the invisible left "wall" off screen
+   - stop sign doesn't send balls berserk when they fall in fire
+   - set maxy to prevent scrolling off background 
+   - better window scene image
+  0.3
+   - block off top of chimney
+   - move right wall off to the right to avoid throwing-fuse-ball exploit
+   - slight anti-gravity to help building up the chimney
+   - added some graphics from sebastien
+   - changed shape of chimney and gift box to match graphic
+   - added mantel above fireplace for building on
+   - added smoke particle effect up chimney
+   - moved sleeping balls right to avoid waking them too early
+  0.4
+   - added an XmasGift ball type that produces 14 XmasProducts when it is busted
+   - added a ballbuster under the gift geom to bust the XmasGift
+   - Adjusted chimney width
+   - Brought level walls closer in and angled them to nudge balls down
+   - Added stopsign to right side of chimney
+   - made treeBase walkable
+   - upped OCD to 43 balls
+   - more new graphics from Sebastien
+  0.5
+   - adjusted particle effect to suit window
+   - added de, ru, es translations
+   - made the bomb explosion zone smaller
+  0.6
+   - center fireplace and all related elements around x-coord 600
+   - new fireplace and chimney graphics
+   - merge chimney into compositegeom
+   - reduce time bug prob from 0.33 to 0.25
+   - put giftbox ball at back so bomb is in front of it
+   - moved snow effect back behind wall
+   - sent to beta testers
+  -->
+
+</addin>

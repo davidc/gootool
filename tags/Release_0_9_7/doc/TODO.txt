@@ -1,0 +1,141 @@
+MILESTONE 0.10.0 (Final beta version)
+
+- NEW FEATURE: OCD flags on the island
+- BUG FIX: addin merging doesn't work on Linux due to windows line endings
+- NEW FEATURE: command line interface to image l10n tool for the wiki site, no gui
+- NEW FEATURE: Windows installer
+- NEW FEATURE: Supported mac version
+- NEW FEATURE: File association for .goomod
+- IMPROVEMENT: Don't SAVE if unmodified on LAUNCH
+
+- NEW FEATURE: Addin author tool: create addin from directory/create addin from wogeditor
+- IMPROVEMENT: Make checkboxes in addin list actually enable/disable the addin
+- BUG FIX: Dragging addins below last enabled addin should move it to bottom
+
+- NEW FEATURE: Upload profile/tower to goofans.com
+- NEW FEATURE: preference: upload tower on goo exit, or upload tower continuously during play (need to detect when process exits - java.lang.Process?)
+- NEW FEATURE: backup/restore profile to website - perhaps just store their last 5 uploaded profiles?
+- NEW FEATURE: mark user as cheat - requires X votes or something
+
+MILESTONE 1.0.0 (First public release)
+
+- All bugs from 0.10 series fixed, no new features
+
+MILESTONE 1.1.0
+
+- NEW FEATURE: Option to check mods for updates on goofans.com from within GooTool
+- NEW FEATURE: Auto-download required dependencies from goofans.com
+
+- IMPROVEMENT: strip down bouncycastle to only needed classes
+- NEW FEATURE: Integrated ball editor
+- NEW FEATURE: Finalise the level editor
+- NEW FEATURE: Changing refreshrate in config.txt - NEW IN 1.10? 1.20?
+
+NO MILESTONE SET
+
+- IMPROVEMENT: dev releases should have the actual svn version in their build filename/about version - may need to separate svn revision into an svn:ignored file
+- NEW FEATURE: Check for new WorldOfGoo releases
+- NEW FEATURE: Drag and Drop installing of Addons. So you can drag a file from your desktop to mod list and install it
+- NEW FEATURE: fullscreen preference? Involves editing pers2.dat so maybe not
+- NEW FEATURE: Perhaps stop overrides of Drained files, to prevent cheating in goocorp?
+- NEW FEATURE: Addin XML: conflicts <addin>
+- NEW FEATURE: Addin XML: provides <x> (to include mods in a packaged download)
+- BUGFIX: Addins build.xml ANT task doesn't work under Linux.
+- NEW FEATURE: .deb build: http://code.google.com/p/ant-deb-task/
+- NEW FEATURE: mute music/mute all sound
+
+- reformat b5s and use as wog website server
+
+
+todo
+
+web report on what balls are used, by what levels, etc.
+- where is this image used?
+
+
+can't access our formatter currently inside the jar/exe
+
+
+- Modify EOL scene automatically depending on resolution?
+
+
+use JFormattedTextField for input field validation
+
+
+
+Hey Ron and Kyle
+
+I know you're probably busy preparing for the EU release at the moment, but I assume you've been following the forums enough
+to see what I've been doing and know that I'm not just a fan-boy begging favours :-)
+
+I've got a few requests for you that hopefully are easy to implement and will make modding and GooTool easier to use:
+
+- Versioning. Currently GooTool has no way to tell what version of WoG is installed, so it has to look at WorldOfGoo.exe
+file modification time (yuck!) to determine what features are available (e.g. refresh rate, level load from cmdline). I know
+you've started added 1.20 etc to the download link, so maybe you could just add a simple version.txt into the install directory
+that contains this version number? (Please pass this on to the Mac/Linux developers too!)
+
+- Chapter support. I'm sure you're aware that the game can't support extra chapters at the moment. It would be nice to add
+chapters to the root
+
+- level design competition with some kind of reward
+
+- christmas level with 2dboy promo
+
+beta test moon
+
+- Would you be willing to share the .binltl movie format so we can create new movies?
+In particular in my chapter I'm interested in a "found mad scientist" movie and an "end credits" movie.
+
+- Better level load crash debugging
+
+
+
+So I was thinking...
+
+I run goofans.com as you already know. It has GooTool and will have mods/levels downloads as and when those start happening. GooTool will also have an automatic profile upload option when it leaves beta.
+
+I'd quite like to make a central site for WoG fans to go to.
+
+Just to recap what we have:
+
+- Translation wiki, standalone, on your site
+- File format description, on the WogEdit wiki (only a little) plus various knowledge in the 2dboy forums
+- GooTool: addin installer, profile viewer/tower viewer
+- Maks(your friend?)'s pages: tower viewer
+
+I'd really like to integrate all these things into one site for players.
+
+I would like to create a master wiki including all things: translations, reverse-engineering efforts, user documentation.
+
+I would like to create a central place for profile/tower uploads. You have this, I have this, no sense duplication.
+
+I think we can create a site together building on both our work and centralising on a central community site that does everything for WoG players.
+
+Obviously I'm not commercially driven and neither are you, we're both just big WoG fans. (Indeed the site probably never will be, since I own an ISP and so hosting bills are non-existant). So in this respect I'm happy to work with you to create the master site (as much or as little as you desire - I'm already committed to building the goofans.com site per spec)
+
+At the moment I'm using Drupal, though I'm not especially happy with it, it got me up and running quickly. I think it'll suffice. It just needs a download module writing, and a WoG profile module - both of which I'm already intendign to do alone but would welcome you to join me in.
+
+
+
+
+WoG 1.20
+- added refreshrate (or was this 1.10?)
+- added launch level from command line
+
+WoG  1.30
+
+
+
+
+<xanax`> sebastienkerguen@free.fr
+for christmas level design perhaps
+
+
+Jingle Balls testers:
+
+Vials - ruswog@gmail.com (RU)
+Mincus - phillmwebster@gmail.com
+herminator - herman@hiddema.com
+Decar - tehill@gmail.com
+tek - teknorat@gmail.com

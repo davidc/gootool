@@ -1,0 +1,22 @@
+<ResourceManifest>
+  <Resources id="scene_JingleBalls">
+    <SetDefaults idprefix="" path="./"/>
+    <Image id="IMAGE_SCENE_JINGLEBALLS_SIGNPOST_BROWN" path="res/images/levelimages/signpost_brown"/>
+    <Image id="IMAGE_SCENE_JINGLEBALLS_SIGNPOSTPOLE_BROWN" path="res/images/levelimages/signpostPole_brown"/>
+    <Image id="IMAGE_SCENE_JINGLEBALLS_FLOOR" path="res/levels/JingleBalls/floor"/>
+    <Image id="IMAGE_SCENE_JINGLEBALLS_BG" path="res/levels/JingleBalls/bg"/>
+    <Image id="IMAGE_SCENE_JINGLEBALLS_WINDOWSCENE" path="res/levels/JingleBalls/windowscene"/>
+    <Image id="IMAGE_SCENE_JINGLEBALLS_GIFTBOX" path="res/balls/XmasGift/body"/>
+    <Image id="IMAGE_SCENE_JINGLEBALLS_TREE" path="res/levels/JingleBalls/tree"/>
+    <Image id="IMAGE_SCENE_JINGLEBALLS_STAR" path="res/levels/JingleBalls/star"/>
+    <Image id="IMAGE_SCENE_JINGLEBALLS_CHIMNEYLEFT" path="res/levels/JingleBalls/chimneyleft"/>
+    <Image id="IMAGE_SCENE_JINGLEBALLS_CHIMNEYRIGHT" path="res/levels/JingleBalls/chimneyright"/>
+    <Image id="IMAGE_SCENE_JINGLEBALLS_CHIMNEYBACK" path="res/levels/JingleBalls/chimneyback"/>
+    <Image id="IMAGE_SCENE_JINGLEBALLS_FIREPLACEMANTEL" path="res/levels/JingleBalls/fireplacemantel"/>
+    <Image id="IMAGE_SCENE_JINGLEBALLS_FIREPLACELEFT" path="res/levels/JingleBalls/fireplaceleft"/>
+    <Image id="IMAGE_SCENE_JINGLEBALLS_FIREPLACERIGHT" path="res/levels/JingleBalls/fireplaceright"/>
+    <SetDefaults idprefix="" path="./"/>
+    <Sound id="SOUND_LEVEL_JINGLEBALLS_MUSIC" path="res/music/cotb_loop"/>
+    <Sound id="SOUND_LEVEL_JINGLEBALLS_LOOP_FIRE" path="res/sounds/loop_fire"/>
+  </Resources>
+</ResourceManifest>

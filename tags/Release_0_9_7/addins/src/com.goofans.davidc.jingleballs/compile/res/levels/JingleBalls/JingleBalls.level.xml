@@ -1,0 +1,111 @@
+<level allowskip="true" autobounds="true" ballsrequired="16" letterboxed="false" strandgeom="false" textcolor="255,255,255" texteffects="true"
+       timebugprobability="0.25" visualdebug="false">
+  <camera aspect="normal" endpos="0,450" endzoom="0.571">
+    <poi pause="1" pos="600,300" traveltime="0" zoom="1.2"/>
+    <poi pause="2" pos="0,480" traveltime="3" zoom="0.58"/>
+    <poi pause="0.2" pos="0,450" traveltime="1.5" zoom="0.941"/>
+  </camera>
+  <camera aspect="widescreen" endpos="0,450" endzoom="0.571">
+    <poi pause="1" pos="600,300" traveltime="0" zoom="1.2"/>
+    <poi pause="2" pos="0,480" traveltime="3" zoom="0.58"/>
+    <poi pause="0.2" pos="0,450" traveltime="1.5" zoom="0.941"/>
+  </camera>
+  <music id="SOUND_LEVEL_JINGLEBALLS_MUSIC"/>
+  <loopsound id="SOUND_LEVEL_JINGLEBALLS_LOOP_FIRE"/>
+  <fire depth="0" particles="fireStackSquat" radius="160" x="600.0" y="200.0"/>
+  <signpost alpha="1" colorize="255,255,255" depth="-3" image="IMAGE_SCENE_JINGLEBALLS_SIGNPOST_BROWN" name="signpost1" rotation="30" scalex="0.823"
+            scaley="0.912" text="SIGNPOST_JINGLEBALLS_1" x="385.111284079" y="332.105844329"/>
+  <signpost alpha="1" colorize="255,255,255" depth="-4" image="IMAGE_SCENE_JINGLEBALLS_SIGNPOST_BROWN" name="signpost2" rotation="10" scalex="0.823"
+            scaley="0.912" text="SIGNPOST_JINGLEBALLS_2" x="-545.244872613" y="228.939833117"/>
+  <signpost alpha="1" colorize="255,255,255" depth="-1" image="IMAGE_SCENE_JINGLEBALLS_SIGNPOST_BROWN" name="signpost3" rotation="80" scalex="0.823"
+            scaley="0.912" text="SIGNPOST_JINGLEBALLS_3" x="675.628540002" y="1407.09558077"/>
+  <pipe depth="0" id="0">
+    <Vertex x="600" y="1320"/>
+    <Vertex x="600" y="2000"/>
+  </pipe>
+  <levelexit filter="" id="theExit" pos="600,1320" radius="75"/>
+  <BallInstance angle="0" id="giftbox" type="XmasGift" x="-500" y="290"/>
+  <BallInstance angle="0" id="0" type="AnchorFriendly" x="0" y="880"/>
+  <BallInstance angle="0" id="1" type="XmasBomb" x="0" y="750"/>
+  <BallInstance angle="0" id="2" type="XmasIvy" x="-52.0" y="710.0"/>
+  <BallInstance angle="0" id="3" type="XmasIvy" x="1.1935483871" y="627.483870968"/>
+  <BallInstance angle="0" id="4" type="XmasIvy" x="56.0" y="711.0"/>
+  <BallInstance angle="0" id="5" type="XmasIvy" x="-117.052696774" y="609.624516129"/>
+  <BallInstance angle="0" id="6" type="XmasIvy" x="-75.9665032258" y="514.043974194"/>
+  <BallInstance angle="0" id="7" type="XmasIvy" x="29.3441548387" y="514.388129032"/>
+  <BallInstance angle="0" id="8" type="XmasIvy" x="110.029058065" y="607.562322581"/>
+  <BallInstance angle="0" id="9" type="XmasIvy" x="-162.906890322" y="502.253316129"/>
+  <BallInstance angle="0" id="10" type="XmasIvy" x="-124.847432259" y="410.669625806"/>
+  <BallInstance angle="0" id="11" type="XmasIvy" x="-5.51540645161" y="407.207329032"/>
+  <BallInstance angle="0" id="12" type="XmasIvy" x="125.698064516" y="397.583741935"/>
+  <BallInstance angle="0" id="13" type="XmasIvy" x="166.211354839" y="494.410735484"/>
+  <BallInstance angle="0" id="14" type="XmasIvy" x="-230.192258064" y="405.189677419"/>
+  <BallInstance angle="0" id="15" type="XmasIvy" x="-147.041290323" y="300.103225806"/>
+  <BallInstance angle="0" id="16" type="XmasIvy" x="-53.4722580645" y="271.701935484"/>
+  <BallInstance angle="0" id="17" type="XmasIvy" x="59.3690322581" y="265.236129032"/>
+  <BallInstance angle="0" id="18" type="XmasIvy" x="142.891612903" y="276.179354839"/>
+  <BallInstance angle="0" id="19" type="XmasIvy" x="220.446451613" y="383.388387097"/>
+  <BallInstance angle="0" id="bauble1" type="Fuse" x="-44.0304" y="642.936"/>
+  <BallInstance angle="0" id="bauble2" type="Fuse" x="46.376" y="641.7856"/>
+  <BallInstance angle="0" id="bauble3" type="Fuse" x="-117.193548387" y="534.064516129"/>
+  <BallInstance angle="0" id="bauble4" type="Fuse" x="116.718916129" y="531.17476129"/>
+  <BallInstance angle="0" id="bauble5" type="Fuse" x="-159.179045161" y="431.316232258"/>
+  <BallInstance angle="0" id="bauble6" type="Fuse" x="167.814864516" y="423.767948387"/>
+  <BallInstance angle="0" id="bauble7" type="Fuse" x="-222.362580645" y="295.135483871"/>
+  <BallInstance angle="0" id="bauble8" type="Fuse" x="219.703225806" y="297.438709677"/>
+  <BallInstance angle="0" id="pot1" type="common" x="-50" y="155"/>
+  <BallInstance angle="0" id="pot2" type="common" x="50.0" y="155.0"/>
+  <BallInstance angle="0" discovered="false" id="dozer1" type="XmasProduct" x="391.349677419" y="177.767741935"/>
+  <BallInstance angle="0" discovered="false" id="dozer2" type="XmasProduct" x="339.397960458" y="177.621810614"/>
+  <BallInstance angle="0" discovered="false" id="dozer3" type="XmasProduct" x="372.050322581" y="221.107096774"/>
+  <BallInstance angle="0" discovered="false" id="dozer4" type="XmasProduct" x="418.541935484" y="210.700645161"/>
+  <Strand gb1="0" gb2="1"/>
+  <Strand gb1="1" gb2="2"/>
+  <Strand gb1="1" gb2="3"/>
+  <Strand gb1="1" gb2="4"/>
+  <Strand gb1="2" gb2="3"/>
+  <Strand gb1="3" gb2="4"/>
+  <Strand gb1="3" gb2="5"/>
+  <Strand gb1="3" gb2="6"/>
+  <Strand gb1="3" gb2="7"/>
+  <Strand gb1="3" gb2="8"/>
+  <Strand gb1="5" gb2="6"/>
+  <Strand gb1="6" gb2="7"/>
+  <Strand gb1="7" gb2="8"/>
+  <Strand gb1="6" gb2="9"/>
+  <Strand gb1="6" gb2="10"/>
+  <Strand gb1="6" gb2="11"/>
+  <Strand gb1="7" gb2="11"/>
+  <Strand gb1="7" gb2="12"/>
+  <Strand gb1="7" gb2="13"/>
+  <Strand gb1="9" gb2="10"/>
+  <Strand gb1="10" gb2="11"/>
+  <Strand gb1="11" gb2="12"/>
+  <Strand gb1="12" gb2="13"/>
+  <Strand gb1="10" gb2="14"/>
+  <Strand gb1="10" gb2="15"/>
+  <Strand gb1="10" gb2="16"/>
+  <Strand gb1="11" gb2="16"/>
+  <Strand gb1="11" gb2="17"/>
+  <Strand gb1="12" gb2="17"/>
+  <Strand gb1="12" gb2="18"/>
+  <Strand gb1="12" gb2="19"/>
+  <Strand gb1="14" gb2="15"/>
+  <Strand gb1="15" gb2="16"/>
+  <Strand gb1="16" gb2="17"/>
+  <Strand gb1="17" gb2="18"/>
+  <Strand gb1="18" gb2="19"/>
+  <Strand gb1="2" gb2="bauble1"/>
+  <Strand gb1="4" gb2="bauble2"/>
+  <Strand gb1="5" gb2="bauble3"/>
+  <Strand gb1="8" gb2="bauble4"/>
+  <Strand gb1="9" gb2="bauble5"/>
+  <Strand gb1="13" gb2="bauble6"/>
+  <Strand gb1="14" gb2="bauble7"/>
+  <Strand gb1="19" gb2="bauble8"/>
+  <Strand gb1="16" gb2="pot1"/>
+  <Strand gb1="17" gb2="pot2"/>
+  <Strand gb1="pot1" gb2="pot2"/>
+  <Strand gb1="17" gb2="pot1"/>
+  <Strand gb1="16" gb2="pot2"/>
+</level>
