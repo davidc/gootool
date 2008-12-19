@@ -218,8 +218,8 @@ public class AddinFactory
       for (int i = 0; i < map.getLength(); i++) {
         Node node = map.item(i);
         levelSubtitles.put(node.getNodeName(), node.getNodeValue());
-        System.out.println("node.getNodeName() = " + node.getNodeName());
-        System.out.println("node.getNodeValue() = " + node.getNodeValue());
+//        System.out.println("node.getNodeName() = " + node.getNodeName());
+//        System.out.println("node.getNodeValue() = " + node.getNodeValue());
       }
       if (levelSubtitles.get("text") == null) throw new AddinFormatException("No text attribute on level subtitle");
     }
