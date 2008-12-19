@@ -114,7 +114,7 @@ public class WorldOfGoo
 
     if (userWogDir != null) {
       if (locateWogAtPath(new File(userWogDir))) {
-        log.info("Found WoG at stored location of \"" + userWogDir + "\" at: " + wogDir);
+        log.info("Found World of Goo at stored location of \"" + userWogDir + "\" at: " + wogDir);
         return;
       }
     }
@@ -123,7 +123,7 @@ public class WorldOfGoo
       String newSearchPath = Utilities.expandEnvVars(searchPath);
 
       if (newSearchPath != null && locateWogAtPath(new File(newSearchPath))) {
-        log.info("Found WoG through default search of \"" + searchPath + "\" at: " + wogDir);
+        log.info("Found World of Goo through default search of \"" + searchPath + "\" at: " + wogDir);
         return;
       }
     }
@@ -138,7 +138,7 @@ public class WorldOfGoo
   {
     File f = new File(searchPath, EXE_FILENAME);
 
-    log.finest("looking for wog at " + f);
+    log.finest("looking for World of Goo at " + f);
     if (f.exists()) {
       foundWog(searchPath);
       return true;
@@ -211,7 +211,7 @@ public class WorldOfGoo
     if (!locateWogAtPath(path)) {
       throw new FileNotFoundException("WorldOfGoo.exe was not found at " + path);
     }
-    log.info("Found WoG through user selection at: " + wogDir);
+    log.info("Found World of Goo through user selection at: " + wogDir);
   }
 
   public static Configuration readConfiguration() throws IOException
@@ -245,7 +245,7 @@ public class WorldOfGoo
   public static File getWogDir() throws IOException
   {
     if (!wogFound) {
-      throw new IOException("WoG isn't found yet");
+      throw new IOException("World of Goo isn't found yet");
     }
     return wogDir;
   }

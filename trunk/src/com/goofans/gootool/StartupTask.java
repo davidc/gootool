@@ -31,7 +31,7 @@ public class StartupTask extends ProgressIndicatingTask
 
   public void run() throws Exception
   {
-    beginStep(textProvider.getText("launcher.locatewog"), false);
+    beginStep(textProvider.getText("launcher.locategoo"), false);
     initWog();
 
     beginStep(textProvider.getText("launcher.profile"), false);
@@ -65,7 +65,7 @@ public class StartupTask extends ProgressIndicatingTask
         {
           public void run()
           {
-            JOptionPane.showMessageDialog(null, textProvider.getText("launcher.locatewog.notfound.message"), textProvider.getText("launcher.locatewog.notfound.title"), JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(null, textProvider.getText("launcher.locategoo.notfound.message"), textProvider.getText("launcher.locategoo.notfound.title"), JOptionPane.WARNING_MESSAGE);
 
             while (!WorldOfGoo.isWogFound()) {
               int result = controller.askToLocateWog();
@@ -78,7 +78,7 @@ public class StartupTask extends ProgressIndicatingTask
         });
       }
       catch (Exception e) {
-        throw new RuntimeException("Unexpected exception locating WoG", e);
+        throw new RuntimeException("Unexpected exception locating World of Goo", e);
       }
     }
   }
