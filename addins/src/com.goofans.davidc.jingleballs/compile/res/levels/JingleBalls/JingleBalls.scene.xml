@@ -10,8 +10,8 @@
               x="120.188233757" y="936.083682743"/>
   <SceneLayer alpha="1" colorize="255,255,255" depth="-10" image="IMAGE_SCENE_JINGLEBALLS_FLOOR" name="floor" rotation="0" scalex="2" scaley="1.5"
               x="146.535325263" y="66.2367886134"/>
-  <SceneLayer alpha="1" colorize="128,128,128" depth="-3" image="IMAGE_SCENE_JINGLEBALLS_SIGNPOSTPOLE_BROWN" name="signpost1post" rotation="30" scalex="0.869"
-              scaley="1.046" x="393.713206243" y="311.451343184"/>
+  <SceneLayer alpha="1" colorize="128,128,128" depth="-5" image="IMAGE_SCENE_JINGLEBALLS_SIGNPOSTPOLE_BROWN" name="signpost1post" rotation="30" scalex="0.869"
+              scaley="1.046" x="399.713206243" y="308.451343184"/>
   <SceneLayer alpha="1" colorize="128,128,128" depth="-4" image="IMAGE_SCENE_JINGLEBALLS_SIGNPOSTPOLE_BROWN" name="signpost2post" rotation="10" scalex="0.869"
               scaley="1.046" x="-557.552459226" y="195.69690191"/>
   <SceneLayer alpha="1" colorize="128,128,128" depth="-1" image="IMAGE_SCENE_JINGLEBALLS_SIGNPOSTPOLE_BROWN" name="signpost3post" rotation="80" scalex="0.869"
@@ -19,7 +19,7 @@
   <line anchor="-57,155" id="floor" material="rock" normal="0,1" static="true" tag="walkable"/>
   <line anchor="1050,500" id="right" material="rock" normal="-1,0.05" static="true" tag="detaching"/>
   <line anchor="-850,500" id="left" material="rock" normal="1,0.05" static="true" tag="detaching"/>
-  <rectangle height="10" id="treebase" material="verysticky" rotation="0.0" static="true" tag="walkable" width="200" x="0.0" y="150.0"/>
+  <rectangle height="10" id="treebase" material="verysticky" rotation="0.0" static="true" tag="walkable" width="160" x="0.0" y="150.0"/>
   <SceneLayer alpha="1" colorize="255,255,255" depth="-2" image="IMAGE_SCENE_JINGLEBALLS_CHIMNEYLEFT" rotation="0" scalex="1.3" scaley="1.3" x="450" y="1050"/>
   <SceneLayer alpha="1" colorize="255,255,255" depth="-2" image="IMAGE_SCENE_JINGLEBALLS_CHIMNEYRIGHT" rotation="0" scalex="1.3" scaley="1.3" x="750" y="1050"/>
   <compositegeom id="chimney" material="rock" rotation="0.0" static="true" x="600" y="700">
@@ -35,12 +35,12 @@
   <SceneLayer alpha="1" colorize="255,255,255" depth="-8" image="IMAGE_SCENE_JINGLEBALLS_CHIMNEYBACK" rotation="0" scalex="1.5" scaley="1.6" x="600" y="950"/>
   <rectangle height="100" id="fireplaceStopSign1" rotation="0.0" static="true" tag="stopsign" width="5" x="450" y="200"/>
   <rectangle height="100" id="fireplaceStopSign2" rotation="0.0" static="true" tag="stopsign" width="5" x="750" y="200"/>
-  <compositegeom id="giftbox" image="IMAGE_SCENE_JINGLEBALLS_GIFTBOX" imagepos="-500,245" imagerot="0.0" imagescale="1.5,1.5" material="rock" rotation="0.0"
+  <compositegeom id="giftbox" image="IMAGE_SCENE_JINGLEBALLS_GIFTBOX" imagepos="-500,235" imagerot="0.0" imagescale="1.5,1.5" material="rock" rotation="0.0"
                  static="false" tag="break=1" x="-500" y="275">
-    <rectangle height="80" id="giftboxTop" mass="500" rotation="0.0" width="180" x="0" y="20"/>
+    <rectangle height="90" id="giftboxTop" mass="500" rotation="0.0" width="180" x="0" y="15"/>
     <rectangle height="160" id="giftboxLeft" mass="500" rotation="0.0" width="100" x="-60" y="-40"/>
     <rectangle height="160" id="giftboxRight" mass="500" rotation="0.0" width="100" x="60" y="-40"/>
-    <rectangle height="80" id="giftboxBottom" mass="5000" rotation="0.0" width="220" x="0.0" y="-80.0"/>
+    <rectangle height="70" id="giftboxBottom" mass="5000" rotation="0.0" width="220" x="0.0" y="-85.0"/>
   </compositegeom>
   <rectangle height="10" id="giftboxBuster" material="rock" nogeomcollisions="true" rotation="0.0" static="true" tag="ballbuster,walkable" width="20" x="-500.0"
              y="200.0"/>
@@ -48,9 +48,9 @@
   <SceneLayer alpha="1" colorize="255,255,255" depth="-6" image="IMAGE_SCENE_JINGLEBALLS_TREE" name="tree" rotation="0" scalex="1.6" scaley="1.6" x="-8.24"
               y="455.5670272"/>
   <SceneLayer alpha="1" colorize="255,255,255" depth="-4" image="IMAGE_SCENE_JINGLEBALLS_STAR" name="star" rotation="0" x="-6.61264128" y="750.68745728"/>
-  <SceneLayer alpha="1" colorize="192,192,192" depth="-4" image="IMAGE_SCENE_JINGLEBALLS_FIREPLACELEFT" name="star" rotation="0" scalex="1.5" scaley="1.5"
+  <SceneLayer alpha="1" colorize="255,255,255" depth="-4" image="IMAGE_SCENE_JINGLEBALLS_FIREPLACELEFT" name="star" rotation="0" scalex="1.5" scaley="1.5"
               x="450" y="280"/>
-  <SceneLayer alpha="1" colorize="192,192,192" depth="-4" image="IMAGE_SCENE_JINGLEBALLS_FIREPLACERIGHT" name="star" rotation="0" scalex="1.5" scaley="1.5"
+  <SceneLayer alpha="1" colorize="255,255,255" depth="-4" image="IMAGE_SCENE_JINGLEBALLS_FIREPLACERIGHT" name="star" rotation="0" scalex="1.5" scaley="1.5"
               x="750" y="280"/>
   <SceneLayer alpha="1" colorize="255,255,255" depth="-3" image="IMAGE_SCENE_JINGLEBALLS_FIREPLACEMANTEL" name="star" rotation="0" scalex="1.4" scaley="1.4"
               x="600" y="430"/>

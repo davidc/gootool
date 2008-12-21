@@ -17,7 +17,7 @@
   <p>Many thanks to the translators and beta-testers.</p>
   </html>
   ]]></description>
-  <author>davidc/xanax/cosminmarza</author>
+  <author>davidc/xanax/cosminmirza</author>
 
   <level>
     <dir>JingleBalls</dir>
@@ -88,6 +88,11 @@
    - added window and snow scene
    - added music!
    - sent to cosmin and sebastien
+  0.9
+  - moved gift box down to visually rest on floor
+  - minor position updates on signposts
+  - zoomed out a bit
+  - sent to beta testers  
   -->
 
 </addin>
