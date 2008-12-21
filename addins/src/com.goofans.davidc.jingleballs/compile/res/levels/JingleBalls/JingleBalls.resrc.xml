@@ -16,7 +16,7 @@
     <Image id="IMAGE_SCENE_JINGLEBALLS_FIREPLACELEFT" path="res/levels/JingleBalls/fireplaceleft"/>
     <Image id="IMAGE_SCENE_JINGLEBALLS_FIREPLACERIGHT" path="res/levels/JingleBalls/fireplaceright"/>
     <SetDefaults idprefix="" path="./"/>
-    <Sound id="SOUND_LEVEL_JINGLEBALLS_MUSIC" path="res/music/cotb_loop"/>
+    <Sound id="SOUND_LEVEL_JINGLEBALLS_MUSIC" path="res/music/cosmin_jingleballs"/>
     <Sound id="SOUND_LEVEL_JINGLEBALLS_LOOP_FIRE" path="res/sounds/loop_fire"/>
   </Resources>
 </ResourceManifest>

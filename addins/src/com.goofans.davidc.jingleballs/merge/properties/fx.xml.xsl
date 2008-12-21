@@ -16,15 +16,15 @@
       <xsl:apply-templates/>
 
 
-      <particleeffect name="snowStormWindow" maxparticles="60" rate="0.1">
+      <particleeffect name="snowStormWindow" maxparticles="60" rate="0.05">
         <particle image="IMAGE_FX_SNOWFLAKE1"
                   rotspeed="-2,2"
                   rotation="-180,180"
                   scale="0.3,1"
-                  fade="false"
+                  fade="true"
                   directed="false"
                   additive="false"
-                  lifespan="1.5,1.5"
+                  lifespan="2.0,2.5"
                   speed="3.0,5.0"
                   movedir="-90"
                   movedirvar="30"

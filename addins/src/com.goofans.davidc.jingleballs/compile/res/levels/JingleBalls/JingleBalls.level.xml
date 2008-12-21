@@ -1,4 +1,4 @@
-<level allowskip="true" autobounds="true" ballsrequired="16" letterboxed="false" strandgeom="false" textcolor="255,255,255" texteffects="true"
+<level allowskip="true" autobounds="true" ballsrequired="32" letterboxed="false" strandgeom="false" textcolor="255,255,255" texteffects="true"
        timebugprobability="0.15" visualdebug="false">
   <camera aspect="normal" endpos="0,450" endzoom="0.571">
     <poi pause="1" pos="600,300" traveltime="0" zoom="1.2"/>
