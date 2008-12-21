@@ -3,11 +3,11 @@
   <linearforcefield antigrav="true" center="595.2,1094.92" dampeningfactor="0" enabled="true" force="0,2" geomonly="false" height="1200" id="chimneyHelper"
                     type="gravity" water="false" width="330"/>
   <particles depth="-8" effect="blackBallsRising" pos="0.0,0.0" pretick="0"/>
-  <SceneLayer alpha="1" colorize="255,255,255" depth="-500" image="IMAGE_SCENE_JINGLEBALLS_WINDOWSCENE" name="windowscene" rotation="0" scalex="1.5"
-              scaley="1.5" x="-331.97915367" y="887.15538647"/>
-  <particles depth="-150" effect="snowStormWindow" pos="-483.018405331,978.90653034"/>
+  <SceneLayer alpha="1" colorize="255,255,255" depth="-400" image="IMAGE_SCENE_JINGLEBALLS_WINDOWSCENE" name="windowscene" rotation="0" scalex="1.9"
+              scaley="1.9" x="-556.358700046" y="787.386322348"/>
+  <particles depth="-150" effect="snowStormWindow" pos="-450.770529645,1022.88090628"/>
   <SceneLayer alpha="1" colorize="255,255,255" depth="-100" image="IMAGE_SCENE_JINGLEBALLS_BG" name="bg" rotation="0" scalex="2.2" scaley="2.2"
-              x="30.0348998382" y="1017.22168327"/>
+              x="120.188233757" y="936.083682743"/>
   <SceneLayer alpha="1" colorize="255,255,255" depth="-10" image="IMAGE_SCENE_JINGLEBALLS_FLOOR" name="floor" rotation="0" scalex="2" scaley="1.5"
               x="146.535325263" y="66.2367886134"/>
   <SceneLayer alpha="1" colorize="128,128,128" depth="-3" image="IMAGE_SCENE_JINGLEBALLS_SIGNPOSTPOLE_BROWN" name="signpost1post" rotation="30" scalex="0.869"

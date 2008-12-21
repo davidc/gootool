@@ -2,16 +2,19 @@
   <id>com.goofans.davidc.jingleballs</id>
   <name>Jingle Balls</name>
   <type>level</type>
-  <version>0.7</version>
+  <version>0.8</version>
   <description><![CDATA[
   <html>
   <p>The night before Christmas. The Goo Balls are nestled all snug by the fire, but Ebenezer Sign Painter has other ideas...</p>
+  <p>Translated into German, Russian, Spanish, Dutch and French.</p>
 
   <ul>
     <li>Level design: David Croft (davidc)</li>
     <li>Graphics: S&eacute;bastien Kerguen (xanax)</li>
-    <li>Music: Cosmin Marza</li>
+    <li>Music: Cosmin Mirza</li>
   </ul>
+
+  <p>Many thanks to the translators and beta-testers.</p>
   </html>
   ]]></description>
   <author>davidc/xanax/cosminmarza</author>
@@ -24,8 +27,9 @@
             de="Die Goo-Bälle rösten über dem Feuer"
             ru="шарики, поджаривающиеся на открытом огне"
             es="las bolas de goo tocan a fuego"
-            nl="goo-ballen bij de open haard"/>
-    <ocd>balls,43</ocd>
+            nl="goo-ballen bij de open haard"
+            fr="boules de goo rôtissant sur un feu ouvert"/>
+    <ocd>balls,57</ocd>
   </level>
 
   <!-- Changelog:
@@ -76,6 +80,14 @@
    - moved left wall slightly off-screen, move right wall slightly in
    - updated german subtitle, added dutch translation
    - fixed text.xml.xsl charset to fix russian translation
+   - sent to beta testers
+  0.8
+   - updated signpost 1 to include hint about gift box
+   - updated dutch translation, added french translation
+   - number of balls in gift increased; level requirements and ocd increased to prevent completion without exploding the box
+   - added window and snow scene
+   - added music!
+   - sent to cosmin and sebastien
   -->
 
 </addin>
