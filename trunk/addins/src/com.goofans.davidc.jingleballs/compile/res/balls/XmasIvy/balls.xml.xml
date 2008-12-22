@@ -14,7 +14,7 @@
   detonateradius="0"
 	  
   >
-<!-- Same as Ivy except   burntime="2.0" removed and burning strands removed -->
+<!-- Same as Ivy except   burntime="2.0" removed and burning strands removed, added sounds -->
 
   <marker drag="IMAGE_BALL_XMASIVY_DRAGMARKER_P1"
           detach="IMAGE_BALL_XMASIVY_DETACHMARKER_P1"

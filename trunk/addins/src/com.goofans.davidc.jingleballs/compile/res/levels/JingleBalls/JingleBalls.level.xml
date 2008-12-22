@@ -1,5 +1,5 @@
 <level allowskip="true" autobounds="true" ballsrequired="32" letterboxed="false" strandgeom="false" textcolor="255,255,255" texteffects="true"
-       timebugprobability="0.15" visualdebug="false">
+       timebugprobability="0.2" visualdebug="false">
   <camera aspect="normal" endpos="0,450" endzoom="0.8">
     <poi pause="1" pos="600,300" traveltime="0" zoom="1.2"/>
     <poi pause="2" pos="0,480" traveltime="3" zoom="0.58"/>
