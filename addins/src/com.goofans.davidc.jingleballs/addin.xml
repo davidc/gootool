@@ -2,7 +2,7 @@
   <id>com.goofans.davidc.jingleballs</id>
   <name>Jingle Balls</name>
   <type>level</type>
-  <version>1.0</version>
+  <version>1.1</version>
   <description><![CDATA[
   <html>
   <p>The night before Christmas. The Goo Balls are nestled all snug by the fire, but Ebenezer Sign Painter has other ideas...</p>
@@ -93,11 +93,14 @@
    - minor position updates on signposts
    - zoomed out a bit
    - sent to beta testers
-  1.0
+  1.0 - 21 Dec 2008
    - time bug probability from 0.15 to 0.2
    - adjust tree size so star is better positioned
    - updated music from cosmin
-   - first public release!   
+   - first public release!
+  1.1 - 22 Dec 2008
+   - fixed the accidentally truncated music in 1.0
+   - second public release!
   -->
 
 </addin>
