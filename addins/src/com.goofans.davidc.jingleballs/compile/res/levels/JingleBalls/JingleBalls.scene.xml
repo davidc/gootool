@@ -45,8 +45,8 @@
   <rectangle height="10" id="giftboxBuster" material="rock" nogeomcollisions="true" rotation="0.0" static="true" tag="ballbuster,walkable" width="20" x="-500.0"
              y="200.0"/>
   <hinge anchor="-550,280" body1="giftbox"/>
-  <SceneLayer alpha="1" colorize="255,255,255" depth="-6" image="IMAGE_SCENE_JINGLEBALLS_TREE" name="tree" rotation="0" scalex="1.6" scaley="1.6" x="-8.24"
-              y="455.5670272"/>
+  <SceneLayer alpha="1" colorize="255,255,255" depth="-6" image="IMAGE_SCENE_JINGLEBALLS_TREE" name="tree" rotation="0" scalex="1.55" scaley="1.55" x="-2.0896"
+              y="450.9542272"/>
   <SceneLayer alpha="1" colorize="255,255,255" depth="-4" image="IMAGE_SCENE_JINGLEBALLS_STAR" name="star" rotation="0" x="-6.61264128" y="750.68745728"/>
   <SceneLayer alpha="1" colorize="255,255,255" depth="-4" image="IMAGE_SCENE_JINGLEBALLS_FIREPLACELEFT" name="star" rotation="0" scalex="1.5" scaley="1.5"
               x="450" y="280"/>

@@ -2,7 +2,7 @@
   <id>com.goofans.davidc.jingleballs</id>
   <name>Jingle Balls</name>
   <type>level</type>
-  <version>0.9</version>
+  <version>1.0</version>
   <description><![CDATA[
   <html>
   <p>The night before Christmas. The Goo Balls are nestled all snug by the fire, but Ebenezer Sign Painter has other ideas...</p>
@@ -77,7 +77,7 @@
    - Made the gift box background image the same size and position as the foreground ball image to prevent ball shrinking when off screen
    - Moved ballbuster up above floor level so that it busts quicker and made it smaller
    - timebug prob reduced from 0.25 to 0.15
-   - moved left wall slightly off-screen, move right wall slightly in
+   - moved left wall slightly off-screen, moved right wall slightly in
    - updated german subtitle, added dutch translation
    - fixed text.xml.xsl charset to fix russian translation
    - sent to beta testers
@@ -89,10 +89,15 @@
    - added music!
    - sent to cosmin and sebastien
   0.9
-  - moved gift box down to visually rest on floor
-  - minor position updates on signposts
-  - zoomed out a bit
-  - sent to beta testers  
+   - moved gift box down to visually rest on floor
+   - minor position updates on signposts
+   - zoomed out a bit
+   - sent to beta testers
+  1.0
+   - time bug probability from 0.15 to 0.2
+   - adjust tree size so star is better positioned
+   - updated music from cosmin
+   - first public release!   
   -->
 
 </addin>
