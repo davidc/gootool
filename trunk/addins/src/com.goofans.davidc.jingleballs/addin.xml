@@ -2,7 +2,7 @@
   <id>com.goofans.davidc.jingleballs</id>
   <name>Jingle Balls</name>
   <type>level</type>
-  <version>1.1</version>
+  <version>1.2</version>
   <description><![CDATA[
   <html>
   <p>The night before Christmas. The Goo Balls are nestled all snug by the fire, but Ebenezer Sign Painter has other ideas...</p>
@@ -101,6 +101,9 @@
   1.1 - 22 Dec 2008
    - fixed the accidentally truncated music in 1.0
    - second public release!
+  1.2 - 22 Dec 2008
+   - made the gift box ball invisible to fix the weird-looking explosion
+   - third public release!
   -->
 
 </addin>
