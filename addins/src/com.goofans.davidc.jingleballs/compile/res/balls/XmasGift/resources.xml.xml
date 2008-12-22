@@ -4,9 +4,9 @@
   <Resources id="ball_XmasGift">
 
     <!-- Unique Images -->
-    <SetDefaults path="res/balls/XmasGift/" idprefix="IMAGE_BALL_XMASGIFT_" />
+    <!--<SetDefaults path="res/balls/XmasGift/" idprefix="IMAGE_BALL_XMASGIFT_" />-->
 
-    <Image id="BODY"				path="body"/>
+    <!--<Image id="BODY"				path="body"/>-->
 
     <!-- Unique Sounds -->
     <SetDefaults path="res/balls/Beauty/" idprefix="SOUND_BALL_BEAUTY_" />

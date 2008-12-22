@@ -6,7 +6,7 @@
     <Image id="IMAGE_SCENE_JINGLEBALLS_FLOOR" path="res/levels/JingleBalls/floor"/>
     <Image id="IMAGE_SCENE_JINGLEBALLS_BG" path="res/levels/JingleBalls/bg"/>
     <Image id="IMAGE_SCENE_JINGLEBALLS_WINDOWSCENE" path="res/levels/JingleBalls/windowscene"/>
-    <Image id="IMAGE_SCENE_JINGLEBALLS_GIFTBOX" path="res/balls/XmasGift/body"/>
+    <Image id="IMAGE_SCENE_JINGLEBALLS_GIFTBOX" path="res/levels/JingleBalls/giftbox"/>
     <Image id="IMAGE_SCENE_JINGLEBALLS_TREE" path="res/levels/JingleBalls/tree"/>
     <Image id="IMAGE_SCENE_JINGLEBALLS_STAR" path="res/levels/JingleBalls/star"/>
     <Image id="IMAGE_SCENE_JINGLEBALLS_CHIMNEYLEFT" path="res/levels/JingleBalls/chimneyleft"/>

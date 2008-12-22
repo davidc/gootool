@@ -32,12 +32,12 @@
   <!--suckable="false"-->
 
 
-  <part name="body"
+  <!--<part name="body"
         layer="0"
         rotate="false"
         x="0" y="0"
         image="IMAGE_BALL_XMASGIFT_BODY"
         scale="1.5"
-        />
+        />-->
 
 </ball>
