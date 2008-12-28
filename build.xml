@@ -26,6 +26,9 @@
   <taskdef resource="org/tigris/subversion/svnant/svnantlib.xml" classpathref="build.classpath"/>
   <taskdef resource="net/sf/antcontrib/antcontrib.properties" classpathref="build.classpath"/>
 
+  <taskdef name="jarbundler"
+           classpathref="build.classpath"
+           classname="net.sourceforge.jarbundler.JarBundler"/>
 
   <!-- Version numbers -->
 
@@ -143,6 +146,7 @@
   <property name="dist.dir" value="dist"/>
   <property name="dist.win32" value="${dist.dir}/win32"/>
   <property name="dist.linux" value="${dist.dir}/linux"/>
+  <property name="dist.macosx" value="${dist.dir}/macosx"/>
 
   <target name="clean" description="cleanup all">
     <delete dir="${dist.dir}"/>
@@ -162,8 +166,8 @@
               repackageclasses="com.goofans.gootool"
               allowaccessmodification="true"
               renamesourcefileattribute="SourceFile">
-      -dontskipnonpubliclibraryclasses <!-- needed to fix DataTransferHandler errors in jdk--> 
-      
+      -dontskipnonpubliclibraryclasses <!-- needed to fix DataTransferHandler errors in jdk-->
+
       <keepattribute name="SourceFile"/>
       <keepattribute name="LineNumberTable"/>
       <libraryjar refid="gootool.module.runtime.classpath"/>
@@ -208,6 +212,42 @@
     </zip>
   </target>
 
+  <target name="dist-macosx" description="Build the Mac OS X distribution" depends="obfuscate">
+    <mkdir dir="${dist.macosx}"/>
+    <!--<copy todir="${dist.macosx}">-->
+    <!--<fileset dir="dist_src/common">-->
+    <!--<patternset refid="ignored.files"/>-->
+    <!--<type type="file"/>-->
+    <!--</fileset>-->
+    <!--</copy>-->
+    <!--<copy todir="${dist.win32}/doc">-->
+    <!--<fileset file="doc/CHANGELOG.txt"/>-->
+    <!--</copy>-->
+
+    <!--<zip destfile="${dist.dir}/GooTool-${gootool.version.full}-MacOSX.zip">-->
+    <!--<zipfileset dir="${dist.win32}" prefix="GooTool-${gootool.version.full}"/>-->
+    <!--</zip>-->
+    <jarbundler dir="${dist.macosx}" verbose="true" showPlist="true"
+                name="GooTool"
+                mainclass="com.goofans.gootool.GooTool"
+                icon="dist_src/macosx/gootool.icns"
+                version="${gootool.version.full}"
+                jvmversion="1.6*"
+                workingdirectory="$APP_PACKAGE/Contents/Resources"
+                stubfile="dist_src/macosx/JavaApplicationStub"
+            >
+      <jarfileset dir="dist_src/common/lib/">
+        <include name="*.jar"/>
+      </jarfileset>
+      <jarfileset dir="${build.dir}" includesfile="${obfuscated.jar}" />
+      <!--<extraclasspathfilelist files="gootool.jar"/>-->
+      <javaproperty name="java.util.logging.config.file" value="etc/logger_properties.txt"/>
+      <javaproperty name="apple.laf.useScreenMenuBar" value="true"/>
+    </jarbundler>
+    <!--<copy tofile="${dist.macosx}/GooTool.app/Contents/Resources/Java/gootool.jar" file="${obfuscated.jar}"/>-->
+
+  </target>
+
   <target name="dist-linux" description="Build the Linux distribution" depends="obfuscate">
     <copy todir="${dist.linux}">
       <fileset dir="dist_src/common">
@@ -236,7 +276,7 @@
     </tar>
   </target>
 
-  <target name="dist" description="Build the distribution" depends="dist-win32, dist-linux"/>
+  <target name="dist" description="Build the distribution" depends="dist-win32, dist-linux, dist-macosx"/>
 
 
   <property name="svn.trunk" value="${svn.base}/trunk"/>

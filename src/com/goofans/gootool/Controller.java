@@ -281,7 +281,8 @@ public class Controller implements ActionListener
     if (addin.getType() == Addin.TYPE_LEVEL) {
       msg.append("\nYour new level will appear in Chapter 1, at the far top-left.");
     }
-    
+    msg.append("\nDon't forget to save!");
+
     showMessageDialog("Addin installed", msg.toString());
   }
 
