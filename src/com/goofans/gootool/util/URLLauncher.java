@@ -41,21 +41,7 @@ public class URLLauncher
   public static void launch(URL url) throws IOException
   {
     /* Try Java 1.6 Desktop class if supported */
-
-    if (Desktop.isDesktopSupported()) {
-      log.finer("Launching " + url + " using Desktop");
-      try {
-        Desktop.getDesktop().browse(new URI(url.toExternalForm()));
-        return;
-      }
-      catch (URISyntaxException e) {
-        throw new IOException(e);
-      }
-      catch (UnsupportedOperationException e) {
-        log.warning("Desktop.browse() wasn't supported after all");
-        // fall through to previous methods
-      }
-    }
+    if (launchDesktop(url)) return;
 
     String osName = System.getProperty("os.name");
     log.finer("Launching " + url + " for OS " + osName);
@@ -119,6 +105,37 @@ public class URLLauncher
     }
   }
 
+  private static boolean launchDesktop(URL url)
+  {
+    // NB The following String is intentionally not inlined to prevent ProGuard trying to locate the unknown class.
+    String desktopClassName = "java.awt.Desktop";
+    try {
+      Class desktopClass = Class.forName(desktopClassName);
+      Method isDesktopSupportedMethod = desktopClass.getDeclaredMethod("isDesktopSupported", new Class[]{});
+      log.finer("invoking isDesktopSupported");
+      boolean isDesktopSupported = (Boolean) isDesktopSupportedMethod.invoke(null, url.toString());
+
+      if (!isDesktopSupported) {
+        log.finer("isDesktopSupported: no");
+        return false;
+      }
+
+      log.finer("Launching " + url + " using Desktop");
+
+      Method getDesktopMethod = desktopClass.getDeclaredMethod("getDesktop");
+      Object desktopInstance = getDesktopMethod.invoke(null);
+
+      Method browseMethod = desktopClass.getDeclaredMethod("browse", URI.class);
+      browseMethod.invoke(desktopInstance, new URI(url.toExternalForm()));
+    }
+    catch (Exception e) {
+      log.log(Level.FINE, "Exception in Desktop operation", e);
+      return false;
+    }
+
+    return true;
+  }
+
   private static void launchMac(URL url) throws IOException
   {
     try {
@@ -133,7 +150,8 @@ public class URLLauncher
       openURL.invoke(null, url.toString());
     }
     catch (Exception e) {
-      throw new IOException("Could not launch Mac browser: " + e.getLocalizedMessage(), e);
+      log.log(Level.WARNING, "Couldn't launch Mac browser", e);
+      throw new IOException("Could not launch Mac browser: " + e.getLocalizedMessage());
     }
   }
 

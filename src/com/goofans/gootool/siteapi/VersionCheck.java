@@ -26,9 +26,9 @@ public class VersionCheck implements Runnable
   private boolean upToDate = false;
 
   private boolean alwaysAlertUser;
-  private Window parentWindow;
+  private Frame parentWindow;
 
-  public VersionCheck(Window parentWindow, boolean alwaysAlertUser) throws MalformedURLException
+  public VersionCheck(Frame parentWindow, boolean alwaysAlertUser) throws MalformedURLException
   {
     this.alwaysAlertUser = alwaysAlertUser;
     this.parentWindow = parentWindow;

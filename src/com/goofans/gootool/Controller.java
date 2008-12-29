@@ -1,7 +1,6 @@
 package com.goofans.gootool;
 
 import javax.swing.*;
-import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -17,10 +16,7 @@ import com.goofans.gootool.addins.Addin;
 import com.goofans.gootool.addins.AddinFactory;
 import com.goofans.gootool.model.Configuration;
 import com.goofans.gootool.profile.ProfileFactory;
-import com.goofans.gootool.util.GUIUtil;
-import com.goofans.gootool.util.ProfileFileFilter;
-import com.goofans.gootool.util.WogExeFileFilter;
-import com.goofans.gootool.util.VersionSpec;
+import com.goofans.gootool.util.*;
 import com.goofans.gootool.view.AboutDialog;
 import com.goofans.gootool.view.AddinPropertiesDialog;
 import com.goofans.gootool.view.MainFrame;

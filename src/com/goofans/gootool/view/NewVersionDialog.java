@@ -28,13 +28,14 @@ public class NewVersionDialog extends JDialog
 
   private static TextProvider textProvider = GooTool.getTextProvider();
 
-  public NewVersionDialog(final Window parentWindow, final VersionSpec latestVersion, String messageText, final String downloadUrl)
+  public NewVersionDialog(final Frame parentWindow, final VersionSpec latestVersion, String messageText, final String downloadUrl)
   {
     super(parentWindow, textProvider.getText("newVersion.title"));
     setContentPane(contentPane);
     getRootPane().setDefaultButton(yesButton);
 
-    setIconImage(GooTool.getMainIconImage());
+    // TODO 1.6
+//    setIconImage(GooTool.getMainIconImage());
     setModal(true);
     setResizable(false);
 

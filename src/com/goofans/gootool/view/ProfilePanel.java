@@ -2,12 +2,11 @@ package com.goofans.gootool.view;
 
 import net.infotrek.util.TextUtil;
 
-import com.goofans.gootool.GooTool;
 import com.goofans.gootool.ToolPreferences;
+import com.goofans.gootool.util.FileNameExtensionFilter;
 import com.goofans.gootool.profile.*;
 
 import javax.swing.*;
-import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.border.LineBorder;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableColumnModel;
@@ -278,7 +277,8 @@ public class ProfilePanel implements ActionListener
     d.setTitle("Tower");
     BufferedImage prettyImg = tr.getPretty();
     d.setPreferredSize(new Dimension(prettyImg.getWidth(), prettyImg.getHeight()));
-    d.setIconImage(GooTool.getMainIconImage());
+    // TODO 1.6
+//    d.setIconImage(GooTool.getMainIconImage());
     JLabel jLabel = new JLabel(new ImageIcon(prettyImg));
     jLabel.setBorder(new LineBorder(Color.BLACK));
     d.add(jLabel);

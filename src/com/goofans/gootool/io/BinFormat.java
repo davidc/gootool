@@ -1,15 +1,8 @@
 package com.goofans.gootool.io;
 
-import com.goofans.gootool.wog.WorldOfGoo;
-import com.goofans.gootool.util.XMLUtil;
 import com.goofans.gootool.util.Utilities;
-
-import javax.xml.transform.TransformerException;
-import java.io.*;
-import java.nio.charset.Charset;
-import java.util.logging.Logger;
-import java.util.Arrays;
-
+import com.goofans.gootool.util.XMLUtil;
+import com.goofans.gootool.wog.WorldOfGoo;
 import org.bouncycastle.crypto.BlockCipher;
 import org.bouncycastle.crypto.BufferedBlockCipher;
 import org.bouncycastle.crypto.InvalidCipherTextException;
@@ -17,6 +10,13 @@ import org.bouncycastle.crypto.engines.AESEngine;
 import org.bouncycastle.crypto.modes.CBCBlockCipher;
 import org.bouncycastle.crypto.params.KeyParameter;
 import org.w3c.dom.Document;
+
+import javax.xml.transform.TransformerException;
+import java.io.File;
+import java.io.IOException;
+import java.io.StringReader;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * @author David Croft (davidc@goofans.com)
@@ -30,7 +30,7 @@ public class BinFormat
           0x06, 0x09, 0x09, 0x04, 0x06, 0x0D, 0x03, 0x0F,
           0x03, 0x06, 0x0E, 0x01, 0x0E, 0x02, 0x07, 0x0B};
 
-  private static final Charset CHARSET = Charset.forName("UTF-8");
+  private static final String CHARSET = "UTF-8";
   private static final byte EOF_MARKER = (byte) 0xFD;
 
 
@@ -77,7 +77,8 @@ public class BinFormat
       outputLen += cipher.doFinal(outputBytes, outputLen);
     }
     catch (InvalidCipherTextException e) {
-      throw new IOException("Can't decrypt file", e);
+      log.log(Level.SEVERE, "Can't decrypt file", e);
+      throw new IOException("Can't decrypt file: " + e.getLocalizedMessage());
     }
 
     /* End before any 0xFD cruft at the end of the file */
@@ -164,7 +165,10 @@ public class BinFormat
 
       log.finer("Size " + origSize + " padded with " + padding + " bytes to make " + newSize);
 
-      inputBytes = Arrays.copyOf(inputBytes, newSize);
+      byte[] newInputBytes = new byte[newSize];
+      System.arraycopy(inputBytes, 0, newInputBytes, 0, inputBytes.length);
+      inputBytes = newInputBytes;
+//      inputBytes = Arrays.copyOf(inputBytes, newSize);
 
       /* Write up to 4 0xFD bytes immediately after the original file. The remainder can stay as the 0x00 provided by Arrays.copyOf. */
       for (int i = origSize; i < origSize + 4 && i < newSize; ++i) {
@@ -179,8 +183,6 @@ public class BinFormat
 
     BufferedBlockCipher cipher = getCipher(true);
 
-    // TODO pad with 0xfd?
-
     byte[] outputBytes = new byte[cipher.getOutputSize(inputSize)];
 
     int outputLen = cipher.processBytes(inputBytes, 0, inputSize, outputBytes, 0);
@@ -189,7 +191,8 @@ public class BinFormat
       outputLen += cipher.doFinal(outputBytes, outputLen);
     }
     catch (InvalidCipherTextException e) {
-      throw new IOException("Can't encrypt file", e);
+      log.log(Level.SEVERE, "Can't encrypt file", e);
+      throw new IOException("Can't encrypt file: " + e.getLocalizedMessage());
     }
 
 
@@ -219,8 +222,10 @@ public class BinFormat
       }
     }
 
-
-    return Arrays.copyOf(outputBytes, outputLen);
+//    return Arrays.copyOf(outputBytes, outputLen);
+    byte[] outputBytes2 = new byte[outputLen];
+    System.arraycopy(outputBytes, 0, outputBytes2, 0, outputLen);
+    return outputBytes2;
   }
 
 
