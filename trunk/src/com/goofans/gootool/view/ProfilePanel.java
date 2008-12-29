@@ -133,28 +133,28 @@ public class ProfilePanel implements ActionListener
 
         StringBuilder flagInfo = new StringBuilder();
         if (currentProfile.hasFlag(Profile.FLAG_ONLINE)) {
-          flagInfo.append("Online Enabled.<br/>");
+          flagInfo.append("Online Enabled.<br>");
         }
         if (currentProfile.hasFlag(Profile.FLAG_GOOCORP_UNLOCKED)) {
-          flagInfo.append("GooCorp Unlocked.<br/>");
+          flagInfo.append("GooCorp Unlocked.<br>");
         }
         if (currentProfile.hasFlag(Profile.FLAG_GOOCORP_DESTROYED)) {
-          flagInfo.append("GooCorp Destroyed.<br/>");
+          flagInfo.append("GooCorp Destroyed.<br>");
         }
         if (currentProfile.hasFlag(Profile.FLAG_WHISTLE)) {
-          flagInfo.append("Whistle Found.<br/>");
+          flagInfo.append("Whistle Found.<br>");
         }
         if (currentProfile.hasFlag(Profile.FLAG_TERMS)) {
-          flagInfo.append("Terms Accepted.<br/>");
+          flagInfo.append("Terms Accepted.<br>");
         }
         if (currentProfile.hasFlag(32)) {
-          flagInfo.append("Flag32.<br/>");
+          flagInfo.append("Flag32.<br>");
         }
         if (currentProfile.hasFlag(64)) {
-          flagInfo.append("Flag64.<br/>");
+          flagInfo.append("Flag64.<br>");
         }
         if (currentProfile.hasFlag(128)) {
-          flagInfo.append("Flag128.<br/>");
+          flagInfo.append("Flag128.<br>");
         }
 
         if (flagInfo.length() == 0) {
