@@ -3,10 +3,7 @@ package com.goofans.gootool.leveledit.view;
 import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 import java.awt.geom.Point2D;
 import java.io.IOException;
 import java.util.HashMap;
@@ -96,7 +93,7 @@ public class LevelEditor extends JFrame implements ActionListener
     });*/
 
 //    levelDisplay.get
-    levelDisplay.addMouseMotionListener(new MouseAdapter()
+    levelDisplay.addMouseMotionListener(new MouseMotionListener()
     {
       public void mouseMoved(MouseEvent e)
       {
@@ -105,6 +102,10 @@ public class LevelEditor extends JFrame implements ActionListener
           Cursor cursor = currentTool.getCursorAtPoint(new Point2D.Double(e.getX(), e.getY()));
           levelDisplay.setCursor(cursor);
         }
+      }
+
+      public void mouseDragged(MouseEvent e)
+      {
       }
     });
   }

@@ -7,6 +7,8 @@ import javax.xml.transform.*;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.dom.DOMSource;
 import java.io.*;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 
 import org.w3c.dom.*;
 import org.xml.sax.SAXException;
@@ -18,6 +20,8 @@ import org.xml.sax.InputSource;
  */
 public class XMLUtil
 {
+  private static final Logger log = Logger.getLogger(XMLUtil.class.getName());
+
   public static Document loadDocumentFromFile(File file) throws IOException
   {
     DocumentBuilder builder;
@@ -25,7 +29,8 @@ public class XMLUtil
       builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
     }
     catch (ParserConfigurationException e) {
-      throw new IOException("Unable to create an XML document builder: " + e.getLocalizedMessage(), e);
+      log.log(Level.SEVERE, "Unable to create an XML document builder", e);
+      throw new IOException("Unable to create an XML document builder: " + e.getLocalizedMessage());
     }
 
     Document document;
@@ -33,7 +38,8 @@ public class XMLUtil
       document = builder.parse(file);
     }
     catch (SAXException e) {
-      throw new IOException("Unable to load " + file.getName(), e);
+      log.log(Level.SEVERE, "Unable to parse " + file.getName(), e);
+      throw new IOException("Unable to parse " + file.getName());
     }
     return document;
   }
@@ -66,7 +72,8 @@ public class XMLUtil
       builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
     }
     catch (ParserConfigurationException e) {
-      throw new IOException("Unable to create an XML document builder: " + e.getLocalizedMessage(), e);
+      log.log(Level.SEVERE, "Unable to create an XML document builder", e);
+      throw new IOException("Unable to create an XML document builder: " + e.getLocalizedMessage());
     }
 
     Document document;
@@ -74,7 +81,8 @@ public class XMLUtil
       document = builder.parse(new InputSource(r));
     }
     catch (SAXException e) {
-      throw new IOException("Unable to load document", e);
+      log.log(Level.SEVERE, "Unable to parse document", e);
+      throw new IOException("Unable to parse document");
     }
     return document;
   }

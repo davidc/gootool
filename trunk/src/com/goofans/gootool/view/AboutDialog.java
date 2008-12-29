@@ -42,7 +42,8 @@ public class AboutDialog extends JDialog
 
     setResizable(false);
 
-    setIconImage(GooTool.getMainIconImage());
+    // TODO 1.6
+//    setIconImage(GooTool.getMainIconImage());
 
     setContentPane(rootPanel);
 

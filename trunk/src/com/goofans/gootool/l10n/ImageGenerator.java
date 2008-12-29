@@ -10,6 +10,8 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -25,6 +27,8 @@ import org.w3c.dom.NodeList;
  */
 public class ImageGenerator
 {
+  private static final Logger log = Logger.getLogger(ImageGenerator.class.getName());
+
   private static final int WORKING_SCALE = 1;
 
   private static final Pattern COLOR_PATTERN = Pattern.compile("^#([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})(,([0-9.]+))?$", Pattern.CASE_INSENSITIVE);
@@ -83,7 +87,8 @@ public class ImageGenerator
       srcImage = ImageIO.read(sourceFile);
     }
     catch (IOException e) {
-      throw new IOException("Can't read " + sourceFile + ": " + e.getLocalizedMessage(), e);
+      log.log(Level.SEVERE, "Can't read " + sourceFile, e);
+      throw new IOException("Can't read " + sourceFile + ": " + e.getLocalizedMessage());
     }
 
     srcWidth = srcImage.getWidth();

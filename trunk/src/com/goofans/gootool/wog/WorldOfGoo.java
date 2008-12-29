@@ -312,7 +312,8 @@ public class WorldOfGoo
 
     }
     catch (XPathExpressionException e) {
-      throw new IOException("Unable to execute XPath", e);
+      log.log(Level.SEVERE, "Unable to execute XPath", e);
+      throw new IOException("Unable to execute XPath: " + e.getLocalizedMessage());
     }
   }
 

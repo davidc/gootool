@@ -198,14 +198,16 @@ public class ConfigurationWriterTask extends ProgressIndicatingTask
       n.setNodeValue(String.valueOf(c.getUiInset()));
     }
     catch (XPathExpressionException e) {
-      throw new IOException("Unable to execute XPath", e);
+      log.log(Level.SEVERE, "Unable to execute XPath", e);
+      throw new IOException("Unable to execute XPath: " + e.getLocalizedMessage());
     }
 
     try {
       XMLUtil.writeDocumentToFile(document, new File(WorldOfGoo.getCustomDir(), WorldOfGoo.USER_CONFIG_FILE));
     }
     catch (TransformerException e) {
-      throw new IOException("Unable to write config file", e);
+      log.log(Level.SEVERE, "Unable to write config file", e);
+      throw new IOException("Unable to write config file: " + e.getLocalizedMessage());
     }
 
     /* If we're skipping opening movie, we need to remove res/movie/2dboy */
@@ -229,7 +231,7 @@ public class ConfigurationWriterTask extends ProgressIndicatingTask
     }
   }
 
-  private void installAddins(Configuration c) throws IOException
+  private void installAddins(Configuration c) throws AddinFormatException
   {
     /* we need the addins in reverse order, as the earlier ones are higher priority */
 
@@ -246,15 +248,18 @@ public class ConfigurationWriterTask extends ProgressIndicatingTask
           try {
             AddinInstaller.installAddin(addin);
           }
+          catch (IOException e) {
+            throw new AddinFormatException("IOException in " + addin.getName() + ":\n" + e.getMessage(), e);
+          }
           catch (AddinFormatException e) {
-            throw new IOException("Addin format exception in " + addin.getName() + ":\n" + e.getMessage(), e);
+            throw new AddinFormatException("Addin format exception in " + addin.getName() + ":\n" + e.getMessage(), e);
           }
           addinFound = true;
           break;
         }
       }
       if (!addinFound) {
-        throw new IOException("Couldn't locate addin " + id + " to install");
+        throw new AddinFormatException("Couldn't locate addin " + id + " to install");
       }
     }
   }

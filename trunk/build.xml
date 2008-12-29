@@ -227,22 +227,33 @@
     <!--<zip destfile="${dist.dir}/GooTool-${gootool.version.full}-MacOSX.zip">-->
     <!--<zipfileset dir="${dist.win32}" prefix="GooTool-${gootool.version.full}"/>-->
     <!--</zip>-->
+
+    <copy file="${obfuscated.jar}" tofile="${dist.macosx}/gootool.jar"/>
+
     <jarbundler dir="${dist.macosx}" verbose="true" showPlist="true"
                 name="GooTool"
                 mainclass="com.goofans.gootool.GooTool"
                 icon="dist_src/macosx/gootool.icns"
                 version="${gootool.version.full}"
-                jvmversion="1.6*"
+                jvmversion="1.5+"
                 workingdirectory="$APP_PACKAGE/Contents/Resources"
                 stubfile="dist_src/macosx/JavaApplicationStub"
             >
       <jarfileset dir="dist_src/common/lib/">
         <include name="*.jar"/>
       </jarfileset>
-      <jarfileset dir="${build.dir}" includesfile="${obfuscated.jar}" />
+      <jarfileset dir="${dist.macosx}">
+        <include name="gootool.jar"/>
+      </jarfileset>
       <!--<extraclasspathfilelist files="gootool.jar"/>-->
       <javaproperty name="java.util.logging.config.file" value="etc/logger_properties.txt"/>
       <javaproperty name="apple.laf.useScreenMenuBar" value="true"/>
+
+      <documenttype name="World of Goo addin"
+        extensions="goomod"
+        mimetypes="application/x-goomod"
+        role="Viewer"/>
+      <!--iconfile="todo"-->
     </jarbundler>
     <!--<copy tofile="${dist.macosx}/GooTool.app/Contents/Resources/Java/gootool.jar" file="${obfuscated.jar}"/>-->
 

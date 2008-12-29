@@ -75,7 +75,8 @@ public class AddinsPanel implements ViewComponent
     addinTable.setDragEnabled(true);
     addinTable.setTransferHandler(new MyTransferHandler(controller));
 
-    addinTable.setDropMode(DropMode.INSERT_ROWS);
+    // TODO 1.6
+//    addinTable.setDropMode(DropMode.INSERT_ROWS);
 
     addinTable.doLayout();
     addinTable.getSelectionModel().addListSelectionListener(new ListSelectionListener()
@@ -102,7 +103,7 @@ public class AddinsPanel implements ViewComponent
   {
     int row = addinTable.getSelectedRow();
 
-    if (row < 0 || controller.getDisplayAddins().size() == 0) {
+    if (row < 0 || controller.getDisplayAddins().isEmpty()) {
       propertiesButton.setEnabled(false);
       enableButton.setEnabled(false);
       disableButton.setEnabled(false);
@@ -228,10 +229,19 @@ public class AddinsPanel implements ViewComponent
       return new MyTransferable(row);
     }
 
-    public boolean canImport(TransferSupport support)
+    public boolean canImport(JComponent comp, DataFlavor[] transferFlavors)
     {
-      if (!support.isDataFlavorSupported(FLAVOR))
+      for (DataFlavor transferFlavor : transferFlavors) {
+        if (transferFlavor == FLAVOR) {
+          return true;
+        }
+      }
       return false;
+    }
+//    public boolean canImport(TransferSupport support)
+//    {
+//      if (!support.isDataFlavorSupported(FLAVOR))
+//      return false;
 
 
 //      DropLocation dropLocation = support.getDropLocation();
@@ -239,44 +249,48 @@ public class AddinsPanel implements ViewComponent
 //      if (!(support.getDropLocation() instanceof JTable.DropLocation)) {
 //        return false;
 //      }
-      // TODO check they're not dropping it below the end of hte table
-      return true;
-    }
+//       TODO check they're not dropping it below the end of hte table
+//      return true;
+//    }
 
-    public boolean importData(TransferSupport support)
+    public boolean importData(JComponent comp, Transferable t)
     {
-      if (!support.isDrop()) return false;
-
-      DropLocation dropLocation = support.getDropLocation();
-
-      if (!(support.getDropLocation() instanceof JTable.DropLocation)) {
-        return false;
-      }
-
-      int destRow = ((JTable.DropLocation) dropLocation).getRow();
-//      System.out.println("dropped at " + dropLocation);
-      try {
-        Object transferData = support.getTransferable().getTransferData(FLAVOR);
-        if (!(transferData instanceof Integer)) return false;
-
-        int srcRow = (Integer) transferData;
-
-        if (srcRow != destRow && srcRow != destRow - 1) {
-          controller.reorderAddins(srcRow, destRow);
-          addinsModel.fireTableDataChanged();
-        }
-      }
-      catch (UnsupportedFlavorException e) {
-        log.log(Level.FINER, "Unsupported flavour for import", e);
-        return false;
-      }
-      catch (IOException e) {
-        log.log(Level.WARNING, "IOException on import", e);
-        return false;
-      }
-
-      return true;
+      return super.importData(comp, t);    //To change body of overridden methods use File | Settings | File Templates.
     }
+
+//    public boolean importData(TransferSupport support)
+//    {
+//      if (!support.isDrop()) return false;
+//
+//      DropLocation dropLocation = support.getDropLocation();
+//
+//      if (!(support.getDropLocation() instanceof JTable.DropLocation)) {
+//        return false;
+//      }
+//
+//      int destRow = ((JTable.DropLocation) dropLocation).getRow();
+//      try {
+//        Object transferData = support.getTransferable().getTransferData(FLAVOR);
+//        if (!(transferData instanceof Integer)) return false;
+//
+//        int srcRow = (Integer) transferData;
+//
+//        if (srcRow != destRow && srcRow != destRow - 1) {
+//          controller.reorderAddins(srcRow, destRow);
+//          addinsModel.fireTableDataChanged();
+//        }
+//      }
+//      catch (UnsupportedFlavorException e) {
+//        log.log(Level.FINER, "Unsupported flavour for import", e);
+//        return false;
+//      }
+//      catch (IOException e) {
+//        log.log(Level.WARNING, "IOException on import", e);
+//        return false;
+//      }
+//
+//      return true;
+//    }
   }
 
   private static final DataFlavor FLAVOR = new DataFlavor(MyTransferable.class, null);

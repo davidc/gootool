@@ -81,7 +81,12 @@ public class TextUtil
       e += 4;
     }
 
-    return new String(outBuff, 0, e, Charset.forName("UTF-8"));
+    try {
+      return new String(outBuff, 0, e, "UTF-8");
+    }
+    catch (UnsupportedEncodingException e1) {
+      throw new RuntimeException(e1);
+    }
   }
 
   private static byte[] encode3to4(byte[] source, int srcOffset, int numSigBytes, byte[] destination, int destOffset)
@@ -134,7 +139,7 @@ public class TextUtil
    */
   public static byte[] base64Decode(String str) throws IOException
   {
-    byte[] source = str.getBytes(Charset.forName("UTF-8"));
+    byte[] source = str.getBytes("UTF-8");
     int len = source.length;
 
     int len34 = len * 3 / 4;
@@ -256,7 +261,7 @@ public class TextUtil
     String encoded = base64Encode(original.getBytes());
     System.out.println("encoded = " + encoded);
     byte[] decoded = base64Decode(encoded);
-    String decodedStr = new String(decoded, Charset.forName("UTF-8"));
+    String decodedStr = new String(decoded, "UTF-8");
     System.out.println("decodedStr = " + decodedStr);
     System.out.println("(original.equals(decodedStr)) = " + (original.equals(decodedStr)));
   }

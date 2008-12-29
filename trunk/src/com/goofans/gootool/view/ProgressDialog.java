@@ -25,7 +25,8 @@ public class ProgressDialog extends JDialog implements ProgressListener
 
     setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 
-    setIconImage(GooTool.getMainIconImage());
+    // TODO 1.6
+//    setIconImage(GooTool.getMainIconImage());
     setContentPane(rootPanel);
 //
 //    addWindowListener(new WindowAdapter()
