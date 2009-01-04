@@ -39,6 +39,7 @@
     </orderEntry>
     <orderEntry type="library" name="bouncycastle" level="project" />
     <orderEntry type="library" name="uiruntime" level="project" />
+    <orderEntry type="library" name="applejavaextensions" level="project" />
     <orderEntryProperties />
   </component>
 </module>

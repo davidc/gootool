@@ -2,6 +2,7 @@ package com.goofans.gootool.profile;
 
 import com.goofans.gootool.util.Utilities;
 import com.goofans.gootool.GooTool;
+import com.goofans.gootool.platform.PlatformSupport;
 
 import java.io.File;
 import java.io.IOException;
@@ -17,24 +18,6 @@ public class ProfileFactory
 {
   private static final Logger log = Logger.getLogger(ProfileFactory.class.getName());
 
-  private static final String[] SEARCH_PATHS = {
-          // NEW locations (under profile)
-          "%LOCALAPPDATA%\\2DBoy\\WorldOfGoo", // generic, appdata
-          "%USERPROFILE%\\AppData\\Local\\2DBoy\\WorldOfGoo", // vista
-          "%USERPROFILE%\\Local Settings\\Application Data\\2DBoy\\WorldOfGoo", // xp
-
-          // OLD locations (under All Users)
-          "%ProgramData%\\2DBoy\\WorldOfGoo", // generic all users, vista (c:\programdata...)
-          "%ALLUSERSPROFILE%\\Application Data\\2DBoy\\WorldOfGoo", // generic all users, xp but not internationalised C:\Documents and Settings\All Users\Application Data\2DBoy\WorldOfGoo
-          "C:\\ProgramData\\2DBoy\\WorldOfGoo", // fixed, vista
-          "C:\\Documents and Settings\\All Users\\Application Data\\2DBoy\\WorldOfGoo", // fixed, xp
-
-          "%HOME%/.PlayOnLinux/wineprefix/WorldOfGoo/drive_c/windows/profiles/%USERNAME%/Application Data/2DBoy/WorldOfGoo", // PlayOnLinux, new format
-          "%HOME%/.PlayOnLinux/wineprefix/WorldOfGoo/drive_c/windows/profiles/All Users/Application Data/2DBoy/WorldOfGoo", // PlayOnLinux, new format
-
-          "%HOME%/.wine/drive_c/windows/profiles/%USERNAME%/Application Data/2DBoy/WorldOfGoo", //wine, new format
-          "%HOME%/.wine/drive_c/windows/profiles/All Users/Application Data/2DBoy/WorldOfGoo", //wine, old format
-  };
   private static final String PROFILE_DAT_FILENAME = "pers2.dat";
   private static final String PREF_PROFILE_FILE = "profile_file";
 
@@ -58,9 +41,10 @@ public class ProfileFactory
       }
     }
 
-    for (String searchPath : SEARCH_PATHS) {
+    for (String searchPath : PlatformSupport.getProfileSearchPaths()) {
 
       File file = new File(Utilities.expandEnvVars(searchPath), PROFILE_DAT_FILENAME);
+      log.finest("Looking for profile at " + file);
       if (locateProfileAtFile(file)) {
         log.info("Found profile through default search of \"" + searchPath + "\" at: " + file);
         return;
@@ -111,7 +95,7 @@ public class ProfileFactory
   @SuppressWarnings({"UseOfSystemOutOrSystemErr"})
   public static void main(String[] args) throws IOException
   {
-    for (String searchPath : SEARCH_PATHS) {
+    for (String searchPath : PlatformSupport.getProfileSearchPaths()) {
       System.out.println("searchPath = " + searchPath);
       System.out.println("expandEndVars(searchPath) = " + Utilities.expandEnvVars(searchPath));
     }

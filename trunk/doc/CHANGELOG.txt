@@ -1,3 +1,9 @@
+0.10.0
+
+- added Mac support
+- added file association and document icon for goomods on Mac
+- rewrote code to support java 1.5 (you can no longer drag addins to reorder them) 
+
 0.9.7
 
 - fixed addin transform files to be UTF-8, fixes translated texts with non-ASCII characters

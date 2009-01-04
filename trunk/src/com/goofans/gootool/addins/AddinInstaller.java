@@ -9,7 +9,7 @@ import java.util.logging.Level;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
-import com.goofans.gootool.io.BinFormat;
+import com.goofans.gootool.io.GameFormat;
 import com.goofans.gootool.util.Utilities;
 import com.goofans.gootool.wog.WorldOfGoo;
 import org.w3c.dom.Document;
@@ -148,7 +148,7 @@ public class AddinInstaller
     log.log(Level.FINER, "Override " + fileName);
     checkDirOk(fileName);
 
-    File destFile = new File(WorldOfGoo.getCustomDir(), fileName);
+    File destFile = WorldOfGoo.getTheInstance().getCustomGameFile(fileName);
 
     destFile.getParentFile().mkdirs(); // ensure the directory exists
 
@@ -173,7 +173,7 @@ public class AddinInstaller
 
     if (!fileName.endsWith(".xsl")) throw new AddinFormatException("Addin has a non-XSLT file in the merge directory: " + fileName);
 
-    File mergeFile = new File(WorldOfGoo.getCustomDir(), fileName.substring(0, fileName.length() - 4) + ".bin");
+    File mergeFile = WorldOfGoo.getTheInstance().getCustomGameFile(fileName.substring(0, fileName.length() - 4) + ".bin");
 
     if (!mergeFile.exists()) throw new AddinFormatException("Addin tries to merge a nonexistent file: " + fileName);
 
@@ -197,7 +197,7 @@ public class AddinInstaller
 
     if (!fileName.endsWith(".xml")) throw new AddinFormatException("Addin has a non-XML file in the compile directory " + fileName);
 
-    File destFile = new File(WorldOfGoo.getCustomDir(), fileName.substring(0, fileName.length() - 4) + ".bin");
+    File destFile = WorldOfGoo.getTheInstance().getCustomGameFile(fileName.substring(0, fileName.length() - 4) + ".bin");
 
     destFile.getParentFile().mkdirs(); // ensure the directory exists
 
@@ -208,7 +208,7 @@ public class AddinInstaller
     finally {
       is.close();
     }
-    BinFormat.encodeFile(destFile, xml);
+    GameFormat.encodeBinFile(destFile, xml);
   }
 
   private static void installLevel(Addin addin) throws IOException, AddinFormatException
@@ -218,7 +218,7 @@ public class AddinInstaller
 
     /* First add our two level strings to text.xml */
 
-    File textFile = new File(WorldOfGoo.getCustomDir(), "properties/text.xml.bin");
+    File textFile = WorldOfGoo.getTheInstance().getCustomGameFile("properties/text.xml.bin");
     try {
       Merger merger = new Merger(textFile, new InputStreamReader(AddinInstaller.class.getResourceAsStream("/level-text.xsl"), "UTF-8"));
       merger.setTransformParameter("level_name_string", makeString(levelNameId, addin.getLevelNames()));
@@ -233,7 +233,7 @@ public class AddinInstaller
 
     /* Now add ourselves into the island.xml */
 
-    File islandFile = new File(WorldOfGoo.getCustomDir(), "res/islands/island1.xml.bin");
+    File islandFile = WorldOfGoo.getTheInstance().getCustomGameFile("res/islands/island1.xml.bin");
     try {
       Merger merger = new Merger(islandFile, new InputStreamReader(AddinInstaller.class.getResourceAsStream("/level-island.xsl"), "UTF-8"));
 
@@ -250,7 +250,7 @@ public class AddinInstaller
     }
 
     /* Now add our buttons to island1.scene.xml */
-    File islandSceneFile = new File(WorldOfGoo.getCustomDir(), "res/levels/island1/island1.scene.bin");
+    File islandSceneFile = WorldOfGoo.getTheInstance().getCustomGameFile("res/levels/island1/island1.scene.bin");
     try {
       Merger merger = new Merger(islandSceneFile, new InputStreamReader(AddinInstaller.class.getResourceAsStream("/level-island-scene.xsl"), "UTF-8"));
 
@@ -291,8 +291,9 @@ public class AddinInstaller
 
   public static void main(String[] args) throws IOException, AddinFormatException
   {
-    WorldOfGoo.init();
-    WorldOfGoo.setCustomDir(new File("C:\\BLAH\\"));
+    WorldOfGoo worldOfGoo = WorldOfGoo.getTheInstance();
+    worldOfGoo.init();
+    worldOfGoo.setCustomDir(new File("C:\\BLAH\\"));
     Addin addin = AddinFactory.loadAddinFromDir(new File("addins/src/net.davidc.madscientist.dejavu"));
 
     AddinInstaller.installAddin(addin);

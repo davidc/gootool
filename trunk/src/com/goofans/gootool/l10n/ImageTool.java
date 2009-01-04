@@ -100,7 +100,7 @@ public class ImageTool extends ProgressIndicatingTask
 
             try {
               constraints.gridx++;
-              contentPanel.add(makeLabel(ImageIO.read(new File(WorldOfGoo.getWogDir(), destFileName + ".png"))), constraints);
+              contentPanel.add(makeLabel(ImageIO.read(WorldOfGoo.getTheInstance().getGameFile(destFileName + ".png"))), constraints);
             }
             catch (IIOException e) {
               // don't care, e.g. test image
@@ -154,7 +154,7 @@ public class ImageTool extends ProgressIndicatingTask
 
   public static void main(String[] args) throws Exception
   {
-    WorldOfGoo.init();
+    WorldOfGoo.getTheInstance().init();
 //    File sourceFile = new File("C:\\Users\\david\\Downloads\\wog-translate\\images_continue.png");
 
 //    ImageGenerator generator = new ImageGenerator(sourceFile);

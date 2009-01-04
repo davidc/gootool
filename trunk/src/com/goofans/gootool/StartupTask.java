@@ -3,6 +3,7 @@ package com.goofans.gootool;
 import com.goofans.gootool.model.Configuration;
 import com.goofans.gootool.profile.ProfileFactory;
 import com.goofans.gootool.util.ProgressIndicatingTask;
+import com.goofans.gootool.platform.PlatformSupport;
 import com.goofans.gootool.view.MainFrame;
 import com.goofans.gootool.wog.WorldOfGoo;
 import com.goofans.gootool.siteapi.VersionCheck;
@@ -55,9 +56,10 @@ public class StartupTask extends ProgressIndicatingTask
   private void initWog()
   {
     // Locate WoG
-    WorldOfGoo.init();
+    final WorldOfGoo worldOfGoo = WorldOfGoo.getTheInstance();
+    worldOfGoo.init();
 
-    if (!WorldOfGoo.isWogFound()) {
+    if (!worldOfGoo.isWogFound()) {
 
       // Do it in the UI thread
       try {
@@ -65,9 +67,20 @@ public class StartupTask extends ProgressIndicatingTask
         {
           public void run()
           {
-            JOptionPane.showMessageDialog(null, textProvider.getText("launcher.locategoo.notfound.message"), textProvider.getText("launcher.locategoo.notfound.title"), JOptionPane.WARNING_MESSAGE);
+            String message = null;
+            switch (PlatformSupport.getPlatform()) {
+              case WINDOWS:
+                message = textProvider.getText("launcher.locategoo.notfound.message.windows");
+                break;
+              case MACOSX:
+                message = textProvider.getText("launcher.locategoo.notfound.message.macosx");
+                break;
+            }
+            log.finer("dialog opening");
+            JOptionPane.showMessageDialog(null, message, textProvider.getText("launcher.locategoo.notfound.title"), JOptionPane.WARNING_MESSAGE);
 
-            while (!WorldOfGoo.isWogFound()) {
+            log.finer("dialog closed");
+            while (!worldOfGoo.isWogFound()) {
               int result = controller.askToLocateWog();
               if (result == -2) {
                 log.info("User refused to locate WorldOfGoo.exe, exiting");
@@ -92,7 +105,7 @@ public class StartupTask extends ProgressIndicatingTask
   {
     Configuration c;
     try {
-      c = WorldOfGoo.readConfiguration();
+      c = WorldOfGoo.getTheInstance().readConfiguration();
     }
     catch (IOException e) {
       log.log(Level.SEVERE, "Error reading configuration", e);

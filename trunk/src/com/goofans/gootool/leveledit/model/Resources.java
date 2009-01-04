@@ -8,7 +8,7 @@ import java.util.Map;
 import java.util.HashMap;
 import java.awt.*;
 
-import com.goofans.gootool.io.BinFormat;
+import com.goofans.gootool.io.GameFormat;
 import com.goofans.gootool.util.XMLUtil;
 import com.goofans.gootool.wog.WorldOfGoo;
 import org.w3c.dom.Document;
@@ -77,13 +77,14 @@ public class Resources
   @SuppressWarnings({"UseOfSystemOutOrSystemErr"})
   public static void main(String[] args) throws IOException
   {
-    WorldOfGoo.init();
-    File f = new File(WorldOfGoo.getWogDir(), "res/levels/AB3/AB3.resrc.bin");
+    WorldOfGoo worldOfGoo = WorldOfGoo.getTheInstance();
+    worldOfGoo.init();
+    File f = worldOfGoo.getGameFile("res/levels/AB3/AB3.resrc.bin");
 
-    String xml = BinFormat.decodeFile(f);
+    String xml = GameFormat.decodeBinFile(f);
     Document doc = XMLUtil.loadDocumentFromReader(new StringReader(xml));
 
-    Resources res = new Resources(doc, WorldOfGoo.getWogDir());
+    Resources res = new Resources(doc, worldOfGoo.getCustomGameFile(""));
 
     System.out.println(">>> IMAGES <<<");
 

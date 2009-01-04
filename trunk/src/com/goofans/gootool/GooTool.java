@@ -3,6 +3,7 @@ package com.goofans.gootool;
 import com.goofans.gootool.util.ProgressIndicatingTask;
 import com.goofans.gootool.util.Version;
 import com.goofans.gootool.util.GUIUtil;
+import com.goofans.gootool.platform.PlatformSupport;
 
 import javax.swing.*;
 import java.awt.*;
@@ -29,16 +30,26 @@ public class GooTool
 
   public static void main(String[] args)
   {
-    GUIUtil.switchToSystemLookAndFeel();
-
     log.info("Launching gootool " + Version.RELEASE_FULL);
     log.info("Java version " + System.getProperty("java.version") + " from " + System.getProperty("java.vendor") + " in " + System.getProperty("java.home"));
+
+    log.info("os.name = " + System.getProperty("os.name"));
+    log.info("os.version = " + System.getProperty("os.version"));
+    log.info("os.arch = " + System.getProperty("os.arch"));
+
+    if (!PlatformSupport.preStartup(args)) {
+      return;
+    }
+
+    GUIUtil.switchToSystemLookAndFeel();
 
     try {
       initIcon();
       initTextProvider();
 
       Controller controller = new Controller();
+
+      PlatformSupport.startup(controller);
 
       ProgressIndicatingTask startupTask = new StartupTask(controller);
 

@@ -1,9 +1,8 @@
 package com.goofans.gootool.addins;
 
 import com.goofans.gootool.wog.WorldOfGoo;
-import com.goofans.gootool.io.BinFormat;
 import com.goofans.gootool.io.FinalNewlineRemovingReader;
-import com.goofans.gootool.util.Utilities;
+import com.goofans.gootool.io.GameFormat;
 
 import javax.xml.transform.*;
 import javax.xml.transform.stream.StreamSource;
@@ -26,7 +25,7 @@ public class Merger
 
   public Merger(File encryptedFile, Reader transform) throws IOException, TransformerException
   {
-    this(new StringReader(BinFormat.decodeFile(encryptedFile)), transform);
+    this(new StringReader(GameFormat.decodeBinFile(encryptedFile)), transform);
 //    System.out.println("encryptedFile = " + encryptedFile);
 //    System.out.println(">>"+Utilities.readReaderIntoString(new FinalNewlineRemovingReader(new StringReader(BinFormat.decodeFile(encryptedFile))))+"<<");
   }
@@ -72,14 +71,15 @@ public class Merger
   public void writeEncoded(File out) throws IOException
   {
     if (result == null) throw new RuntimeException("Not yet merged!");
-    BinFormat.encodeFile(out, result);
+    GameFormat.encodeBinFile(out, result);
   }
 
 
-  @SuppressWarnings({"UseOfSystemOutOrSystemErr"})
+  @SuppressWarnings({"UseOfSystemOutOrSystemErr", "HardcodedFileSeparator", "HardCodedStringLiteral", "DuplicateStringLiteralInspection"})
   public static void main(String[] args) throws IOException, TransformerException
   {
-    WorldOfGoo.init();
+    WorldOfGoo worldOfGoo = WorldOfGoo.getTheInstance();
+    worldOfGoo.init();
 
 //    FileReader transformReader = new FileReader(new File("addins/src\\net.davidc.test.merger\\merge\\res\\levels\\GoingUp\\GoingUp.level"));
 //    File in = new File(WorldOfGoo.getWogDir(), "res\\levels\\GoingUp\\GoingUp.level.bin.2dboy");
@@ -90,8 +90,8 @@ public class Merger
 //    File out = new File(WorldOfGoo.getWogDir(), "res\\levels\\EconomicDivide\\EconomicDivide.level.bin");
 
     FileReader transformReader = new FileReader(new File("resources/watermark.xsl"));
-    File in = new File(WorldOfGoo.getWogDir(), "properties/text.xml.bin");
-    File out = new File(WorldOfGoo.getWogDir(), "properties/newtext.xml.bin");
+    File in = worldOfGoo.getGameFile("properties/text.xml.bin");
+    File out = worldOfGoo.getGameFile("properties/newtext.xml.bin");
 
     Merger merger = new Merger(in, transformReader);
 
@@ -102,5 +102,4 @@ public class Merger
 
     merger.writeEncoded(out);
   }
-
 }

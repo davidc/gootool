@@ -158,9 +158,9 @@ public class LevelEditor extends JFrame implements ActionListener
   {
     GUIUtil.switchToSystemLookAndFeel();
 
-    WorldOfGoo.init();
+    WorldOfGoo.getTheInstance().init();
 
-    Level level = new Level(WorldOfGoo.getWogDir(), "MapWorldView");
+    Level level = new Level(WorldOfGoo.getTheInstance().getWogDir(), "MapWorldView");
 
     LevelEditor dialog = new LevelEditor(level);
     dialog.pack();

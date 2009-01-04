@@ -3,6 +3,7 @@ package com.goofans.gootool.view;
 import com.goofans.gootool.Controller;
 import com.goofans.gootool.GooTool;
 import com.goofans.gootool.TextProvider;
+import com.goofans.gootool.platform.PlatformSupport;
 import com.goofans.gootool.util.HyperlinkLaunchingListener;
 
 import javax.swing.*;
@@ -54,11 +55,13 @@ public class MainMenu
     menuItem.addActionListener(controller);
     menu.add(menuItem);
 
-    menuItem = new JMenuItem(textProvider.getText("mainMenu.file.exit"));
-    menuItem.setMnemonic(KeyEvent.VK_X);
-    menuItem.setActionCommand(Controller.CMD_EXIT);
-    menuItem.addActionListener(controller);
-    menu.add(menuItem);
+    if (PlatformSupport.getPlatform() != PlatformSupport.Platform.MACOSX) {
+      menuItem = new JMenuItem(textProvider.getText("mainMenu.file.exit"));
+      menuItem.setMnemonic(KeyEvent.VK_X);
+      menuItem.setActionCommand(Controller.CMD_EXIT);
+      menuItem.addActionListener(controller);
+      menu.add(menuItem);
+    }
 
     menuBar.add(menu);
 
@@ -108,11 +111,13 @@ public class MainMenu
     menuItem.addActionListener(controller);
     menu.add(menuItem);
 
-    menuItem = new JMenuItem(textProvider.getText("mainMenu.help.about"));
-    menuItem.setMnemonic(KeyEvent.VK_A);
-    menuItem.setActionCommand(Controller.CMD_ABOUT);
-    menuItem.addActionListener(controller);
-    menu.add(menuItem);
+    if (PlatformSupport.getPlatform() != PlatformSupport.Platform.MACOSX) {
+      menuItem = new JMenuItem(textProvider.getText("mainMenu.help.about"));
+      menuItem.setMnemonic(KeyEvent.VK_A);
+      menuItem.setActionCommand(Controller.CMD_ABOUT);
+      menuItem.addActionListener(controller);
+      menu.add(menuItem);
+    }
 
     menuBar.add(menu);
   }

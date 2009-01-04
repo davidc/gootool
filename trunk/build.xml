@@ -155,7 +155,7 @@
 
   <target name="recompile" depends="clean, compile" description="build all"/>
 
-  <target name="jar" depends="recompile">
+  <target name="jar" depends="compile">
     <jar jarfile="${output.jar}">
       <fileset dir="${output.dir}" excludes="com/goofans/gootool/leveledit/**"/>
     </jar>
@@ -170,7 +170,7 @@
 
       <keepattribute name="SourceFile"/>
       <keepattribute name="LineNumberTable"/>
-      <libraryjar refid="gootool.module.runtime.classpath"/>
+      <libraryjar refid="gootool.module.build.classpath"/>
       <injar file="${output.jar}"/>
       <outjar file="${obfuscated.jar}"/>
 
@@ -246,16 +246,27 @@
         <include name="gootool.jar"/>
       </jarfileset>
       <!--<extraclasspathfilelist files="gootool.jar"/>-->
-      <javaproperty name="java.util.logging.config.file" value="etc/logger_properties.txt"/>
+      <javaproperty name="java.util.logging.config.file" value="$APP_PACKAGE/Contents/Resources/logger_properties.txt"/>
       <javaproperty name="apple.laf.useScreenMenuBar" value="true"/>
 
       <documenttype name="World of Goo addin"
-        extensions="goomod"
-        mimetypes="application/x-goomod"
-        role="Viewer"/>
-      <!--iconfile="todo"-->
+                    extensions="goomod"
+                    mimetypes="application/x-goomod"
+                    role="Viewer"
+                    iconfile="dist_src/macosx/goomod.icns"/>
     </jarbundler>
+
+    <delete file="${dist.macosx}/gootool.jar"/>
+
     <!--<copy tofile="${dist.macosx}/GooTool.app/Contents/Resources/Java/gootool.jar" file="${obfuscated.jar}"/>-->
+    <mkdir dir="${dist.macosx}/Licenses"/>
+    <copy todir="${dist.macosx}/Licenses">
+      <fileset dir="dist_src/common/doc/" includes="*"/>
+    </copy>
+
+    <copy todir="${dist.macosx}/GooTool.app/Contents/Resources/">
+      <fileset dir="dist_src/common/etc" includes="*"/>
+    </copy>
 
   </target>
 
