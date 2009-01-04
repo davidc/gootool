@@ -1,5 +1,7 @@
 package com.goofans.gootool.util;
 
+import com.goofans.gootool.platform.PlatformSupport;
+
 import javax.swing.filechooser.FileFilter;
 import java.io.File;
 
@@ -26,12 +28,24 @@ public class WogExeFileFilter extends FileFilter
   public boolean accept(File f)
   {
     if (f != null) {
-      if (f.isDirectory()) {
-        return true;
-      }
       String fileName = f.getName();
-      if (fileName.equalsIgnoreCase("WorldOfGoo.exe")) {
-        return true;
+
+      switch (PlatformSupport.getPlatform()) {
+        case WINDOWS:
+          if (f.isDirectory()) {
+            return true;
+          }
+          if (fileName.equalsIgnoreCase("WorldOfGoo.exe")) {
+            return true;
+          }
+          break;
+        case MACOSX:
+          if (f.isDirectory()) {
+            if (!f.getName().endsWith(".app")) return true;
+            File exeFile = new File(f, "Contents/MacOS/World of Goo");
+            if (exeFile.exists()) return true;
+          }
+          break;
       }
     }
     return false;
@@ -44,7 +58,14 @@ public class WogExeFileFilter extends FileFilter
    */
   public String getDescription()
   {
-    return "WorldOfGoo.exe";
+    switch (PlatformSupport.getPlatform()) {
+
+      case WINDOWS:
+        return "WorldOfGoo.exe";
+      case MACOSX:
+        return "World of Goo";
+    }
+    return null;
   }
 
 

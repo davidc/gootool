@@ -1,24 +1,19 @@
 package com.goofans.gootool.wog;
 
+import com.goofans.gootool.GooTool;
+import com.goofans.gootool.addins.*;
+import com.goofans.gootool.model.Configuration;
+import com.goofans.gootool.model.Resolution;
+import com.goofans.gootool.platform.PlatformSupport;
+import com.goofans.gootool.util.*;
+
 import javax.xml.transform.TransformerException;
-import javax.xml.xpath.XPathConstants;
-import javax.xml.xpath.XPathExpressionException;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.prefs.Preferences;
-
-import com.goofans.gootool.GooTool;
-import com.goofans.gootool.addins.*;
-import com.goofans.gootool.model.Configuration;
-import com.goofans.gootool.model.Resolution;
-import com.goofans.gootool.util.*;
-import org.w3c.dom.Document;
-import org.w3c.dom.Node;
 
 /**
  * Handles the actual writing of the configuration to the World of Goo directory.
@@ -55,8 +50,9 @@ public class ConfigurationWriterTask extends ProgressIndicatingTask
   // Writes the "custom" folder inside WoG. Might take a long time on first run.
   private void copyGameFiles() throws IOException
   {
-    File wogDir = WorldOfGoo.getWogDir();
-    File customDir = WorldOfGoo.getCustomDir();
+    WorldOfGoo worldOfGoo = WorldOfGoo.getTheInstance();
+    File wogDir = worldOfGoo.getWogDir();
+    File customDir = worldOfGoo.getCustomDir();
     log.info("Copying game files from " + wogDir + " to " + customDir);
 
     customDir.mkdir();
@@ -66,14 +62,20 @@ public class ConfigurationWriterTask extends ProgressIndicatingTask
     /* First build a list of everything to copy, so we have an estimate for the progress bar */
     List<String> filesToCopy = new ArrayList<String>(2500);
 
-    for (String resourceDir : resourceDirs) {
-      getFilesInFolder(new File(wogDir, resourceDir), filesToCopy, resourceDir);
+    if (PlatformSupport.getPlatform() == PlatformSupport.Platform.MACOSX) {
+      getFilesInFolder(wogDir, filesToCopy, "");
     }
+    else {
+      // WINDOWS
+      for (String resourceDir : resourceDirs) {
+        getFilesInFolder(new File(wogDir, resourceDir), filesToCopy, resourceDir);
+      }
 
-    /* Add all files (but not directories) in the root directory */
-    for (File file : wogDir.listFiles()) {
-      if (file.isFile()) {
-        filesToCopy.add(file.getName());
+      /* Add all files (but not directories) in the root directory */
+      for (File file : wogDir.listFiles()) {
+        if (file.isFile()) {
+          filesToCopy.add(file.getName());
+        }
       }
     }
 
@@ -106,16 +108,25 @@ public class ConfigurationWriterTask extends ProgressIndicatingTask
       }
       else {
         if (!destFile.exists() || srcFile.lastModified() != destFile.lastModified()) {
-//          System.out.println("copying");
           Utilities.copyFile(srcFile, destFile);
           copied++;
         }
       }
     }
 
-    // TODO? remove files/dirs that only exist in dest dir
+    // TODO remove files/dirs that only exist in dest dir
 
     log.fine(copied + " files copied");
+
+    if (PlatformSupport.getPlatform() == PlatformSupport.Platform.MACOSX) {
+      // Make the EXE executable
+      File exe = new File(customDir, WorldOfGooMacOSX.EXE_FILENAME);
+      Runtime.getRuntime().exec(new String[]{"chmod", "+x", exe.getAbsolutePath()});
+      // Add the Mac icon
+      InputStream is = getClass().getResourceAsStream("/customapp.icns");
+      OutputStream os = new FileOutputStream(customDir + "/Contents/Resources/gooicon.icns");
+      Utilities.copyStreams(is, os);
+    }
 
     progressStep(100f);
   }
@@ -174,51 +185,18 @@ public class ConfigurationWriterTask extends ProgressIndicatingTask
   private void writeUserConfig(Configuration c) throws IOException
   {
     beginStep("Writing game preferences", false);
-
-    // Load the users's config.txt
-    Document document = XMLUtil.loadDocumentFromFile(new File(WorldOfGoo.getWogDir(), WorldOfGoo.USER_CONFIG_FILE));
-
-    try {
-      Node n;
-      if (c.getLanguage() != null) {
-        n = (Node) WorldOfGoo.USER_CONFIG_XPATH_LANGUAGE.evaluate(document, XPathConstants.NODE);
-        n.setNodeValue(c.getLanguage().getCode());
-      }
-
-      Resolution resolution = c.getResolution();
-      if (resolution != null) {
-        n = (Node) WorldOfGoo.USER_CONFIG_XPATH_SCREENWIDTH.evaluate(document, XPathConstants.NODE);
-        n.setNodeValue(String.valueOf(resolution.getWidth()));
-
-        n = (Node) WorldOfGoo.USER_CONFIG_XPATH_SCREENHEIGHT.evaluate(document, XPathConstants.NODE);
-        n.setNodeValue(String.valueOf(resolution.getHeight()));
-      }
-
-      n = (Node) WorldOfGoo.USER_CONFIG_XPATH_UIINSET.evaluate(document, XPathConstants.NODE);
-      n.setNodeValue(String.valueOf(c.getUiInset()));
-    }
-    catch (XPathExpressionException e) {
-      log.log(Level.SEVERE, "Unable to execute XPath", e);
-      throw new IOException("Unable to execute XPath: " + e.getLocalizedMessage());
-    }
-
-    try {
-      XMLUtil.writeDocumentToFile(document, new File(WorldOfGoo.getCustomDir(), WorldOfGoo.USER_CONFIG_FILE));
-    }
-    catch (TransformerException e) {
-      log.log(Level.SEVERE, "Unable to write config file", e);
-      throw new IOException("Unable to write config file: " + e.getLocalizedMessage());
-    }
+    WorldOfGoo worldOfGoo = WorldOfGoo.getTheInstance();
+    worldOfGoo.writeGamePreferences(c);
 
     /* If we're skipping opening movie, we need to remove res/movie/2dboy */
     if (c.isSkipOpeningMovie()) {
-      File movieDir = new File(WorldOfGoo.getCustomDir(), "res/movie/2dboyLogo/");
+      File movieDir = worldOfGoo.getCustomGameFile("res/movie/2dboyLogo/");
       Utilities.rmdirAll(movieDir);
     }
 
     /* If we have a watermark, we need to modify properties/text.xml.bin */
     if (c.getWatermark().length() > 0) {
-      File textFile = new File(WorldOfGoo.getCustomDir(), "properties/text.xml.bin");
+      File textFile = worldOfGoo.getCustomGameFile("properties/text.xml.bin");
       try {
         Merger merger = new Merger(textFile, new InputStreamReader(getClass().getResourceAsStream("/watermark.xsl")));
         merger.setTransformParameter("watermark", c.getWatermark());
@@ -241,7 +219,7 @@ public class ConfigurationWriterTask extends ProgressIndicatingTask
       String id = addins.get(i);
       beginStep("Merging addin " + id, false);
 
-      List<Addin> availableAddins = WorldOfGoo.getAvailableAddins();
+      List<Addin> availableAddins = WorldOfGoo.getTheInstance().getAvailableAddins();
       boolean addinFound = false;
       for (Addin addin : availableAddins) {
         if (addin.getId().equals(id)) {
@@ -269,10 +247,11 @@ public class ConfigurationWriterTask extends ProgressIndicatingTask
   {
     DebugUtil.setAllLogging();
 
-    WorldOfGoo.init();
-    WorldOfGoo.setCustomDir(new File("C:\\BLAH\\"));
+    WorldOfGoo worldOfGoo = WorldOfGoo.getTheInstance();
+    worldOfGoo.init();
+    worldOfGoo.setCustomDir(new File("C:\\BLAH\\"));
 
-    Configuration c = WorldOfGoo.readConfiguration();
+    Configuration c = worldOfGoo.readConfiguration();
     c.setSkipOpeningMovie(true);
     c.setWatermark("hi there!");
 

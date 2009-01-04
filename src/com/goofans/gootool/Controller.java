@@ -23,6 +23,7 @@ import com.goofans.gootool.view.MainFrame;
 import com.goofans.gootool.wog.ConfigurationWriterTask;
 import com.goofans.gootool.wog.WorldOfGoo;
 import com.goofans.gootool.siteapi.VersionCheck;
+import com.goofans.gootool.platform.PlatformSupport;
 
 /**
  * @author David Croft (davidc@goofans.com)
@@ -174,23 +175,22 @@ public class Controller implements ActionListener
     for (File addinFile : selectedFiles) {
       installAddin(addinFile);
     }
-
-    refreshView();
   }
 
   private boolean ensureCustomDirIsSet()
   {
-    if (!WorldOfGoo.isCustomDirSet()) {
+    WorldOfGoo worldOfGoo = WorldOfGoo.getTheInstance();
+    if (!worldOfGoo.isCustomDirSet()) {
       showMessageDialog(textProvider.getText("customdir.select.title"), textProvider.getText("customdir.select.message"));
       changeCustomDir();
-      if (!WorldOfGoo.isCustomDirSet()) {
+      if (!worldOfGoo.isCustomDirSet()) {
         return false;
       }
     }
     return true;
   }
 
-  private void installAddin(File addinFile)
+  public void installAddin(File addinFile)
   {
     if (!addinFile.exists()) {
       log.info("File not found: " + addinFile);
@@ -231,6 +231,8 @@ public class Controller implements ActionListener
       return;
     }
 
+    WorldOfGoo worldOfGoo = WorldOfGoo.getTheInstance();
+
     try {
       for (Addin installedAddin : WorldOfGoo.getAvailableAddins()) {
         if (installedAddin.getId().equals(addin.getId())) {
@@ -251,18 +253,18 @@ public class Controller implements ActionListener
             msg.append("Would you like to replace it");
           }
           msg.append("?");
-          
+
           returnVal = showYesNoDialog("Replace Addin?", msg.toString());
           if (returnVal != JOptionPane.YES_OPTION) {
             log.info("User cancelled overwriting installation of " + addin);
             return;
           }
-          WorldOfGoo.uninstallAddin(installedAddin);
+          worldOfGoo.uninstallAddin(installedAddin);
           break;
         }
       }
 
-      WorldOfGoo.installAddin(addinFile, addin.getId());
+      worldOfGoo.installAddin(addinFile, addin.getId());
     }
     catch (IOException e) {
       log.log(Level.SEVERE, "Unable to copy to addins directory", e);
@@ -280,6 +282,7 @@ public class Controller implements ActionListener
     msg.append("\nDon't forget to save!");
 
     showMessageDialog("Addin installed", msg.toString());
+    refreshView();
   }
 
   private void uninstallAddin()
@@ -294,7 +297,7 @@ public class Controller implements ActionListener
 //    }
 
     try {
-      WorldOfGoo.uninstallAddin(addin);
+      WorldOfGoo.getTheInstance().uninstallAddin(addin);
     }
     catch (IOException e) {
       log.log(Level.SEVERE, "Unable to uninstall addin", e);
@@ -344,9 +347,11 @@ public class Controller implements ActionListener
 
   private void changeCustomDir()
   {
+    WorldOfGoo worldOfGoo = WorldOfGoo.getTheInstance();
+
     File wogDir;
     try {
-      wogDir = WorldOfGoo.getWogDir();
+      wogDir = worldOfGoo.getWogDir();
     }
     catch (IOException e) {
       log.log(Level.WARNING, "Can't get World of Goo dir", e);
@@ -355,14 +360,28 @@ public class Controller implements ActionListener
     }
 
     JFileChooser chooser = new JFileChooser();
-    chooser.setDialogTitle("Choose a directory to save into");
-    chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+    if (PlatformSupport.getPlatform() == PlatformSupport.Platform.MACOSX) {
+      chooser.setDialogTitle("Choose where to save your World of Goo");
+      chooser.setFileFilter(new FileNameExtensionFilter("Application", "app"));
+
+      chooser.setSelectedFile(new File(System.getProperty("user.home") + "/Desktop", "My Custom World of Goo"));
+    }
+    else {
+      chooser.setDialogTitle("Choose a directory to save into");
+      chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+    }
 
     if (chooser.showSaveDialog(mainFrame) != JFileChooser.APPROVE_OPTION) {
       return;
     }
 
     File selectedFile = chooser.getSelectedFile();
+
+    if (PlatformSupport.getPlatform() == PlatformSupport.Platform.MACOSX) {
+      if (!selectedFile.getName().endsWith(".app")) {
+        selectedFile = new File(selectedFile.getAbsoluteFile() + ".app");
+      }
+    }
 
     if (selectedFile.equals(wogDir)) {
       showErrorDialog("Bad choice", "You can't install to same directory that World of Goo's already in! Make a new directory.");
@@ -389,7 +408,7 @@ public class Controller implements ActionListener
     }
 
     try {
-      WorldOfGoo.setCustomDir(selectedFile);
+      worldOfGoo.setCustomDir(selectedFile);
     }
     catch (IOException e) {
       log.log(Level.SEVERE, "Can't set custom dir to " + selectedFile, e);
@@ -514,7 +533,8 @@ public class Controller implements ActionListener
     if (!ensureCustomDirIsSet()) return;
 
     try {
-      if (!new File(WorldOfGoo.getCustomDir(), "WorldOfGoo.exe").exists()) {
+      if (WorldOfGoo.getTheInstance().isFirstCustomBuild()) {
+        // TODO better message for Mac
         showMessageDialog(textProvider.getText("firstbuild.title"), textProvider.getText("firstbuild.message"));
       }
     }
@@ -538,7 +558,7 @@ public class Controller implements ActionListener
     }
 
     try {
-      liveConfig = WorldOfGoo.readConfiguration();
+      liveConfig = WorldOfGoo.getTheInstance().readConfiguration();
     }
     catch (IOException e) {
       showErrorDialog("Error re-reading configuration!", "We recommend you restart GooTool. " + e.getMessage());
@@ -549,7 +569,7 @@ public class Controller implements ActionListener
 
     if (launch && !errored) {
       try {
-        WorldOfGoo.launch();
+        WorldOfGoo.getTheInstance().launch();
       }
       catch (IOException e) {
         log.log(Level.SEVERE, "Error launching World of Goo", e);
@@ -583,7 +603,7 @@ public class Controller implements ActionListener
   }
 
 
-  private void openAboutDialog()
+  public void openAboutDialog()
   {
     JDialog aboutDialog = new AboutDialog(mainFrame);
 
@@ -662,16 +682,20 @@ public class Controller implements ActionListener
    */
   public int askToLocateWog()
   {
+    log.finer("Asking to locate WoG");
     JFileChooser chooser = new JFileChooser();
     chooser.setFileFilter(new WogExeFileFilter());
 
+    log.finer("Chooser opening");
     if (chooser.showOpenDialog(mainFrame) != JFileChooser.APPROVE_OPTION) {
+      log.finer("Chooser cancelled");
       return -2;
     }
 
     File selectedFile = chooser.getSelectedFile();
+    log.finer("Chooser selected: " + selectedFile);
     try {
-      WorldOfGoo.init(selectedFile.getParentFile());
+      WorldOfGoo.getTheInstance().init(selectedFile);
       return 0;
     }
     catch (FileNotFoundException e) {

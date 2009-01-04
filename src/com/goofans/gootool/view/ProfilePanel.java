@@ -192,7 +192,7 @@ public class ProfilePanel implements ActionListener
         }
         catch (IOException e1) {
           log.log(Level.SEVERE, "Unable to render tower", event);
-          towerPanel.add(new JLabel("Sorry, couldn't render your tower."));
+          towerPanel.add(new JLabel("Sorry, couldn't\nrender your tower."));
 //          viewTowerButton.setEnabled(false);
           saveTowerButton.setEnabled(false);
         }

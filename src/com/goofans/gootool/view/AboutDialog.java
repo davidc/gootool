@@ -47,7 +47,7 @@ public class AboutDialog extends JDialog
 
     setContentPane(rootPanel);
 
-    GUIUtil.setPackOnOpen(this);
+//    GUIUtil.setPackOnOpen(this);
 
     GUIUtil.setDefaultClosingOkButton(okButton, this);
     GUIUtil.setCloseOnEscape(this);

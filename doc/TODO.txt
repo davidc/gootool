@@ -1,5 +1,14 @@
+- remove launch4j singleinstance
+- on launch, open a defined lockfile ($HOME/gootool.lock?) writeable
+- if this fails, it's already running. read the file to get the port number, then dump the filename to that socket
+- if it succeeds, open a listening port, dump the port number to this file
+- close and delete file on exit
+
+- about dialog sizing, particularly on mac
+
 MILESTONE 0.10.0 (Final beta version)
 
+- Send OS and CPU type in CheckVersion API
 - NEW FEATURE: OCD flags on the island
 - BUG FIX: addin merging doesn't work on Linux due to windows line endings
 - NEW FEATURE: command line interface to image l10n tool for the wiki site, no gui

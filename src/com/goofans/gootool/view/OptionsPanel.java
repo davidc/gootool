@@ -97,14 +97,14 @@ public class OptionsPanel implements ViewComponent
     resolutionCombo.setSelectedItem(c.getResolution());
 
     try {
-      installDirText.setText(WorldOfGoo.getWogDir().getAbsolutePath());
+      installDirText.setText(WorldOfGoo.getTheInstance().getWogDir().getAbsolutePath());
     }
     catch (IOException e) {
       installDirText.setText("");
     }
 
     try {
-      customDirText.setText(WorldOfGoo.getCustomDir().getAbsolutePath());
+      customDirText.setText(WorldOfGoo.getTheInstance().getCustomDir().getAbsolutePath());
     }
     catch (IOException e) {
       customDirText.setText("");

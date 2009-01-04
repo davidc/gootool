@@ -109,8 +109,16 @@ public class URLLauncher
   {
     // NB The following String is intentionally not inlined to prevent ProGuard trying to locate the unknown class.
     String desktopClassName = "java.awt.Desktop";
+    Class desktopClass;
     try {
-      Class desktopClass = Class.forName(desktopClassName);
+      desktopClass = Class.forName(desktopClassName);
+    }
+    catch (ClassNotFoundException e) {
+      log.info("Desktop class not found");
+      return false;
+    }
+
+    try {
       Method isDesktopSupportedMethod = desktopClass.getDeclaredMethod("isDesktopSupported", new Class[]{});
       log.finer("invoking isDesktopSupported");
       boolean isDesktopSupported = (Boolean) isDesktopSupportedMethod.invoke(null, url.toString());

@@ -1,6 +1,6 @@
 package com.goofans.gootool.profile;
 
-import com.goofans.gootool.io.BinFormat;
+import com.goofans.gootool.io.GameFormat;
 
 import java.io.File;
 import java.io.IOException;
@@ -24,7 +24,7 @@ public class ProfileData
 
   public ProfileData(File f) throws IOException
   {
-    String profile = BinFormat.decodeFile(f);
+    String profile = GameFormat.decodeProfileFile(f);
 
     readProfileData(profile);
 

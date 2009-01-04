@@ -406,6 +406,13 @@
       <JAVADOC />
       <SOURCES />
     </library>
+    <library name="applejavaextensions">
+      <CLASSES>
+        <root url="jar://$PROJECT_DIR$/lib/build/AppleJavaExtensions.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES />
+    </library>
   </component>
 </project>
 

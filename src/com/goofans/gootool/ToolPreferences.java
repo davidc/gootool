@@ -26,6 +26,9 @@ public class ToolPreferences
   private static final String PREF_MRU_ADDIN_DIR = "gootool_mru_addin_dir";
   private static final String PREF_MRU_TOWER_DIR = "gootool_mru_tower_dir";
 
+  private static final String PREF_WOG_DIR = "wog_dir";
+  private static final String PREF_CUSTOM_DIR = "custom_dir";
+
   private ToolPreferences()
   {
   }
@@ -105,6 +108,26 @@ public class ToolPreferences
   public static void setMruAddinDir(String mruDir)
   {
     PREFS.put(PREF_MRU_ADDIN_DIR, mruDir);
+  }
+
+  public static String getWogDir()
+  {
+    return PREFS.get(PREF_WOG_DIR, null);
+  }
+
+  public static void setWogDir(String wogDir)
+  {
+    PREFS.put(PREF_WOG_DIR, wogDir);
+  }
+
+  public static String getCustomDir()
+  {
+    return PREFS.get(PREF_CUSTOM_DIR, null);
+  }
+
+  public static void setCustomDir(String customDir)
+  {
+    PREFS.put(PREF_CUSTOM_DIR, customDir);
   }
 
   @SuppressWarnings({"UseOfSystemOutOrSystemErr"})

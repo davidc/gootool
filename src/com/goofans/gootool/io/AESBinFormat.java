@@ -22,9 +22,9 @@ import java.util.logging.Logger;
  * @author David Croft (davidc@goofans.com)
  * @version $Id$
  */
-public class BinFormat
+public class AESBinFormat
 {
-  private static final Logger log = Logger.getLogger(BinFormat.class.getName());
+  private static final Logger log = Logger.getLogger(AESBinFormat.class.getName());
 
   private static final byte[] KEY = {0x0D, 0x06, 0x07, 0x07, 0x0C, 0x01, 0x08, 0x05,
           0x06, 0x09, 0x09, 0x04, 0x06, 0x0D, 0x03, 0x0F,
@@ -40,11 +40,11 @@ public class BinFormat
   private static int TESTMODE_DECODING_STRING_SIZE;
   private static byte[] TESTMODE_ORIGINAL;
 
-  private BinFormat()
+  private AESBinFormat()
   {
   }
 
-  public static String decodeFile(File file) throws IOException
+  static String decodeFile(File file) throws IOException
   {
     byte[] inputBytes = Utilities.readFile(file);
     return decode(inputBytes);
@@ -133,13 +133,13 @@ public class BinFormat
   }
 
 
-  public static void encodeFile(File file, String input) throws IOException
+  static void encodeFile(File file, String input) throws IOException
   {
     byte[] bytes = encode(input);
     Utilities.writeFile(file, bytes);
   }
 
-  public static byte[] encode(String input) throws IOException
+  private static byte[] encode(String input) throws IOException
   {
     byte[] inputBytes = input.getBytes(CHARSET);
 
@@ -166,7 +166,7 @@ public class BinFormat
       log.finer("Size " + origSize + " padded with " + padding + " bytes to make " + newSize);
 
       byte[] newInputBytes = new byte[newSize];
-      System.arraycopy(inputBytes, 0, newInputBytes, 0, inputBytes.length);
+      System.arraycopy(inputBytes, 0, newInputBytes, 0, origSize);
       inputBytes = newInputBytes;
 //      inputBytes = Arrays.copyOf(inputBytes, newSize);
 
@@ -242,9 +242,10 @@ public class BinFormat
   @SuppressWarnings({"UseOfSystemOutOrSystemErr"})
   public static void main(String[] args) throws IOException, TransformerException
   {
-    WorldOfGoo.init();
+    WorldOfGoo worldOfGoo = WorldOfGoo.getTheInstance();
+    worldOfGoo.init();
 
-    String s = decodeFile(new File(WorldOfGoo.getWogDir(), "properties\\text.xml.bin"));
+    String s = decodeFile(worldOfGoo.getGameFile("properties/text.xml.bin"));
 
 //    Document doc = XMLUtil.loadDocumentFromInputStream(new ByteArrayInputStream(s.getBytes()));
     Document doc = XMLUtil.loadDocumentFromReader(new StringReader(s));
@@ -258,7 +259,7 @@ public class BinFormat
 //    testFile("res\\levels\\GoingUp\\GoingUp.scene.bin");
 //    testFile("properties\\materials.xml.bin");
 
-    testDir(WorldOfGoo.getWogDir());
+    testDir(worldOfGoo.getGameFile(""));
 
 //    testFile("res\\anim\\ball_counter.anim.binltl");
   }
@@ -290,7 +291,7 @@ public class BinFormat
 
   private static String testFile(String file) throws IOException
   {
-    File f = new File(WorldOfGoo.getWogDir(), file);
+    File f = WorldOfGoo.getTheInstance().getGameFile(file);
 
     return testFile(f);
   }
@@ -315,5 +316,13 @@ public class BinFormat
 //    System.out.println("enc = " + enc);
 
     return de;
+  }
+
+  public static byte[] copyOf(byte[] original, int newLength)
+  {
+    byte[] copy = new byte[newLength];
+    System.arraycopy(original, 0, copy, 0,
+            Math.min(original.length, newLength));
+    return copy;
   }
 }
