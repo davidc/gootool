@@ -4,8 +4,8 @@
   <!--
   ant.properties must contain:
   launch4j.dir
-  jdk.home.1.6
-  svn.base (if tag-release task is neede)
+  jdk.home
+  svn.base (if tag-release task is needed)
   -->
 
   <property file="ant.properties"/>
@@ -55,9 +55,9 @@
 
   <!-- JDK definitions -->
 
-  <property name="jdk.bin.1.6" value="${jdk.home.1.6}/bin"/>
+  <property name="jdk.bin" value="${jdk.home}/bin"/>
   <path id="jdk.classpath.1.6">
-    <fileset dir="${jdk.home.1.6}">
+    <fileset dir="${jdk.home}">
       <include name="jre/lib/charsets.jar"/>
       <include name="jre/lib/deploy.jar"/>
       <include name="jre/lib/javaws.jar"/>
@@ -75,8 +75,8 @@
     </fileset>
   </path>
 
-  <property name="project.jdk.home" value="${jdk.home.1.6}"/>
-  <property name="project.jdk.bin" value="${jdk.bin.1.6}"/>
+  <property name="project.jdk.home" value="${jdk.home}"/>
+  <property name="project.jdk.bin" value="${jdk.bin}"/>
   <property name="project.jdk.classpath" value="jdk.classpath.1.6"/>
 
 
