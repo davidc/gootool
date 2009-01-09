@@ -202,6 +202,8 @@ public class Controller implements ActionListener
       return;
     }
 
+    if (!ensureCustomDirIsSet()) return;
+
     log.info("Opening file " + addinFile);
     Addin addin;
     try {
