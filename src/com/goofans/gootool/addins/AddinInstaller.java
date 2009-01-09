@@ -1,20 +1,24 @@
 package com.goofans.gootool.addins;
 
+import javax.imageio.ImageIO;
 import javax.xml.transform.TransformerException;
+import java.awt.*;
 import java.io.*;
 import java.util.Enumeration;
 import java.util.Map;
-import java.util.logging.Logger;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
 import com.goofans.gootool.io.GameFormat;
+import com.goofans.gootool.io.MacGraphicFormat;
+import com.goofans.gootool.platform.PlatformSupport;
 import com.goofans.gootool.util.Utilities;
 import com.goofans.gootool.wog.WorldOfGoo;
 import org.w3c.dom.Document;
-import org.w3c.dom.Node;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 
 /**
  * @author David Croft (davidc@goofans.com)
@@ -148,21 +152,30 @@ public class AddinInstaller
     log.log(Level.FINER, "Override " + fileName);
     checkDirOk(fileName);
 
-    File destFile = WorldOfGoo.getTheInstance().getCustomGameFile(fileName);
 
-    destFile.getParentFile().mkdirs(); // ensure the directory exists
+    if (fileName.endsWith(".png") && PlatformSupport.getPlatform() == PlatformSupport.Platform.MACOSX) {
+      // Mac PNG files need to be "compiled"
+      File destFile = WorldOfGoo.getTheInstance().getCustomGameFile(fileName + ".binltl");
+      Image image = ImageIO.read(is);
+      MacGraphicFormat.encodeImage(destFile, image);
+    }
+    else {
+      File destFile = WorldOfGoo.getTheInstance().getCustomGameFile(fileName);
 
-    try {
-      OutputStream os = new FileOutputStream(destFile);
+      destFile.getParentFile().mkdirs(); // ensure the directory exists
+
       try {
-        Utilities.copyStreams(is, os);
+        OutputStream os = new FileOutputStream(destFile);
+        try {
+          Utilities.copyStreams(is, os);
+        }
+        finally {
+          os.close();
+        }
       }
       finally {
-        os.close();
+        is.close();
       }
-    }
-    finally {
-      is.close();
     }
   }
 
