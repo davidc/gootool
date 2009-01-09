@@ -259,14 +259,18 @@
     <delete file="${dist.macosx}/gootool.jar"/>
 
     <!--<copy tofile="${dist.macosx}/GooTool.app/Contents/Resources/Java/gootool.jar" file="${obfuscated.jar}"/>-->
-    <mkdir dir="${dist.macosx}/Licenses"/>
-    <copy todir="${dist.macosx}/Licenses">
+    <mkdir dir="${dist.macosx}/GooTool.app/Contents/Resources/Licenses"/>
+    <copy todir="${dist.macosx}/GooTool.app/Contents/Resources/Licenses">
       <fileset dir="dist_src/common/doc/" includes="*"/>
     </copy>
 
     <copy todir="${dist.macosx}/GooTool.app/Contents/Resources/">
       <fileset dir="dist_src/common/etc" includes="*"/>
     </copy>
+
+    <zip destfile="${dist.dir}/GooTool-${gootool.version.full}-MacOSX.zip">
+      <zipfileset dir="${dist.macosx}" prefix="/"/>
+    </zip>
 
   </target>
 
