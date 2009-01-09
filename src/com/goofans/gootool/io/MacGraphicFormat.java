@@ -26,18 +26,13 @@ public class MacGraphicFormat
     InputStream is = new FileInputStream(file);
 
     int width = readUnsignedShort(is);
-//    System.out.println("width = " + width);
     int height = readUnsignedShort(is);
-//    System.out.println("height = " + height);
 
     int squareSide = 1;
     while (squareSide < width || squareSide < height) squareSide *= 2;
-//    System.out.println("squareSide = " + squareSide);
 
     int compressedSize = readUnsignedInt(is);
-//    System.out.println("compressedSize = " + compressedSize);
     int uncompressedSize = readUnsignedInt(is);
-//    System.out.println("uncompressedSize = " + uncompressedSize);
 
     byte[] compressedData = new byte[compressedSize];
     if (is.read(compressedData) != compressedSize) {
@@ -83,15 +78,12 @@ public class MacGraphicFormat
   public static void encodeImage(File file, Image image) throws IOException
   {
     int width = image.getWidth(null);
-    System.out.println("width = " + width);
     int height = image.getHeight(null);
-    System.out.println("height = " + height);
 
     // Need to make a square first
 
     int squareSide = 1;
     while (squareSide < width || squareSide < height) squareSide *= 2;
-    System.out.println("squareSide = " + squareSide);
 
     ComponentColorModel colorModel = getColorModel();
     PixelInterleavedSampleModel sampleModel = getSampleModel(squareSide, squareSide, squareSide);
@@ -99,8 +91,6 @@ public class MacGraphicFormat
     WritableRaster raster = Raster.createWritableRaster(sampleModel, new Point(0, 0));
     BufferedImage squareImage = new BufferedImage(colorModel, raster, false, null);
     squareImage.getGraphics().drawImage(image, 0, 0, null);
-
-    showImageWindow(squareImage);
 
     // Get the RGBA bytes from this
     DataBufferByte imageData = (DataBufferByte) squareImage.getRaster().getDataBuffer();
@@ -134,9 +124,7 @@ public class MacGraphicFormat
     writeUnsignedShort(os, width);
     writeUnsignedShort(os, height);
     writeUnsignedInt(os, compressedSize);
-    System.out.println("compressedSize = " + compressedSize);
     writeUnsignedInt(os, uncompressedSize);
-    System.out.println("uncompressedSize = " + uncompressedSize);
 
     os.write(compressedData);
 
