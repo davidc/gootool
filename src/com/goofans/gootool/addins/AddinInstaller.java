@@ -156,6 +156,8 @@ public class AddinInstaller
     if (fileName.endsWith(".png") && PlatformSupport.getPlatform() == PlatformSupport.Platform.MACOSX) {
       // Mac PNG files need to be "compiled"
       File destFile = WorldOfGoo.getTheInstance().getCustomGameFile(fileName + ".binltl");
+      destFile.getParentFile().mkdirs(); // ensure the directory exists
+
       Image image = ImageIO.read(is);
       MacGraphicFormat.encodeImage(destFile, image);
     }
