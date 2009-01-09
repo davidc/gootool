@@ -22,7 +22,8 @@ public class WorldOfGooWindows extends WorldOfGoo
           "%SystemDrive%\\Program Files\\WorldOfGoo", "%SystemDrive%\\Program Files\\World Of Goo",
           "%SystemDrive%\\Games\\WorldOfGoo", "%SystemDrive%\\Games\\World Of Goo",
           "%HOME%/.PlayOnLinux/wineprefix/WorldOfGoo/drive_c/Program Files/WorldOfGoo", // PlayOnLinux
-          "%HOME%/.wine/drive_c/Program Files/WorldOfGoo" // wine
+          "%HOME%/.wine/drive_c/Program Files/WorldOfGoo", // wine
+          "%ProgramFiles\\Steam\\steamapps\\common\\world of goo" // steam
   };
   private static final String EXE_FILENAME = "WorldOfGoo.exe";
 
