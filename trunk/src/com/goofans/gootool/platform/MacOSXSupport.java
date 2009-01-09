@@ -1,9 +1,12 @@
 package com.goofans.gootool.platform;
 
+import javax.swing.*;
+
 import com.apple.eawt.Application;
 import com.apple.eawt.ApplicationEvent;
 import com.apple.eawt.ApplicationListener;
 import com.goofans.gootool.Controller;
+import com.goofans.gootool.GooTool;
 
 import java.io.File;
 import java.util.logging.Logger;
@@ -63,7 +66,14 @@ public class MacOSXSupport extends PlatformSupport implements ApplicationListene
   public void handleOpenFile(ApplicationEvent event)
   {
     log.fine("Mac: handleOpenFile");
-    controller.installAddin(new File(event.getFilename()));
+    final File addinFile = new File(event.getFilename());
+    GooTool.queueTask(new Runnable()
+    {
+      public void run()
+      {
+        controller.installAddin(addinFile);
+      }
+    });
     event.setHandled(true);
   }
 

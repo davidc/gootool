@@ -190,6 +190,10 @@ public class Controller implements ActionListener
     return true;
   }
 
+  /**
+   * NB NB must be run on the GUI thread!
+   * @param addinFile
+   */
   public void installAddin(File addinFile)
   {
     if (!addinFile.exists()) {
@@ -217,8 +221,6 @@ public class Controller implements ActionListener
 //      showErrorDialog("Can't install " + addinFile.getName(), "Can't install this addin because its dependencies aren't satisfied");
 //      return;
 //    }
-
-    // TODO check we already have an addin by this ID, if so, we must ask to replace it. (warn if downgrading)
 
     StringBuilder msg = new StringBuilder("Are you sure you wish to install this addin?\n");
     msg.append("Name: ").append(addin.getName()).append("\n");
@@ -704,5 +706,12 @@ public class Controller implements ActionListener
       JOptionPane.showMessageDialog(null, e.getLocalizedMessage(), "File not found", JOptionPane.ERROR_MESSAGE);
       return -1;
     }
+  }
+
+  public void bringToForeground()
+  {
+    log.finest("Controller is requesting focus on MainFrame");
+    mainFrame.toFront();
+    mainFrame.requestFocus();
   }
 }

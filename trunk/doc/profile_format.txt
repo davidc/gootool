@@ -45,7 +45,11 @@ number of levels played), but sometimes there is more level data. I haven't
 looked into exactly why this is; maybe these are levels that have been played
 but not yet completed.
 
-Then, the World of Goo Coporation data follows, which is a string prefixed by
+A level id with an integer value indicates the end of level data. This is usually
+0, meaning no fields follow, but is sometimes 1, followed by a level name, possibly
+the level name they are currently attempting.
+
+Then, the World of Goo Corporation tower data follows, which is a string prefixed by
 an underscore character (_) which is how it can be distinguished from more
 level data.
 
@@ -108,3 +112,6 @@ I have found that:
 I think for now I will code it so that if it receives an integer when expecting a level name, it skips over that many fields to reach the tower. Normally 0 but in this case 1, and possibly may have other values.
 
 -davidc
+
+
+Credit to Soultaker for first documenting this.

@@ -51,6 +51,8 @@ public class StartupTask extends ProgressIndicatingTask
     catch (MalformedURLException e) {
       log.log(Level.WARNING, "Unable to check version on startup", e);
     }
+
+    GooTool.startupIsComplete();
   }
 
   private void initWog()

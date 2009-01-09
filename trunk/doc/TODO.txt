@@ -1,15 +1,10 @@
-- remove launch4j singleinstance
-- on launch, open a defined lockfile ($HOME/gootool.lock?) writeable
-- if this fails, it's already running. read the file to get the port number, then dump the filename to that socket
-- if it succeeds, open a listening port, dump the port number to this file
-- close and delete file on exit
+- image coloring on Mac conversion
 
-- about dialog sizing, particularly on mac
 
 MILESTONE 0.10.0 (Final beta version)
 
+- Warn if using demo verion of WoG
 - Send OS and CPU type in CheckVersion API
-- NEW FEATURE: OCD flags on the island
 - BUG FIX: addin merging doesn't work on Linux due to windows line endings
 - NEW FEATURE: command line interface to image l10n tool for the wiki site, no gui
 - NEW FEATURE: Windows installer
@@ -25,6 +20,8 @@ MILESTONE 0.10.0 (Final beta version)
 - NEW FEATURE: preference: upload tower on goo exit, or upload tower continuously during play (need to detect when process exits - java.lang.Process?)
 - NEW FEATURE: backup/restore profile to website - perhaps just store their last 5 uploaded profiles?
 - NEW FEATURE: mark user as cheat - requires X votes or something
+
+- NEW FEATURE: Extend size of chapter 1 to support more chapters
 
 MILESTONE 1.0.0 (First public release)
 

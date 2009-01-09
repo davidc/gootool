@@ -1,15 +1,16 @@
 package com.goofans.gootool;
 
-import com.goofans.gootool.util.ProgressIndicatingTask;
-import com.goofans.gootool.util.Version;
-import com.goofans.gootool.util.GUIUtil;
-import com.goofans.gootool.platform.PlatformSupport;
-
 import javax.swing.*;
 import java.awt.*;
+import java.util.List;
+import java.util.LinkedList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.ResourceBundle;
+
+import com.goofans.gootool.platform.PlatformSupport;
+import com.goofans.gootool.util.GUIUtil;
+import com.goofans.gootool.util.ProgressIndicatingTask;
+import com.goofans.gootool.util.Version;
 
 /**
  * Responsible for launching the application, creating the view and controller, and linking them together.
@@ -37,6 +38,8 @@ public class GooTool
     log.info("os.version = " + System.getProperty("os.version"));
     log.info("os.arch = " + System.getProperty("os.arch"));
 
+    initQueuedTasks();
+
     if (!PlatformSupport.preStartup(args)) {
       return;
     }
@@ -60,6 +63,49 @@ public class GooTool
       JOptionPane.showMessageDialog(null, "Uncaught exception (" + t.getClass().getName() + ") " + t.getLocalizedMessage(), "GooTool Exception", JOptionPane.ERROR_MESSAGE);
       System.exit(1);
     }
+  }
+
+  private static List<Runnable> queuedTasks;
+  private static boolean startupIsComplete = false;
+
+  public static void initQueuedTasks()
+  {
+    queuedTasks = new LinkedList<Runnable>();
+  }
+
+  /**
+   * Queue a task to be run after the startup is complete (or now, if we've already started up).
+   * The task is run on the GUI event dispatch thread.
+   *
+   * @param task the Runnable to be executed after startup
+   */
+  public static synchronized void queueTask(Runnable task)
+  {
+    if (startupIsComplete) {
+      log.finest("Running task immediately: " + task);
+      task.run();
+    }
+    else {
+      log.finest("Queueing task for later: " + task);
+      queuedTasks.add(task);
+    }
+  }
+
+  public static synchronized void startupIsComplete()
+  {
+    startupIsComplete = true;
+    SwingUtilities.invokeLater(new Runnable()
+    {
+      public void run()
+      {
+        /* Run all the queued tasks */
+        for (Runnable task : queuedTasks) {
+          log.finest("Running queued task: " + task);
+          task.run();
+        }
+        queuedTasks.clear();
+      }
+    });
   }
 
   private static void initIcon()
