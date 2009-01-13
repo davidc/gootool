@@ -1,10 +1,12 @@
 package com.goofans.gootool.io;
 
 import com.goofans.gootool.platform.PlatformSupport;
+import com.goofans.gootool.util.XMLUtil;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.util.logging.Logger;
+
+import org.w3c.dom.Document;
 
 /**
  * @author David Croft (davidc@goofans.com)
@@ -13,8 +15,9 @@ import java.util.logging.Logger;
 public class GameFormat
 {
   private static final Logger log = Logger.getLogger(GameFormat.class.getName());
+  public static final String DEFAULT_CHARSET = "UTF-8";
 
-  public static String decodeBinFile(File file) throws IOException
+  public static byte[] decodeBinFile(File file) throws IOException
   {
     log.finest("decode bin file: " + file);
     switch (PlatformSupport.getPlatform()) {
@@ -26,29 +29,39 @@ public class GameFormat
     return null;
   }
 
-  public static void encodeBinFile(File file, String input) throws IOException
+  public static void encodeBinFile(File file, byte[] input) throws IOException
   {
     log.finest("encode bin file: " + file);
+
     switch (PlatformSupport.getPlatform()) {
       case WINDOWS:
         AESBinFormat.encodeFile(file, input);
-        return;
+        break;
       case MACOSX:
         MacBinFormat.encodeFile(file, input);
-        return;
+        break;
     }
+  }
+
+  public static Document decodeXmlBinFile(File file) throws IOException
+  {
+    byte[] decoded = decodeBinFile(file);
+    InputStream is = new ByteArrayInputStream(decoded);
+    return XMLUtil.loadDocumentFromInputStream(is);
   }
 
   public static String decodeProfileFile(File file) throws IOException
   {
     log.finest("decode profile file: " + file);
+    byte[] decoded = null;
     switch (PlatformSupport.getPlatform()) {
       case WINDOWS:
-        return AESBinFormat.decodeFile(file);
+        decoded = AESBinFormat.decodeFile(file);
+        break;
       case MACOSX:
-        return MacBinFormat.decodeFile(file);
+        decoded = MacBinFormat.decodeFile(file);
+        break;
     }
-    return null;
+    return new String(decoded, DEFAULT_CHARSET);
   }
-
 }

@@ -3,7 +3,6 @@ package com.goofans.gootool.siteapi;
 import net.infotrek.util.EncodingUtil;
 
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -70,7 +69,7 @@ public class APIRequest
 
     urlConn.connect();
 
-    Document doc = XMLUtil.loadDocumentFromReader(new InputStreamReader(urlConn.getInputStream()));
+    Document doc = XMLUtil.loadDocumentFromInputStream(urlConn.getInputStream());
 
     if (doc.getDocumentElement().getNodeName().equals("error")) {
       String message = XMLUtil.getElementString(doc.getDocumentElement(), "message");

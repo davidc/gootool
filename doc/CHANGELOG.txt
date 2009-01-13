@@ -5,6 +5,7 @@
 - rewrote code to support java 1.5 (you can no longer drag addins to reorder them though)
 - fixed size of about dialog
 - added file handling for Windows/refocussing if GooTool clicked on again
+- skip over Unicode byte-order-marks, fixes UTF-8 files saved from Notepad etc 
 
 0.9.7
 

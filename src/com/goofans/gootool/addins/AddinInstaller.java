@@ -2,6 +2,7 @@ package com.goofans.gootool.addins;
 
 import javax.imageio.ImageIO;
 import javax.xml.transform.TransformerException;
+import javax.swing.*;
 import java.awt.*;
 import java.io.*;
 import java.util.Enumeration;
@@ -13,6 +14,7 @@ import java.util.zip.ZipFile;
 
 import com.goofans.gootool.io.GameFormat;
 import com.goofans.gootool.io.MacGraphicFormat;
+import com.goofans.gootool.io.UnicodeReader;
 import com.goofans.gootool.platform.PlatformSupport;
 import com.goofans.gootool.util.Utilities;
 import com.goofans.gootool.wog.WorldOfGoo;
@@ -162,6 +164,12 @@ public class AddinInstaller
       MacGraphicFormat.encodeImage(destFile, image);
     }
     else {
+      if (fileName.endsWith(".png")) {
+        // Force the image to be read, so Windows users can detect images that Java can't read and prevent
+        // problems on Mac
+        ImageIO.read(is);
+      }
+
       File destFile = WorldOfGoo.getTheInstance().getCustomGameFile(fileName);
 
       destFile.getParentFile().mkdirs(); // ensure the directory exists
@@ -193,7 +201,7 @@ public class AddinInstaller
     if (!mergeFile.exists()) throw new AddinFormatException("Addin tries to merge a nonexistent file: " + fileName);
 
     try {
-      Merger merger = new Merger(mergeFile, new InputStreamReader(is, "UTF-8"));
+      Merger merger = new Merger(mergeFile, new UnicodeReader(is, GameFormat.DEFAULT_CHARSET));
       merger.merge();
       merger.writeEncoded(mergeFile);
     }
@@ -223,7 +231,7 @@ public class AddinInstaller
     finally {
       is.close();
     }
-    GameFormat.encodeBinFile(destFile, xml);
+    GameFormat.encodeBinFile(destFile, xml.getBytes(GameFormat.DEFAULT_CHARSET));
   }
 
   private static void installLevel(Addin addin) throws IOException, AddinFormatException
@@ -275,8 +283,6 @@ public class AddinInstaller
 //      System.out.println("s = " + s);
       merger.writeEncoded(islandSceneFile);
 //		<button id="lb_GoingUp" depth="8" x="-520" y="278" scalex="1" scaley="1" rotation="0" alpha="1" colorize="255,255,255"   up="IMAGE_SCENE_ISLAND1_LEVELMARKERA_UP" over="IMAGE_SCENE_ISLAND1_LEVELMARKERA_OVER" onclick="pl_GoingUp" onmouseenter="ss_GoingUp" onmouseexit="hs_GoingUp" />
-
-      // TODO OCD flag location
     }
     catch (TransformerException e) {
       throw new AddinFormatException("Unable to merge level island scene", e);

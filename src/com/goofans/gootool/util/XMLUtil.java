@@ -13,6 +13,8 @@ import java.util.logging.Level;
 import org.w3c.dom.*;
 import org.xml.sax.SAXException;
 import org.xml.sax.InputSource;
+import com.goofans.gootool.io.UnicodeReader;
+import com.goofans.gootool.io.GameFormat;
 
 /**
  * @author David Croft (davidc@goofans.com)
@@ -24,48 +26,27 @@ public class XMLUtil
 
   public static Document loadDocumentFromFile(File file) throws IOException
   {
-    DocumentBuilder builder;
     try {
-      builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-    }
-    catch (ParserConfigurationException e) {
-      log.log(Level.SEVERE, "Unable to create an XML document builder", e);
-      throw new IOException("Unable to create an XML document builder: " + e.getLocalizedMessage());
-    }
-
-    Document document;
-    try {
-      document = builder.parse(file);
+      return loadDocumentInternal(new FileInputStream(file));
     }
     catch (SAXException e) {
       log.log(Level.SEVERE, "Unable to parse " + file.getName(), e);
       throw new IOException("Unable to parse " + file.getName());
     }
-    return document;
   }
 
-  // Can't use this, at least one fie has weird encoding
-//  public static Document loadDocumentFromInputStream(InputStream is) throws IOException
-//  {
-//    DocumentBuilder builder;
-//    try {
-//      builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-//    }
-//    catch (ParserConfigurationException e) {
-//      throw new IOException("Unable to create an XML document builder: " + e.getLocalizedMessage(), e);
-//    }
-//
-//    Document document;
-//    try {
-//      document = builder.parse(is);
-//    }
-//    catch (SAXException e) {
-//      throw new IOException("Unable to load properties/config.txt", e);
-//    }
-//    return document;
-//  }
+  public static Document loadDocumentFromInputStream(InputStream is) throws IOException
+  {
+    try {
+      return loadDocumentInternal(is);
+    }
+    catch (SAXException e) {
+      log.log(Level.SEVERE, "Unable to parse document", e);
+      throw new IOException("Unable to parse document");
+    }
+  }
 
-  public static Document loadDocumentFromReader(Reader r) throws IOException
+  private static Document loadDocumentInternal(InputStream is) throws IOException, SAXException
   {
     DocumentBuilder builder;
     try {
@@ -76,15 +57,11 @@ public class XMLUtil
       throw new IOException("Unable to create an XML document builder: " + e.getLocalizedMessage());
     }
 
-    Document document;
-    try {
-      document = builder.parse(new InputSource(r));
-    }
-    catch (SAXException e) {
-      log.log(Level.SEVERE, "Unable to parse document", e);
-      throw new IOException("Unable to parse document");
-    }
-    return document;
+    /* Swallow any BOM at the start of file */
+
+    UnicodeReader r = new UnicodeReader(is, GameFormat.DEFAULT_CHARSET);
+
+    return builder.parse(new InputSource(r));
   }
 
   public static void writeDocumentToFile(Document d, File file) throws TransformerException

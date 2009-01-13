@@ -14,7 +14,7 @@ import org.w3c.dom.Document;
 import javax.xml.transform.TransformerException;
 import java.io.File;
 import java.io.IOException;
-import java.io.StringReader;
+import java.io.ByteArrayInputStream;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -44,7 +44,7 @@ public class AESBinFormat
   {
   }
 
-  static String decodeFile(File file) throws IOException
+  static byte[] decodeFile(File file) throws IOException
   {
     byte[] inputBytes = Utilities.readFile(file);
     return decode(inputBytes);
@@ -63,7 +63,7 @@ public class AESBinFormat
 //
 
 
-  private static String decode(byte[] inputBytes) throws IOException
+  private static byte[] decode(byte[] inputBytes) throws IOException
   {
     int inputSize = inputBytes.length;
 
@@ -98,55 +98,35 @@ public class AESBinFormat
       }
     }
 
-//    if (outputLen % 16 == 0) System.out.println("ORIGINAL WAS MULTIPLE OF 16 !!!");
-
     int start = 0;
 
-//    Charset charset = Charset.defaultCharset();
-
     // UTF-8 Byte Order Mark
-    if (outputBytes[0] == (byte) 0xEF && outputBytes[1] == (byte) 0xBB && outputBytes[2] == (byte) 0xBF) {
-      start = 3;
-//      charset = Charset.forName("UTF-8");
-
-      log.finer("Skipping first 3 bytes of file, BOM found");
-      // TODO test what happens in the xml parser if we just leave them there.
-    }
-
+//    if (outputBytes[0] == (byte) 0xEF && outputBytes[1] == (byte) 0xBB && outputBytes[2] == (byte) 0xBF) {
+//      start = 3;
+//      log.finer("Skipping first 3 bytes of file, BOM found");
+//    }
 
     if (TESTMODE) {
       TESTMODE_ORIGINAL = inputBytes;
       TESTMODE_DECODING_STRING_SIZE = outputLen - start;
     }
 
-//    SortedMap<String,Charset> charsets = Charset.availableCharsets();
-//    for (String name : charsets.keySet()) System.out.println("name = " + name);
-//    charset = Charset.forName("UTF-8");
-
-//    CharsetDecoder decoder = charset.newDecoder();
-//    ByteBuffer inBuf = ByteBuffer.wrap(inputBytes, start, outputLen - start);
-//    System.out.println("inBuf.toString() = " + inBuf.toString());
-//    CharBuffer outBuf = decoder.decode(inBuf);
-//    String s = outBuf.toString();
-
-    return new String(outputBytes, start, outputLen - start, CHARSET);
+//    return new String(outputBytes, start, outputLen - start, CHARSET);
+    byte[] finalBytes = new byte[outputLen-start];
+    System.arraycopy(outputBytes, start, finalBytes, 0, outputLen);
+    return finalBytes;
   }
 
 
-  static void encodeFile(File file, String input) throws IOException
+  static void encodeFile(File file, byte[] input) throws IOException
   {
     byte[] bytes = encode(input);
     Utilities.writeFile(file, bytes);
   }
 
-  private static byte[] encode(String input) throws IOException
+  private static byte[] encode(byte[] inputBytes) throws IOException
   {
-    byte[] inputBytes = input.getBytes(CHARSET);
-
-    if (TESTMODE && input.length() != inputBytes.length) {
-      //noinspection UseOfSystemOutOrSystemErr
-      System.err.println("warning! Charset artefact. STRING len = " + input.length() + ", BYTES len = " + inputBytes.length);
-    }
+//    byte[] inputBytes = input.getBytes(CHARSET);
 
     if (TESTMODE && inputBytes.length != TESTMODE_DECODING_STRING_SIZE) {
       //noinspection UseOfSystemOutOrSystemErr
@@ -245,10 +225,10 @@ public class AESBinFormat
     WorldOfGoo worldOfGoo = WorldOfGoo.getTheInstance();
     worldOfGoo.init();
 
-    String s = decodeFile(worldOfGoo.getGameFile("properties/text.xml.bin"));
+    byte[] decoded = decodeFile(worldOfGoo.getGameFile("properties/text.xml.bin"));
 
 //    Document doc = XMLUtil.loadDocumentFromInputStream(new ByteArrayInputStream(s.getBytes()));
-    Document doc = XMLUtil.loadDocumentFromReader(new StringReader(s));
+    Document doc = XMLUtil.loadDocumentFromInputStream(new ByteArrayInputStream(decoded));
     System.out.println(XMLUtil.writeDocumentToString(doc));
 
     TESTMODE = true;
@@ -289,7 +269,7 @@ public class AESBinFormat
     return "0x" + s.substring(s.length() - 2, s.length());
   }
 
-  private static String testFile(String file) throws IOException
+  private static byte[] testFile(String file) throws IOException
   {
     File f = WorldOfGoo.getTheInstance().getGameFile(file);
 
@@ -297,11 +277,11 @@ public class AESBinFormat
   }
 
   @SuppressWarnings({"UseOfSystemOutOrSystemErr"})
-  private static String testFile(File f) throws IOException
+  private static byte[] testFile(File f) throws IOException
   {
     System.err.println("Testing " + f);
 
-    String de = decodeFile(f);
+    byte[] de = decodeFile(f);
 //    System.out.println("de = " + de);
 //    System.out.println("de.length() = " + de.length());
 
