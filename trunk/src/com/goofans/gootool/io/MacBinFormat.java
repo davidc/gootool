@@ -11,15 +11,13 @@ import java.io.IOException;
  */
 public class MacBinFormat
 {
-  private static final String CHARSET = "UTF-8";
-
-  static String decodeFile(File file) throws IOException
+  static byte[] decodeFile(File file) throws IOException
   {
     byte[] inputBytes = Utilities.readFile(file);
     return decode(inputBytes);
   }
 
-  private static String decode(byte[] inputBytes) throws IOException
+  private static byte[] decode(byte[] inputBytes) throws IOException
   {
     int length = inputBytes.length;
     byte[] outputBytes = new byte[length];
@@ -33,18 +31,19 @@ public class MacBinFormat
       salt = ((salt & 0x7f) << 1 | (salt & 0x80) >> 7) ^ inByte;
     }
 
-    return new String(outputBytes, 0, length, CHARSET);
+//    return new String(outputBytes, 0, length, CHARSET);
+    return outputBytes;
   }
 
-  static void encodeFile(File file, String input) throws IOException
+  static void encodeFile(File file, byte[] inputBytes) throws IOException
   {
-    byte[] bytes = encode(input);
+    byte[] bytes = encode(inputBytes);
     Utilities.writeFile(file, bytes);
   }
 
-  private static byte[] encode(String input) throws IOException
+  private static byte[] encode(byte[] inputBytes) throws IOException
   {
-    byte[] inputBytes = input.getBytes(CHARSET);
+//    byte[] inputBytes = inputBytes.getBytes(CHARSET);
     int length = inputBytes.length;
     byte[] outputBytes = new byte[length];
 
@@ -64,11 +63,11 @@ public class MacBinFormat
   @SuppressWarnings({"HardCodedStringLiteral", "UseOfSystemOutOrSystemErr"})
   public static void main(String[] args) throws IOException
   {
-    String s = decodeFile(new File("IvyTower.level.bin"));
+    String s = new String(decodeFile(new File("IvyTower.level.bin")), GameFormat.DEFAULT_CHARSET);
     System.out.println("s = " + s);
 
     byte[] inputBytes = Utilities.readFile(new File("IvyTower.level.bin"));
-    System.out.print(decode(encode(decode(inputBytes))));
+    System.out.print(new String(decode(encode(decode(inputBytes)))));
 
   }
 }

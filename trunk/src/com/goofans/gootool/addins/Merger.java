@@ -3,6 +3,7 @@ package com.goofans.gootool.addins;
 import com.goofans.gootool.wog.WorldOfGoo;
 import com.goofans.gootool.io.FinalNewlineRemovingReader;
 import com.goofans.gootool.io.GameFormat;
+import com.goofans.gootool.io.UnicodeReader;
 
 import javax.xml.transform.*;
 import javax.xml.transform.stream.StreamSource;
@@ -25,7 +26,7 @@ public class Merger
 
   public Merger(File encryptedFile, Reader transform) throws IOException, TransformerException
   {
-    this(new StringReader(GameFormat.decodeBinFile(encryptedFile)), transform);
+    this(new UnicodeReader(new ByteArrayInputStream(GameFormat.decodeBinFile(encryptedFile)), GameFormat.DEFAULT_CHARSET), transform);
 //    System.out.println("encryptedFile = " + encryptedFile);
 //    System.out.println(">>"+Utilities.readReaderIntoString(new FinalNewlineRemovingReader(new StringReader(BinFormat.decodeFile(encryptedFile))))+"<<");
   }
@@ -71,7 +72,7 @@ public class Merger
   public void writeEncoded(File out) throws IOException
   {
     if (result == null) throw new RuntimeException("Not yet merged!");
-    GameFormat.encodeBinFile(out, result);
+    GameFormat.encodeBinFile(out, result.getBytes(GameFormat.DEFAULT_CHARSET));
   }
 
 

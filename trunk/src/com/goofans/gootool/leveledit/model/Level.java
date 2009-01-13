@@ -19,24 +19,23 @@ public class Level
   private Resources resources;
   private LevelContents levelContents;
 
-  public Level(File wogDir, String prefix) throws IOException
+  public Level(String levelName) throws IOException
   {
-    File dir = new File(wogDir, "res/levels/" + prefix); // TODO use getGameFile
+    WorldOfGoo worldOfGoo = WorldOfGoo.getTheInstance();
 
-    File sceneFile = new File(dir, prefix + ".scene.bin");
-    String xml = GameFormat.decodeBinFile(sceneFile);
-    Document doc = XMLUtil.loadDocumentFromReader(new StringReader(xml));
-    scene = new Scene(doc);
+    String levelPrefix = "res/levels/" + levelName + "/" + levelName;
 
-    File resourcesFile = new File(dir, prefix + ".resrc.bin");
-    xml = GameFormat.decodeBinFile(resourcesFile);
-    doc = XMLUtil.loadDocumentFromReader(new StringReader(xml));
-    resources = new Resources(doc, wogDir);
+    File sceneFile = worldOfGoo.getGameFile(levelPrefix + ".scene.bin");
+    Document sceneDoc = GameFormat.decodeXmlBinFile(sceneFile);
+    scene = new Scene(sceneDoc);
 
-    File levelFile = new File(dir, prefix + ".level.bin");
-    xml = GameFormat.decodeBinFile(levelFile);
-    doc = XMLUtil.loadDocumentFromReader(new StringReader(xml));
-    levelContents = new LevelContents(doc);
+    File resourcesFile = worldOfGoo.getGameFile(levelPrefix + ".resrc.bin");
+    Document resourcesDoc = GameFormat.decodeXmlBinFile(resourcesFile);
+    resources = new Resources(resourcesDoc, worldOfGoo.getWogDir());
+
+    File levelFile = worldOfGoo.getGameFile(levelPrefix + ".level.bin");
+    Document levelDoc = GameFormat.decodeXmlBinFile(levelFile);
+    levelContents = new LevelContents(levelDoc);
   }
 
   public Scene getScene()
@@ -59,7 +58,7 @@ public class Level
   {
     WorldOfGoo worldOfGoo = WorldOfGoo.getTheInstance();
     worldOfGoo.init();
-    Level l = new Level(worldOfGoo.getWogDir(), "EconomicDivide");
+    Level l = new Level("EconomicDivide");
 
     System.out.println("l = " + l);
   }

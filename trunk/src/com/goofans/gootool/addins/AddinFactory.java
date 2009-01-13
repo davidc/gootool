@@ -127,7 +127,7 @@ public class AddinFactory
   // Synchronized since xpath expressions and patterns aren't thread safe
   private static synchronized Addin readManifest(InputStream is, File addinDiskFile) throws IOException, AddinFormatException
   {
-    Document document = XMLUtil.loadDocumentFromReader(new InputStreamReader(is, "UTF-8"));
+    Document document = XMLUtil.loadDocumentFromInputStream(is);
 
     try {
       String specVersionStr = getString(document, XPATH_ADDIN_SPECVERSION);

@@ -1,4 +1,6 @@
 - image coloring on Mac conversion
+- more space for addins
+- properties on main addins table
 
 
 MILESTONE 0.10.0 (Final beta version)
@@ -6,9 +8,7 @@ MILESTONE 0.10.0 (Final beta version)
 - Warn if using demo verion of WoG
 - Send OS and CPU type in CheckVersion API
 - BUG FIX: addin merging doesn't work on Linux due to windows line endings
-- NEW FEATURE: command line interface to image l10n tool for the wiki site, no gui
 - NEW FEATURE: Windows installer
-- NEW FEATURE: Supported mac version
 - NEW FEATURE: File association for .goomod
 - IMPROVEMENT: Don't SAVE if unmodified on LAUNCH
 
@@ -31,8 +31,8 @@ MILESTONE 1.1.0
 
 - NEW FEATURE: Option to check mods for updates on goofans.com from within GooTool
 - NEW FEATURE: Auto-download required dependencies from goofans.com
+- NEW FEATURE: command line interface to image l10n tool for the wiki site, no gui
 
-- IMPROVEMENT: strip down bouncycastle to only needed classes
 - NEW FEATURE: Integrated ball editor
 - NEW FEATURE: Finalise the level editor
 - NEW FEATURE: Changing refreshrate in config.txt - NEW IN 1.10? 1.20?

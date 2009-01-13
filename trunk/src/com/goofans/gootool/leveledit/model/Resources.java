@@ -81,8 +81,7 @@ public class Resources
     worldOfGoo.init();
     File f = worldOfGoo.getGameFile("res/levels/AB3/AB3.resrc.bin");
 
-    String xml = GameFormat.decodeBinFile(f);
-    Document doc = XMLUtil.loadDocumentFromReader(new StringReader(xml));
+    Document doc = GameFormat.decodeXmlBinFile(f);
 
     Resources res = new Resources(doc, worldOfGoo.getCustomGameFile(""));
 
