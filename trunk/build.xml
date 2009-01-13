@@ -269,7 +269,12 @@
     </copy>
 
     <zip destfile="${dist.dir}/GooTool-${gootool.version.full}-MacOSX.zip">
-      <zipfileset dir="${dist.macosx}" prefix="/"/>
+      <zipfileset dir="${dist.macosx}" prefix="">
+        <exclude name="GooTool.app/Contents/MacOS/JavaApplicationStub"/>
+      </zipfileset>
+      <zipfileset filemode="755" dir="${dist.macosx}" prefix="">
+        <filename name="GooTool.app/Contents/MacOS/JavaApplicationStub"/>
+      </zipfileset>
     </zip>
 
   </target>
