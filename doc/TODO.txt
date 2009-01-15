@@ -1,17 +1,16 @@
-- image coloring on Mac conversion
-- more space for addins
-- properties on main addins table
 
-MILESTONE 0.10.0 (Final beta version)
-
-- Warn if using demo verion of WoG
 - Send OS and CPU type in CheckVersion API
-- BUG FIX: addin merging doesn't work on Linux due to windows line endings
-- NEW FEATURE: Windows installer
-- NEW FEATURE: File association for .goomod
+
+MILESTONE 0.10.x (Final beta series)
+
+- BUG FIX: Mac image conversion has slight colour shifts due to ColorModel
+- IMPROVEMENT: Create more space on Chapter 1 to support more levels.
+- IMPROVEMENT: Warn if using demo verion of WoG
 - IMPROVEMENT: Don't SAVE if unmodified on LAUNCH
 
-- NEW FEATURE: Addin author tool: create addin from directory/create addin from wogeditor
+- NEW FEATURE: Addin author tool: create addin from directory/create addin from wogeditor, create addin from assets
+
+- IMPROVEMENT: Move up/down to reorder addins, to replace lost drag-and-drop functionality
 - IMPROVEMENT: Make checkboxes in addin list actually enable/disable the addin
 - BUG FIX: Dragging addins below last enabled addin should move it to bottom
 
@@ -19,8 +18,6 @@ MILESTONE 0.10.0 (Final beta version)
 - NEW FEATURE: preference: upload tower on goo exit, or upload tower continuously during play (need to detect when process exits - java.lang.Process?)
 - NEW FEATURE: backup/restore profile to website - perhaps just store their last 5 uploaded profiles?
 - NEW FEATURE: mark user as cheat - requires X votes or something
-
-- NEW FEATURE: Extend size of chapter 1 to support more chapters
 
 MILESTONE 1.0.0 (First public release)
 
