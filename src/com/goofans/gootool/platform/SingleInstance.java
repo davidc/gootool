@@ -1,10 +1,7 @@
 package com.goofans.gootool.platform;
 
 import java.io.*;
-import java.net.InetAddress;
-import java.net.ServerSocket;
-import java.net.Socket;
-import java.net.UnknownHostException;
+import java.net.*;
 import java.nio.channels.*;
 import java.util.Random;
 import java.util.Set;
@@ -177,9 +174,6 @@ public class SingleInstance
     return new File(tmpDir, fileName);
   }
 
-  private static final int MIN_PORT = 20000;
-  private static final int MAX_PORT = 60000;
-
   /**
    * Handles the command line arguments, both if we're the primary instance, and if these args were passed
    * over the socket.
@@ -244,6 +238,9 @@ public class SingleInstance
       log.log(Level.FINE, "Primary instance listening on " + serverSocketChannel);
     }
 
+  private static final int MIN_PORT = 20000;
+  private static final int MAX_PORT = 60000;
+
     private ServerSocketChannel openSocket() throws IOException
     {
       ServerSocketChannel ssc = ServerSocketChannel.open();
@@ -251,30 +248,30 @@ public class SingleInstance
 
       ServerSocket sock = ssc.socket();
 
-      sock.bind(null);
+//      sock.bind(null);
+
+      int attempt = 0;
+      Random rand = new Random();
+      InetAddress addr = getLoopbackAddress();
+
+      while (true) {
+        int port = MIN_PORT + rand.nextInt(1 + MAX_PORT - MIN_PORT);
+        try {
+          sock.bind(new InetSocketAddress(addr, port));
+          break;
+        }
+        catch (IOException e) {
+          log.log(Level.WARNING, "Unable to open socket on port " + port, e);
+          if (++attempt > 9) throw e;
+        }
+      }
+
       return ssc;
-
-//      int attempt = 0;
-//      Random rand = new Random();
-//      InetAddress addr = getLoopbackAddress();
-
-//      while (sock == null) {
-//        int port = MIN_PORT + rand.nextInt(1 + MAX_PORT - MIN_PORT);
-//        try {
-//          sock.bind(new InetSocketAddress(addr, port));
-//        }
-//        catch (IOException e) {
-//          log.log(Level.WARNING, "Unable to open socket on port " + port, e);
-//          if (++attempt > 9) throw e;
-//        }
-//      }
-//      return sock;
     }
 
     @Override
     public void run()
     {
-
       try {
         Selector selector = Selector.open();
         serverSocketChannel.register(selector, SelectionKey.OP_ACCEPT);
