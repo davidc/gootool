@@ -67,14 +67,57 @@ public class MainMenu
 
     menu = new JMenu(textProvider.getText("mainMenu.advanced"));
     menu.setMnemonic(KeyEvent.VK_V);
+    menuBar.add(menu);
+
+    JMenu decryptMenuItem = new JMenu(textProvider.getText("mainMenu.advanced.decrypt"));
+    decryptMenuItem.setMnemonic(KeyEvent.VK_D);
+    menu.add(decryptMenuItem);
+
+    menuItem = new JMenuItem(textProvider.getText("mainMenu.advanced.decrypt.binpc"));
+    menuItem.setMnemonic(KeyEvent.VK_P);
+    menuItem.setActionCommand(Controller.CMD_DECRYPT_BIN_PC);
+    menuItem.addActionListener(controller);
+    decryptMenuItem.add(menuItem);
+
+    menuItem = new JMenuItem(textProvider.getText("mainMenu.advanced.decrypt.binmac"));
+    menuItem.setMnemonic(KeyEvent.VK_M);
+    menuItem.setActionCommand(Controller.CMD_DECRYPT_BIN_MAC);
+    menuItem.addActionListener(controller);
+    decryptMenuItem.add(menuItem);
+
+    menuItem = new JMenuItem(textProvider.getText("mainMenu.advanced.decrypt.binltlmac"));
+    menuItem.setMnemonic(KeyEvent.VK_I);
+    menuItem.setActionCommand(Controller.CMD_DECRYPT_PNGBINLTL_MAC);
+    menuItem.addActionListener(controller);
+    decryptMenuItem.add(menuItem);
+
+    JMenu encryptMenuItem = new JMenu(textProvider.getText("mainMenu.advanced.encrypt"));
+    encryptMenuItem.setMnemonic(KeyEvent.VK_E);
+    menu.add(encryptMenuItem);
+
+    menuItem = new JMenuItem(textProvider.getText("mainMenu.advanced.encrypt.binpc"));
+    menuItem.setMnemonic(KeyEvent.VK_P);
+    menuItem.setActionCommand(Controller.CMD_ENCRYPT_BIN_PC);
+    menuItem.addActionListener(controller);
+    encryptMenuItem.add(menuItem);
+
+    menuItem = new JMenuItem(textProvider.getText("mainMenu.advanced.encrypt.binmac"));
+    menuItem.setMnemonic(KeyEvent.VK_M);
+    menuItem.setActionCommand(Controller.CMD_ENCRYPT_BIN_MAC);
+    menuItem.addActionListener(controller);
+    encryptMenuItem.add(menuItem);
+
+    menuItem = new JMenuItem(textProvider.getText("mainMenu.advanced.encrypt.binltlmac"));
+    menuItem.setMnemonic(KeyEvent.VK_I);
+    menuItem.setActionCommand(Controller.CMD_ENCRYPT_PNGBINLTL_MAC);
+    menuItem.addActionListener(controller);
+    encryptMenuItem.add(menuItem);
 
     translatorModeMenuItem = new JCheckBoxMenuItem(textProvider.getText("mainMenu.advanced.translatorMode"));
     translatorModeMenuItem.setMnemonic(KeyEvent.VK_T);
     translatorModeMenuItem.setActionCommand(Controller.CMD_TRANSLATOR_MODE);
     translatorModeMenuItem.addActionListener(controller);
     menu.add(translatorModeMenuItem);
-
-    menuBar.add(menu);
 
     menu = new JMenu(textProvider.getText("mainMenu.help"));
     menu.setMnemonic(KeyEvent.VK_H);
