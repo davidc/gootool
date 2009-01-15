@@ -11,7 +11,7 @@ import java.io.IOException;
  */
 public class MacBinFormat
 {
-  static byte[] decodeFile(File file) throws IOException
+  public static byte[] decodeFile(File file) throws IOException
   {
     byte[] inputBytes = Utilities.readFile(file);
     return decode(inputBytes);
@@ -35,7 +35,7 @@ public class MacBinFormat
     return outputBytes;
   }
 
-  static void encodeFile(File file, byte[] inputBytes) throws IOException
+  public static void encodeFile(File file, byte[] inputBytes) throws IOException
   {
     byte[] bytes = encode(inputBytes);
     Utilities.writeFile(file, bytes);

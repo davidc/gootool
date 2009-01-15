@@ -44,7 +44,7 @@ public class AESBinFormat
   {
   }
 
-  static byte[] decodeFile(File file) throws IOException
+  public static byte[] decodeFile(File file) throws IOException
   {
     byte[] inputBytes = Utilities.readFile(file);
     return decode(inputBytes);
@@ -112,13 +112,13 @@ public class AESBinFormat
     }
 
 //    return new String(outputBytes, start, outputLen - start, CHARSET);
-    byte[] finalBytes = new byte[outputLen-start];
+    byte[] finalBytes = new byte[outputLen - start];
     System.arraycopy(outputBytes, start, finalBytes, 0, outputLen);
     return finalBytes;
   }
 
 
-  static void encodeFile(File file, byte[] input) throws IOException
+  public static void encodeFile(File file, byte[] input) throws IOException
   {
     byte[] bytes = encode(input);
     Utilities.writeFile(file, bytes);

@@ -2,7 +2,6 @@
 - more space for addins
 - properties on main addins table
 
-
 MILESTONE 0.10.0 (Final beta version)
 
 - Warn if using demo verion of WoG
@@ -147,3 +146,14 @@ Decar - tehill@gmail.com
 
 tek - teknorat@gmail.com
 maks - maksverver@geocities.com
+
+
+
+
+website how to:
+
+- click on a ball to clear its strand
+
+- last two balls hanging ivy
+
+- esc on signpainter retry

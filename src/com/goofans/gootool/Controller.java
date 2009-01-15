@@ -8,6 +8,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.net.MalformedURLException;
@@ -24,6 +26,7 @@ import com.goofans.gootool.wog.ConfigurationWriterTask;
 import com.goofans.gootool.wog.WorldOfGoo;
 import com.goofans.gootool.siteapi.VersionCheck;
 import com.goofans.gootool.platform.PlatformSupport;
+import static com.goofans.gootool.GameFileCodecTool.CodecType;
 
 /**
  * @author David Croft (davidc@goofans.com)
@@ -54,6 +57,13 @@ public class Controller implements ActionListener
 
   public static final String CMD_TRANSLATOR_MODE = "ToggleTranslator";
 
+  public static final String CMD_DECRYPT_BIN_PC = "Decrypt>BinPC";
+  public static final String CMD_DECRYPT_BIN_MAC = "Decrypt>BinMac";
+  public static final String CMD_DECRYPT_PNGBINLTL_MAC = "Decrypt>PngBinLtlMac";
+  public static final String CMD_ENCRYPT_BIN_PC = "Encrypt>BinPC";
+  public static final String CMD_ENCRYPT_BIN_MAC = "Encrypt>BinMac";
+  public static final String CMD_ENCRYPT_PNGBINLTL_MAC = "Encrypt>PngBinLtlMac";
+
   private MainFrame mainFrame;
 
   // The configuration currently live on disk.
@@ -63,10 +73,19 @@ public class Controller implements ActionListener
   private Configuration editorConfig;
   private TextProvider textProvider;
 
+  // The codecs
+  private Map<String, GameFileCodecTool> codecs = new HashMap<String, GameFileCodecTool>(6);
 
   public Controller()
   {
     textProvider = GooTool.getTextProvider();
+
+    codecs.put(CMD_DECRYPT_BIN_PC, new GameFileCodecTool("bin", "Encrypted Bin File (PC/Linux)", "xml", CodecType.AES_DECODE));
+    codecs.put(CMD_DECRYPT_BIN_MAC, new GameFileCodecTool("bin", "Encrypted Bin File (Mac)", "xml", CodecType.XOR_DECODE));
+    codecs.put(CMD_DECRYPT_PNGBINLTL_MAC, new GameFileCodecTool("png.binltl", "Encoded Image File", "png", CodecType.PNGBINLTL_DECODE));
+    codecs.put(CMD_ENCRYPT_BIN_PC, new GameFileCodecTool("xml", "XML Document", "bin", CodecType.AES_ENCODE));
+    codecs.put(CMD_ENCRYPT_BIN_MAC, new GameFileCodecTool("xml", "XML Document", "bin", CodecType.XOR_ENCODE));
+    codecs.put(CMD_ENCRYPT_PNGBINLTL_MAC, new GameFileCodecTool("png", "PNG Image File", "png.binltl", CodecType.PNGBINLTL_ENCODE));
   }
 
   /**
@@ -134,6 +153,14 @@ public class Controller implements ActionListener
       }
       new Thread(versionCheck).start();
     }
+    else if (codecs.containsKey(cmd)) {
+      try {
+        codecs.get(cmd).runTool(mainFrame);
+      }
+      catch (IOException e) {
+        showErrorDialog("Error coding file", e.getLocalizedMessage());
+      }
+    }
   }
 
   private void updateImageLocalisationPanel(boolean enabled)
@@ -192,6 +219,7 @@ public class Controller implements ActionListener
 
   /**
    * NB NB must be run on the GUI thread!
+   *
    * @param addinFile
    */
   public void installAddin(File addinFile)

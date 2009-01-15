@@ -96,13 +96,20 @@ public final class FileNameExtensionFilter extends FileFilter
             String fileName = f.getName();
 	    int i = fileName.lastIndexOf('.');
 	    if (i > 0 && i < fileName.length() - 1) {
-                String desiredExtension = fileName.substring(i+1).
-                        toLowerCase(Locale.ENGLISH);
-                for (String extension : lowerCaseExtensions) {
-                    if (desiredExtension.equals(extension)) {
-                        return true;
-                    }
+//                String desiredExtension = fileName.substring(i+1).
+//                        toLowerCase(Locale.ENGLISH);
+//                for (String extension : lowerCaseExtensions) {
+//                    if (desiredExtension.equals(extension)) {
+//                        return true;
+//                    }
+//                }
+              // REWRITE by davidc: Now accepts extensions composed with a period in them (e.g. png.binltl)
+              String lcFileName = fileName.toLowerCase();
+              for (String extension : lowerCaseExtensions) {
+                if (lcFileName.endsWith("." + extension)) {
+                  return true;
                 }
+              }
 	    }
         }
         return false;
