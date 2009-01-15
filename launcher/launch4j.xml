@@ -27,8 +27,8 @@
   <versionInfo>
     <fileVersion>0.0.0.0</fileVersion>
     <txtFileVersion>OVERRIDE</txtFileVersion>
-    <fileDescription>World of Goo Tool</fileDescription>
-    <copyright>Copyright 2008 David Croft</copyright>
+    <fileDescription>GooTool</fileDescription>
+    <copyright>Copyright 2008, 2009 David Croft</copyright>
     <productVersion>0.0.0.0</productVersion>
     <txtProductVersion>OVERRIDE</txtProductVersion>
     <productName>World of Goo Tool</productName>
