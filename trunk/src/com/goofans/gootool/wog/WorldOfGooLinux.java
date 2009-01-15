@@ -2,10 +2,7 @@ package com.goofans.gootool.wog;
 
 import javax.swing.*;
 import java.awt.*;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -16,20 +13,19 @@ import com.goofans.gootool.util.Utilities;
  * @author David Croft (davidc@goofans.com)
  * @version $Id$
  */
-public class WorldOfGooWindows extends WorldOfGoo
+public class WorldOfGooLinux extends WorldOfGoo
 {
-  private static final Logger log = Logger.getLogger(WorldOfGooWindows.class.getName());
+  private static final Logger log = Logger.getLogger(WorldOfGooLinux.class.getName());
 
   @SuppressWarnings({"HardcodedFileSeparator"})
   private static final String[] SEARCH_PATHS = {
-          "%ProgramFiles%\\WorldOfGoo", "%ProgramFiles%\\World Of Goo",
-          "%SystemDrive%\\Program Files\\WorldOfGoo", "%SystemDrive%\\Program Files\\World Of Goo",
-          "%SystemDrive%\\Games\\WorldOfGoo", "%SystemDrive%\\Games\\World Of Goo",
-          "%HOME%/.PlayOnLinux/wineprefix/WorldOfGoo/drive_c/Program Files/WorldOfGoo", // PlayOnLinux
-          "%HOME%/.wine/drive_c/Program Files/WorldOfGoo", // wine
-          "%ProgramFiles\\Steam\\steamapps\\common\\world of goo" // steam
+          "%HOME%/WorldOfGoox"
   };
-  public static final String EXE_FILENAME = "WorldOfGoo.exe";
+
+  private static final String LASTDIR_FILE = "%HOME/.WorldOfGoo/lastdir";
+
+  public static final String EXE_FILENAME = "WorldOfGoo.bin";
+  public static final String SCRIPT_FILENAME = "WorldOfGoo";
 
 
   private boolean wogFound;
@@ -40,7 +36,7 @@ public class WorldOfGooWindows extends WorldOfGoo
 
   private static final String ADDIN_DIR = "addins";
 
-  WorldOfGooWindows()
+  WorldOfGooLinux()
   {
   }
 
@@ -65,6 +61,22 @@ public class WorldOfGooWindows extends WorldOfGoo
       if (locateWogAtPath(new File(userWogDir))) {
         log.info("Found World of Goo at stored location of \"" + userWogDir + "\" at: " + wogDir);
         return;
+      }
+    }
+
+    // Look in the "lastdir" file
+
+    File lastDirFile = new File(Utilities.expandEnvVars(LASTDIR_FILE));
+    if (lastDirFile.exists()) {
+      String lastDir = null;
+      try {
+        lastDir = Utilities.readStreamIntoString(new FileInputStream(lastDirFile)).trim();
+        if (locateWogAtPath(new File(lastDir))) {
+          log.info("Found World of Goo through lastdir pointer at " + wogDir);
+        }
+      }
+      catch (IOException e) {
+        log.log(Level.WARNING, "Can't read lastdir file " + lastDirFile, e);
       }
     }
 
@@ -119,17 +131,16 @@ public class WorldOfGooWindows extends WorldOfGoo
   public void init(File path) throws FileNotFoundException
   {
     if (!locateWogAtPath(path.getParentFile())) {
-      throw new FileNotFoundException("WorldOfGoo.exe was not found at " + path);
+      throw new FileNotFoundException("WorldOfGoo.bin was not found at " + path);
     }
     log.info("Found World of Goo through user selection at: " + wogDir);
   }
 
   public void launch() throws IOException
   {
-    File exe = new File(getCustomDir(), EXE_FILENAME);
+    File exe = new File(getCustomDir(), SCRIPT_FILENAME);
     log.log(Level.FINE, "Launching " + exe + " in " + customDir);
 
-    // TODO why does this take forever when launching under IDEA?
     ProcessBuilder pb = new ProcessBuilder(exe.getAbsolutePath());
     pb.directory(customDir);
     pb.start();
@@ -204,7 +215,9 @@ public class WorldOfGooWindows extends WorldOfGoo
       return null;
     }
 
-    return chooser.getSelectedFile();
+    File selectedFile = chooser.getSelectedFile();
+
+    return selectedFile;
   }
 
   protected File getAddinInstalledDir() throws IOException

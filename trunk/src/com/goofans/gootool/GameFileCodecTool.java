@@ -151,9 +151,8 @@ public class GameFileCodecTool
       }
     }
     else {
-      if (!outputFile.isDirectory() && !outputFile.mkdirs()) {
-        throw new IOException("Unable to create directory " + outputFile);
-      }
+      Utilities.mkdirsOrException(outputFile);
+
       for (File inputFile : inputFiles) {
         if (inputFile.isFile()) {
           doConversion(inputFile, new File(outputFile, generateOutputName(inputFile.getName())));
@@ -172,9 +171,7 @@ public class GameFileCodecTool
         doDirectory(file, new File(outputDir, file.getName()));
       }
       else if (file.getName().endsWith("." + inputExtension)) {
-        if (!outputDir.isDirectory() && !outputDir.mkdirs()) {
-          throw new IOException("Couldn't create directory " + outputDir);
-        }
+        Utilities.mkdirsOrException(outputDir);
         doConversion(file, new File(outputDir, generateOutputName(file.getName())));
       }
     }

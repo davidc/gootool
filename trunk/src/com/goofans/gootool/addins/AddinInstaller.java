@@ -2,7 +2,6 @@ package com.goofans.gootool.addins;
 
 import javax.imageio.ImageIO;
 import javax.xml.transform.TransformerException;
-import javax.swing.*;
 import java.awt.*;
 import java.io.*;
 import java.util.Enumeration;
@@ -158,7 +157,7 @@ public class AddinInstaller
     if (fileName.endsWith(".png") && PlatformSupport.getPlatform() == PlatformSupport.Platform.MACOSX) {
       // Mac PNG files need to be "compiled"
       File destFile = WorldOfGoo.getTheInstance().getCustomGameFile(fileName + ".binltl");
-      destFile.getParentFile().mkdirs(); // ensure the directory exists
+      Utilities.mkdirsOrException(destFile.getParentFile());
 
       Image image = ImageIO.read(is);
       MacGraphicFormat.encodeImage(destFile, image);
@@ -172,7 +171,7 @@ public class AddinInstaller
 
       File destFile = WorldOfGoo.getTheInstance().getCustomGameFile(fileName);
 
-      destFile.getParentFile().mkdirs(); // ensure the directory exists
+      Utilities.mkdirsOrException(destFile.getParentFile());
 
       try {
         OutputStream os = new FileOutputStream(destFile);
@@ -222,7 +221,7 @@ public class AddinInstaller
 
     File destFile = WorldOfGoo.getTheInstance().getCustomGameFile(fileName.substring(0, fileName.length() - 4) + ".bin");
 
-    destFile.getParentFile().mkdirs(); // ensure the directory exists
+    Utilities.mkdirsOrException(destFile.getParentFile());
 
     String xml;
     try {

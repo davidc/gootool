@@ -14,21 +14,59 @@ public abstract class PlatformSupport
 
   public enum Platform
   {
-    WINDOWS, MACOSX
+    WINDOWS, MACOSX, LINUX
   }
 
-  private static final Platform platform;
-  private static final PlatformSupport support;
+  private static Platform platform;
+  private static PlatformSupport support;
 
   static {
-    String lcOSName = System.getProperty("os.name").toLowerCase();
-    if (lcOSName.startsWith("mac os x")) {
-      platform = Platform.MACOSX;
-      support = new MacOSXSupport();
+    String forcePlatform = System.getProperty("gootool.platform");
+
+    if (forcePlatform != null) {
+      if (forcePlatform.equalsIgnoreCase("windows")) {
+        platform = Platform.WINDOWS;
+      }
+      else if (forcePlatform.equalsIgnoreCase("macosx")) {
+        platform = Platform.MACOSX;
+      }
+      else if (forcePlatform.equalsIgnoreCase("linux")) {
+        platform = Platform.LINUX;
+      }
+      else {
+        log.warning("Unknown gootool.platform " + forcePlatform + ", valid values are: WINDOWS, LINUX, MACOSX");
+      }
+    }
+
+    if (platform != null) {
+      log.warning("Forcing platform: " + platform);
     }
     else {
-      platform = Platform.WINDOWS;
-      support = new WindowsSupport();
+      String lcOSName = System.getProperty("os.name").toLowerCase();
+      if (lcOSName.startsWith("mac os x")) {
+        platform = Platform.MACOSX;
+      }
+      else if (lcOSName.startsWith("windows")) {
+        platform = Platform.WINDOWS;
+      }
+      else if (lcOSName.startsWith("linux")) {
+        platform = Platform.LINUX;
+      }
+      else {
+        throw new RuntimeException("GooTool does not support your OS, " + lcOSName);
+      }
+    }
+
+    switch (platform) {
+      case WINDOWS:
+        support = new WindowsSupport();
+        break;
+      case MACOSX:
+        support = new MacOSXSupport();
+        break;
+      case LINUX:
+        support = new LinuxSupport();
+        break;
     }
 
     log.fine("Platform detected: " + platform);
@@ -40,6 +78,7 @@ public abstract class PlatformSupport
 
   public static Platform getPlatform()
   {
+    if (platform == null) throw new RuntimeException("Platform isn't initialised yet");
     return platform;
   }
 

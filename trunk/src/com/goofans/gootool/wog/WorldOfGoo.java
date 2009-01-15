@@ -12,9 +12,11 @@ import com.goofans.gootool.GooTool;
 
 import java.io.*;
 import java.util.*;
+import java.util.List;
 import java.util.prefs.Preferences;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.awt.*;
 
 /**
  * Encapsulates the static data about World of Goo, i.e. path and version.
@@ -47,6 +49,9 @@ public abstract class WorldOfGoo
       case MACOSX:
         theInstance = new WorldOfGooMacOSX();
         break;
+      case LINUX:
+        theInstance = new WorldOfGooLinux();
+        break;
       default:
         theInstance = null;
     }
@@ -66,7 +71,6 @@ public abstract class WorldOfGoo
   static final String PREF_ADDINS = "addins";
 
 
-
   protected WorldOfGoo()
   {
   }
@@ -77,6 +81,7 @@ public abstract class WorldOfGoo
   }
 
   public abstract void init();
+
   public abstract void init(File path) throws FileNotFoundException;
 
   public abstract boolean isWogFound();
@@ -89,6 +94,7 @@ public abstract class WorldOfGoo
   }
 
   public abstract File getGameFile(String pathname) throws IOException;
+
   public abstract File getCustomGameFile(String pathname) throws IOException;
 
   protected abstract File getAddinInstalledDir() throws IOException;
@@ -110,21 +116,21 @@ public abstract class WorldOfGoo
 //      addinsDir.mkdir();
 //    }
 //    else {
-      File[] files = addinsDir.listFiles();
+    File[] files = addinsDir.listFiles();
 
-      for (File file : files) {
-        if (file.isFile() && file.getName().endsWith(GOOMOD_EXTENSION_WITH_DOT)) {
-          try {
-            availableAddins.add(AddinFactory.loadAddin(file));
-          }
-          catch (AddinFormatException e) {
-            log.log(Level.SEVERE, "Ignoring invalid addin " + file + "in addins dir", e);
-          }
-          catch (IOException e) {
-            log.log(Level.SEVERE, "Ignoring invalid addin " + file + "in addins dir", e);
-          }
+    for (File file : files) {
+      if (file.isFile() && file.getName().endsWith(GOOMOD_EXTENSION_WITH_DOT)) {
+        try {
+          availableAddins.add(AddinFactory.loadAddin(file));
+        }
+        catch (AddinFormatException e) {
+          log.log(Level.SEVERE, "Ignoring invalid addin " + file + "in addins dir", e);
+        }
+        catch (IOException e) {
+          log.log(Level.SEVERE, "Ignoring invalid addin " + file + "in addins dir", e);
         }
       }
+    }
 //    }
   }
 
@@ -252,6 +258,8 @@ public abstract class WorldOfGoo
 
     updateInstalledAddins();
   }
+
+  public abstract File chooseCustomDir(Component mainFrame);
 
 
   @SuppressWarnings({"UseOfSystemOutOrSystemErr"})

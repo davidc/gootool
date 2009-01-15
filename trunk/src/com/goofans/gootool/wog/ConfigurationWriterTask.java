@@ -25,7 +25,7 @@ public class ConfigurationWriterTask extends ProgressIndicatingTask
 {
   private static final Logger log = Logger.getLogger(ConfigurationWriterTask.class.getName());
 
-  private static final String[] resourceDirs = new String[]{"properties", "res"};
+  private static final String[] resourceDirs = new String[]{"properties", "res", "libs"};
 
   private final Configuration configuration;
 
@@ -67,8 +67,11 @@ public class ConfigurationWriterTask extends ProgressIndicatingTask
     }
     else {
       // WINDOWS
-      for (String resourceDir : resourceDirs) {
-        getFilesInFolder(new File(wogDir, resourceDir), filesToCopy, resourceDir);
+      for (String resourceDirName : resourceDirs) {
+        File resourceDir = new File(wogDir, resourceDirName);
+        if (resourceDir.exists()) {
+          getFilesInFolder(resourceDir, filesToCopy, resourceDirName);
+        }
       }
 
       /* Add all files (but not directories) in the root directory */
@@ -127,7 +130,12 @@ public class ConfigurationWriterTask extends ProgressIndicatingTask
       OutputStream os = new FileOutputStream(customDir + "/Contents/Resources/gooicon.icns");
       Utilities.copyStreams(is, os);
     }
-
+    else if (PlatformSupport.getPlatform() == PlatformSupport.Platform.LINUX) {
+      // Make the EXE executable
+      File exe1 = new File(customDir, WorldOfGooLinux.SCRIPT_FILENAME);
+      File exe2 = new File(customDir, WorldOfGooLinux.EXE_FILENAME);
+      Runtime.getRuntime().exec(new String[]{"chmod", "+x", exe1.getAbsolutePath(), exe2.getAbsolutePath()});
+    }
     progressStep(100f);
   }
 

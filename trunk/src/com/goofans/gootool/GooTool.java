@@ -24,6 +24,7 @@ public class GooTool
 
   private static ImageIcon icon;
   public static TextProvider textProvider;
+  private static Controller controller;
 
   private GooTool()
   {
@@ -33,24 +34,21 @@ public class GooTool
   {
     log.info("Launching gootool " + Version.RELEASE_FULL);
     log.info("Java version " + System.getProperty("java.version") + " from " + System.getProperty("java.vendor") + " in " + System.getProperty("java.home"));
-
-    log.info("os.name = " + System.getProperty("os.name"));
-    log.info("os.version = " + System.getProperty("os.version"));
-    log.info("os.arch = " + System.getProperty("os.arch"));
-
-    initQueuedTasks();
-
-    if (!PlatformSupport.preStartup(args)) {
-      return;
-    }
-
-    GUIUtil.switchToSystemLookAndFeel();
+    log.info("OS " + System.getProperty("os.name") + " version " + System.getProperty("os.version") + " on " + System.getProperty("os.arch"));
 
     try {
+      initQueuedTasks();
+
+      if (!PlatformSupport.preStartup(args)) {
+        return;
+      }
+
+      GUIUtil.switchToSystemLookAndFeel();
+
       initIcon();
       initTextProvider();
 
-      Controller controller = new Controller();
+      controller = new Controller();
 
       PlatformSupport.startup(controller);
 
@@ -138,5 +136,10 @@ public class GooTool
   {
     if (textProvider == null) initTextProvider();
     return textProvider;
+  }
+
+  public static Controller getController()
+  {
+    return controller;
   }
 }

@@ -17,6 +17,7 @@ import java.util.regex.Pattern;
 
 import com.goofans.gootool.image.GaussianFilter;
 import com.goofans.gootool.util.XMLUtil;
+import com.goofans.gootool.util.Utilities;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -227,10 +228,7 @@ public class ImageGenerator
 
   public void writeImage(File file) throws IOException
   {
-    File parentDir = file.getParentFile();
-    if (!parentDir.exists() && !parentDir.mkdirs()) {
-      throw new IOException("Unable to create " + parentDir);
-    }
+    Utilities.mkdirsOrException(file.getParentFile());
     ImageIO.write(finalImage, "PNG", file);
   }
 

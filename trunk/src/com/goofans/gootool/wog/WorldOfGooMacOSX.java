@@ -1,14 +1,17 @@
 package com.goofans.gootool.wog;
 
-import com.goofans.gootool.ToolPreferences;
-import com.goofans.gootool.util.Utilities;
-
+import javax.swing.*;
+import java.awt.*;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import com.goofans.gootool.ToolPreferences;
+import com.goofans.gootool.util.FileNameExtensionFilter;
+import com.goofans.gootool.util.Utilities;
 
 /**
  * @author David Croft (davidc@goofans.com)
@@ -18,17 +21,17 @@ public class WorldOfGooMacOSX extends WorldOfGoo
 {
   private static final Logger log = Logger.getLogger(WorldOfGooWindows.class.getName());
 
-  private static final String[] SEARCH_PATHS = {"/Applications/World of Goo.app",
+  private static final String[] SEARCH_PATHS = {
+          "/Applications/World of Goo.app",
   };
-  static final String EXE_FILENAME = "Contents/MacOS/World of Goo";
-
+  public static final String EXE_FILENAME = "Contents/MacOS/World of Goo";
+  private static final String ADDIN_DIR = "Contents/Resources/addins";
 
   private boolean wogFound;
   private File wogDir;
   private File addinsDir;
   private File customDir;
 
-  private static final String ADDIN_DIR = "Contents/Resources/addins";
 
   WorldOfGooMacOSX()
   {
@@ -142,13 +145,14 @@ public class WorldOfGooMacOSX extends WorldOfGoo
     os.write(65);
     os.close();
 
-    testFile.delete();
+    if (!testFile.delete()) throw new IOException("Can't delete test file " + testFile);
+
     this.customDir = customDir;
 
     ToolPreferences.setCustomDir(customDir.getAbsolutePath());
 
     addinsDir = new File(customDir, ADDIN_DIR);
-    addinsDir.mkdirs();
+    Utilities.mkdirsOrException(addinsDir);
 
     updateInstalledAddins();
   }
@@ -168,17 +172,39 @@ public class WorldOfGooMacOSX extends WorldOfGoo
 
   public File getGameFile(String pathname) throws IOException
   {
-    return new File(getWogDir(),"Contents/Resources/game/"+ pathname);
+    return new File(getWogDir(), "Contents/Resources/game/" + pathname);
   }
 
   public File getCustomGameFile(String pathname) throws IOException
   {
-    return new File(getCustomDir(), "Contents/Resources/game/"+pathname);
+    return new File(getCustomDir(), "Contents/Resources/game/" + pathname);
   }
 
   protected File getAddinInstalledFile(String addinId) throws IOException
   {
     return new File(getAddinInstalledDir(), addinId + GOOMOD_EXTENSION_WITH_DOT);
+  }
+
+  public File chooseCustomDir(Component mainFrame)
+  {
+    JFileChooser chooser = new JFileChooser();
+
+    chooser.setDialogTitle("Choose where to save your World of Goo");
+    chooser.setFileFilter(new FileNameExtensionFilter("Application", "app"));
+
+    chooser.setSelectedFile(new File(System.getProperty("user.home") + "/Desktop", "My Custom World of Goo"));
+
+    if (chooser.showSaveDialog(mainFrame) != JFileChooser.APPROVE_OPTION) {
+      return null;
+    }
+
+    File selectedFile = chooser.getSelectedFile();
+
+    if (!selectedFile.getName().endsWith(".app")) {
+      selectedFile = new File(selectedFile.getAbsoluteFile() + ".app");
+    }
+
+    return selectedFile;
   }
 
   protected File getAddinInstalledDir() throws IOException

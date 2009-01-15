@@ -21,13 +21,14 @@ public class MacOSXSupport extends PlatformSupport implements ApplicationListene
 {
   private static final Logger log = Logger.getLogger(MacOSXSupport.class.getName());
 
+  @SuppressWarnings({"HardcodedFileSeparator"})
   private static final String[] PROFILE_SEARCH_PATHS = {
           "%HOME%/Library/Application Support/WorldOfGoo/"
   };
 
   private Controller controller;
 
-  public MacOSXSupport()
+  MacOSXSupport()
   {
   }
 
@@ -89,7 +90,7 @@ public class MacOSXSupport extends PlatformSupport implements ApplicationListene
   {
     log.fine("Mac: handleQuit");
     controller.maybeExit();
-//    event.setHandled(true);
+//    event.setHandled(true);  this causes us to always quit even if they cancel
   }
 
   public String[] doGetProfileSearchPaths()
