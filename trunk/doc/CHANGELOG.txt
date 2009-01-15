@@ -1,7 +1,8 @@
 0.10.0
 
-- added Mac support!
+- Added Mac support!
 - added file association and document icon for goomods on Mac
+- Created a Windows installer, added goomod file association
 - rewrote code to support java 1.5 (you can no longer drag addins to reorder them though)
 - fixed size of about dialog
 - added file handling for Windows/refocussing if GooTool clicked on again

@@ -6,6 +6,7 @@
   launch4j.dir
   jdk.home
   svn.base (if tag-release task is needed)
+  nsis.dir (directory of makensis, for dist-win32)
   -->
 
   <property file="ant.properties"/>
@@ -29,6 +30,10 @@
   <taskdef name="jarbundler"
            classpathref="build.classpath"
            classname="net.sourceforge.jarbundler.JarBundler"/>
+
+  <taskdef name="nsis"
+           classpathref="build.classpath"
+           classname="net.sf.nsisant.Task"/>
 
   <!-- Version numbers -->
 
@@ -182,7 +187,7 @@
     </proguard>
   </target>
 
-  <target name="launcher-win32" description="builds the launcher" depends="obfuscate"><!-- depends="jar">-->
+  <target name="launcher-win32" description="builds the launcher" depends="obfuscate">
     <mkdir dir="${dist.win32}"/>
     <mkdir dir="${dist.win32}/bin"/>
 
@@ -196,9 +201,15 @@
             />
   </target>
 
-  <target name="dist-win32" description="Build the Win32 distribution" depends="obfuscate, launcher-win32">
+  <target name="dist-win32" description="Build the Win32 distribution" depends="launcher-win32">
     <copy todir="${dist.win32}">
       <fileset dir="dist_src/common">
+        <patternset refid="ignored.files"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+    <copy todir="${dist.win32}">
+      <fileset dir="dist_src/win32">
         <patternset refid="ignored.files"/>
         <type type="file"/>
       </fileset>
@@ -208,9 +219,15 @@
     </copy>
     <copy file="lib/build/AppleJavaExtensions.jar" todir="${dist.win32}/lib"/>
 
-    <zip destfile="${dist.dir}/GooTool-${gootool.version.full}-Windows.zip">
-      <zipfileset dir="${dist.win32}" prefix="GooTool-${gootool.version.full}"/>
-    </zip>
+    <!--<zip destfile="${dist.dir}/GooTool-${gootool.version.full}-Windows.zip">-->
+      <!--<zipfileset dir="${dist.win32}" prefix="GooTool-${gootool.version.full}"/>-->
+    <!--</zip>-->
+
+    <nsis script="installer/installer.nsi" verbosity="2" path="${nsis.dir}" nocd="true">
+      <define name="gootool.version" value="${gootool.version}"/>
+      <define name="gootool.version.full" value="${gootool.version.full}"/>
+    </nsis>
+
   </target>
 
   <target name="dist-macosx" description="Build the Mac OS X distribution" depends="obfuscate">
