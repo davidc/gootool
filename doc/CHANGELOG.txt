@@ -6,7 +6,7 @@
 - fixed size of about dialog
 - added file handling for Windows/refocussing if GooTool clicked on again
 - skip over Unicode byte-order-marks, fixes UTF-8 files saved from Notepad etc
-- Added options to the Advanced menu to encode/decode the various game file formats
+- Added options to the Advanced menu to encode/decode the various game file formats. You can select whole directories or multiple files.
 
 0.9.7
 

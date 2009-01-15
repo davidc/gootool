@@ -15,6 +15,8 @@ import com.goofans.gootool.io.MacBinFormat;
 import com.goofans.gootool.io.MacGraphicFormat;
 
 /**
+ * TODO put this in a background thread
+ * 
  * @author David Croft (davidc@goofans.com)
  * @version $Id$
  */
@@ -62,50 +64,61 @@ public class GameFileCodecTool
   public void runTool(Component parent) throws IOException
   {
     JFileChooser inputChooser = new JFileChooser(currentInputDir);
-//    chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES); TODO
+    inputChooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+    inputChooser.setMultiSelectionEnabled(true);
+
     if (inputExtension.length() > 0) {
       inputChooser.setFileFilter(new FileNameExtensionFilter(inputDescription, inputExtension));
     }
 
     if (codecType.isEncode()) {
-      inputChooser.setDialogTitle("Select the file to encode");
+      inputChooser.setDialogTitle("Select the file(s) or directory to encode");
     }
     else {
-      inputChooser.setDialogTitle("Select the file to decode");
+      inputChooser.setDialogTitle("Select the file(s) or directory to decode");
     }
 
     if (inputChooser.showOpenDialog(parent) != JFileChooser.APPROVE_OPTION) {
       return;
     }
 
-    File inputFile = inputChooser.getSelectedFile();
-    if (!inputFile.exists()) {
-      JOptionPane.showMessageDialog(parent, "File " + inputFile + " not found", "File not found", JOptionPane.ERROR_MESSAGE);
-      return;
+
+    File[] inputFiles = inputChooser.getSelectedFiles();
+
+    for (File inputFile : inputFiles) {
+      if (!inputFile.exists()) {
+        JOptionPane.showMessageDialog(parent, "File " + inputFile + " not found", "File not found", JOptionPane.ERROR_MESSAGE);
+        return;
+      }
     }
+
+    boolean singleFile = inputFiles.length == 1 && inputFiles[0].isFile();
 
     currentInputDir = inputChooser.getCurrentDirectory();
 
-    // TODO if >1 file, choose a directory not a file
-
     JFileChooser outputChooser = new JFileChooser(currentOutputDir);
-    if (outputExtension.length() > 0) {
-      outputChooser.setFileFilter(new FileNameExtensionFilter("Output file", outputExtension));
-    }
-    String inputName = inputFile.getName();
-    outputChooser.setDialogTitle("Select output for converted " + inputName);
 
-    String outputName;
-    if (inputName.endsWith("." + inputExtension)) {
-      outputName = inputName.substring(0, inputName.length() - (inputExtension.length() + 1));
+    if (singleFile) {
+      if (outputExtension.length() > 0) {
+        outputChooser.setFileFilter(new FileNameExtensionFilter("Output file", outputExtension));
+      }
+      String inputName = inputFiles[0].getName();
+      outputChooser.setDialogTitle("Select output for converted " + inputName);
+      outputChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+      outputChooser.setMultiSelectionEnabled(false);
+
+      String outputName = generateOutputName(inputName);
+      outputChooser.setSelectedFile(new File(currentOutputDir, outputName));
     }
     else {
-      outputName = inputName;
+      outputChooser.setDialogTitle("Select output directory for converted files");
+      outputChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+      outputChooser.setMultiSelectionEnabled(false);
+
+      if (inputFiles.length == 1) {
+        outputChooser.setSelectedFile(new File(currentOutputDir, inputFiles[0].getName()));
+      }
     }
-    if (outputExtension.length() > 0) {
-      outputName += "." + outputExtension;
-    }
-    outputChooser.setSelectedFile(new File(currentOutputDir, outputName));
 
     File outputFile = null;
 
@@ -128,7 +141,43 @@ public class GameFileCodecTool
 
     currentOutputDir = outputChooser.getCurrentDirectory();
 
-    doConversion(inputFile, outputFile);
+    if (inputFiles.length == 1) {
+      File inputFile = inputFiles[0];
+      if (inputFile.isFile()) {
+        doConversion(inputFile, outputFile);
+      }
+      else if (inputFile.isDirectory()) {
+        doDirectory(inputFile, outputFile);
+      }
+    }
+    else {
+      if (!outputFile.isDirectory() && !outputFile.mkdirs()) {
+        throw new IOException("Unable to create directory " + outputFile);
+      }
+      for (File inputFile : inputFiles) {
+        if (inputFile.isFile()) {
+          doConversion(inputFile, new File(outputFile, generateOutputName(inputFile.getName())));
+        }
+        else if (inputFile.isDirectory()) {
+          doDirectory(inputFile, new File(outputFile, inputFile.getName()));
+        }
+      }
+    }
+  }
+
+  private void doDirectory(File inputDir, File outputDir) throws IOException
+  {
+    for (File file : inputDir.listFiles()) {
+      if (file.isDirectory()) {
+        doDirectory(file, new File(outputDir, file.getName()));
+      }
+      else if (file.getName().endsWith("." + inputExtension)) {
+        if (!outputDir.isDirectory() && !outputDir.mkdirs()) {
+          throw new IOException("Couldn't create directory " + outputDir);
+        }
+        doConversion(file, new File(outputDir, generateOutputName(file.getName())));
+      }
+    }
   }
 
   private void doConversion(File inputFile, File outputFile) throws IOException
@@ -161,5 +210,20 @@ public class GameFileCodecTool
         MacGraphicFormat.encodeImage(outputFile, encImage);
         break;
     }
+  }
+
+  private String generateOutputName(String inputName)
+  {
+    String outputName;
+    if (inputName.endsWith("." + inputExtension)) {
+      outputName = inputName.substring(0, inputName.length() - (inputExtension.length() + 1));
+    }
+    else {
+      outputName = inputName;
+    }
+    if (outputExtension.length() > 0) {
+      outputName += "." + outputExtension;
+    }
+    return outputName;
   }
 }
