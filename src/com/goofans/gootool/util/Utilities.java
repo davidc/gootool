@@ -150,4 +150,17 @@ public class Utilities
 
     return sb.toString();
   }
+
+  /**
+   * Makes the given directory (and any necessary parents) and throws an exception if this failed.
+   * Does not do anything if the directory already exists.
+   * @param dir The directory (with parents) to create
+   * @throws IOException if the directory (or any parents) could not be created
+   */
+  public static void mkdirsOrException(File dir) throws IOException
+  {
+    if (!dir.isDirectory() && !dir.mkdirs()) {
+      throw new IOException("Couldn't create directory " + dir);
+    }
+  }
 }

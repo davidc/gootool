@@ -1,6 +1,9 @@
 package com.goofans.gootool.util;
 
 import com.goofans.gootool.platform.PlatformSupport;
+import com.goofans.gootool.wog.WorldOfGooWindows;
+import com.goofans.gootool.wog.WorldOfGooMacOSX;
+import com.goofans.gootool.wog.WorldOfGooLinux;
 
 import javax.swing.filechooser.FileFilter;
 import java.io.File;
@@ -35,17 +38,26 @@ public class WogExeFileFilter extends FileFilter
           if (f.isDirectory()) {
             return true;
           }
-          if (fileName.equalsIgnoreCase("WorldOfGoo.exe")) {
+          if (fileName.equalsIgnoreCase(WorldOfGooWindows.EXE_FILENAME)) {
             return true;
           }
           break;
         case MACOSX:
           if (f.isDirectory()) {
             if (!f.getName().endsWith(".app")) return true;
-            File exeFile = new File(f, "Contents/MacOS/World of Goo");
+            File exeFile = new File(f, WorldOfGooMacOSX.EXE_FILENAME);
             if (exeFile.exists()) return true;
           }
           break;
+        case LINUX:
+          if (f.isDirectory()) {
+            return true;
+          }
+          if (fileName.equalsIgnoreCase(WorldOfGooLinux.EXE_FILENAME)) {
+            return true;
+          }
+          break;
+
       }
     }
     return false;
@@ -59,11 +71,12 @@ public class WogExeFileFilter extends FileFilter
   public String getDescription()
   {
     switch (PlatformSupport.getPlatform()) {
-
       case WINDOWS:
-        return "WorldOfGoo.exe";
+        return WorldOfGooWindows.EXE_FILENAME;
       case MACOSX:
         return "World of Goo";
+      case LINUX:
+        return WorldOfGooLinux.EXE_FILENAME;
     }
     return null;
   }

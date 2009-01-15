@@ -22,6 +22,7 @@ public class GameFormat
     log.finest("decode bin file: " + file);
     switch (PlatformSupport.getPlatform()) {
       case WINDOWS:
+      case LINUX:
         return AESBinFormat.decodeFile(file);
       case MACOSX:
         return MacBinFormat.decodeFile(file);
@@ -35,6 +36,7 @@ public class GameFormat
 
     switch (PlatformSupport.getPlatform()) {
       case WINDOWS:
+      case LINUX:
         AESBinFormat.encodeFile(file, input);
         break;
       case MACOSX:
@@ -56,6 +58,7 @@ public class GameFormat
     byte[] decoded = null;
     switch (PlatformSupport.getPlatform()) {
       case WINDOWS:
+      case LINUX:
         decoded = AESBinFormat.decodeFile(file);
         break;
       case MACOSX:

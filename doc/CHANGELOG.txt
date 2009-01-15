@@ -7,6 +7,7 @@
 - added file handling for Windows/refocussing if GooTool clicked on again
 - skip over Unicode byte-order-marks, fixes UTF-8 files saved from Notepad etc
 - Added options to the Advanced menu to encode/decode the various game file formats. You can select whole directories or multiple files.
+- Preliminary support for the World of Goo Linux beta added. If you want to force GooTool to use your WINE World of Goo, run "GOOTOOL_PLATFORM=windows bin/gootool"
 
 0.9.7
 

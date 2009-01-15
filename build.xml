@@ -206,6 +206,7 @@
     <copy todir="${dist.win32}/doc">
       <fileset file="doc/CHANGELOG.txt"/>
     </copy>
+    <copy file="lib/build/AppleJavaExtensions.jar" todir="${dist.win32}/lib"/>
 
     <zip destfile="${dist.dir}/GooTool-${gootool.version.full}-Windows.zip">
       <zipfileset dir="${dist.win32}" prefix="GooTool-${gootool.version.full}"/>
@@ -214,19 +215,6 @@
 
   <target name="dist-macosx" description="Build the Mac OS X distribution" depends="obfuscate">
     <mkdir dir="${dist.macosx}"/>
-    <!--<copy todir="${dist.macosx}">-->
-    <!--<fileset dir="dist_src/common">-->
-    <!--<patternset refid="ignored.files"/>-->
-    <!--<type type="file"/>-->
-    <!--</fileset>-->
-    <!--</copy>-->
-    <!--<copy todir="${dist.win32}/doc">-->
-    <!--<fileset file="doc/CHANGELOG.txt"/>-->
-    <!--</copy>-->
-
-    <!--<zip destfile="${dist.dir}/GooTool-${gootool.version.full}-MacOSX.zip">-->
-    <!--<zipfileset dir="${dist.win32}" prefix="GooTool-${gootool.version.full}"/>-->
-    <!--</zip>-->
 
     <copy file="${obfuscated.jar}" tofile="${dist.macosx}/gootool.jar"/>
 
@@ -258,7 +246,6 @@
 
     <delete file="${dist.macosx}/gootool.jar"/>
 
-    <!--<copy tofile="${dist.macosx}/GooTool.app/Contents/Resources/Java/gootool.jar" file="${obfuscated.jar}"/>-->
     <mkdir dir="${dist.macosx}/GooTool.app/Contents/Resources/Licenses"/>
     <copy todir="${dist.macosx}/GooTool.app/Contents/Resources/Licenses">
       <fileset dir="dist_src/common/doc/" includes="*"/>
@@ -296,6 +283,7 @@
       <fileset file="doc/CHANGELOG.txt"/>
     </copy>
     <copy file="${obfuscated.jar}" tofile="${dist.linux}/lib/gootool.jar"/>
+    <copy file="lib/build/AppleJavaExtensions.jar" todir="${dist.linux}/lib"/>
 
     <tar destfile="${dist.dir}/gootool-${gootool.version.full}-linux.tar.bz2" compression="bzip2">
       <tarfileset dir="${dist.linux}" prefix="gootool-${gootool.version.full}" mode="755" username="root" group="root">

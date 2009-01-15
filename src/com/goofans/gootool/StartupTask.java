@@ -69,15 +69,7 @@ public class StartupTask extends ProgressIndicatingTask
         {
           public void run()
           {
-            String message = null;
-            switch (PlatformSupport.getPlatform()) {
-              case WINDOWS:
-                message = textProvider.getText("launcher.locategoo.notfound.message.windows");
-                break;
-              case MACOSX:
-                message = textProvider.getText("launcher.locategoo.notfound.message.macosx");
-                break;
-            }
+            String message = textProvider.getText("launcher.locategoo.notfound.message." + PlatformSupport.getPlatform().toString().toLowerCase());
             log.finer("dialog opening");
             JOptionPane.showMessageDialog(null, message, textProvider.getText("launcher.locategoo.notfound.title"), JOptionPane.WARNING_MESSAGE);
 

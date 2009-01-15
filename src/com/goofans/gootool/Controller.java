@@ -391,28 +391,10 @@ public class Controller implements ActionListener
       return;
     }
 
-    JFileChooser chooser = new JFileChooser();
-    if (PlatformSupport.getPlatform() == PlatformSupport.Platform.MACOSX) {
-      chooser.setDialogTitle("Choose where to save your World of Goo");
-      chooser.setFileFilter(new FileNameExtensionFilter("Application", "app"));
+    File selectedFile = worldOfGoo.chooseCustomDir(mainFrame);
 
-      chooser.setSelectedFile(new File(System.getProperty("user.home") + "/Desktop", "My Custom World of Goo"));
-    }
-    else {
-      chooser.setDialogTitle("Choose a directory to save into");
-      chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-    }
-
-    if (chooser.showSaveDialog(mainFrame) != JFileChooser.APPROVE_OPTION) {
+    if (selectedFile == null) {
       return;
-    }
-
-    File selectedFile = chooser.getSelectedFile();
-
-    if (PlatformSupport.getPlatform() == PlatformSupport.Platform.MACOSX) {
-      if (!selectedFile.getName().endsWith(".app")) {
-        selectedFile = new File(selectedFile.getAbsoluteFile() + ".app");
-      }
     }
 
     if (selectedFile.equals(wogDir)) {

@@ -43,11 +43,14 @@ public class ProfileFactory
 
     for (String searchPath : PlatformSupport.getProfileSearchPaths()) {
 
-      File file = new File(Utilities.expandEnvVars(searchPath), PROFILE_DAT_FILENAME);
-      log.finest("Looking for profile at " + file);
-      if (locateProfileAtFile(file)) {
-        log.info("Found profile through default search of \"" + searchPath + "\" at: " + file);
-        return;
+      String expandedPath = Utilities.expandEnvVars(searchPath);
+      if (expandedPath != null) {
+        File file = new File(expandedPath, PROFILE_DAT_FILENAME);
+        log.finest("Looking for profile at " + file);
+        if (locateProfileAtFile(file)) {
+          log.info("Found profile through default search of \"" + searchPath + "\" at: " + file);
+          return;
+        }
       }
     }
     log.log(Level.INFO, "Couldn't find the user's profile in any default location");
