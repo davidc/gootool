@@ -1,14 +1,15 @@
 0.10.0
 
 - Added Mac support!
-- added file association and document icon for goomods on Mac
-- Created a Windows installer, added goomod file association
+- Added file association and document icon for goomods on Mac
+- Created a Windows installer, added goomod file association and icon
 - rewrote code to support java 1.5 (you can no longer drag addins to reorder them though)
 - fixed size of about dialog
 - added file handling for Windows/refocussing if GooTool clicked on again
 - skip over Unicode byte-order-marks, fixes UTF-8 files saved from Notepad etc
 - Added options to the Advanced menu to encode/decode the various game file formats. You can select whole directories or multiple files.
 - Preliminary support for the World of Goo Linux beta added. If you want to force GooTool to use your WINE World of Goo, run "GOOTOOL_PLATFORM=windows bin/gootool"
+- Moved Addin description to the main Addins tab.
 
 0.9.7
 

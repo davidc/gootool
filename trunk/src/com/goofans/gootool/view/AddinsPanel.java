@@ -36,6 +36,9 @@ public class AddinsPanel implements ViewComponent
   private JButton enableButton;
   private JButton disableButton;
   private JButton propertiesButton;
+  private JLabel description;
+  private JButton moveUpButton;
+  private JButton moveDownButton;
   private MyTableModel addinsModel;
 
   private Controller controller;
@@ -104,6 +107,7 @@ public class AddinsPanel implements ViewComponent
     int row = addinTable.getSelectedRow();
 
     if (row < 0 || controller.getDisplayAddins().isEmpty()) {
+      description.setText(null);
       propertiesButton.setEnabled(false);
       enableButton.setEnabled(false);
       disableButton.setEnabled(false);
@@ -113,6 +117,13 @@ public class AddinsPanel implements ViewComponent
       Addin addin = controller.getDisplayAddins().get(row);
       boolean isEnabled = controller.getEditorConfig().isEnabledAdddin(addin.getId());
 
+      if (addin.getDescription().startsWith("<html>")) {
+        description.setText(addin.getDescription());
+      }
+      else {
+        // add <html> to make sure it wraps, replace newlines with <br/>, remove any HTML that may be in there already.
+        description.setText("<html>" + addin.getDescription().replaceAll("<", "&lt;").replaceAll("\n", "<br/>") + "</html>");
+      }
       propertiesButton.setEnabled(true);
       enableButton.setEnabled(!isEnabled);
       disableButton.setEnabled(isEnabled);
