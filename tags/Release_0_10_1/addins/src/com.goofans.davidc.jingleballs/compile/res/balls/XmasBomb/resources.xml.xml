@@ -1,0 +1,44 @@
+<?xml version="1.0" ?>
+<ResourceManifest>
+
+  <Resources id="ball_XmasBomb">
+
+    <!-- Unique Images -->
+    <SetDefaults path="res/balls/XmasBomb/" idprefix="IMAGE_BALL_XMASBOMB_" />
+    <Image id="BODY"	      path="body"/>
+    
+    <!-- Images from BombSticky-->
+    <SetDefaults path="res/balls/BombSticky/" idprefix="IMAGE_BALL_XMASBOMB_" />
+
+	<Image id="SPIKES"	      path="spikes"/>
+	<Image id="VALVE"	      path="valve"/>
+	<Image id="EYELID1"	      path="eyeLid1"/>
+	<Image id="EYELID2"	      path="eyeLid2"/>
+	
+	<Image id="SHADOW"	      path="shadow"/>
+	
+    <Image id="STRAND"	      path="spring_goo"/>
+    <Image id="STRAND_HILITE" path="spring_goo"/>
+	<Image id="STRAND_BURNT" path="spring_goo_burnt"/>
+
+    <Image id="DRAGMARKER"	  path="dragmarker"/>
+    <Image id="DETACHMARKER"	path="detachmarker"/>
+
+
+    <!-- Unique Sounds -->
+    <SetDefaults path="res/balls/BombSticky/" idprefix="SOUND_BALL_XMASBOMB_" />
+	
+	<Sound id="DETONATE1"    	      	path="detonate1"/>
+	
+	<!-- Shared Sounds -->
+	<SetDefaults path="res/balls/Fuse/" idprefix="SOUND_BALL_XMASBOMB_" />
+
+	<Sound id="IGNITE01"    	      	path="igniteBurn01"/>
+	<Sound id="IGNITE02"    	      	path="igniteBurn02"/>
+	<Sound id="IGNITE03"    	      	path="igniteBurn03"/>
+	<Sound id="IGNITE04"    	      	path="igniteBurn04"/>
+
+
+  </Resources>
+
+</ResourceManifest>
