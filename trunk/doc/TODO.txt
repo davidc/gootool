@@ -10,7 +10,7 @@ MILESTONE 0.10.x (Final beta series)
 
 - NEW FEATURE: Addin author tool: create addin from directory/create addin from wogeditor, create addin from assets
 
-- IMPROVEMENT: Move up/down to reorder addins, to replace lost drag-and-drop functionality
+- IMPROVEMENT: Move up/down buttons to reorder addins, to replace lost drag-and-drop functionality
 - IMPROVEMENT: Make checkboxes in addin list actually enable/disable the addin
 - BUG FIX: Dragging addins below last enabled addin should move it to bottom
 
