@@ -153,7 +153,6 @@ public class AddinInstaller
     log.log(Level.FINER, "Override " + fileName);
     checkDirOk(fileName);
 
-
     if (fileName.endsWith(".png") && PlatformSupport.getPlatform() == PlatformSupport.Platform.MACOSX) {
       // Mac PNG files need to be "compiled"
       File destFile = WorldOfGoo.getTheInstance().getCustomGameFile(fileName + ".binltl");
@@ -163,11 +162,6 @@ public class AddinInstaller
       MacGraphicFormat.encodeImage(destFile, image);
     }
     else {
-      if (fileName.endsWith(".png")) {
-        // Force the image to be read, so Windows users can detect images that Java can't read and prevent
-        // problems on Mac
-        ImageIO.read(is);
-      }
 
       File destFile = WorldOfGoo.getTheInstance().getCustomGameFile(fileName);
 
@@ -184,6 +178,12 @@ public class AddinInstaller
       }
       finally {
         is.close();
+      }
+
+      if (fileName.endsWith(".png")) {
+        // Force the image to be read, so Windows users can detect images that Java can't read and prevent
+        // problems on Mac
+        ImageIO.read(destFile);
       }
     }
   }

@@ -131,7 +131,7 @@
   <target name="compile" depends="-update-build-properties" description="Compile module gootool">
     <mkdir dir="${output.dir}"/>
     <javac2 destdir="${output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}"
-            fork="true" executable="${project.jdk.bin}/javac">
+            fork="true" executable="${project.jdk.bin}/javac" target="1.5">
       <compilerarg line="${compiler.args}"/>
       <!--<bootclasspath refid="gootool.module.bootclasspath"/>-->
       <classpath refid="gootool.module.build.classpath"/>
@@ -235,7 +235,7 @@
 
     <copy file="${obfuscated.jar}" tofile="${dist.macosx}/gootool.jar"/>
 
-    <jarbundler dir="${dist.macosx}" verbose="true" showPlist="true"
+    <jarbundler dir="${dist.macosx}" verbose="false" showPlist="false"
                 name="GooTool"
                 mainclass="com.goofans.gootool.GooTool"
                 icon="dist_src/macosx/gootool.icns"

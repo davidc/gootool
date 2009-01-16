@@ -1,3 +1,7 @@
+0.10.1
+
+- Fixed a huge WTF on image encoding on non-Mac platforms.
+
 0.10.0
 
 - Added Mac support!
