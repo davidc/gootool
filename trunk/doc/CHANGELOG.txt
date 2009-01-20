@@ -1,3 +1,7 @@
+0.10.2
+
+- Auto-detect the Linux installation location through ~/.WorldOfGoo/LastRun.txt
+
 0.10.1
 
 - Fixed a huge WTF on image encoding on non-Mac platforms.

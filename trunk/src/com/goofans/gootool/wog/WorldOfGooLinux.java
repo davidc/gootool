@@ -13,16 +13,18 @@ import com.goofans.gootool.util.Utilities;
  * @author David Croft (davidc@goofans.com)
  * @version $Id$
  */
+@SuppressWarnings({"HardcodedFileSeparator"})
 public class WorldOfGooLinux extends WorldOfGoo
 {
   private static final Logger log = Logger.getLogger(WorldOfGooLinux.class.getName());
 
-  @SuppressWarnings({"HardcodedFileSeparator"})
   private static final String[] SEARCH_PATHS = {
-          "%HOME%/WorldOfGoox"
+          "%HOME%/WorldOfGoo",
+          "/usr/local/WorldOfGoo",
+          "/opt/WorldOfGoo"
   };
 
-  private static final String LASTDIR_FILE = "%HOME/.WorldOfGoo/lastdir";
+  private static final String LASTRUN_FILE = "%HOME%/.WorldOfGoo/LastRun.txt";
 
   public static final String EXE_FILENAME = "WorldOfGoo.bin";
   public static final String SCRIPT_FILENAME = "WorldOfGoo";
@@ -64,19 +66,26 @@ public class WorldOfGooLinux extends WorldOfGoo
       }
     }
 
-    // Look in the "lastdir" file
+    // Look in the "LastRun.txt" file
 
-    File lastDirFile = new File(Utilities.expandEnvVars(LASTDIR_FILE));
+    File lastDirFile = new File(Utilities.expandEnvVars(LASTRUN_FILE));
     if (lastDirFile.exists()) {
-      String lastDir = null;
       try {
-        lastDir = Utilities.readStreamIntoString(new FileInputStream(lastDirFile)).trim();
-        if (locateWogAtPath(new File(lastDir))) {
-          log.info("Found World of Goo through lastdir pointer at " + wogDir);
+        BufferedReader r = new BufferedReader(new FileReader(lastDirFile));
+        String line;
+        while ((line = r.readLine()) != null) {
+          String[] bits = line.split("=", 2);
+          log.finest("lastrun: " + bits[0] + " -> " + bits[1]);
+          if (bits[0].equalsIgnoreCase("gamedir")) {
+            if (locateWogAtPath(new File(bits[1]))) {
+              log.info("Found World of Goo through lastrun pointer at " + wogDir);
+              return;
+            }
+          }
         }
       }
       catch (IOException e) {
-        log.log(Level.WARNING, "Can't read lastdir file " + lastDirFile, e);
+        log.log(Level.WARNING, "Can't read lastrun file " + lastDirFile, e);
       }
     }
 

@@ -17,6 +17,7 @@ import com.goofans.gootool.util.Utilities;
  * @author David Croft (davidc@goofans.com)
  * @version $Id$
  */
+@SuppressWarnings({"HardcodedFileSeparator"})
 public class WorldOfGooMacOSX extends WorldOfGoo
 {
   private static final Logger log = Logger.getLogger(WorldOfGooWindows.class.getName());
