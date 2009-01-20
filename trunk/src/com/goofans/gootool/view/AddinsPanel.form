@@ -39,7 +39,6 @@
                   <component id="8fcba" class="javax.swing.JTable" binding="addinTable">
                     <constraints/>
                     <properties>
-                      <fillsViewportHeight value="true"/>
                     </properties>
                   </component>
                 </children>
