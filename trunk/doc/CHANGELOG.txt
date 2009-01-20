@@ -1,6 +1,7 @@
 0.10.2
 
 - Auto-detect the Linux installation location through ~/.WorldOfGoo/LastRun.txt
+- Adjust layout of Chapter 1 and automatically resize screen to fit installed levels.
 - Send OS and CPU type in CheckVersion API call
 
 0.10.1
