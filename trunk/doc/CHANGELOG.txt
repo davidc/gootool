@@ -1,6 +1,7 @@
 0.10.2
 
 - Auto-detect the Linux installation location through ~/.WorldOfGoo/LastRun.txt
+- Send OS and CPU type in CheckVersion API call
 
 0.10.1
 
