@@ -11,6 +11,7 @@ import java.util.logging.Logger;
 
 import com.goofans.gootool.ToolPreferences;
 import com.goofans.gootool.util.XMLUtil;
+import com.goofans.gootool.util.Version;
 import org.w3c.dom.Document;
 
 /**
@@ -66,6 +67,19 @@ public class APIRequest
     urlConn.setDoOutput(true);
     urlConn.setUseCaches(false);
     urlConn.addRequestProperty("GooTool-ID", ToolPreferences.getGooToolId()); //NON-NLS
+
+    StringBuilder platformStr = new StringBuilder("GooTool;");
+    platformStr.append(Version.RELEASE_FULL)
+            .append(';')
+            .append(System.getProperty("java.version").replaceAll(";", "_"))
+            .append(';')
+            .append(System.getProperty("os.name").replaceAll(";", "_"))
+            .append(';')
+            .append(System.getProperty("os.version").replaceAll(";", "_"))
+            .append(';')
+            .append(System.getProperty("os.arch").replaceAll(";", "_"));
+
+    urlConn.addRequestProperty("User-Agent", platformStr.toString());
 
     urlConn.connect();
 

@@ -1,7 +1,5 @@
 - Mime type in installer  for website?
 
-- Send OS and CPU type in CheckVersion API
-
 MILESTONE 0.10.x (Final beta series)
 
 - BUG FIX: Mac image conversion has slight colour shifts due to ColorModel
