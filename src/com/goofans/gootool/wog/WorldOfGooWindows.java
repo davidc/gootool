@@ -16,11 +16,11 @@ import com.goofans.gootool.util.Utilities;
  * @author David Croft (davidc@goofans.com)
  * @version $Id$
  */
+@SuppressWarnings({"HardcodedFileSeparator"})
 public class WorldOfGooWindows extends WorldOfGoo
 {
   private static final Logger log = Logger.getLogger(WorldOfGooWindows.class.getName());
 
-  @SuppressWarnings({"HardcodedFileSeparator"})
   private static final String[] SEARCH_PATHS = {
           "%ProgramFiles%\\WorldOfGoo", "%ProgramFiles%\\World Of Goo",
           "%SystemDrive%\\Program Files\\WorldOfGoo", "%SystemDrive%\\Program Files\\World Of Goo",
@@ -36,7 +36,7 @@ public class WorldOfGooWindows extends WorldOfGoo
   private File wogDir;
   private File addinsDir;
   private File customDir;
-  static final String USER_CONFIG_FILE = "properties/config.txt";
+  static final String USER_CONFIG_FILE = "properties\\config.txt";
 
   private static final String ADDIN_DIR = "addins";
 

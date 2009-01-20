@@ -17,11 +17,6 @@
       <maximumHeapSize value="128" />
       <maximumStackSize value="32" />
       <properties />
-      <executeOn event="beforeRun" target="compile" />
-      <executeOn event="beforeRun" target="compile" />
-      <executeOn event="beforeRun" target="compile" />
-      <executeOn event="beforeRun" target="compile" />
-      <executeOn event="beforeRun" target="compile" />
       <executeOn event="beforeRun" target="compile" runConfigurationType="Application" runConfigurationName="GooTool" />
     </buildFile>
   </component>

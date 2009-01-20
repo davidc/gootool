@@ -1,3 +1,4 @@
+- Mime type in installer  for website?
 
 - Send OS and CPU type in CheckVersion API
 
@@ -45,6 +46,8 @@ NO MILESTONE SET
 - BUGFIX: Addins build.xml ANT task doesn't work under Linux.
 - NEW FEATURE: .deb build: http://code.google.com/p/ant-deb-task/
 - NEW FEATURE: mute music/mute all sound
+
+- NEW FEATURE: automatically self-update
 
 - reformat b5s and use as wog website server
 
