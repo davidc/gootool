@@ -4,6 +4,7 @@ import com.goofans.gootool.model.Language;
 import com.goofans.gootool.model.Resolution;
 import com.goofans.gootool.model.Configuration;
 import com.goofans.gootool.Controller;
+import com.goofans.gootool.ToolPreferences;
 import com.goofans.gootool.profile.ProfileFactory;
 import com.goofans.gootool.wog.WorldOfGoo;
 
@@ -36,6 +37,9 @@ public class OptionsPanel implements ViewComponent
   private JButton changeCustomDirButton;
   private JTextField profileFileText;
   private JButton changeProfileFileButton;
+  private JTextField goofansUsername;
+  private JPasswordField goofansPassword;
+  private JButton gooFansLoginButton;
 
   public OptionsPanel(Controller controller)
   {
@@ -59,6 +63,9 @@ public class OptionsPanel implements ViewComponent
 
     changeProfileFileButton.addActionListener(controller);
     changeProfileFileButton.setActionCommand(Controller.CMD_CHANGE_PROFILE_FILE);
+
+    gooFansLoginButton.addActionListener(controller);
+    gooFansLoginButton.setActionCommand(Controller.CMD_GOOFANS_LOGIN);
   }
 
   private void updateResolutions()
@@ -117,6 +124,9 @@ public class OptionsPanel implements ViewComponent
     else {
       profileFileText.setText("");
     }
+
+    goofansUsername.setText(ToolPreferences.getGooFansUsername());
+    goofansPassword.setText(ToolPreferences.getGooFansPassword());
   }
 
   public void updateModelFromView(Configuration c)
@@ -132,5 +142,8 @@ public class OptionsPanel implements ViewComponent
     c.setWatermark(watermark.getText());
     c.setAllowWidescreen(allowWidescreen.isSelected());
     c.setResolution((Resolution) resolutionCombo.getSelectedItem());
+
+    ToolPreferences.setGooFansUsername(goofansUsername.getText());
+    ToolPreferences.setGooFansPassword(new String(goofansPassword.getPassword()));
   }
 }

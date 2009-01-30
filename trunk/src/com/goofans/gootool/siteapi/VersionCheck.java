@@ -38,7 +38,7 @@ public class VersionCheck implements Runnable
   {
     try {
       APIRequest request = new APIRequest(APIRequest.API_CHECKVERSION);
-      request.addParameter("version", Version.RELEASE.toString());
+      request.addGetParameter("version", Version.RELEASE.toString());
 
       log.log(Level.FINE, "Checkversion " + request);
 

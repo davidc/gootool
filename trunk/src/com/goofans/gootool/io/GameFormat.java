@@ -67,4 +67,21 @@ public class GameFormat
     }
     return new String(decoded, DEFAULT_CHARSET);
   }
+
+
+  public static void encodeProfileFile(File file, byte[] input) throws IOException
+  {
+    log.finest("encode profile file: " + file);
+
+    switch (PlatformSupport.getPlatform()) {
+      case WINDOWS:
+      case LINUX:
+        AESBinFormat.encodeFile(file, input);
+        break;
+      case MACOSX:
+        MacBinFormat.encodeFile(file, input);
+        break;
+    }
+  }
+
 }

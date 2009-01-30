@@ -299,4 +299,24 @@ public class TextUtil
 
     return sb.toString();
   }
+
+  public static byte[] stringToBytesUtf8(String s)
+  {
+    try {
+      return s.getBytes("UTF-8");
+    }
+    catch (UnsupportedEncodingException e) {
+      throw new RuntimeException("UTF-8 unsupported!");
+    }
+  }
+
+  public static String bytesToStringUtf8(byte[] b)
+  {
+    try {
+      return new String(b, "UTF-8");
+    }
+    catch (UnsupportedEncodingException e) {
+      throw new RuntimeException("UTF-8 unsupported!");
+    }
+  }
 }

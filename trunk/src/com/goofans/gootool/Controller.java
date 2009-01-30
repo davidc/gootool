@@ -24,8 +24,7 @@ import com.goofans.gootool.view.AddinPropertiesDialog;
 import com.goofans.gootool.view.MainFrame;
 import com.goofans.gootool.wog.ConfigurationWriterTask;
 import com.goofans.gootool.wog.WorldOfGoo;
-import com.goofans.gootool.siteapi.VersionCheck;
-import com.goofans.gootool.platform.PlatformSupport;
+import com.goofans.gootool.siteapi.*;
 import static com.goofans.gootool.GameFileCodecTool.CodecType;
 
 /**
@@ -50,6 +49,11 @@ public class Controller implements ActionListener
   public static final String CMD_CHANGE_INSTALL_DIR = "Options>InstallDir";
   public static final String CMD_CHANGE_CUSTOM_DIR = "Options>CustomDir";
   public static final String CMD_CHANGE_PROFILE_FILE = "Options>ProfileFile";
+
+  public static final String CMD_GOOFANS_LOGIN = "GooFans>Login";
+  public static final String CMD_GOOFANS_BACKUP = "GooFans>Backup";
+  public static final String CMD_GOOFANS_RESTORE = "GooFans>Restore";
+  public static final String CMD_GOOFANS_PUBLISH = "GooFans>Publish";
 
   public static final String CMD_SAVE = "Save";
   public static final String CMD_SAVE_AND_LAUNCH = "Save&Launch";
@@ -137,6 +141,15 @@ public class Controller implements ActionListener
     }
     else if (cmd.equals(CMD_CHANGE_PROFILE_FILE)) {
       changeProfileFile();
+    }
+    else if (cmd.equals(CMD_GOOFANS_LOGIN)) {
+      gooFansLogin();
+    }
+    else if (cmd.equals(CMD_GOOFANS_BACKUP)) {
+      gooFansBackup();
+    }
+    else if (cmd.equals(CMD_GOOFANS_RESTORE)) {
+      gooFansRestore();
     }
     else if (cmd.equals(CMD_TRANSLATOR_MODE)) {
       boolean enabled = mainFrame.mainMenu.translatorModeMenuItem.isSelected();
@@ -450,6 +463,80 @@ public class Controller implements ActionListener
     refreshView();
   }
 
+  // TODO background task this
+  private void gooFansLogin()
+  {
+    updateModelFromView(editorConfig);
+
+    try {
+      LoginTestRequest request = new LoginTestRequest();
+      request.loginTest();
+
+      showMessageDialog("Login success", "You are now logged in to goofans.com");
+      ToolPreferences.setGooFansLoginOk(true);
+    }
+    catch (APIException e) {
+      log.log(Level.WARNING, "Login test failed", e);
+      ToolPreferences.setGooFansLoginOk(false);
+      showErrorDialog("Login failed", e.getLocalizedMessage());
+    }
+
+    updateViewFromModel(editorConfig);
+  }
+
+  // TODO background task this
+  private void gooFansBackup()
+  {
+    String description = JOptionPane.showInputDialog(mainFrame, "Enter an optional description for this backup", "Description", JOptionPane.QUESTION_MESSAGE);
+    if (description == null) return;
+
+    try {
+      ProfileBackupRequest request = new ProfileBackupRequest();
+      request.backupProfile(description);
+      showMessageDialog("Backup complete", "Your backup is now stored at GooFans.com and can be restored on this or any other computer later.");
+    }
+    catch (APIException e) {
+      log.log(Level.WARNING, "Backup failed", e);
+      showErrorDialog("Backup failed", e.getLocalizedMessage());
+    }
+  }
+
+  // TODO background task this
+  private void gooFansRestore()
+  {
+    try {
+      ProfileListRequest listRequest = new ProfileListRequest();
+
+      List<ProfileListRequest.BackupInstance> backups = listRequest.listBackups();
+      if (backups.isEmpty()) {
+        showErrorDialog("No backups", "You have not yet created any backups.");
+        return;
+      }
+
+
+      Object[] values = backups.toArray();
+
+      Object selected = JOptionPane.showInputDialog(mainFrame, "Select backup to restore", "Select backup", JOptionPane.QUESTION_MESSAGE, null, values, backups.get(backups.size() - 1));
+      if (selected == null) return;
+
+      ProfileListRequest.BackupInstance instance = (ProfileListRequest.BackupInstance) selected;
+
+      if (JOptionPane.showConfirmDialog(mainFrame, "Your current profile will be DELETED and replaced with the following backup:\n" + instance.description + "\n\nAre you sure you wish to proceed?", "Confirm profile restore", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE) != JOptionPane.YES_OPTION)
+        return;
+
+      ProfileRestoreRequest restoreRequest = new ProfileRestoreRequest();
+
+      restoreRequest.restoreProfile(instance.id);
+
+      mainFrame.profilePanel.loadProfiles();
+
+      showMessageDialog("Restore complete", "Restore complete.");
+    }
+    catch (APIException e) {
+      log.log(Level.WARNING, "Restore failed", e);
+      showErrorDialog("Restore failed", e.getLocalizedMessage());
+    }
+  }
 
   private void showMessageDialog(String title, String msg)
   {

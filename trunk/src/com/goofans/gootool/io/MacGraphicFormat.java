@@ -1,6 +1,5 @@
 package com.goofans.gootool.io;
 
-import javax.swing.*;
 import java.awt.*;
 import java.awt.color.ColorSpace;
 import java.awt.image.*;
@@ -8,6 +7,8 @@ import java.io.*;
 import java.util.zip.DataFormatException;
 import java.util.zip.Deflater;
 import java.util.zip.Inflater;
+
+import com.goofans.gootool.util.DebugUtil;
 
 /**
  * Handles encoding and decoding of the Mac .png.binltl raster format.
@@ -141,19 +142,6 @@ public class MacGraphicFormat
     return colorModel;
   }
 
-  private static void showImageWindow(BufferedImage image)
-  {
-    JDialog dlg = new JDialog((Frame) null, "Image", true);
-    dlg.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-    JLabel imgLabel = new JLabel(new ImageIcon(image));
-    Dimension d = new Dimension(image.getWidth(null), image.getHeight(null));
-    imgLabel.setPreferredSize(d);
-    dlg.getContentPane().add(imgLabel);
-    dlg.pack();
-    dlg.setVisible(true);
-  }
-
-
   private static int readUnsignedShort(InputStream is) throws IOException
   {
     byte[] tmp = new byte[2];
@@ -193,13 +181,13 @@ public class MacGraphicFormat
 
     File tmpfile = new File("cliff_left-OUT.png.binltl");
     encodeImage(tmpfile, image);
-    showImageWindow(decodeImage(tmpfile));
+    DebugUtil.showImageWindow(decodeImage(tmpfile));
 
     image = decodeImage(new File("cliff_right.png.binltl"));
 
     tmpfile = new File("cliff_right-OUT.png.binltl");
     encodeImage(tmpfile, image);
-    showImageWindow(decodeImage(tmpfile));
+    DebugUtil.showImageWindow(decodeImage(tmpfile));
 
 //    ImageIO.write(image, "PNG", new File("cliff_left.png"));
   }
