@@ -5,6 +5,8 @@ import net.infotrek.util.TextUtil;
 import java.util.prefs.Preferences;
 import java.util.Random;
 import java.util.logging.Logger;
+import java.util.logging.Level;
+import java.io.IOException;
 
 import com.goofans.gootool.util.VersionSpec;
 
@@ -20,6 +22,7 @@ public class ToolPreferences
   private static final Logger log = Logger.getLogger(ToolPreferences.class.getName());
 
   private static final Preferences PREFS = Preferences.userNodeForPackage(GooTool.class);
+
   private static final String PREF_GOOTOOL_ID = "gootool_random_id";
   private static final String PREF_IGNORE_UPDATE = "gootool_ignore_update";
   private static final String PREF_L10N_MODE = "gootool_l10n_enabled";
@@ -28,6 +31,10 @@ public class ToolPreferences
 
   private static final String PREF_WOG_DIR = "wog_dir";
   private static final String PREF_CUSTOM_DIR = "custom_dir";
+
+  private static final String PREF_GOOFANS_USERNAME = "goofans_username";
+  private static final String PREF_GOOFANS_PASSWORD = "goofans_password";
+  private static final String PREF_GOOFANS_LOGINOK = "goofans_loginok";
 
   private ToolPreferences()
   {
@@ -128,6 +135,45 @@ public class ToolPreferences
   public static void setCustomDir(String customDir)
   {
     PREFS.put(PREF_CUSTOM_DIR, customDir);
+  }
+
+  public static String getGooFansUsername()
+  {
+    return PREFS.get(PREF_GOOFANS_USERNAME, null);
+  }
+
+  public static void setGooFansUsername(String username)
+  {
+    PREFS.put(PREF_GOOFANS_USERNAME, username);
+  }
+
+  public static String getGooFansPassword()
+  {
+    String enc = PREFS.get(PREF_GOOFANS_PASSWORD, null);
+    if (enc == null) return null;
+
+    try {
+      return new String(TextUtil.base64Decode(enc));
+    }
+    catch (IOException e) {
+      log.log(Level.SEVERE, "Base64 encoding exception in password, removing");
+      return null;
+    }
+  }
+
+  public static void setGooFansPassword(String password)
+  {
+    PREFS.put(PREF_GOOFANS_PASSWORD, TextUtil.base64Encode(password.getBytes()));
+  }
+
+  public static boolean isGooFansLoginOk()
+  {
+    return PREFS.getBoolean(PREF_GOOFANS_LOGINOK, false);
+  }
+
+  public static void setGooFansLoginOk(boolean ok)
+  {
+    PREFS.putBoolean(PREF_GOOFANS_LOGINOK, ok);
   }
 
   @SuppressWarnings({"UseOfSystemOutOrSystemErr"})

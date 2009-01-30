@@ -15,6 +15,7 @@ public class Utilities
 
   /**
    * Expands the string with any %envvars% expanded.
+   *
    * @param s the string to expand, with env vars enclosed within % signs
    * @return The expanded string, or null of any env var wasn't found
    */
@@ -154,6 +155,7 @@ public class Utilities
   /**
    * Makes the given directory (and any necessary parents) and throws an exception if this failed.
    * Does not do anything if the directory already exists.
+   *
    * @param dir The directory (with parents) to create
    * @throws IOException if the directory (or any parents) could not be created
    */

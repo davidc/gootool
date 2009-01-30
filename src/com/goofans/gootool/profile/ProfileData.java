@@ -60,9 +60,11 @@ public class ProfileData
 //    boolean collectingNumbers;
     int length = 0;
     int ch;
+    int sanity = 0; // prevents eternal loop reading non-profile data
 
     while ((ch = r.read()) != ',') {
       length = (length * 10) + (ch - '0');
+      if (sanity++ > 5) throw new IOException("Insane profile data");
     }
 
     if (length == 0) {

@@ -32,6 +32,7 @@ public class MainFrame extends JFrame implements ViewComponent
   private OptionsPanel optionsPanel;
   public ImageL10nPanel imageLocalisationPanel;
   public MainMenu mainMenu;
+  public ProfilePanel profilePanel;
 
   public MainFrame(final Controller controller)
   {
@@ -65,13 +66,14 @@ public class MainFrame extends JFrame implements ViewComponent
 
   private void createUIComponents()
   {
+    optionsPanel = new OptionsPanel(controller);
     addinsPanel = new AddinsPanel(controller);
-    optionsPanel = new OptionsPanel(this.controller);
+    profilePanel = new ProfilePanel(controller);
     imageLocalisationPanel = new ImageL10nPanel();
 
     optionsPanelPanel = optionsPanel.rootPanel;
     addinsPanelPanel = addinsPanel.rootPanel;
-    profilePanelPanel = new ProfilePanel().rootPanel;
+    profilePanelPanel = profilePanel.rootPanel;
 //    imageLocalisationPanelPanel = imageLocalisationPanel.rootPanel;
   }
 
@@ -79,12 +81,14 @@ public class MainFrame extends JFrame implements ViewComponent
   {
     optionsPanel.updateViewFromModel(c);
     addinsPanel.updateViewFromModel(c);
+    profilePanel.updateViewFromModel(c);
   }
 
   public void updateModelFromView(Configuration c)
   {
     optionsPanel.updateModelFromView(c);
     addinsPanel.updateModelFromView(c);
+    profilePanel.updateModelFromView(c);
   }
 
 }

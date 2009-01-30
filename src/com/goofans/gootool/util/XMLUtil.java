@@ -197,7 +197,7 @@ public class XMLUtil
     return foundEl;
   }
 
-  public static String getElementString(Element el, String tagName) throws IOException
+  public static String getElementString(Element el, String tagName)
   {
     Element foundEl = getElement(el, tagName);
     if (foundEl == null) return "";
@@ -209,9 +209,9 @@ public class XMLUtil
     return getElementRequired(el, tagName).getTextContent().trim();
   }
 
-  public static double getElementDouble(Element addTextEl, String tagName, double defaultValue) throws IOException
+  public static double getElementDouble(Element el, String tagName, double defaultValue) throws IOException
   {
-    NodeList list = addTextEl.getElementsByTagName(tagName);
+    NodeList list = el.getElementsByTagName(tagName);
     if (list.getLength() == 0) return defaultValue;
 
     try {
@@ -221,6 +221,32 @@ public class XMLUtil
     }
     catch (NumberFormatException e) {
       throw new IOException("Invalid " + tagName + " double value: " + list.item(0));
+    }
+  }
+
+  public static int getElementInteger(Element el, String tagName, int defaultValue) throws IOException
+  {
+    NodeList list = el.getElementsByTagName(tagName);
+    if (list.getLength() == 0) return defaultValue;
+
+    try {
+      return Integer.valueOf(list.item(0).getTextContent().trim());
+    }
+    catch (NumberFormatException e) {
+      throw new IOException("Invalid " + tagName + " integer value: " + list.item(0));
+    }
+  }
+
+  public static int getElementIntegerRequired(Element el, String tagName) throws IOException
+  {
+    NodeList list = el.getElementsByTagName(tagName);
+    if (list.getLength() == 0) throw new IOException("element " + tagName + " not found");
+
+    try {
+      return Integer.valueOf(list.item(0).getTextContent().trim());
+    }
+    catch (NumberFormatException e) {
+      throw new IOException("Invalid " + tagName + " integer value: " + list.item(0));
     }
   }
 }

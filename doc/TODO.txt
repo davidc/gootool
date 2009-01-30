@@ -14,7 +14,6 @@ MILESTONE 0.10.x (Final beta series)
 
 - NEW FEATURE: Upload profile/tower to goofans.com
 - NEW FEATURE: preference: upload tower on goo exit, or upload tower continuously during play (need to detect when process exits - java.lang.Process?)
-- NEW FEATURE: backup/restore profile to website - perhaps just store their last 5 uploaded profiles?
 - NEW FEATURE: mark user as cheat - requires X votes or something
 
 MILESTONE 1.0.0 (First public release)

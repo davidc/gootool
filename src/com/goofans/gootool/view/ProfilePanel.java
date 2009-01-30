@@ -3,6 +3,8 @@ package com.goofans.gootool.view;
 import net.infotrek.util.TextUtil;
 
 import com.goofans.gootool.ToolPreferences;
+import com.goofans.gootool.Controller;
+import com.goofans.gootool.model.Configuration;
 import com.goofans.gootool.util.FileNameExtensionFilter;
 import com.goofans.gootool.profile.*;
 
@@ -24,7 +26,7 @@ import java.util.logging.Logger;
  * @author David Croft (davidc@goofans.com)
  * @version $Id$
  */
-public class ProfilePanel implements ActionListener
+public class ProfilePanel implements ActionListener, ViewComponent
 {
   private static final Logger log = Logger.getLogger(ProfilePanel.class.getName());
 
@@ -43,6 +45,9 @@ public class ProfilePanel implements ActionListener
   private JLabel towerHeight;
   //  private JButton viewTowerButton;
   private JButton saveTowerButton;
+  private JButton profileBackupButton;
+  private JButton profileRestoreButton;
+  private JButton profilePublishButton;
 
   private static final String CMD_REFRESH = "REFRESH";
   private static final String CMD_PROFILE_CHANGED = "PROFILE_CHANGED";
@@ -65,7 +70,7 @@ public class ProfilePanel implements ActionListener
   }
 
 
-  public ProfilePanel()
+  public ProfilePanel(Controller controller)
   {
     refreshButton.setActionCommand(CMD_REFRESH);
     refreshButton.addActionListener(this);
@@ -79,6 +84,15 @@ public class ProfilePanel implements ActionListener
     profilesCombo.setActionCommand(CMD_PROFILE_CHANGED);
     profilesCombo.addActionListener(this);
 
+    profileBackupButton.setActionCommand(Controller.CMD_GOOFANS_BACKUP);
+    profileBackupButton.addActionListener(controller);
+
+    profileRestoreButton.setActionCommand(Controller.CMD_GOOFANS_RESTORE);
+    profileRestoreButton.addActionListener(controller);
+
+    profilePublishButton.setActionCommand(Controller.CMD_GOOFANS_PUBLISH);
+    profilePublishButton.addActionListener(controller);
+
     levelsTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     levelsModel = new LevelsTableModel();
     levelsTable.setModel(levelsModel);
@@ -87,8 +101,8 @@ public class ProfilePanel implements ActionListener
 
     columnModel.getColumn(0).setPreferredWidth(150);
     columnModel.getColumn(1).setPreferredWidth(50);
-    columnModel.getColumn(2).setPreferredWidth(75);
-    columnModel.getColumn(3).setPreferredWidth(150);
+    columnModel.getColumn(2).setPreferredWidth(50);
+    columnModel.getColumn(3).setPreferredWidth(50);
 
     levelsTable.getTableHeader().setReorderingAllowed(false);
 //    levelsTable.so
@@ -191,7 +205,7 @@ public class ProfilePanel implements ActionListener
           saveTowerButton.setEnabled(true);
         }
         catch (IOException e1) {
-          log.log(Level.SEVERE, "Unable to render tower", event);
+          log.log(Level.SEVERE, "Unable to render tower", e1);
           towerPanel.add(new JLabel("Sorry, couldn't\nrender your tower."));
 //          viewTowerButton.setEnabled(false);
           saveTowerButton.setEnabled(false);
@@ -221,8 +235,6 @@ public class ProfilePanel implements ActionListener
     JFileChooser chooser = new JFileChooser(ToolPreferences.getMruTowerDir());
     chooser.setFileFilter(new FileNameExtensionFilter("PNG Image", "png"));
     int returnVal = chooser.showSaveDialog(this.rootPanel);
-
-    // TODO : Do you want to overwrite?
 
     if (returnVal == JFileChooser.APPROVE_OPTION) {
 
@@ -299,7 +311,7 @@ public class ProfilePanel implements ActionListener
     d.setVisible(true);
   }
 
-  private void loadProfiles()
+  public void loadProfiles()
   {
     profilesCombo.removeAllItems();
 
@@ -325,6 +337,19 @@ public class ProfilePanel implements ActionListener
   {
     NumberFormat nf = NumberFormat.getNumberInstance();
     return nf.format(height) + " m";
+  }
+
+  public void updateViewFromModel(Configuration c)
+  {
+    boolean enabled = ToolPreferences.isGooFansLoginOk() && ProfileFactory.isProfileFound();
+
+    profileBackupButton.setEnabled(enabled);
+    profileRestoreButton.setEnabled(enabled);
+    profilePublishButton.setEnabled(false); //TODO
+  }
+
+  public void updateModelFromView(Configuration c)
+  {
   }
 
 
