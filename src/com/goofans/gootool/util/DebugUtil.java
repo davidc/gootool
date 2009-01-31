@@ -12,6 +12,7 @@ import java.awt.*;
  * @author David Croft (davidc@goofans.com)
  * @version $Id$
  */
+@SuppressWarnings({"HardCodedStringLiteral"})
 public class DebugUtil
 {
   public static void setAllLogging()
@@ -29,6 +30,15 @@ public class DebugUtil
     Dimension d = new Dimension(image.getWidth(null), image.getHeight(null));
     imgLabel.setPreferredSize(d);
     dlg.getContentPane().add(imgLabel);
+    dlg.pack();
+    dlg.setVisible(true);
+  }
+
+  public static void showPanelWindow(JPanel panel)
+  {
+    JDialog dlg = new JDialog((Frame) null, "Panel Debug", true);
+    dlg.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+    dlg.getContentPane().add(panel);
     dlg.pack();
     dlg.setVisible(true);
   }

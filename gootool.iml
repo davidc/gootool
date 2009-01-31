@@ -12,9 +12,9 @@
         <url>file://$MODULE_DIR$/resources</url>
       </containerElement>
     </containerInfo>
-    <setting name="jarUrl" value="file://$MODULE_DIR$/dist/gootool.jar" />
+    <setting name="jarUrl" value="file://$MODULE_DIR$/dist/toolbar.jar" />
     <setting name="buildJar" value="true" />
-    <setting name="mainClass" value="net.infotrek.gootool.GooTool" />
+    <setting name="mainClass" value="com.goofans.gootool.leveledit.ui.Toolbar" />
   </component>
   <component name="NewModuleRootManager" inherit-compiler-output="false">
     <output url="file://$MODULE_DIR$/build/compiled" />

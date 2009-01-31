@@ -31,7 +31,7 @@ public class Level
 
     File resourcesFile = worldOfGoo.getGameFile(levelPrefix + ".resrc.bin");
     Document resourcesDoc = GameFormat.decodeXmlBinFile(resourcesFile);
-    resources = new Resources(resourcesDoc, worldOfGoo.getWogDir());
+    resources = new Resources(resourcesDoc);
 
     File levelFile = worldOfGoo.getGameFile(levelPrefix + ".level.bin");
     Document levelDoc = GameFormat.decodeXmlBinFile(levelFile);

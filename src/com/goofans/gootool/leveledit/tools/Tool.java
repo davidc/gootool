@@ -1,9 +1,11 @@
-package com.goofans.gootool.leveledit.view;
+package com.goofans.gootool.leveledit.tools;
 
 import java.awt.*;
 import java.awt.geom.Point2D;
 
 /**
+ * Interface implemented by all Tools.
+ *
  * @author David Croft (davidc@goofans.com)
  * @version $Id$
  */
