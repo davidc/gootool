@@ -107,25 +107,25 @@ public class BallPart
   }
 
   // TODO draw at higher scale?
-  public void draw(Graphics2D g2, int xOffset, int yOffset) throws IOException
+  public void draw(Graphics2D g2, int xOffset, int yOffset, double drawScale) throws IOException
   {
     String imageResName = imageRes.get(0);
 
-    int xCentre = (int) (xOffset + ((x1 + x2) / 2));
-    int yCentre = (int) (yOffset - ((y1 + y2) / 2));
+    int xCentre = (int) (xOffset + (drawScale * ((x1 + x2) / 2)));
+    int yCentre = (int) (yOffset - (drawScale * ((y1 + y2) / 2)));
 
-    drawImage(g2, imageResName, xCentre, yCentre);
+    drawImage(g2, imageResName, xCentre, yCentre, drawScale);
 
     if (isEye) {
-      drawImage(g2, pupilRes, xCentre, yCentre);
+      drawImage(g2, pupilRes, xCentre, yCentre, drawScale);
     }
   }
 
-  private void drawImage(Graphics2D g2, String imageResName, int xCentre, int yCentre) throws IOException
+  private void drawImage(Graphics2D g2, String imageResName, int xCentre, int yCentre, double drawScale) throws IOException
   {
     Image image = getResourceImage(imageResName);
-    int width = (int) (image.getWidth(null) * scale);
-    int height = (int) (image.getHeight(null) * scale);
+    int width = (int) (image.getWidth(null) * scale * drawScale);
+    int height = (int) (image.getHeight(null) * scale * drawScale);
 
     System.out.println("image " + imageResName + " width=" + width + " height=" + height + ", scale = " + scale);
 
@@ -141,6 +141,26 @@ public class BallPart
     if (image == null) image = Resources.getGlobalResources().getImage(imageResName);
     if (image == null) throw new IOException("No image found for resource " + imageResName);
     return image;
+  }
+
+  public Ball.Bounds getBounds() throws IOException
+  {
+    String imageResName = imageRes.get(0);
+    Image image = getResourceImage(imageResName);
+    int width = (int) (image.getWidth(null) * scale);
+    int height = (int) (image.getHeight(null) * scale);
+
+    Ball.Bounds b = new Ball.Bounds();
+
+    double x = (x1 + x2) / 2;
+    b.minx = x - (width / 2);
+    b.maxx = x + (width / 2);
+
+    double y = (y1 + y2) / 2;
+    b.miny = y - (height / 2);
+    b.maxy = y + (height / 2);
+
+    return b;
   }
 
 

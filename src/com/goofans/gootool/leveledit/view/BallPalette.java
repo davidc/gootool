@@ -52,7 +52,7 @@ public class BallPalette extends JComponent implements Scrollable
       if (dir.isDirectory() && !dir.getName().startsWith("_")) {
         System.out.println("dir.getName() = " + dir.getName());
         Ball ball = new Ball(dir.getName());
-        PaletteThumbnail button = new PaletteThumbnail(dir.getName(), new ImageIcon(ball.getImageInState("walking")));
+        PaletteThumbnail button = new PaletteThumbnail(dir.getName(), new ImageIcon(ball.getImageInState("walking", new Dimension(50,50))));
         button.setToolTipText(dir.getName());
         add(button);
       }
