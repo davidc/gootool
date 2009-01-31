@@ -2,7 +2,7 @@
 <form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="com.goofans.gootool.leveledit.view.LevelEditor">
   <grid id="e4dc1" binding="contentPane" layout-manager="BorderLayout" hgap="0" vgap="0">
     <constraints>
-      <xy x="48" y="54" width="1016" height="629"/>
+      <xy x="48" y="54" width="1016" height="649"/>
     </constraints>
     <properties/>
     <border type="none"/>
@@ -98,7 +98,7 @@
             <properties>
               <orientation value="0"/>
             </properties>
-            <border type="none"/>
+            <border type="empty"/>
             <children>
               <splitpane id="89176">
                 <constraints>
@@ -107,7 +107,7 @@
                 <properties>
                   <resizeWeight value="1.0"/>
                 </properties>
-                <border type="none"/>
+                <border type="empty"/>
                 <children>
                   <grid id="2dfd7" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
                     <margin top="0" left="0" bottom="0" right="0"/>
@@ -281,9 +281,9 @@
                           </grid>
                         </children>
                       </scrollpane>
-                      <grid id="73fdc" layout-manager="GridLayoutManager" row-count="2" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                      <grid id="73fdc" layout-manager="GridLayoutManager" row-count="1" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
                         <margin top="0" left="0" bottom="0" right="0"/>
-                        <constraints border-constraint="East"/>
+                        <constraints border-constraint="North"/>
                         <properties/>
                         <border type="none"/>
                         <children>
@@ -299,12 +299,17 @@
                           </component>
                           <component id="e0429" class="javax.swing.JSlider" binding="slider1" default-binding="true">
                             <constraints>
-                              <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
+                              <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
                             </constraints>
                             <properties>
-                              <orientation value="1"/>
+                              <orientation value="0"/>
                             </properties>
                           </component>
+                          <hspacer id="72145">
+                            <constraints>
+                              <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                            </constraints>
+                          </hspacer>
                         </children>
                       </grid>
                     </children>

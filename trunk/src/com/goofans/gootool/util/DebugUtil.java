@@ -31,6 +31,7 @@ public class DebugUtil
     imgLabel.setPreferredSize(d);
     dlg.getContentPane().add(imgLabel);
     dlg.pack();
+    GUIUtil.setCloseOnEscape(dlg);
     dlg.setVisible(true);
   }
 
