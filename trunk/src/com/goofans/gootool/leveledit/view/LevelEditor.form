@@ -129,6 +129,7 @@
                           <component id="95945" class="com.goofans.gootool.leveledit.view.LevelDisplay" binding="levelDisplay">
                             <constraints/>
                             <properties>
+                              <focusable value="true"/>
                               <opaque value="true"/>
                             </properties>
                           </component>

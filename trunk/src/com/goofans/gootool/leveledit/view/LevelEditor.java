@@ -205,7 +205,7 @@ public class LevelEditor extends JFrame implements ActionListener
     if (shortcut.length() > 0) {
       KeyStroke keyStroke = KeyStroke.getKeyStroke(shortcut);
       log.log(java.util.logging.Level.FINER, "Adding keystroke " + keyStroke + " for tool " + toolName);
-      getRootPane().getInputMap().put(keyStroke, toolName);
+      getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(keyStroke, toolName);
       getRootPane().getActionMap().put(toolName, new AbstractAction()
       {
         public void actionPerformed(ActionEvent e)
