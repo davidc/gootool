@@ -10,6 +10,7 @@ import java.util.Map;
 import java.io.IOException;
 
 import com.goofans.gootool.leveledit.tools.Tool;
+import com.goofans.gootool.leveledit.tools.SelectTool;
 import com.goofans.gootool.util.GUIUtil;
 import com.goofans.gootool.util.DebugUtil;
 
@@ -19,7 +20,7 @@ import com.goofans.gootool.util.DebugUtil;
  */
 public class Toolbar extends JToolBar implements ActionListener
 {
-  private int orientation;
+//  private int orientation;
 
   //  private Map<String, Tool> tools;
   private Map<Tool, ToolbarButton> toolButtons;
@@ -27,7 +28,7 @@ public class Toolbar extends JToolBar implements ActionListener
 
   private Tool currentTool;
 
-  private int maxIconWidth, maxIconHeight;
+//  private int maxIconWidth, maxIconHeight;
 //  private GridBagConstraints constraints;
 
   private Icon buttonBackgroundSelected;
@@ -40,14 +41,16 @@ public class Toolbar extends JToolBar implements ActionListener
   public Toolbar(int orientation) throws IOException
   {
     super(orientation);
+
 //    tools = new HashMap<String, Tool>();
     toolButtons = new HashMap<Tool, ToolbarButton>();
 //    buttons = new LinkedList<Object>();
-    this.orientation = orientation;
+//    this.orientation = orientation;
 
     setBackground(new Color(214, 214, 214));
 //    setOpaque(true);
-    setBorder(BorderFactory.createEmptyBorder(4, 4, 4, 4));
+//    setBorder(BorderFactory.createEmptyBorder(4, 4, 4, 4));
+    setMargin(new Insets(4, 4, 4, 4));
 
 //    GridBagLayout layout = new GridBagLayout();
 //    setLayout(layout);
@@ -204,6 +207,6 @@ public class Toolbar extends JToolBar implements ActionListener
 
   private static void quickAddTool(Toolbar bar, String toolName) throws IOException
   {
-    bar.addTool(null, toolName, new ImageIcon(ImageIO.read(Toolbar.class.getResourceAsStream("/leveledit/toolbar/" + toolName + ".png"))));
+    bar.addTool(new SelectTool(), toolName, new ImageIcon(ImageIO.read(Toolbar.class.getResourceAsStream("/leveledit/toolbar/" + toolName + ".png"))));
   }
 }
