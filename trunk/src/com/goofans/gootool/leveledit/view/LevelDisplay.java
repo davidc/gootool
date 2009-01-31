@@ -16,7 +16,7 @@ import com.goofans.gootool.leveledit.model.*;
  * @author David Croft (davidc@goofans.com)
  * @version $Id$
  */
-public class LevelDisplay extends JPanel// implements Scrollable
+public class LevelDisplay extends JPanel implements Scrollable
 {
   private Level level;
   private Scene scene;
@@ -356,6 +356,13 @@ public class LevelDisplay extends JPanel// implements Scrollable
     return (int) x;
   }
 
+  public double canvasToWorldX(int x)
+  {
+    double ox = canvasToWorldScaleX(x);
+    ox += scene.getMinX();
+    return ox;
+  }
+
   /*
   * Converts an Y-coordinate in world units to the actual y location we should display it on our canvas.
   */
@@ -369,6 +376,13 @@ public class LevelDisplay extends JPanel// implements Scrollable
     return (int) y;
   }
 
+  public double canvasToWorldY(int y)
+  {
+    double oy = canvasToWorldScaleY(y);
+    oy = scene.getMaxY() - oy;
+    return oy;
+  }
+
 
   /*
   * Converts an X width in world units to width on our canvas
@@ -378,12 +392,22 @@ public class LevelDisplay extends JPanel// implements Scrollable
     return (int) (x * scale);
   }
 
+  private double canvasToWorldScaleX(int x)
+  {
+    return x / scale;
+  }
+
   /*
   * Converts a Y height in world units to height on our canvas
   */
   private int worldToCanvasScaleY(double y)
   {
     return (int) (y * scale);
+  }
+
+  private double canvasToWorldScaleY(int y)
+  {
+    return y / scale;
   }
 
   public boolean isLayerVisibile(LevelDisplayLayer layer)
@@ -397,6 +421,37 @@ public class LevelDisplay extends JPanel// implements Scrollable
     else visibleLayers.remove(layer);
 
     repaint();
+  }
+
+  public Dimension getPreferredScrollableViewportSize()
+  {
+    return new Dimension(500,500);
+  }
+
+  public int getScrollableUnitIncrement(Rectangle visibleRect, int orientation, int direction)
+  {
+    return 10;
+  }
+
+  public int getScrollableBlockIncrement(Rectangle visibleRect, int orientation, int direction)
+  {
+    return 100;
+  }
+
+  public boolean getScrollableTracksViewportWidth()
+  {
+    return false;
+  }
+
+  public boolean getScrollableTracksViewportHeight()
+  {
+    return false;
+  }
+
+  @Override
+  public Dimension getPreferredSize()
+  {
+    return new Dimension(500,500);
   }
 
   private class DepthSorter implements Comparator<SceneObject>

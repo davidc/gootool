@@ -1,17 +1,24 @@
 package com.goofans.gootool.leveledit.view;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.geom.Point2D;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.logging.Logger;
+import java.text.MessageFormat;
+import java.text.NumberFormat;
+import java.text.DecimalFormat;
 
 import com.goofans.gootool.GooTool;
+import com.goofans.gootool.TextProvider;
 import com.goofans.gootool.leveledit.model.Level;
+import com.goofans.gootool.leveledit.tools.*;
+import com.goofans.gootool.leveledit.ui.Toolbar;
 import com.goofans.gootool.util.GUIUtil;
+import com.goofans.gootool.util.DebugUtil;
 import com.goofans.gootool.wog.WorldOfGoo;
 
 /**
@@ -20,32 +27,44 @@ import com.goofans.gootool.wog.WorldOfGoo;
  */
 public class LevelEditor extends JFrame implements ActionListener
 {
+  private static final Logger log = Logger.getLogger(LevelEditor.class.getName());
+
   private JPanel contentPane;
-  private JButton loadButton;
-  private JButton saveButton;
-  private JButton panButton;
-  private JButton selectButton;
-  private JTable table1;
   private JTree contentsTree;
   private JTable layersTable;
   private LevelDisplay levelDisplay;
   private JButton zoomInButton;
   private JButton zoomOutButton;
+  private BallPalette ballPalette;
+  private JButton loadButton;
+  private JButton saveButton;
+  private JButton groupButton;
+  private JButton ungroupButton;
+  private JButton undoButton;
+  private JButton redoButton;
+  private Toolbar leftToolBar;
+  private JTable table1;
+  private JButton showGridButton;
+  private JButton snapToGridButton;
+  private JLabel tooltip;
+  private JLabel mousePos;
+  private JSlider slider1;
+  private JSlider ballZoomSlider;
 
-  Tool currentTool = null;
+//  private Tool currentTool;
 
   private static final String CMD_ZOOM_IN = "ZoomIn";
   private static final String CMD_ZOOM_OUT = "ZoomOut";
-  private static final String CMD_TOOL_PAN = "Tool>Pan";
-  private static final String CMD_TOOL_SELECT = "Tool>Select";
+  private TextProvider textProvider;
+  private NumberFormat mousePosNumberFormat;
 
-  private Map<String, Tool> tools;
-  private Map<String, JButton> toolButtons;
 
- 
-  public LevelEditor(Level level)
+  public LevelEditor(Level level) throws IOException
   {
     super("Level Editor");
+
+    textProvider = GooTool.getTextProvider();
+
     setContentPane(contentPane);
 //    setModal(true);
     levelDisplay.setLevel(level);
@@ -62,11 +81,6 @@ public class LevelEditor extends JFrame implements ActionListener
     zoomOutButton.addActionListener(this);
     zoomOutButton.setActionCommand(CMD_ZOOM_OUT);
 
-    tools = new HashMap<String, Tool>();
-    toolButtons = new HashMap<String, JButton>();
-    addTool(panButton, CMD_TOOL_PAN, new PanTool());
-    addTool(selectButton, CMD_TOOL_SELECT, new SelectTool());
-
     final LayersTableModel layersTableModel = new LayersTableModel(levelDisplay);
 
     layersTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -80,7 +94,7 @@ public class LevelEditor extends JFrame implements ActionListener
 
     layersTable.setGridColor(Color.WHITE);
 
-  /*  layersTableModel.addTableModelListener(new TableModelListener()
+    /*  layersTableModel.addTableModelListener(new TableModelListener()
     {
       public void tableChanged(TableModelEvent e)
       {
@@ -91,31 +105,53 @@ public class LevelEditor extends JFrame implements ActionListener
         }
       }
     });*/
+    
+    mousePosNumberFormat = NumberFormat.getNumberInstance();
+    mousePosNumberFormat.setMaximumFractionDigits(2);
 
 //    levelDisplay.get
     levelDisplay.addMouseMotionListener(new MouseMotionListener()
     {
       public void mouseMoved(MouseEvent e)
       {
+        Point.Double worldCoords = new Point.Double(levelDisplay.canvasToWorldX(e.getX()),
+                levelDisplay.canvasToWorldY(e.getY()));
+
+        Tool currentTool = leftToolBar.getCurrentTool();
         if (currentTool != null) {
-          // TODO ask display to convert x,y to world coordinates
-          Cursor cursor = currentTool.getCursorAtPoint(new Point2D.Double(e.getX(), e.getY()));
+          Cursor cursor = currentTool.getCursorAtPoint(worldCoords);
           levelDisplay.setCursor(cursor);
         }
+
+        String strX = mousePosNumberFormat.format(worldCoords.x);
+        String strY = mousePosNumberFormat.format(worldCoords.y);
+        mousePos.setText(MessageFormat.format(textProvider.getText("leveledit.status.mousePos"), strX, strY)); // TODO remove mousepos on mouseout
       }
 
       public void mouseDragged(MouseEvent e)
       {
       }
     });
-  }
 
-  private void addTool(JButton button, String cmd, Tool tool)
-  {
-    tools.put(cmd, tool);
-    toolButtons.put(cmd, button);
-    button.addActionListener(this);
-    button.setActionCommand(cmd);
+
+    PanTool defaultTool = new PanTool();
+    quickAddTool("pan", defaultTool);
+    leftToolBar.addSeparator();
+    quickAddTool("select", new SelectTool());
+
+//    quickAddTool(leftToolBar, "selectmulti");
+    quickAddTool("move", new MoveTool());
+//    quickAddTool(leftToolBar, "rotate");
+    leftToolBar.addSeparator();
+    quickAddTool("ball", new BallTool());
+//    quickAddTool(leftToolBar, "strand");
+//    quickAddTool(leftToolBar, "geomcircle");
+//    quickAddTool(leftToolBar, "geomrectangle");
+//    quickAddTool(leftToolBar, "pipe");
+//    leftToolBar.addSeparator();
+//    quickAddTool(leftToolBar, "camera");
+
+    leftToolBar.setCurrentTool(defaultTool);
   }
 
   public void actionPerformed(ActionEvent e)
@@ -128,22 +164,22 @@ public class LevelEditor extends JFrame implements ActionListener
       levelDisplay.setScale(levelDisplay.getScale() / 2);
     }
     else {
-      for (String toolCmd : tools.keySet()) {
-        if (cmd.equals(toolCmd)) {
+//      for (String toolCmd : tools.keySet()) {
+//        if (cmd.equals(toolCmd)) {
 //          System.out.println("select tool " + toolCmd);
 
-          for (String toolCmd2 : tools.keySet()) {
-            toolButtons.get(toolCmd2).setSelected(toolCmd.equals(toolCmd2));
-          }
-
-          currentTool = tools.get(toolCmd);
-          break;
-        }
-      }
+//          for (String toolCmd2 : tools.keySet()) {
+//            toolButtons.get(toolCmd2).setSelected(toolCmd.equals(toolCmd2));
+//          }
+//
+//          currentTool = tools.get(toolCmd);
+//          break;
+//        }
+//      }
     }
   }
 
-  private void createUIComponents()
+  private void createUIComponents() throws IOException
   {
     DefaultMutableTreeNode rootNode = new DefaultMutableTreeNode("abc");
     rootNode.add(new DefaultMutableTreeNode("def"));
@@ -152,18 +188,46 @@ public class LevelEditor extends JFrame implements ActionListener
     rootNode.add(new DefaultMutableTreeNode("mno"));
 
     contentsTree = new JTree(rootNode);
+
+    ballPalette = new BallPalette();
+
+    leftToolBar = new Toolbar(SwingConstants.VERTICAL);
+  }
+
+  private void quickAddTool(String toolName, final Tool tool) throws IOException
+  {
+    ImageIcon icon = new ImageIcon(ImageIO.read(Toolbar.class.getResourceAsStream("/leveledit/toolbar/" + toolName + ".png")));
+    String tooltip = textProvider.getText("leveledit.tool." + toolName + ".tooltip");
+    leftToolBar.addTool(tool, tooltip, icon);
+
+    final String shortcut = textProvider.getText("leveledit.tool." + toolName + ".shortcut");
+    if (shortcut.length() > 0) {
+      KeyStroke keyStroke = KeyStroke.getKeyStroke(shortcut);
+      log.log(java.util.logging.Level.FINER, "Adding keystroke " + keyStroke + " for tool " + toolName);
+      getRootPane().getInputMap().put(keyStroke, toolName);
+      getRootPane().getActionMap().put(toolName, new AbstractAction()
+      {
+        public void actionPerformed(ActionEvent e)
+        {
+          System.out.println("Keypress " + shortcut);
+          leftToolBar.setCurrentTool(tool);
+        }
+      });
+    }
   }
 
   public static void main(String[] args) throws IOException
   {
     GUIUtil.switchToSystemLookAndFeel();
+    DebugUtil.setAllLogging();
 
     WorldOfGoo.getTheInstance().init();
 
-    Level level = new Level("MapWorldView");
+    Level level = new Level("GoingUp");
 
     LevelEditor dialog = new LevelEditor(level);
     dialog.pack();
+    dialog.setLocationByPlatform(true);
     dialog.setVisible(true);
   }
 }
