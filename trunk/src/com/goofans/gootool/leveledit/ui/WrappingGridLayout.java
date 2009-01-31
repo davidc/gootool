@@ -37,6 +37,22 @@ public class WrappingGridLayout extends GridLayout
     }
   }
 
+  public Dimension preferredLayoutSizeForWidth(Container parent, int width)
+  {
+    synchronized (parent.getTreeLock()) {
+      Insets insets = parent.getInsets();
+      Dimension cellSize = getCellSize(parent);
+
+      int ncols = width / (cellSize.width + hgap);
+      int ncomponents = parent.getComponentCount();
+      if (ncols < 1) ncols = 1;
+      int nrows = ncomponents / ncols;
+      if (ncomponents % ncols > 0) nrows++;
+      return new Dimension(insets.left + insets.right + ncols * cellSize.width + (ncols - 1) * hgap,
+              insets.top + insets.bottom + nrows * cellSize.height + (nrows - 1) * vgap);
+    }
+  }
+
   private Dimension getCellSize(Container parent)
   {
     int ncomponents = parent.getComponentCount();
@@ -82,6 +98,7 @@ public class WrappingGridLayout extends GridLayout
       Dimension cellSize = getCellSize(parent);
       int parentWidth = parent.getSize().width;
       int ncols = parentWidth / cellSize.width;
+      if (ncols < 1) ncols = 1;
 
       int nrows = ncomponents / ncols;
       if (ncomponents % ncols > 0) nrows++;
@@ -98,7 +115,7 @@ public class WrappingGridLayout extends GridLayout
         w = cellSize.width;
       }
 //      if (h < cellSize.height) {
-        h = cellSize.height;
+      h = cellSize.height;
 //      }
 
       for (int c = 0, x = insets.left; c < ncols; c++, x += w + hgap) {

@@ -79,7 +79,7 @@ public class LevelDisplay extends JPanel implements Scrollable
     g.drawRect(0, 0, width - 1, height - 1);
 
 
-    System.out.println("scene = " + scene);
+//    System.out.println("scene = " + scene);
 
     if (visibleLayers.contains(LevelDisplayLayer.IMAGES)) drawSceneLayers(g);
     if (visibleLayers.contains(LevelDisplayLayer.GEOMETRY)) drawGeometry(g);
@@ -203,7 +203,7 @@ public class LevelDisplay extends JPanel implements Scrollable
   private void drawSceneLayer(Graphics2D g, SceneObject sceneObject)
   {
     String name = (String) sceneObject.getValue(SceneObjectType.SCENELAYER_ATTRIBUTE_NAME);
-    System.out.println("name = " + name);
+//    System.out.println("name = " + name);
 //    if (!sceneObject.getValue(SceneObjectType.SCENELAYER_ATTRIBUTE_NAME).equals("signpostPole_brown")) return;
 
     int x = worldToCanvasX((Double) sceneObject.getValue(SceneObjectType.GEOM_ATTRIBUTE_X));
@@ -239,7 +239,7 @@ public class LevelDisplay extends JPanel implements Scrollable
 
     AffineTransform identity = g.getTransform();
 
-    System.out.println("drawing " + imageId + "(" + image + ") at " + x + "," + y);
+//    System.out.println("drawing " + imageId + "(" + image + ") at " + x + "," + y);
 
 // This time rotation is in degrees!
     g.rotate(-(rotation * (Math.PI * 2) / 360), x, y);
@@ -289,8 +289,8 @@ public class LevelDisplay extends JPanel implements Scrollable
     int y = worldToCanvasY(anchor.getY());
 //    drawPoint(g, x, y, Color.RED);
 
-    System.out.println("anchor = " + anchor);
-    System.out.println("normal = " + normal);
+//    System.out.println("anchor = " + anchor);
+//    System.out.println("normal = " + normal);
 
     g.setStroke(new BasicStroke(2));
     g.setColor(Color.ORANGE);
