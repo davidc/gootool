@@ -2,8 +2,7 @@ package com.goofans.gootool.leveledit.view;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseWheelEvent;
-import java.awt.event.MouseWheelListener;
+import java.awt.event.*;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
 import java.io.IOException;
@@ -16,7 +15,7 @@ import com.goofans.gootool.leveledit.model.*;
  * @author David Croft (davidc@goofans.com)
  * @version $Id$
  */
-public class LevelDisplay extends JPanel implements Scrollable
+public class LevelDisplay extends JPanel implements Scrollable, FocusListener
 {
   private Level level;
   private Scene scene;
@@ -25,6 +24,7 @@ public class LevelDisplay extends JPanel implements Scrollable
   private double scale = 0.5;
 
   private Set<LevelDisplayLayer> visibleLayers;
+  private boolean focused;
 
   public LevelDisplay()
   {
@@ -34,7 +34,6 @@ public class LevelDisplay extends JPanel implements Scrollable
         visibleLayers.add(layer);
       }
     }
-
 
     addMouseWheelListener(new MouseWheelListener()
     {
@@ -50,6 +49,28 @@ public class LevelDisplay extends JPanel implements Scrollable
         }
       }
     });
+    addMouseListener(new MouseAdapter()
+    {
+      @Override
+      public void mouseClicked(MouseEvent e)
+      {
+        requestFocusInWindow();
+      }
+    });
+
+    addFocusListener(this);
+
+//    addHierarchyBoundsListener(new HierarchyBoundsAdapter()
+//    {
+//      @Override
+//      public void ancestorResized(HierarchyEvent e)
+//      {
+//        if (e.getChanged() == getParent()) {
+//          System.out.println("parent resized");
+//          setSize(getParent().getSize());
+//        }
+//      }
+//    });
   }
 
   public void setLevel(Level level)
@@ -78,7 +99,6 @@ public class LevelDisplay extends JPanel implements Scrollable
     g.setColor(Color.YELLOW);
     g.drawRect(0, 0, width - 1, height - 1);
 
-
 //    System.out.println("scene = " + scene);
 
     if (visibleLayers.contains(LevelDisplayLayer.IMAGES)) drawSceneLayers(g);
@@ -86,6 +106,12 @@ public class LevelDisplay extends JPanel implements Scrollable
     if (visibleLayers.contains(LevelDisplayLayer.BOUNDARIES)) drawLines(g);
     if (visibleLayers.contains(LevelDisplayLayer.HINGES)) drawHinges(g);
     if (visibleLayers.contains(LevelDisplayLayer.VIEWPORT)) drawViewport(g);
+
+    if (focused) {
+      g.setColor(Color.BLACK);
+      g.setStroke(new BasicStroke(1, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER, 1.0f, new float[]{2, 2}, 0));
+      g.drawRect(0, 0, width - 1, height - 1);
+    }
   }
 
   private void drawViewport(Graphics2D g)
@@ -97,7 +123,7 @@ public class LevelDisplay extends JPanel implements Scrollable
 
     g.setStroke(new BasicStroke(2));
     g.setColor(Color.BLACK);
-    g.drawRect(x, y-height, width, height);
+    g.drawRect(x, y - height, width, height);
   }
 
   private void drawSceneLayers(Graphics2D g)
@@ -425,7 +451,7 @@ public class LevelDisplay extends JPanel implements Scrollable
 
   public Dimension getPreferredScrollableViewportSize()
   {
-    return new Dimension(500,500);
+    return new Dimension(500, 500);
   }
 
   public int getScrollableUnitIncrement(Rectangle visibleRect, int orientation, int direction)
@@ -451,7 +477,19 @@ public class LevelDisplay extends JPanel implements Scrollable
   @Override
   public Dimension getPreferredSize()
   {
-    return new Dimension(500,500);
+    return new Dimension(500, 500);
+  }
+
+  public void focusGained(FocusEvent e)
+  {
+    focused = true;
+    repaint();
+  }
+
+  public void focusLost(FocusEvent e)
+  {
+    focused = false;
+    repaint();
   }
 
   private class DepthSorter implements Comparator<SceneObject>

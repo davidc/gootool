@@ -2,23 +2,22 @@ package com.goofans.gootool.leveledit.view;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.HierarchyListener;
-import java.awt.event.HierarchyEvent;
 import java.awt.event.HierarchyBoundsAdapter;
+import java.awt.event.HierarchyEvent;
 import java.io.File;
 import java.io.IOException;
 
 import com.goofans.gootool.leveledit.resource.Ball;
 import com.goofans.gootool.leveledit.ui.PaletteThumbnail;
 import com.goofans.gootool.leveledit.ui.WrappingGridLayout;
-import com.goofans.gootool.wog.WorldOfGoo;
 import com.goofans.gootool.util.GUIUtil;
+import com.goofans.gootool.wog.WorldOfGoo;
 
 /**
  * @author David Croft (davidc@goofans.com)
  * @version $Id$
  */
-public class BallPalette extends JPanel implements Scrollable
+public class BallPalette extends JComponent implements Scrollable
 {
   public BallPalette() throws IOException
   {
