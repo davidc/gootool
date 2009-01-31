@@ -2,6 +2,9 @@ package com.goofans.gootool.leveledit.view;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.HierarchyListener;
+import java.awt.event.HierarchyEvent;
+import java.awt.event.HierarchyBoundsAdapter;
 import java.io.File;
 import java.io.IOException;
 
@@ -19,11 +22,28 @@ public class BallPalette extends JPanel implements Scrollable
 {
   public BallPalette() throws IOException
   {
-    setLayout(new WrappingGridLayout(5, 5));
-    setPreferredSize(new Dimension(200, 100));
+    final WrappingGridLayout layout = new WrappingGridLayout(5, 5);
+    setLayout(layout);
+
+    addHierarchyBoundsListener(new HierarchyBoundsAdapter()
+    {
+      @Override
+      public void ancestorResized(HierarchyEvent e)
+      {
+        if (e.getChanged() == getParent()) {
+          // Our preferred width is always our parent's width
+          // Our preferred height then depends on our layout.
+
+          int parentWidth = getParent().getSize().width;
+          Dimension preferredSize = layout.preferredLayoutSizeForWidth(BallPalette.this, parentWidth);
+          setPreferredSize(preferredSize);
+        }
+      }
+    });
+
   }
 
-  private void addBalls() throws IOException
+  public void addBalls() throws IOException
   {
     File ballsDir = WorldOfGoo.getTheInstance().getCustomGameFile("res/balls");
 

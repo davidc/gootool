@@ -190,6 +190,7 @@ public class LevelEditor extends JFrame implements ActionListener
     contentsTree = new JTree(rootNode);
 
     ballPalette = new BallPalette();
+    ballPalette.addBalls();
 
     leftToolBar = new Toolbar(SwingConstants.VERTICAL);
   }
