@@ -44,12 +44,14 @@ public class BallPart
   private int layer;
   private double x1, x2, y1, y2; // xrange, range
   private List<String> imageRes;
+  private Image mainImage;
   private boolean rotate;
   private Set<String> states;
   private double scale;
 
   private boolean isEye;
   private String pupilRes;
+  private Image pupilImage;
   private int pupilInset;
 
   // TODO stretch
@@ -99,6 +101,12 @@ public class BallPart
         states.add(state);
       }
     }
+
+    /* We need to preload all the images since we can't be throwing IOExceptions in our paint methods */
+    mainImage = getResourceImage(imageRes.get(0));
+    if (isEye) {
+      pupilImage = getResourceImage(pupilRes);
+    }
   }
 
   public boolean isPartActiveInState(String state)
@@ -107,27 +115,24 @@ public class BallPart
   }
 
   // TODO draw at higher scale?
-  public void draw(Graphics2D g2, int xOffset, int yOffset, double drawScale) throws IOException
+  public void draw(Graphics2D g2, Point offset, double drawScale)
   {
-    String imageResName = imageRes.get(0);
+    int xCentre = (int) (offset.x + (drawScale * ((x1 + x2) / 2)));
+    int yCentre = (int) (offset.y - (drawScale * ((y1 + y2) / 2)));
 
-    int xCentre = (int) (xOffset + (drawScale * ((x1 + x2) / 2)));
-    int yCentre = (int) (yOffset - (drawScale * ((y1 + y2) / 2)));
-
-    drawImage(g2, imageResName, xCentre, yCentre, drawScale);
+    drawImage(g2, mainImage, xCentre, yCentre, drawScale);
 
     if (isEye) {
-      drawImage(g2, pupilRes, xCentre, yCentre, drawScale);
+      drawImage(g2, pupilImage, xCentre, yCentre, drawScale);
     }
   }
 
-  private void drawImage(Graphics2D g2, String imageResName, int xCentre, int yCentre, double drawScale) throws IOException
+  private void drawImage(Graphics2D g2, Image image, int xCentre, int yCentre, double drawScale)
   {
-    Image image = getResourceImage(imageResName);
     int width = (int) (image.getWidth(null) * scale * drawScale);
     int height = (int) (image.getHeight(null) * scale * drawScale);
 
-    System.out.println("image " + imageResName + " width=" + width + " height=" + height + ", scale = " + scale);
+//    System.out.println("image " + imageResName + " width=" + width + " height=" + height + ", scale = " + scale);
 
     int x = xCentre - (width / 2);
     int y = yCentre - (height / 2);
@@ -143,12 +148,10 @@ public class BallPart
     return image;
   }
 
-  public Ball.Bounds getBounds() throws IOException
+  public Ball.Bounds getBounds()
   {
-    String imageResName = imageRes.get(0);
-    Image image = getResourceImage(imageResName);
-    int width = (int) (image.getWidth(null) * scale);
-    int height = (int) (image.getHeight(null) * scale);
+    int width = (int) (mainImage.getWidth(null) * scale);
+    int height = (int) (mainImage.getHeight(null) * scale);
 
     Ball.Bounds b = new Ball.Bounds();
 

@@ -1,9 +1,17 @@
 package com.goofans.gootool.leveledit.model;
 
 import java.io.IOException;
+import java.util.Map;
+import java.util.TreeMap;
+import java.util.List;
+import java.util.LinkedList;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
+import org.w3c.dom.Node;
 
 /**
  * @author David Croft (davidc@goofans.com)
@@ -11,6 +19,14 @@ import org.w3c.dom.Element;
  */
 public class LevelContents
 {
+  private static final Map<String, Class<? extends LevelContentsItem>> LEVEL_CONTENT_TYPES = new TreeMap<String, Class<? extends LevelContentsItem>>();
+
+  static {
+    LEVEL_CONTENT_TYPES.put("ballinstance", BallInstance.class);
+    LEVEL_CONTENT_TYPES.put("strand", Strand.class);
+  }
+
+  private List<LevelContentsItem> items = new LinkedList<LevelContentsItem>();
 
   public LevelContents(Document d) throws IOException
   {
@@ -59,7 +75,73 @@ public class LevelContents
      Node "level" have [0-1] occurrences of child tag "targetheight"
      12 child tags found for node "level"
      */
-    rootElement.getElementsByTagName("BallInstance");
 
+
+    NodeList childNodes = rootElement.getChildNodes();
+    for (int i = 0; i < childNodes.getLength(); i++) {
+      Node node = childNodes.item(i);
+      if (node instanceof Element) {
+        Element el = (Element) node;
+        String elName = el.getNodeName().toLowerCase();
+
+        Class clazz = LEVEL_CONTENT_TYPES.get(elName);
+        if (clazz == null) {
+          System.out.println("Warning, no class found for item " + elName);
+        }
+        else {
+          try {
+            Constructor<? extends LevelContentsItem> constructor = clazz.getConstructor(Element.class);
+            LevelContentsItem contentsItem = constructor.newInstance(el);
+            items.add(contentsItem);
+          }
+          catch (NoSuchMethodException e) {
+            throw new RuntimeException("Class " + clazz + " has no constructor(Element)");
+          }
+          catch (InvocationTargetException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+          }
+          catch (IllegalAccessException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+          }
+          catch (InstantiationException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+          }
+        }
+
+      }
+
+    }
+//    rootElement.getElementsByTagName("BallInstance");
+
+  }
+
+  public List<LevelContentsItem> getLevelContents(Class<? extends LevelContentsItem> clazz)
+  {
+    List<LevelContentsItem> list = new LinkedList<LevelContentsItem>();
+    for (LevelContentsItem item : items) {
+      if (clazz.isAssignableFrom(item.getClass())) {
+        list.add(item);
+      }
+
+    }
+    return list;
+  }
+
+  public BallInstance getBallById(String id)
+  {
+    for (LevelContentsItem item : items) {
+      if (item instanceof BallInstance) {
+        BallInstance ball = (BallInstance) item;
+        if (ball.id.equals(id)) {
+          return ball;
+        }
+      }
+    }
+    return null;
+  }
+
+  public void addItem(LevelContentsItem item)
+  {
+    items.add(item);
   }
 }

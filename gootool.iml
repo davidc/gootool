@@ -11,10 +11,14 @@
         <attribute name="URI" value="/" />
         <url>file://$MODULE_DIR$/resources</url>
       </containerElement>
+      <containerElement type="library" name="applejavaextensions" level="project">
+        <attribute name="method" value="1" />
+        <attribute name="URI" value="/" />
+      </containerElement>
     </containerInfo>
-    <setting name="jarUrl" value="file://$MODULE_DIR$/dist/toolbar.jar" />
+    <setting name="jarUrl" value="file://$MODULE_DIR$/dist/leveleditor.jar" />
     <setting name="buildJar" value="true" />
-    <setting name="mainClass" value="com.goofans.gootool.leveledit.ui.Toolbar" />
+    <setting name="mainClass" value="com.goofans.gootool.leveledit.view.LevelEditor" />
   </component>
   <component name="NewModuleRootManager" inherit-compiler-output="false">
     <output url="file://$MODULE_DIR$/build/compiled" />

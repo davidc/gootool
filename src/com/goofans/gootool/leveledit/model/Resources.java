@@ -48,6 +48,10 @@ public class Resources
             String id = defaultIdPrefix + el.getAttribute("id");
             File f = new File(defaultPath, el.getAttribute("path") + ".png");
 
+            // HACK: fix Fish
+            if (id.equals("IMAGE_BALL_FISH_WINGLEFT")) id = "IMAGE_BALL_TIMEBUG_WINGLEFT";
+            if (id.equals("IMAGE_BALL_FISH_WINGRIGHT")) id = "IMAGE_BALL_TIMEBUG_WINGRIGHT";
+
             images.put(id, ImageIO.read(f));
           }
           else if (el.getNodeName().equals("Sound")) {
