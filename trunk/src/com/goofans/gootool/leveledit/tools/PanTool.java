@@ -3,6 +3,9 @@ package com.goofans.gootool.leveledit.tools;
 import java.awt.*;
 import java.awt.geom.Point2D;
 
+import com.goofans.gootool.leveledit.view.LevelDisplayLayer;
+import com.goofans.gootool.leveledit.model.LevelContentsItem;
+
 /**
  * Tool to pan the current viewport.
  *
@@ -11,9 +14,16 @@ import java.awt.geom.Point2D;
  */
 public class PanTool implements Tool
 {
-  // Gets the cursor at the given point, in world coordinates
-  public Cursor getCursorAtPoint(Point2D.Double p)
+  private static final Cursor HAND_CURSOR = Cursor.getPredefinedCursor(Cursor.HAND_CURSOR);
+
+  public LevelDisplayLayer[] getHitLayers()
   {
-    return Cursor.getPredefinedCursor(Cursor.HAND_CURSOR);
+    return null;
+  }
+
+  // Gets the cursor at the given point, in world coordinates
+  public Cursor getCursorAtPoint(Point displayCoords, Point2D.Double worldCoords, LevelContentsItem hoverItem)
+  {
+    return HAND_CURSOR;
   }
 }

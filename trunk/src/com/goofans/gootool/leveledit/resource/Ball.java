@@ -1,12 +1,15 @@
 package com.goofans.gootool.leveledit.resource;
 
 import java.awt.*;
+import java.awt.geom.Rectangle2D;
+import java.awt.geom.Ellipse2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.StringTokenizer;
 
 import com.goofans.gootool.io.GameFormat;
 import com.goofans.gootool.leveledit.model.Resources;
@@ -25,8 +28,7 @@ public class Ball
   private String ballName;
   private File ballDir;
   private Resources resources;
-
-  // TODO shape for bounding box check
+  private Shape outlineShape;
 
   private List<BallPart> parts;
 
@@ -47,6 +49,21 @@ public class Ball
       throw new IOException("Ball name in xml doc doesn't equal ball dir");
     }
 
+    String shapeStr = XMLUtil.getAttributeStringRequired(ballDoc.getDocumentElement(), "shape");
+
+    StringTokenizer tok = new StringTokenizer(shapeStr, ",");
+    String shapeName = tok.nextToken();
+    if (shapeName.equals("rectangle")) {
+      outlineShape = new Rectangle2D.Double(0, 0, Double.valueOf(tok.nextToken()), Double.valueOf(tok.nextToken()));
+    }
+    else if (shapeName.equals("circle")) {
+      double radius = Double.valueOf(tok.nextToken());
+      outlineShape = new Ellipse2D.Double(0, 0, radius *2, radius*2);
+    }
+    else {
+      throw new IOException("Unknown shape " + shapeName + " on ball " + ballName);
+    }
+
     parts = new LinkedList<BallPart>();
 
     NodeList partNodes = ballDoc.getElementsByTagName("part");
@@ -56,25 +73,36 @@ public class Ball
     Collections.sort(parts, new BallPart.LayerComparator());
   }
 
-  public BufferedImage getImageInState(String state, Dimension imgSize) throws IOException
+  public BufferedImage getImageInState(String state, Dimension imgSize)
   {
     BufferedImage img = new BufferedImage(imgSize.width, imgSize.height, BufferedImage.TYPE_4BYTE_ABGR);
     Graphics2D g2 = img.createGraphics();
 
-    int xOffset = imgSize.width / 2;
-    int yOffset = imgSize.height / 2;
-
-    double scale = 1.0d;
-
     Bounds bounds = getBoundsInState(state);
+    double scale = getScale(imgSize, bounds);
 
-    System.out.println("bounds.minx = " + bounds.minx);
-    System.out.println("bounds.maxx = " + bounds.maxx);
-    System.out.println("bounds.miny = " + bounds.miny);
-    System.out.println("bounds.maxy = " + bounds.maxy);
+    Point offset = getOffset(imgSize, scale, bounds);
 
-    System.out.println("xOffset = " + xOffset);
-    System.out.println("yOffset = " + yOffset);
+    for (BallPart part : parts) {
+      if (part.isPartActiveInState(state)) {
+        part.draw(g2, offset, scale);
+      }
+    }
+
+    drawPoint(g2, offset.x, offset.y, Color.ORANGE);
+    return img;
+  }
+
+  private double getScale(Dimension imgSize, Bounds bounds)
+  {
+    double scale;
+    //    System.out.println("bounds.minx = " + bounds.minx);
+//    System.out.println("bounds.maxx = " + bounds.maxx);
+//    System.out.println("bounds.miny = " + bounds.miny);
+//    System.out.println("bounds.maxy = " + bounds.maxy);
+
+//    System.out.println("xOffset = " + xOffset);
+//    System.out.println("yOffset = " + yOffset);
 
 //    if ((bounds.getWidth() * scale) > imgSize.width) {
 //      scale = imgSize.width / bounds.getWidth();
@@ -83,26 +111,24 @@ public class Ball
 //      scale = imgSize.height / bounds.getHeight();
 //    }
 
-    System.out.println("bounds.getWidth() = " + bounds.getWidth());
-    System.out.println("bounds.getHeight() = " + bounds.getHeight());
+//    System.out.println("bounds.getWidth() = " + bounds.getWidth());
+//    System.out.println("bounds.getHeight() = " + bounds.getHeight());
     scale = Math.min(1.0d, Math.min(imgSize.width / bounds.getWidth(), imgSize.height / bounds.getHeight()));
-    System.out.println("scale = " + scale);
-
-    xOffset += (int) (scale * ((bounds.minx + bounds.maxx) / 2));
-    yOffset += (int) (scale * ((bounds.miny + bounds.maxy) / 2));
-
-
-    for (BallPart part : parts) {
-      if (part.isPartActiveInState(state)) {
-        part.draw(g2, xOffset, yOffset, scale);
-      }
-    }
-
-    drawPoint(g2, xOffset, yOffset, Color.ORANGE);
-    return img;
+//    System.out.println("scale = " + scale);
+    return scale;
   }
 
-  public Bounds getBoundsInState(String state) throws IOException
+  private Point getOffset(Dimension imgSize, double scale, Bounds bounds)
+  {
+    Point offset = new Point(imgSize.width / 2, imgSize.height / 2);
+
+    offset.x += (int) (scale * ((bounds.minx + bounds.maxx) / 2));
+    offset.y += (int) (scale * ((bounds.miny + bounds.maxy) / 2));
+
+    return offset;
+  }
+
+  public Bounds getBoundsInState(String state)
   {
     BufferedImage img = new BufferedImage(50, 50, BufferedImage.TYPE_4BYTE_ABGR);
     Graphics2D g2 = img.createGraphics();
@@ -121,6 +147,21 @@ public class Ball
 
     return b;
   }
+
+//  public Cursor getCursor()
+//  {
+//    String state = "sleeping";
+//    Toolkit toolkit = Toolkit.getDefaultToolkit();
+//    Dimension cursorSize = toolkit.getBestCursorSize(50, 50);
+//    BufferedImage image = getImageInState(state, cursorSize);
+//
+//    Bounds bounds = getBoundsInState(state);
+//    double scale = getScale(cursorSize, bounds);
+//
+//    Point offset = getOffset(cursorSize, scale, bounds);
+//    return toolkit.createCustomCursor(image, offset, "Ball");
+//  }
+
 
   public static class Bounds
   {
@@ -144,6 +185,24 @@ public class Ball
     g.drawLine(x - 2, y - 2, x + 2, y + 2);
     g.drawLine(x + 2, y - 2, x - 2, y + 2);
 //    g.drawRect(x, y, 0, 0);
+  }
+
+  public Shape getOutlineShape()
+  {
+    return outlineShape;
+  }
+
+  @Override
+  public String toString()
+  {
+    return "Ball{" +
+            "ballName='" + ballName + '\'' +
+            '}';
+  }
+
+  public String getBallName()
+  {
+    return ballName;
   }
 
   public static void main(String[] args) throws IOException

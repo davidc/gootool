@@ -13,11 +13,23 @@ import com.goofans.gootool.leveledit.model.BallInstance;
  * @author David Croft (davidc@goofans.com)
  * @version $Id$
  */
-public class BallTool implements Tool
+public class StrandTool implements Tool
 {
-  private static final LevelDisplayLayer[] HIT_LAYERS = new LevelDisplayLayer[]{LevelDisplayLayer.BALLS};
+  private static final LevelDisplayLayer[] HIT_LAYERS = new LevelDisplayLayer[]{LevelDisplayLayer.BALLS, LevelDisplayLayer.STRANDS};
+
   private static final Cursor CROSSHAIR_CURSOR = Cursor.getPredefinedCursor(Cursor.CROSSHAIR_CURSOR);
-  private static final Cursor MOVE_CURSOR = Cursor.getPredefinedCursor(Cursor.MOVE_CURSOR);
+  private static final Cursor INVALID_CURSOR;
+
+  static {
+    Cursor INVALID_CURSOR1;
+    try {
+      INVALID_CURSOR1 = Cursor.getSystemCustomCursor("Invalid.32x32");
+    }
+    catch (AWTException e) {
+      INVALID_CURSOR1 = Cursor.getDefaultCursor();
+    }
+    INVALID_CURSOR = INVALID_CURSOR1;
+  }
 
   public LevelDisplayLayer[] getHitLayers()
   {
@@ -28,10 +40,10 @@ public class BallTool implements Tool
   public Cursor getCursorAtPoint(Point displayCoords, Point2D.Double worldCoords, LevelContentsItem hoverItem)
   {
     if (hoverItem instanceof BallInstance) {
-      return MOVE_CURSOR;
+      return CROSSHAIR_CURSOR;
     }
     else {
-      return CROSSHAIR_CURSOR;
+      return INVALID_CURSOR;
     }
   }
 }

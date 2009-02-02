@@ -2,14 +2,26 @@ package com.goofans.gootool.leveledit.view;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.dnd.*;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.Transferable;
+import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.event.*;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
+import java.awt.geom.Ellipse2D;
+import java.awt.geom.Rectangle2D;
 import java.io.IOException;
 import java.util.*;
 import java.util.List;
+import java.util.logging.Logger;
+
+import com.goofans.gootool.leveledit.view.render.Renderer;
+import com.goofans.gootool.leveledit.view.render.BallRenderer;
 
 import com.goofans.gootool.leveledit.model.*;
+import com.goofans.gootool.leveledit.resource.BallTransferable;
+import com.goofans.gootool.leveledit.resource.Ball;
 
 /**
  * @author David Croft (davidc@goofans.com)
@@ -17,14 +29,27 @@ import com.goofans.gootool.leveledit.model.*;
  */
 public class LevelDisplay extends JPanel implements Scrollable, FocusListener
 {
+  private static final Logger log = Logger.getLogger(LevelDisplay.class.getName());
+
   private Level level;
   private Scene scene;
   private Resources resources;
+
+  private static Map<LevelDisplayLayer, Renderer> renderers = new TreeMap<LevelDisplayLayer, Renderer>();
+  private static Map<LevelDisplayLayer, Class[]> layerContents = new TreeMap<LevelDisplayLayer, Class[]>();
+
+  static {
+    renderers.put(LevelDisplayLayer.BALLS, new BallRenderer());
+    layerContents.put(LevelDisplayLayer.BALLS, new Class[]{BallInstance.class});
+  }
 
   private double scale = 0.5;
 
   private Set<LevelDisplayLayer> visibleLayers;
   private boolean focused;
+
+  private Ball dragBall;
+  private Point dragPoint;
 
   public LevelDisplay()
   {
@@ -43,7 +68,6 @@ public class LevelDisplay extends JPanel implements Scrollable, FocusListener
           scale = (scale - (e.getWheelRotation() * 0.1));
           if (scale < 0.1) scale = 0.1;
           if (scale > 10) scale = 10;
-          System.out.println("          e.getWheelRotation(); = " + e.getWheelRotation());
           // TODO center at mouse position
           repaint();
         }
@@ -71,6 +95,49 @@ public class LevelDisplay extends JPanel implements Scrollable, FocusListener
 //        }
 //      }
 //    });
+
+    setTransferHandler(new LevelDisplayTransferHandler());
+    try {
+      getDropTarget().addDropTargetListener(new DropTargetAdapter()
+      {
+        @Override
+        public void dragOver(DropTargetDragEvent dtde)
+        {
+          Transferable transferable = dtde.getTransferable();
+//          if (transferable instanceof BallTransferable) {
+          try {
+            Ball newBall = (Ball) transferable.getTransferData(BallTransferable.FLAVOR);
+            if (dragBall != newBall || !dtde.getLocation().equals(dragPoint)) {
+              dragBall = newBall;
+              dragPoint = dtde.getLocation();
+              repaint();// TODO only repaint the current and previous drop location
+            }
+          }
+          catch (UnsupportedFlavorException e) {
+            return;
+          }
+          catch (IOException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            return;
+          }
+        }
+
+        @Override
+        public void dragExit(DropTargetEvent dte)
+        {
+          dragBall = null;
+        }
+
+        public void drop(DropTargetDropEvent dtde)
+        {
+          dragBall = null;
+          repaint();
+        }
+      });
+    }
+    catch (TooManyListenersException e) {
+      throw new RuntimeException("Listener already registered on LevelDisplay");
+    }
   }
 
   public void setLevel(Level level)
@@ -102,15 +169,71 @@ public class LevelDisplay extends JPanel implements Scrollable, FocusListener
 //    System.out.println("scene = " + scene);
 
     if (visibleLayers.contains(LevelDisplayLayer.IMAGES)) drawSceneLayers(g);
+//    if (visibleLayers.contains(LevelDisplayLayer.BALLS)) drawBalls(g);
+    if (visibleLayers.contains(LevelDisplayLayer.STRANDS)) drawStrands(g);
     if (visibleLayers.contains(LevelDisplayLayer.GEOMETRY)) drawGeometry(g);
     if (visibleLayers.contains(LevelDisplayLayer.BOUNDARIES)) drawLines(g);
     if (visibleLayers.contains(LevelDisplayLayer.HINGES)) drawHinges(g);
     if (visibleLayers.contains(LevelDisplayLayer.VIEWPORT)) drawViewport(g);
 
+    for (LevelDisplayLayer layer : LevelDisplayLayer.values()) {
+      if (visibleLayers.contains(layer)) {
+        Renderer renderer = renderers.get(layer);
+        if (renderer != null) {
+          for (Class clazz : layerContents.get(layer)) {
+            List<LevelContentsItem> contents = level.getLevelContents().getLevelContents(clazz);
+            for (LevelContentsItem content : contents) {
+              renderer.render(g, this, content);
+
+              Shape hitbox = renderer.getHitBox(this, content);
+              drawShape(g, hitbox, Color.GREEN);
+              hitbox = renderer.getNegativeHitBox(this, content);
+              drawShape(g, hitbox, Color.BLACK);
+            }
+          }
+        }
+      }
+    }
+
+    if (dragBall != null) {
+      drawDragBall(g);
+    }
+
     if (focused) {
       g.setColor(Color.BLACK);
       g.setStroke(new BasicStroke(1, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER, 1.0f, new float[]{2, 2}, 0));
       g.drawRect(0, 0, width - 1, height - 1);
+    }
+  }
+
+  private void drawShape(Graphics2D g, Shape hitbox, Color color)
+  {
+    g.setColor(color);
+    g.setStroke(new BasicStroke(1));
+    if (hitbox instanceof Ellipse2D.Float) {
+      Ellipse2D.Float ellipse = (Ellipse2D.Float) hitbox;
+      g.drawOval((int) ellipse.x, (int) ellipse.y, (int) ellipse.width, (int) ellipse.height);
+    }
+  }
+
+  private void drawDragBall(Graphics2D g)
+  {
+    g.setStroke(new BasicStroke(2, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER, 1.0f, new float[]{5, 5}, 0));
+    g.setColor(Color.RED);
+
+    Shape s = dragBall.getOutlineShape();
+    Rectangle2D bounds = s.getBounds2D();
+
+    if (s instanceof Ellipse2D.Double) {
+      double radius = bounds.getWidth() / 2;
+      int radiusX = worldToCanvasScaleX(radius);
+      int radiusY = worldToCanvasScaleY(radius);
+      g.drawOval(dragPoint.x - radiusX, dragPoint.y - radiusY, radiusX * 2, radiusY * 2);
+    }
+    else if (s instanceof Rectangle2D.Double) {
+      int width = worldToCanvasScaleX(bounds.getWidth());
+      int height = worldToCanvasScaleY(bounds.getHeight());
+      g.drawRect(dragPoint.x - (width / 2), dragPoint.y - (height / 2), width, height);
     }
   }
 
@@ -144,6 +267,59 @@ public class LevelDisplay extends JPanel implements Scrollable, FocusListener
 //    for (SceneObject sceneObject : scene.getSceneObjects()) {
       drawSceneLayer(g, sceneObject);
     }
+  }
+
+  private void drawBalls(Graphics2D g)
+  {
+    List<LevelContentsItem> balls = level.getLevelContents().getLevelContents(BallInstance.class);
+    for (LevelContentsItem item : balls) {
+      BallInstance ball = (BallInstance) item;
+      drawBall(g, ball);
+    }
+  }
+
+  private void drawBall(Graphics2D g, BallInstance ball)
+  {
+    int x = worldToCanvasX(ball.x);
+    int y = worldToCanvasY(ball.y);
+    double radius = 40;
+    int radiusX = worldToCanvasScaleX(radius);
+    int radiusY = worldToCanvasScaleY(radius);
+
+    // TODO find the Ball so we can get the right Shape and size. 
+
+    g.setStroke(new BasicStroke(2));
+    g.setColor(Color.RED);
+    g.drawOval(x - radiusX, y - radiusY, radiusX * 2, radiusY * 2);
+  }
+
+  private void drawStrands(Graphics2D g)
+  {
+    List<LevelContentsItem> balls = level.getLevelContents().getLevelContents(Strand.class);
+    for (LevelContentsItem item : balls) {
+      Strand strand = (Strand) item;
+      drawStrand(g, strand);
+    }
+  }
+
+  private void drawStrand(Graphics2D g, Strand strand)
+  {
+    BallInstance ball1 = level.getLevelContents().getBallById(strand.gb1);
+    BallInstance ball2 = level.getLevelContents().getBallById(strand.gb2);
+
+    if (ball1 == null || ball2 == null) {
+      System.out.println("TODO: strand with invalid balls");
+    }
+
+    int x1 = worldToCanvasX(ball1.x);
+    int y1 = worldToCanvasY(ball1.y);
+
+    int x2 = worldToCanvasX(ball2.x);
+    int y2 = worldToCanvasY(ball2.y);
+
+    g.setStroke(new BasicStroke(2));
+    g.setColor(Color.RED);
+    g.drawLine(x1, y1, x2, y2);
   }
 
   private void drawGeometry(Graphics2D g)
@@ -371,7 +547,7 @@ public class LevelDisplay extends JPanel implements Scrollable, FocusListener
   /*
    * Converts an X-coordinate in world units to the actual x location we should display it on our canvas.
    */
-  private int worldToCanvasX(double x)
+  public int worldToCanvasX(double x)
   {
     // Let's say 0,0 top left is the scene's minX
     x -= scene.getMinX();
@@ -392,7 +568,7 @@ public class LevelDisplay extends JPanel implements Scrollable, FocusListener
   /*
   * Converts an Y-coordinate in world units to the actual y location we should display it on our canvas.
   */
-  private int worldToCanvasY(double y)
+  public int worldToCanvasY(double y)
   {
     // Let's say 0,0 top left is the scene's maxY
     y = scene.getMaxY() - y;
@@ -413,12 +589,12 @@ public class LevelDisplay extends JPanel implements Scrollable, FocusListener
   /*
   * Converts an X width in world units to width on our canvas
   */
-  private int worldToCanvasScaleX(double x)
+  public int worldToCanvasScaleX(double x)
   {
     return (int) (x * scale);
   }
 
-  private double canvasToWorldScaleX(int x)
+  public double canvasToWorldScaleX(int x)
   {
     return x / scale;
   }
@@ -426,12 +602,12 @@ public class LevelDisplay extends JPanel implements Scrollable, FocusListener
   /*
   * Converts a Y height in world units to height on our canvas
   */
-  private int worldToCanvasScaleY(double y)
+  public int worldToCanvasScaleY(double y)
   {
     return (int) (y * scale);
   }
 
-  private double canvasToWorldScaleY(int y)
+  public double canvasToWorldScaleY(int y)
   {
     return y / scale;
   }
@@ -492,6 +668,74 @@ public class LevelDisplay extends JPanel implements Scrollable, FocusListener
     repaint();
   }
 
+  /**
+   * Checks for a hit at the given point in one of the allowed layers.
+   *
+   * @param point         The display coordinates to check
+   * @param layersToCheck The layers in which to check (or null for all).
+   * @return the item that hit, or null of nothing hit
+   */
+  public LevelContentsItem checkHit(Point point, LevelDisplayLayer[] layersToCheck)
+  {
+    /* Reverse ordering so we hit higher stuff first */
+    for (int i = LevelDisplayLayer.values().length - 1; i >= 0; i--) {
+      LevelDisplayLayer layer = LevelDisplayLayer.values()[i];
+      LevelContentsItem item = null;
+
+      if (layersToCheck == null) {
+        item = checkHit(point, layer);
+      }
+      else {
+        /* Are we testing this layer */
+        for (LevelDisplayLayer testLayer : layersToCheck) {
+          if (layer == testLayer) {
+            item = checkHit(point, layer);
+          }
+        }
+      }
+      if (item != null) return item;
+    }
+
+
+    return null;
+  }
+
+  /**
+   * Checks for a hit at the given point in the specified layers.
+   *
+   * @param point The display coordinates to check
+   * @param layer The layer in which to check.
+   * @return the item that hit, or null of nothing hit
+   */
+  public LevelContentsItem checkHit(Point point, LevelDisplayLayer layer)
+  {
+    Renderer renderer = renderers.get(layer);
+    if (renderer == null) return null;
+
+    /* Go through the items in this layer, again in reverse order */
+
+    for (int i = layerContents.get(layer).length - 1; i >= 0; i--) {
+      Class clazz = layerContents.get(layer)[i];
+      List<LevelContentsItem> contents = level.getLevelContents().getLevelContents(clazz);
+
+      /* And now go through the contents of this layer in reverse order too */
+
+      for (int j = contents.size() - 1; j >= 0; j--) {
+        LevelContentsItem content = contents.get(j);
+
+        Shape hitbox = renderer.getHitBox(this, content);
+
+        if (hitbox.contains(point)) {
+//          hitbox = renderer.getNegativeHitBox(this, content);
+//          if (!hitbox.contains(point)) {
+          return content;
+//          }
+        }
+      }
+    }
+    return null;
+  }
+
   private class DepthSorter implements Comparator<SceneObject>
   {
 
@@ -502,6 +746,39 @@ public class LevelDisplay extends JPanel implements Scrollable, FocusListener
       if (d1 < d2) return -1;
       else if (d1 > d2) return 1;
       else return 0;
+    }
+  }
+
+  private class LevelDisplayTransferHandler extends TransferHandler
+  {
+    @Override
+    public boolean canImport(JComponent comp, DataFlavor[] transferFlavors)
+    {
+      for (DataFlavor flavor : transferFlavors) {
+        if (flavor == BallTransferable.FLAVOR) {
+          return true;
+        }
+      }
+      return false;
+    }
+
+    @Override
+    public boolean importData(JComponent comp, Transferable t)
+    {
+      try {
+        Ball ball = (Ball) t.getTransferData(BallTransferable.FLAVOR);
+        BallInstance newInstance = new BallInstance(ball.getBallName(), canvasToWorldX(dragPoint.x), canvasToWorldY(dragPoint.y));
+        level.getLevelContents().addItem(newInstance);
+        repaint();
+        return true;
+      }
+      catch (UnsupportedFlavorException e) {
+        // shouldn't happen
+      }
+      catch (IOException e) {
+        log.log(java.util.logging.Level.WARNING, "Can't import data from DnD", e);
+      }
+      return false;
     }
   }
 }

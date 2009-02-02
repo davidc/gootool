@@ -2,19 +2,21 @@ package com.goofans.gootool.leveledit.view;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.event.ChangeListener;
+import javax.swing.event.ChangeEvent;
 import javax.swing.tree.DefaultMutableTreeNode;
 import java.awt.*;
+import java.awt.dnd.DragSource;
 import java.awt.event.*;
-import java.awt.geom.Point2D;
 import java.io.IOException;
 import java.util.logging.Logger;
 import java.text.MessageFormat;
 import java.text.NumberFormat;
-import java.text.DecimalFormat;
 
 import com.goofans.gootool.GooTool;
 import com.goofans.gootool.TextProvider;
 import com.goofans.gootool.leveledit.model.Level;
+import com.goofans.gootool.leveledit.model.LevelContentsItem;
 import com.goofans.gootool.leveledit.tools.*;
 import com.goofans.gootool.leveledit.ui.Toolbar;
 import com.goofans.gootool.util.GUIUtil;
@@ -48,8 +50,8 @@ public class LevelEditor extends JFrame implements ActionListener
   private JButton snapToGridButton;
   private JLabel tooltip;
   private JLabel mousePos;
-  private JSlider slider1;
   private JSlider ballZoomSlider;
+  private JLabel mouseItem;
 
 //  private Tool currentTool;
 
@@ -105,7 +107,7 @@ public class LevelEditor extends JFrame implements ActionListener
         }
       }
     });*/
-    
+
     mousePosNumberFormat = NumberFormat.getNumberInstance();
     mousePosNumberFormat.setMaximumFractionDigits(2);
 
@@ -119,13 +121,18 @@ public class LevelEditor extends JFrame implements ActionListener
 
         Tool currentTool = leftToolBar.getCurrentTool();
         if (currentTool != null) {
-          Cursor cursor = currentTool.getCursorAtPoint(worldCoords);
+          LevelContentsItem contentsItem = levelDisplay.checkHit(e.getPoint(), currentTool.getHitLayers());
+          mouseItem.setText(contentsItem == null ? "" : contentsItem.toString());
+
+          Cursor cursor = currentTool.getCursorAtPoint(e.getPoint(), worldCoords, contentsItem);
           levelDisplay.setCursor(cursor);
         }
+        //TODO also set cursor when tool changed
 
         String strX = mousePosNumberFormat.format(worldCoords.x);
         String strY = mousePosNumberFormat.format(worldCoords.y);
-        mousePos.setText(MessageFormat.format(textProvider.getText("leveledit.status.mousePos"), strX, strY)); // TODO remove mousepos on mouseout
+        mousePos.setText(MessageFormat.format(textProvider.getText("leveledit.status.mousePos"), strX, strY));
+
       }
 
       public void mouseDragged(MouseEvent e)
@@ -133,6 +140,18 @@ public class LevelEditor extends JFrame implements ActionListener
       }
     });
 
+    levelDisplay.addMouseListener(new MouseAdapter()
+    {
+      @Override
+      public void mouseExited(MouseEvent e)
+      {
+        mousePos.setText("");
+      }
+    });
+
+    MouseProxy mouseProxy = new MouseProxy();
+    levelDisplay.addMouseMotionListener(mouseProxy);
+    levelDisplay.addMouseListener(mouseProxy);
 
     PanTool defaultTool = new PanTool();
     quickAddTool("pan", defaultTool);
@@ -143,8 +162,9 @@ public class LevelEditor extends JFrame implements ActionListener
     quickAddTool("move", new MoveTool());
 //    quickAddTool(leftToolBar, "rotate");
     leftToolBar.addSeparator();
-    quickAddTool("ball", new BallTool());
-//    quickAddTool(leftToolBar, "strand");
+    final BallTool ballTool = new BallTool();
+    quickAddTool("ball", ballTool);
+    quickAddTool("strand", new StrandTool());
 //    quickAddTool(leftToolBar, "geomcircle");
 //    quickAddTool(leftToolBar, "geomrectangle");
 //    quickAddTool(leftToolBar, "pipe");
@@ -152,6 +172,22 @@ public class LevelEditor extends JFrame implements ActionListener
 //    quickAddTool(leftToolBar, "camera");
 
     leftToolBar.setCurrentTool(defaultTool);
+
+    ballZoomSlider.addChangeListener(new ChangeListener()
+    {
+      public void stateChanged(ChangeEvent e)
+      {
+        ballPalette.setThumbnailSize(ballZoomSlider.getValue());
+      }
+    });
+
+    ballPalette.addSelectionListener(new BallPalette.SelectionListener()
+    {
+      public void ballSelected(BallPaletteBall ball)
+      {
+        leftToolBar.setCurrentTool(ballTool);
+      }
+    });
   }
 
   public void actionPerformed(ActionEvent e)
@@ -217,12 +253,79 @@ public class LevelEditor extends JFrame implements ActionListener
     }
   }
 
+  /**
+   * Proxies the mouse events to the selected tool.
+   */
+  private class MouseProxy implements MouseListener, MouseMotionListener
+  {
+
+    public void mouseClicked(MouseEvent e)
+    {
+      Tool currentTool = leftToolBar.getCurrentTool();
+      if (currentTool instanceof MouseListener) {
+        ((MouseListener) currentTool).mouseClicked(e);
+      }
+    }
+
+    public void mousePressed(MouseEvent e)
+    {
+      Tool currentTool = leftToolBar.getCurrentTool();
+      if (currentTool instanceof MouseListener) {
+        ((MouseListener) currentTool).mousePressed(e);
+      }
+    }
+
+    public void mouseReleased(MouseEvent e)
+    {
+      Tool currentTool = leftToolBar.getCurrentTool();
+      if (currentTool instanceof MouseListener) {
+        ((MouseListener) currentTool).mouseReleased(e);
+      }
+    }
+
+    public void mouseEntered(MouseEvent e)
+    {
+      Tool currentTool = leftToolBar.getCurrentTool();
+      if (currentTool instanceof MouseListener) {
+        ((MouseListener) currentTool).mouseEntered(e);
+      }
+    }
+
+    public void mouseExited(MouseEvent e)
+    {
+      Tool currentTool = leftToolBar.getCurrentTool();
+      if (currentTool instanceof MouseListener) {
+        ((MouseListener) currentTool).mouseExited(e);
+      }
+    }
+
+    public void mouseDragged(MouseEvent e)
+    {
+      Tool currentTool = leftToolBar.getCurrentTool();
+      if (currentTool instanceof MouseMotionListener) {
+        ((MouseMotionListener) currentTool).mouseDragged(e);
+      }
+    }
+
+    public void mouseMoved(MouseEvent e)
+    {
+
+      Tool currentTool = leftToolBar.getCurrentTool();
+      if (currentTool instanceof MouseMotionListener) {
+        ((MouseMotionListener) currentTool).mouseMoved(e);
+      }
+    }
+  }
+
+
   public static void main(String[] args) throws IOException
   {
     GUIUtil.switchToSystemLookAndFeel();
-    DebugUtil.setAllLogging();
+//    DebugUtil.setAllLogging();
 
     WorldOfGoo.getTheInstance().init();
+
+    System.out.println("DragSource.isDragImageSupported() = " + DragSource.isDragImageSupported());
 
     Level level = new Level("GoingUp");
 

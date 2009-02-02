@@ -4,11 +4,14 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.HierarchyBoundsAdapter;
 import java.awt.event.HierarchyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
+import java.util.ArrayList;
 
 import com.goofans.gootool.leveledit.resource.Ball;
-import com.goofans.gootool.leveledit.ui.PaletteThumbnail;
 import com.goofans.gootool.leveledit.ui.WrappingGridLayout;
 import com.goofans.gootool.util.GUIUtil;
 import com.goofans.gootool.wog.WorldOfGoo;
@@ -19,6 +22,9 @@ import com.goofans.gootool.wog.WorldOfGoo;
  */
 public class BallPalette extends JComponent implements Scrollable
 {
+  private int thumbnailSize = 50;
+  List<BallPaletteBall> paletteEntries = new ArrayList<BallPaletteBall>();
+
   public BallPalette() throws IOException
   {
     final WrappingGridLayout layout = new WrappingGridLayout(5, 5);
@@ -50,11 +56,25 @@ public class BallPalette extends JComponent implements Scrollable
     int i = 0;
     for (File dir : ballsDirs) {
       if (dir.isDirectory() && !dir.getName().startsWith("_")) {
-        System.out.println("dir.getName() = " + dir.getName());
         Ball ball = new Ball(dir.getName());
-        PaletteThumbnail button = new PaletteThumbnail(dir.getName(), new ImageIcon(ball.getImageInState("walking", new Dimension(50,50))));
+        final BallPaletteBall button = new BallPaletteBall(dir.getName(), ball);
         button.setToolTipText(dir.getName());
         add(button);
+
+        paletteEntries.add(button);
+
+        button.addMouseListener(new MouseAdapter()
+        {
+          @Override
+          public void mousePressed(MouseEvent e)
+          {
+            for (BallPaletteBall paletteEntry : paletteEntries) {
+              paletteEntry.setSelected(paletteEntry == button);
+            }
+            notifySelectionListeners(button);
+          }
+        });
+
       }
 //      if (++i > 20) return;
     }
@@ -97,5 +117,41 @@ public class BallPalette extends JComponent implements Scrollable
   public boolean getScrollableTracksViewportHeight()
   {
     return false;
+  }
+
+  public void setThumbnailSize(int value)
+  {
+    if (value != thumbnailSize) {
+      thumbnailSize = value;
+
+      // TODO need to revalidate the scrollbars as well
+      invalidate();
+      repaint();
+    }
+  }
+
+  public int getThumbnailSize()
+  {
+    return thumbnailSize;
+  }
+
+
+  private List<SelectionListener> selectionListeners = new ArrayList<SelectionListener>();
+
+  public void addSelectionListener(SelectionListener l)
+  {
+    selectionListeners.add(l);
+  }
+
+  private void notifySelectionListeners(BallPaletteBall ball)
+  {
+    for (SelectionListener l : selectionListeners) {
+      l.ballSelected(ball);
+    }
+  }
+
+  public static interface SelectionListener
+  {
+    public void ballSelected(BallPaletteBall ball);
   }
 }

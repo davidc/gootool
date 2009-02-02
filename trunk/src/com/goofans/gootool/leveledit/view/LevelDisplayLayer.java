@@ -7,6 +7,8 @@ package com.goofans.gootool.leveledit.view;
 public enum LevelDisplayLayer
 {
   IMAGES("Images", true),
+  BALLS("Balls", true),
+  STRANDS("Strands", true),
   GEOMETRY("Geometry", true),
   BOUNDARIES("Boundaries", true),
   HINGES("Hinges", true),
