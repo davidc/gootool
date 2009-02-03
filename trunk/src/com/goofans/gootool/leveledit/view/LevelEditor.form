@@ -126,7 +126,7 @@
                         <properties/>
                         <border type="none"/>
                         <children>
-                          <component id="95945" class="com.goofans.gootool.leveledit.view.LevelDisplay" binding="levelDisplay">
+                          <component id="95945" class="com.goofans.gootool.leveledit.view.LevelDisplay" binding="levelDisplay" custom-create="true">
                             <constraints/>
                             <properties>
                               <focusable value="true"/>

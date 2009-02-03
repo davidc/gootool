@@ -144,4 +144,9 @@ public class LevelContents
   {
     items.add(item);
   }
+
+  public void removeItem(LevelContentsItem item)
+  {
+    items.remove(item);
+  }
 }
