@@ -213,10 +213,13 @@ public class LevelEditor extends JFrame implements ActionListener
 
   private void updateUndoState()
   {
-    undoButton.setEnabled(undoManager.canUndo());
-    undoButton.setToolTipText("Undo " + undoManager.getUndoPresentationName());
-    redoButton.setEnabled(undoManager.canRedo());
-    redoButton.setToolTipText("Redo " + undoManager.getRedoPresentationName());
+    boolean canUndo = undoManager.canUndo();
+    undoButton.setEnabled(canUndo);
+    undoButton.setToolTipText(canUndo ? undoManager.getUndoPresentationName() : textProvider.getText("leveledit.edit.cantundo"));
+    
+    boolean canRedo = undoManager.canRedo();
+    redoButton.setEnabled(canRedo);
+    redoButton.setToolTipText(canRedo ? undoManager.getRedoPresentationName() : textProvider.getText("leveledit.edit.cantredo"));
   }
 
   private void undo()
@@ -226,7 +229,8 @@ public class LevelEditor extends JFrame implements ActionListener
     }
     catch (CannotUndoException e) {
       log.log(java.util.logging.Level.WARNING, "Can't undo", e);
-      JOptionPane.showMessageDialog(this, "Can't undo: " + e.getLocalizedMessage(), "Can't undo", JOptionPane.ERROR);
+      String msg = textProvider.getText("leveledit.edit.cantundo");
+      JOptionPane.showMessageDialog(this, msg, msg, JOptionPane.ERROR);
     }
     levelDisplay.repaint();
     updateUndoState();
@@ -239,7 +243,8 @@ public class LevelEditor extends JFrame implements ActionListener
     }
     catch (CannotRedoException e) {
       log.log(java.util.logging.Level.WARNING, "Can't redo", e);
-      JOptionPane.showMessageDialog(this, "Can't redo: " + e.getLocalizedMessage(), "Can't redo", JOptionPane.ERROR);
+      String msg = textProvider.getText("leveledit.edit.cantredo");
+      JOptionPane.showMessageDialog(this, msg, msg, JOptionPane.ERROR);
     }
     levelDisplay.repaint();
     updateUndoState();
@@ -279,8 +284,8 @@ public class LevelEditor extends JFrame implements ActionListener
 
   private void createUIComponents() throws IOException
   {
-    levelDisplay = new LevelDisplay(this); 
-    
+    levelDisplay = new LevelDisplay(this);
+
     DefaultMutableTreeNode rootNode = new DefaultMutableTreeNode("abc");
     rootNode.add(new DefaultMutableTreeNode("def"));
     rootNode.add(new DefaultMutableTreeNode("ghi"));
