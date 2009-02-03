@@ -22,6 +22,7 @@ import com.goofans.gootool.leveledit.view.render.BallRenderer;
 import com.goofans.gootool.leveledit.model.*;
 import com.goofans.gootool.leveledit.resource.BallTransferable;
 import com.goofans.gootool.leveledit.resource.Ball;
+import com.goofans.gootool.leveledit.edits.NewBallEdit;
 
 /**
  * @author David Croft (davidc@goofans.com)
@@ -51,8 +52,12 @@ public class LevelDisplay extends JPanel implements Scrollable, FocusListener
   private Ball dragBall;
   private Point dragPoint;
 
-  public LevelDisplay()
+  private LevelEditor editor;
+
+  public LevelDisplay(LevelEditor editor)
   {
+    this.editor = editor;
+
     visibleLayers = new HashSet<LevelDisplayLayer>(LevelDisplayLayer.values().length);
     for (LevelDisplayLayer layer : LevelDisplayLayer.values()) {
       if (layer.isDefaultVisible()) {
@@ -768,8 +773,8 @@ public class LevelDisplay extends JPanel implements Scrollable, FocusListener
       try {
         Ball ball = (Ball) t.getTransferData(BallTransferable.FLAVOR);
         BallInstance newInstance = new BallInstance(ball.getBallName(), canvasToWorldX(dragPoint.x), canvasToWorldY(dragPoint.y));
-        level.getLevelContents().addItem(newInstance);
-        repaint();
+        NewBallEdit edit = new NewBallEdit(level, newInstance);
+        editor.doUndoableEdit(edit);
         return true;
       }
       catch (UnsupportedFlavorException e) {

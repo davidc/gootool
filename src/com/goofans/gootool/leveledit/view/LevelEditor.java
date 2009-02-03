@@ -2,6 +2,10 @@ package com.goofans.gootool.leveledit.view;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.undo.UndoManager;
+import javax.swing.undo.UndoableEdit;
+import javax.swing.undo.CannotUndoException;
+import javax.swing.undo.CannotRedoException;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ChangeEvent;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -20,7 +24,6 @@ import com.goofans.gootool.leveledit.model.LevelContentsItem;
 import com.goofans.gootool.leveledit.tools.*;
 import com.goofans.gootool.leveledit.ui.Toolbar;
 import com.goofans.gootool.util.GUIUtil;
-import com.goofans.gootool.util.DebugUtil;
 import com.goofans.gootool.wog.WorldOfGoo;
 
 /**
@@ -57,8 +60,13 @@ public class LevelEditor extends JFrame implements ActionListener
 
   private static final String CMD_ZOOM_IN = "ZoomIn";
   private static final String CMD_ZOOM_OUT = "ZoomOut";
+  private static final String CMD_UNDO = "Undo";
+  private static final String CMD_REDO = "Redo";
+
   private TextProvider textProvider;
   private NumberFormat mousePosNumberFormat;
+
+  private UndoManager undoManager;
 
 
   public LevelEditor(Level level) throws IOException
@@ -71,6 +79,9 @@ public class LevelEditor extends JFrame implements ActionListener
 //    setModal(true);
     levelDisplay.setLevel(level);
 
+    undoManager = new UndoManager();
+
+    updateUndoState();
 
     setLocationByPlatform(true);
     setMinimumSize(new Dimension(800, 500));
@@ -82,6 +93,10 @@ public class LevelEditor extends JFrame implements ActionListener
     zoomInButton.setActionCommand(CMD_ZOOM_IN);
     zoomOutButton.addActionListener(this);
     zoomOutButton.setActionCommand(CMD_ZOOM_OUT);
+    undoButton.addActionListener(this);
+    undoButton.setActionCommand(CMD_UNDO);
+    redoButton.addActionListener(this);
+    redoButton.setActionCommand(CMD_REDO);
 
     final LayersTableModel layersTableModel = new LayersTableModel(levelDisplay);
 
@@ -132,7 +147,6 @@ public class LevelEditor extends JFrame implements ActionListener
         String strX = mousePosNumberFormat.format(worldCoords.x);
         String strY = mousePosNumberFormat.format(worldCoords.y);
         mousePos.setText(MessageFormat.format(textProvider.getText("leveledit.status.mousePos"), strX, strY));
-
       }
 
       public void mouseDragged(MouseEvent e)
@@ -190,6 +204,48 @@ public class LevelEditor extends JFrame implements ActionListener
     });
   }
 
+  public void doUndoableEdit(UndoableEdit edit)
+  {
+    undoManager.addEdit(edit);
+    levelDisplay.repaint();
+    updateUndoState();
+  }
+
+  private void updateUndoState()
+  {
+    undoButton.setEnabled(undoManager.canUndo());
+    undoButton.setToolTipText("Undo " + undoManager.getUndoPresentationName());
+    redoButton.setEnabled(undoManager.canRedo());
+    redoButton.setToolTipText("Redo " + undoManager.getRedoPresentationName());
+  }
+
+  private void undo()
+  {
+    try {
+      undoManager.undo();
+    }
+    catch (CannotUndoException e) {
+      log.log(java.util.logging.Level.WARNING, "Can't undo", e);
+      JOptionPane.showMessageDialog(this, "Can't undo: " + e.getLocalizedMessage(), "Can't undo", JOptionPane.ERROR);
+    }
+    levelDisplay.repaint();
+    updateUndoState();
+  }
+
+  private void redo()
+  {
+    try {
+      undoManager.redo();
+    }
+    catch (CannotRedoException e) {
+      log.log(java.util.logging.Level.WARNING, "Can't redo", e);
+      JOptionPane.showMessageDialog(this, "Can't redo: " + e.getLocalizedMessage(), "Can't redo", JOptionPane.ERROR);
+    }
+    levelDisplay.repaint();
+    updateUndoState();
+  }
+
+
   public void actionPerformed(ActionEvent e)
   {
     String cmd = e.getActionCommand();
@@ -198,6 +254,12 @@ public class LevelEditor extends JFrame implements ActionListener
     }
     else if (cmd.equals(CMD_ZOOM_OUT)) {
       levelDisplay.setScale(levelDisplay.getScale() / 2);
+    }
+    else if (cmd.equals(CMD_UNDO)) {
+      undo();
+    }
+    else if (cmd.equals(CMD_REDO)) {
+      redo();
     }
     else {
 //      for (String toolCmd : tools.keySet()) {
@@ -217,6 +279,8 @@ public class LevelEditor extends JFrame implements ActionListener
 
   private void createUIComponents() throws IOException
   {
+    levelDisplay = new LevelDisplay(this); 
+    
     DefaultMutableTreeNode rootNode = new DefaultMutableTreeNode("abc");
     rootNode.add(new DefaultMutableTreeNode("def"));
     rootNode.add(new DefaultMutableTreeNode("ghi"));

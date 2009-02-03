@@ -23,7 +23,7 @@ public class BallInstance extends LevelContentsItem
   private double angle;
   private Boolean discovered;
   public String id;
-  private String type;
+  public String type;
   public double x;
   public double y;
 
