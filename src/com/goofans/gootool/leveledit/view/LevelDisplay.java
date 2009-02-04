@@ -37,7 +37,7 @@ public class LevelDisplay extends JPanel implements Scrollable, FocusListener
   private Resources resources;
 
   private static Map<LevelDisplayLayer, Renderer> renderers = new TreeMap<LevelDisplayLayer, Renderer>();
-  private static Map<LevelDisplayLayer, Class[]> layerContents = new TreeMap<LevelDisplayLayer, Class[]>();
+  static Map<LevelDisplayLayer, Class[]> layerContents = new TreeMap<LevelDisplayLayer, Class[]>(); // TODO move out of this class, LevelEditor uses it too
 
   static {
     renderers.put(LevelDisplayLayer.BALLS, new BallRenderer());

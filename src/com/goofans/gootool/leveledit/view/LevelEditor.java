@@ -8,9 +8,12 @@ import javax.swing.undo.CannotUndoException;
 import javax.swing.undo.CannotRedoException;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ChangeEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.event.ListSelectionEvent;
 import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.TreeSelectionModel;
+import javax.swing.tree.DefaultTreeModel;
 import java.awt.*;
-import java.awt.dnd.DragSource;
 import java.awt.event.*;
 import java.io.IOException;
 import java.util.logging.Logger;
@@ -67,11 +70,14 @@ public class LevelEditor extends JFrame implements ActionListener
   private NumberFormat mousePosNumberFormat;
 
   private UndoManager undoManager;
+  private DefaultMutableTreeNode rootNode;
+  private Level level;
 
 
   public LevelEditor(Level level) throws IOException
   {
     super("Level Editor");
+    this.level = level;
 
     textProvider = GooTool.getTextProvider();
 
@@ -111,6 +117,19 @@ public class LevelEditor extends JFrame implements ActionListener
 
     layersTable.setGridColor(Color.WHITE);
 
+    layersTable.getSelectionModel().addListSelectionListener(new ListSelectionListener()
+    {
+      public void valueChanged(ListSelectionEvent e)
+      {
+        LevelDisplayLayer layer = null;
+        int selectedRow = layersTable.getSelectedRow();
+        if (selectedRow >= 0 && selectedRow < LevelDisplayLayer.values().length) {
+          layer = LevelDisplayLayer.values()[selectedRow];
+        }
+        populateLayer(layer);
+      }
+    });
+
     /*  layersTableModel.addTableModelListener(new TableModelListener()
     {
       public void tableChanged(TableModelEvent e)
@@ -122,6 +141,8 @@ public class LevelEditor extends JFrame implements ActionListener
         }
       }
     });*/
+
+    contentsTree.getSelectionModel().setSelectionMode(TreeSelectionModel.DISCONTIGUOUS_TREE_SELECTION);
 
     mousePosNumberFormat = NumberFormat.getNumberInstance();
     mousePosNumberFormat.setMaximumFractionDigits(2);
@@ -216,7 +237,7 @@ public class LevelEditor extends JFrame implements ActionListener
     boolean canUndo = undoManager.canUndo();
     undoButton.setEnabled(canUndo);
     undoButton.setToolTipText(canUndo ? undoManager.getUndoPresentationName() : textProvider.getText("leveledit.edit.cantundo"));
-    
+
     boolean canRedo = undoManager.canRedo();
     redoButton.setEnabled(canRedo);
     redoButton.setToolTipText(canRedo ? undoManager.getRedoPresentationName() : textProvider.getText("leveledit.edit.cantredo"));
@@ -282,17 +303,48 @@ public class LevelEditor extends JFrame implements ActionListener
     }
   }
 
+  private void populateLayer(LevelDisplayLayer layer)
+  {
+    // TODO do nothing if layer wasn't changed
+//    rootNode.add(new DefaultMutableTreeNode("def"));
+//    rootNode.add(new DefaultMutableTreeNode("ghi"));
+//    rootNode.add(new DefaultMutableTreeNode("jkl"));
+//    rootNode.add(new DefaultMutableTreeNode("mno"));
+    rootNode.removeAllChildren();
+//    LevelDisplayLayer layer = LevelDisplayLayer.BALLS;
+
+    System.out.println("layer = " + layer);
+
+    DefaultTreeModel treeModel = (DefaultTreeModel) contentsTree.getModel();
+    while (rootNode.getChildCount() > 0) {
+      DefaultMutableTreeNode node = rootNode.getFirstLeaf();
+      System.out.println("removing = " + node);
+      treeModel.removeNodeFromParent(node);
+    }
+
+    Class[] layerClasses = LevelDisplay.layerContents.get(layer);
+    if (layerClasses != null) {
+      for (Class clazz : layerClasses) {
+        System.out.println("clazz = " + clazz);
+        java.util.List<LevelContentsItem> contents = level.getLevelContents().getLevelContents(clazz);
+        for (LevelContentsItem content : contents) {
+          System.out.println("content = " + content);
+          rootNode.add(new DefaultMutableTreeNode(content.toString()));
+        }
+      }
+    }
+
+    /* TODO when selecting something from the LevelDisplay, tree.scrollPathToVisible(new TreePath(childNode.getPath())); */
+  }
+
   private void createUIComponents() throws IOException
   {
     levelDisplay = new LevelDisplay(this);
 
-    DefaultMutableTreeNode rootNode = new DefaultMutableTreeNode("abc");
-    rootNode.add(new DefaultMutableTreeNode("def"));
-    rootNode.add(new DefaultMutableTreeNode("ghi"));
-    rootNode.add(new DefaultMutableTreeNode("jkl"));
-    rootNode.add(new DefaultMutableTreeNode("mno"));
+    rootNode = new DefaultMutableTreeNode("Root");
 
-    contentsTree = new JTree(rootNode);
+    contentsTree = new JTree(new DefaultTreeModel(rootNode));
+//    contentsTree.setRootVisible(false);
 
     ballPalette = new BallPalette();
     ballPalette.addBalls();
@@ -384,6 +436,7 @@ public class LevelEditor extends JFrame implements ActionListener
         ((MouseMotionListener) currentTool).mouseMoved(e);
       }
     }
+
   }
 
 
@@ -393,8 +446,6 @@ public class LevelEditor extends JFrame implements ActionListener
 //    DebugUtil.setAllLogging();
 
     WorldOfGoo.getTheInstance().init();
-
-    System.out.println("DragSource.isDragImageSupported() = " + DragSource.isDragImageSupported());
 
     Level level = new Level("GoingUp");
 
