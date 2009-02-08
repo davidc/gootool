@@ -1,6 +1,7 @@
 package com.goofans.gootool;
 
 import java.util.ResourceBundle;
+import java.util.MissingResourceException;
 import java.text.MessageFormat;
 
 /**
@@ -21,4 +22,13 @@ public class TextProvider
     return MessageFormat.format(resources.getString(key), args);
   }
 
+  public String getOptionalText(String key, Object... args)
+  {
+    try {
+      return getText(key, args);
+    }
+    catch (MissingResourceException e) {
+      return null;
+    }
+  }
 }

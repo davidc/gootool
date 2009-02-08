@@ -53,7 +53,7 @@ public class LevelEditor extends JFrame implements ActionListener
   private Toolbar leftToolBar;
   private JTable table1;
   private JButton showGridButton;
-  private JButton snapToGridButton;
+  private JButton snapGridButton;
   private JLabel tooltip;
   private JLabel mousePos;
   private JSlider ballZoomSlider;
@@ -65,6 +65,8 @@ public class LevelEditor extends JFrame implements ActionListener
   private static final String CMD_ZOOM_OUT = "ZoomOut";
   private static final String CMD_UNDO = "Undo";
   private static final String CMD_REDO = "Redo";
+  static final String CMD_SHOW_GRID = "ShowGrid";
+  static final String CMD_SNAP_GRID = "SnapGrid";
 
   private TextProvider textProvider;
   private NumberFormat mousePosNumberFormat;
@@ -73,11 +75,17 @@ public class LevelEditor extends JFrame implements ActionListener
   private DefaultMutableTreeNode rootNode;
   private Level level;
 
+  private boolean showGrid, snapGrid;
+
+  private LevelEditorMenuBar menu;
 
   public LevelEditor(Level level) throws IOException
   {
     super("Level Editor");
     this.level = level;
+
+    menu = new LevelEditorMenuBar(this);
+    setJMenuBar(menu);
 
     textProvider = GooTool.getTextProvider();
 
@@ -103,6 +111,11 @@ public class LevelEditor extends JFrame implements ActionListener
     undoButton.setActionCommand(CMD_UNDO);
     redoButton.addActionListener(this);
     redoButton.setActionCommand(CMD_REDO);
+
+    showGridButton.setActionCommand(CMD_SHOW_GRID);
+    showGridButton.addActionListener(this);
+    snapGridButton.setActionCommand(CMD_SNAP_GRID);
+    snapGridButton.addActionListener(this);
 
     final LayersTableModel layersTableModel = new LayersTableModel(levelDisplay);
 
@@ -287,6 +300,17 @@ public class LevelEditor extends JFrame implements ActionListener
     else if (cmd.equals(CMD_REDO)) {
       redo();
     }
+    else if (cmd.equals(CMD_SHOW_GRID)) {
+      showGrid = !showGrid;
+      showGridButton.setSelected(showGrid);
+      menu.showGridItem.setSelected(showGrid);
+      levelDisplay.repaint();
+    }
+    else if (cmd.equals(CMD_SNAP_GRID)) {
+      snapGrid = !snapGrid;
+      snapGridButton.setSelected(snapGrid);
+      menu.snapGridItem.setSelected(snapGrid);
+    }
     else {
 //      for (String toolCmd : tools.keySet()) {
 //        if (cmd.equals(toolCmd)) {
@@ -372,6 +396,16 @@ public class LevelEditor extends JFrame implements ActionListener
         }
       });
     }
+  }
+
+  public boolean isShowGrid()
+  {
+    return showGrid;
+  }
+
+  public boolean isSnapGrid()
+  {
+    return snapGrid;
   }
 
   /**

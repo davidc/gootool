@@ -85,7 +85,7 @@
                   <text value="Show Grid"/>
                 </properties>
               </component>
-              <component id="80a72" class="javax.swing.JButton" binding="snapToGridButton" default-binding="true">
+              <component id="80a72" class="javax.swing.JButton" binding="snapGridButton">
                 <constraints/>
                 <properties>
                   <text value="Snap To Grid"/>
