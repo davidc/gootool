@@ -53,6 +53,8 @@ public class LevelDisplay extends JPanel implements Scrollable, FocusListener
   private Point dragPoint;
 
   private LevelEditor editor;
+  private static final double GRID_PITCH_X = 50d; // TODO Config somewhere, persisted.
+  private static final double GRID_PITCH_Y = 50d;
 
   public LevelDisplay(LevelEditor editor)
   {
@@ -113,9 +115,20 @@ public class LevelDisplay extends JPanel implements Scrollable, FocusListener
           try {
             Ball newBall = (Ball) transferable.getTransferData(BallTransferable.FLAVOR);
             if (dragBall != newBall || !dtde.getLocation().equals(dragPoint)) {
-              dragBall = newBall;
-              dragPoint = dtde.getLocation();
-              repaint();// TODO only repaint the current and previous drop location
+              // Snap to nearest drag point
+              Point newDragPoint = dtde.getLocation();
+
+              if (LevelDisplay.this.editor.isSnapGrid()) {
+                // TODO the drop location should be stored in WORLD coordinates so we can get it exactly bang on 50,50 which won't happen otherwise due to scaling
+              }
+
+              // Only repaint if drag moved (which won't happen so often if we're snapping)
+              if (dragBall != newBall || newDragPoint.equals(dragPoint)) {
+                dragBall = newBall;
+                dragPoint = newDragPoint;
+                repaint();// TODO only repaint the current and previous drop location
+                System.out.println("Repaint requetsed");
+              }
             }
           }
           catch (UnsupportedFlavorException e) {
@@ -204,10 +217,29 @@ public class LevelDisplay extends JPanel implements Scrollable, FocusListener
       drawDragBall(g);
     }
 
+    if (editor.isShowGrid()) {
+      drawGrid(g);
+    }
+
     if (focused) {
       g.setColor(Color.BLACK);
       g.setStroke(new BasicStroke(1, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER, 1.0f, new float[]{2, 2}, 0));
       g.drawRect(0, 0, width - 1, height - 1);
+    }
+  }
+
+  private void drawGrid(Graphics2D g)
+  {
+    Point gridCentre = new Point(0, 0); // TODO implement
+    g.setColor(new Color(0, 0, 0, 128));
+    g.setStroke(new BasicStroke(1));
+    // Get display area bounds in world coordinates
+    Rectangle bounds = g.getClipBounds();
+    for (double x = bounds.getMinX() - (bounds.getMinX() % GRID_PITCH_X); x <= bounds.getMaxX(); x += GRID_PITCH_X) {
+      g.drawLine((int) x, (int) bounds.getMinY(), (int) x, (int) bounds.getMaxY());
+    }
+    for (double y = bounds.getMinY() - (bounds.getMinY() % GRID_PITCH_X); y <= bounds.getMaxY(); y += GRID_PITCH_Y) {
+      g.drawLine((int) bounds.getMinX(), (int) y, (int) bounds.getMaxX(), (int) y);
     }
   }
 
