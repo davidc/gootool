@@ -120,10 +120,13 @@ public class LevelDisplay extends JPanel implements Scrollable, FocusListener
 
               if (LevelDisplay.this.editor.isSnapGrid()) {
                 // TODO the drop location should be stored in WORLD coordinates so we can get it exactly bang on 50,50 which won't happen otherwise due to scaling
+                // Also should snap to nearest, not floor it.
+                newDragPoint.x -= (newDragPoint.x % 50);
+                newDragPoint.y -= (newDragPoint.y % 50);
               }
 
               // Only repaint if drag moved (which won't happen so often if we're snapping)
-              if (dragBall != newBall || newDragPoint.equals(dragPoint)) {
+              if (dragBall != newBall || !newDragPoint.equals(dragPoint)) {
                 dragBall = newBall;
                 dragPoint = newDragPoint;
                 repaint();// TODO only repaint the current and previous drop location
@@ -235,6 +238,7 @@ public class LevelDisplay extends JPanel implements Scrollable, FocusListener
     g.setStroke(new BasicStroke(1));
     // Get display area bounds in world coordinates
     Rectangle bounds = g.getClipBounds();
+    // TODO we're currently showing the grid in display coordinates!
     for (double x = bounds.getMinX() - (bounds.getMinX() % GRID_PITCH_X); x <= bounds.getMaxX(); x += GRID_PITCH_X) {
       g.drawLine((int) x, (int) bounds.getMinY(), (int) x, (int) bounds.getMaxY());
     }
