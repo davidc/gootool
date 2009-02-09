@@ -6,6 +6,7 @@
 - Send OS and CPU type in CheckVersion API call
 - Fix reading of Unicode characters in profiles under World of Goo 1.40+
 - The checkboxes in addin list can now be clicked to enable/disable the addin
+- Linux startup script now uses /bin/bash due to some strange sh-alikes out there. 
 
 0.10.1
 
