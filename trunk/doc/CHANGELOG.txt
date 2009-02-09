@@ -5,6 +5,7 @@
 - Adjust layout of Chapter 1 and automatically resize screen to fit installed levels.
 - Send OS and CPU type in CheckVersion API call
 - Handle EOF mid-profile for semi-broken profiles (Linux with unicode profile names)
+- The checkboxes in addin list can now be clicked to enable/disable the addin
 
 0.10.1
 

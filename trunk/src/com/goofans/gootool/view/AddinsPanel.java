@@ -3,22 +3,17 @@ package com.goofans.gootool.view;
 import com.goofans.gootool.Controller;
 import com.goofans.gootool.model.Configuration;
 import com.goofans.gootool.addins.Addin;
-import com.goofans.gootool.wog.WorldOfGoo;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.AbstractTableModel;
-import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumnModel;
-import javax.swing.table.DefaultTableCellRenderer;
-import java.awt.*;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.io.IOException;
 import java.util.logging.Logger;
-import java.util.logging.Level;
 
 /**
  * @author David Croft (davidc@goofans.com)
@@ -44,6 +39,7 @@ public class AddinsPanel implements ViewComponent
   private Controller controller;
 
   private static final String[] COLUMN_NAMES;
+  private static final Class[] COLUMN_CLASSES = new Class[]{String.class, String.class, String.class, String.class, Boolean.class};
 
   static {
     // TODO load from resources
@@ -62,16 +58,11 @@ public class AddinsPanel implements ViewComponent
     TableColumnModel columnModel = addinTable.getColumnModel();
 
     log.finer("Columns in table = " + columnModel.getColumnCount());
-    columnModel.getColumn(0).setCellRenderer(new TextCellRenderer());
     columnModel.getColumn(0).setPreferredWidth(150);
-    columnModel.getColumn(1).setCellRenderer(new TextCellRenderer());
     columnModel.getColumn(1).setPreferredWidth(50);
-    columnModel.getColumn(2).setCellRenderer(new TextCellRenderer());
     columnModel.getColumn(2).setPreferredWidth(75);
-    columnModel.getColumn(3).setCellRenderer(new TextCellRenderer());
     columnModel.getColumn(3).setPreferredWidth(150);
     columnModel.getColumn(4).setPreferredWidth(25);
-    columnModel.getColumn(4).setCellRenderer(new CheckboxCellRenderer());
 
     addinTable.getTableHeader().setReorderingAllowed(false);
 
@@ -169,44 +160,38 @@ public class AddinsPanel implements ViewComponent
       return null;
     }
 
+    @Override
     public String getColumnName(int column)
     {
       return COLUMN_NAMES[column];
     }
-  }
 
-  private class CheckboxCellRenderer implements TableCellRenderer
-  {
-    private JCheckBox renderCheckbox = new JCheckBox();
-
-    public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column)
+    @Override
+    public Class<?> getColumnClass(int columnIndex)
     {
-      renderCheckbox.setSelected((Boolean) value);
-
-      if (isSelected) {
-        renderCheckbox.setBackground(table.getSelectionBackground());
-      }
-      else {
-        renderCheckbox.setBackground(table.getBackground());
-      }
-
-      return renderCheckbox;
+      return COLUMN_CLASSES[columnIndex];
     }
-  }
 
-  private class TextCellRenderer extends DefaultTableCellRenderer
-  {
-    public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column)
+    @Override
+    public boolean isCellEditable(int rowIndex, int columnIndex)
     {
-      Addin addin = controller.getDisplayAddins().get(row);
+      return columnIndex == 4;
+    }
 
-      if (addin.areDependenciesSatisfiedBy(WorldOfGoo.getAvailableAddins())) {
-        setForeground(Color.BLACK);
+    @Override
+    public void setValueAt(Object aValue, int rowIndex, int columnIndex)
+    {
+      if (columnIndex == 4) {
+        //TODO this should really call the controller to do this.
+        Addin addin = controller.getDisplayAddins().get(rowIndex);
+        if ((Boolean) aValue) {
+          controller.getEditorConfig().enableAddin(addin.getId());
+        }
+        else {
+          controller.getEditorConfig().disableAddin(addin.getId());
+        }
+        updateViewFromModel(controller.getEditorConfig());
       }
-      else {
-        setForeground(Color.RED);
-      }
-      return super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
     }
   }
 
