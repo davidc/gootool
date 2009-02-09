@@ -4,6 +4,7 @@
 - Auto-detect the Linux installation location through ~/.WorldOfGoo/LastRun.txt
 - Adjust layout of Chapter 1 and automatically resize screen to fit installed levels.
 - Send OS and CPU type in CheckVersion API call
+- Handle EOF mid-profile for semi-broken profiles (Linux with unicode profile names)
 
 0.10.1
 

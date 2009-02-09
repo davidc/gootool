@@ -292,6 +292,7 @@
                 </constraints>
                 <properties>
                   <text resource-bundle="text" key="profile.goofans.publish"/>
+                  <visible value="false"/>
                 </properties>
               </component>
             </children>
