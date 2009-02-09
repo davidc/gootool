@@ -63,6 +63,7 @@ public class ProfileData
     int sanity = 0; // prevents eternal loop reading non-profile data
 
     while ((ch = r.read()) != ',') {
+      if (ch == -1) return null; // EOF
       length = (length * 10) + (ch - '0');
       if (sanity++ > 5) throw new IOException("Insane profile data");
     }
