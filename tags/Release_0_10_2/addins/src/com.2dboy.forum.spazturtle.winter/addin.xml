@@ -1,0 +1,19 @@
+<addin spec-version="1.0">
+  <!-- The unique ID of this addin. Used to check if it's already installed or compare its version -->
+  <id>com.2dboy.forum.spazturtle.winter</id>
+
+  <!-- name shown to user -->
+  <name>Winter</name>
+
+  <!-- either "mod" or "level". For user display, and to determine whether to create a chapter 5 entry -->
+  <type>mod</type>
+
+  <!-- Version. Must be numerically comparable at each "." boundary. You could also do it without periods. 11281 is a fine version number.-->
+  <version>1.1</version>
+
+  <!-- description shown to user -->
+  <description>This mod gives the Goo Balls Santa hats, albino Goo Balls look like angels and makes your World of Goo Corporation snowy.</description>
+
+  <!-- author shown to user -->
+  <author>spazturtle</author>
+</addin>
