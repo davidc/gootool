@@ -95,7 +95,7 @@ public class ProfileFactory
     return profileFile;
   }
 
-  @SuppressWarnings({"UseOfSystemOutOrSystemErr"})
+  @SuppressWarnings({"UseOfSystemOutOrSystemErr", "HardCodedStringLiteral"})
   public static void main(String[] args) throws IOException
   {
     for (String searchPath : PlatformSupport.getProfileSearchPaths()) {

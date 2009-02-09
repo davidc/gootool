@@ -1,14 +1,17 @@
 package com.goofans.gootool.profile;
 
-import com.goofans.gootool.io.GameFormat;
+import net.infotrek.util.EncodingUtil;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
-import java.io.StringReader;
+import java.io.InputStream;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.logging.Logger;
+
+import com.goofans.gootool.io.GameFormat;
 
 /**
  * @author David Croft (davidc@goofans.com)
@@ -20,11 +23,11 @@ public class ProfileData
 
   private Map<String, String> data;
 
-  private Profile[] profiles = new Profile[3];// = {null,null,null};
+  private Profile[] profiles = new Profile[3];
 
   public ProfileData(File f) throws IOException
   {
-    String profile = GameFormat.decodeProfileFile(f);
+    byte[] profile = GameFormat.decodeProfileFile(f);
 
     readProfileData(profile);
 
@@ -38,32 +41,34 @@ public class ProfileData
     }
   }
 
-  private void readProfileData(String profile) throws IOException
+  private void readProfileData(byte[] profile) throws IOException
   {
-    StringReader r = new StringReader(profile);
+    InputStream is = new ByteArrayInputStream(profile);
 
     data = new TreeMap<String, String>();
 
     String key;
     do {
-      key = readNextElement(r);
+      key = readNextElement(is);
 
       if (key != null) {
-        String value = readNextElement(r);
+        String value = readNextElement(is);
         data.put(key, value);
       }
     } while (key != null);
   }
 
-  private String readNextElement(StringReader r) throws IOException
+  private String readNextElement(InputStream is) throws IOException
   {
-//    boolean collectingNumbers;
     int length = 0;
     int ch;
     int sanity = 0; // prevents eternal loop reading non-profile data
 
-    while ((ch = r.read()) != ',') {
-      if (ch == -1) return null; // EOF
+    while ((ch = is.read()) != ',') {
+      if (ch == -1) {
+        log.warning("EOF reading profile element!");
+        return null; // EOF
+      }
       length = (length * 10) + (ch - '0');
       if (sanity++ > 5) throw new IOException("Insane profile data");
     }
@@ -73,11 +78,11 @@ public class ProfileData
       return null;
     }
 
-    char[] buf = new char[length];
-    int read = r.read(buf, 0, length);
+    byte[] buf = new byte[length];
+    int read = is.read(buf, 0, length);
     if (read != length) throw new IOException("Short read, expected " + length + " but got " + read);
 
-    return new String(buf);
+    return EncodingUtil.bytesToStringUtf8(buf);
   }
 
   public Profile[] getProfiles()

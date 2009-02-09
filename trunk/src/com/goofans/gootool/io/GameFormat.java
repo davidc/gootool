@@ -52,7 +52,7 @@ public class GameFormat
     return XMLUtil.loadDocumentFromInputStream(is);
   }
 
-  public static String decodeProfileFile(File file) throws IOException
+  public static byte[] decodeProfileFile(File file) throws IOException
   {
     log.finest("decode profile file: " + file);
     byte[] decoded = null;
@@ -65,7 +65,7 @@ public class GameFormat
         decoded = MacBinFormat.decodeFile(file);
         break;
     }
-    return new String(decoded, DEFAULT_CHARSET);
+    return decoded;
   }
 
 

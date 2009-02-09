@@ -32,7 +32,7 @@ public class ProfileBackupRequest extends APIRequestAuthenticated
       throw new APIException("Profile hasn't been located yet");
     }
 
-    String profile;
+    byte[] profile;
     try {
       profile = GameFormat.decodeProfileFile(ProfileFactory.getProfileFile());
     }
@@ -40,7 +40,7 @@ public class ProfileBackupRequest extends APIRequestAuthenticated
       throw new APIException("Profile decoding failed", e);
     }
 
-    addPostParameter("profile", TextUtil.base64Encode(TextUtil.stringToBytesUtf8(profile)));
+    addPostParameter("profile", TextUtil.base64Encode(profile));
     addPostParameter("description", description);
 
     Document doc = doRequest();
