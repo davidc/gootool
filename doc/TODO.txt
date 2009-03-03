@@ -15,6 +15,10 @@ MILESTONE 0.10.x (Final beta series)
 - NEW FEATURE: preference: upload tower on goo exit, or upload tower continuously during play (need to detect when process exits - java.lang.Process?)
 - NEW FEATURE: mark user as cheat - requires X votes or something
 
+- NEW FEATURE: Auto download GooTool updates
+
+- xanax: don't jump mods around when en/disabling
+
 MILESTONE 1.0.0 (First public release)
 
 - All bugs from 0.10 series fixed, no new features
@@ -33,7 +37,6 @@ NO MILESTONE SET
 
 - IMPROVEMENT: dev releases should have the actual svn version in their build filename/about version - may need to separate svn revision into an svn:ignored file
 - NEW FEATURE: Check for new WorldOfGoo releases
-- NEW FEATURE: Drag and Drop installing of Addons. So you can drag a file from your desktop to mod list and install it
 - NEW FEATURE: fullscreen preference? Involves editing pers2.dat so maybe not
 - NEW FEATURE: Perhaps stop overrides of Drained files, to prevent cheating in goocorp?
 - NEW FEATURE: Addin XML: conflicts <addin>

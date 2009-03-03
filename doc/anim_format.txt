@@ -1,0 +1,138 @@
+-- BINIMAGEANIMATION --
+
+hey david,
+
+i don't have access to my main dev computer at the moment so most of
+this is just off the top of my head.  the encryption on the animation
+files should be the same as on the save file.  once the file is
+decrypted, these are the structures you'll find inside:
+
+enum TransformType
+{
+      XFORM_SCALE,
+      XFORM_ROTATE,
+      XFORM_TRANSLATE
+};
+
+enum InterpolationType
+{
+      INTERPOLATION_NONE,
+      INTERPOLATION_LINEAR
+};
+
+struct keyframe
+{
+0:      float x;
+4:      float y;
+8:      float angle;
+12:      int alpha;
+16:      int color;
+20:      int nextFrameIndex;
+24:      int soundStrIdx;
+28:      InterpolationType interpolation;
+};
+
+struct BinImageAnimation
+{
+      int mHasColor;
+      int mHasAlpha;
+      int mHasSound;
+      int mHasTransform;
+      int mNumTransforms;
+      int mNumFrames;
+
+      TransformType *mTransformTypes;
+      float *mFrameTimes;
+      keyframe ***mXformFrames;
+      keyframe **mAlphaFrames;
+      keyframe **mColorFrames;
+      keyframe **mSoundFrames;
+      const char *pStringTable;
+};
+
+i think you'll find a BinImageAnimation at the very beginning of the
+file and that has pointers into a bunch of transform types, frame
+times, keyframes and strings that follow it.  any pointers in these
+structures are actually going to be stored on disk as byte offsets
+from the beginning of the file.  if you're feeling adventurous you
+might try decrypting and then opening up one of the simpler animations
+in a hex editor and seeing if you can make sense of how all the
+structures relate to each other and how they can can be interpreted to
+create the animation.  i can give you more information if you need it
+after i get back from vacation in a couple weeks.  hope this helps!
+
+allan
+
+
+-- BINMOVIE --
+
+hey david,
+
+kyle or ron will have to make the call on whether or not they mind
+documenting these file formats on the wiki (somehow i don't think
+they'll mind.)  as for the movie file format, here is the relevant
+info:
+
+enum ActorType
+{
+       eActorType_Image,
+       eActorType_Text,
+};
+
+enum AlignmentH
+{
+       ALIGN_LEFT,
+       ALIGN_CENTER,
+       ALIGN_RIGHT
+};
+
+enum AlignmentV
+{
+       ALIGN_TOP,
+       ALIGN_MIDDLE,
+       ALIGN_BOTTOM
+};
+
+struct BinActor
+{
+       ActorType mType;
+       int mImageStrIdx;
+       int mLabelTextStrIdx;
+       int mFontStrIdx;
+       float mLabelMaxWidth;
+       float mLabelWrapWidth;
+       AlignmentH mLabelJustification;
+       float mDepth;
+};
+
+struct BinMovie
+{
+       float length;
+       int numActors;
+       BinActor *pActors;
+       BinImageAnimation **ppAnims;
+       const char *pStringTable;
+};
+
+the movie files, once decrypted, have the following contents:
+
+- 1 BinMovie header
+- list of BinActor structures - number of these is given by numActors in header
+- list of BinImageAnimation pointers - there is 1 BinImageAnimation
+pointer for each BinActor.  not sure why these weren't just part of
+the BinActor structure itself - probably some reason that's now lost
+in history...
+- string table
+{ 4 byte alignment }
+- list of BinImageAnimation structures - the BinImageAnimation
+pointers point into this list
+
+all pointers are 32 bit offsets from the beginning of the file in
+bytes.  string table indexes are offsets from the beginning of the
+string table in bytes.  the BinImageAnimation structures are the same
+as in the animation file format from before, so the movies are
+basically just a bunch of animation files along with definitions for
+the actors they get applied to.
+
+hope that helps,
+allan
