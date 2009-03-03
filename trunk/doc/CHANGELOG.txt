@@ -1,4 +1,4 @@
-0.10.2
+0.10.2, 09-Feb-2009
 
 - Added GooFans.com login, added profile backup/restore
 - Auto-detect the Linux installation location through ~/.WorldOfGoo/LastRun.txt
@@ -8,11 +8,11 @@
 - The checkboxes in addin list can now be clicked to enable/disable the addin
 - Linux startup script now uses /bin/bash due to some strange sh-alikes out there. 
 
-0.10.1
+0.10.1, 15-Jan-2009
 
 - Fixed a huge WTF on image encoding on non-Mac platforms.
 
-0.10.0
+0.10.0, 15-Jan-2009
 
 - Added Mac support!
 - Added file association and document icon for goomods on Mac
@@ -25,12 +25,12 @@
 - Preliminary support for the World of Goo Linux beta added. If you want to force GooTool to use your WINE World of Goo, run "GOOTOOL_PLATFORM=windows bin/gootool"
 - Moved Addin description to the main Addins tab.
 
-0.9.7
+0.9.7, 19-Dec-2008
 
 - fixed addin transform files to be UTF-8, fixes translated texts with non-ASCII characters
 - Added OCD flags for custom levels
 
-0.9.6
+0.9.6, 19-Dec-2008
 
 - You can now save the image of your tower (transparent, full-size, or thumbnail)
 - addin.xml assumed to be in UTF-8, fixes non-latin characters in addins
@@ -44,7 +44,7 @@
 - Renamed all remaining uses of "wog" abbreviation
 - Layout improvements in profile and addins panels
 
-0.9.5
+0.9.5, 21-Nov-2008
 
 - added Linux build, also look in .wine and .PlayOnLinux for exe/profile
 - allow selection of multiple addins to install
@@ -57,7 +57,7 @@
 - added java JRE/JVM information to About dialog
 - clarify that GooTool doesn't modify existing WoG installation
 
-0.9.4
+0.9.4, 17-Nov-2008
 
 - make sure 800x600 resolution is always available
 - fixed charset on wiki downloads (e.g. Cyrillic)
@@ -71,18 +71,18 @@
 - GUI l10n usage shows a progress dialog
 - building images to output directory added
 
-0.9.3
+0.9.3, 15-Nov-2008
 
 - added image localisation tool for translators
 - Addin level OCD requirement is now optional
 - possible fix for pyris NPE (unselected resolution)
 
-0.9.2
+0.9.2, 13-Nov-2008
 
 - Fixed bug saving when unrecognised language is selected
 - Added the missing languages to the options pane
 
-0.9.1
+0.9.1, 13-Nov-2008
 
 - Profile parsing fixed for certain test cases
 - Added more debugging for NPE on "save" bug
@@ -93,7 +93,7 @@
 - Less cramped GUI
 - Display available tower balls on profile
 
-0.9.0
+0.9.0, 10-Nov-2008
 
 - Enabling addins. You can now enable addins and build your World of Goo!
 - You can now install level-type addins. They are now fully merged and appear as new levels at the top left of Chapter 1.
@@ -105,10 +105,10 @@
 - Addins can be reordered properly.
 - Taller towers are no longer cropped in the profile pane.
 
-0.8.0
+0.8.0, 05-Nov-2008
 
 - Initial release
- -Loading current preferences (language, resolution, ui_inset).
+- Loading current preferences (language, resolution, ui_inset).
 - Saving preferences (to config.txt.new - does not overwrite config.txt yet)
 - Loading profiles.
 - Displaying profile data. 

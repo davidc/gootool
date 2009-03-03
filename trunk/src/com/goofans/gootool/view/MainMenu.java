@@ -119,6 +119,87 @@ public class MainMenu
     translatorModeMenuItem.addActionListener(controller);
     menu.add(translatorModeMenuItem);
 
+    JMenu testMenuItem = new JMenu("Testing");
+    testMenuItem.setMnemonic(KeyEvent.VK_T);
+    menu.add(testMenuItem);
+
+    menuItem = new JMenuItem("anim decode");
+    try {
+      Class.forName("com.goofans.gootool.movie.BinImageAnimation");
+      menuItem.setActionCommand("animdecode");
+      menuItem.addActionListener(controller);
+    }
+    catch (ClassNotFoundException e) {
+      menuItem.setEnabled(false);
+    }
+    testMenuItem.add(menuItem);
+
+    menuItem = new JMenuItem("anim encode");
+    try {
+      Class.forName("com.goofans.gootool.movie.BinImageAnimation");
+      menuItem.setActionCommand("animencode");
+      menuItem.addActionListener(controller);
+    }
+    catch (ClassNotFoundException e) {
+      menuItem.setEnabled(false);
+    }
+    testMenuItem.add(menuItem);
+
+    menuItem = new JMenuItem("movie decode");
+    try {
+      Class.forName("com.goofans.gootool.movie.BinMovie");
+      menuItem.setActionCommand("movdecode");
+      menuItem.addActionListener(controller);
+    }
+    catch (ClassNotFoundException e) {
+      menuItem.setEnabled(false);
+    }
+    testMenuItem.add(menuItem);
+
+    menuItem = new JMenuItem("movie encode");
+    try {
+      Class.forName("com.goofans.gootool.movie.BinMovie");
+      menuItem.setActionCommand("movencode");
+      menuItem.addActionListener(controller);
+    }
+    catch (ClassNotFoundException e) {
+      menuItem.setEnabled(false);
+    }
+    testMenuItem.add(menuItem);
+
+    menuItem = new JMenuItem("timeline editor");
+    try {
+      Class.forName("com.goofans.gootool.movie.TimelineEditor");
+      menuItem.setActionCommand("tled");
+      menuItem.addActionListener(controller);
+    }
+    catch (ClassNotFoundException e) {
+      menuItem.setEnabled(false);
+    }
+    testMenuItem.add(menuItem);
+
+    menuItem = new JMenuItem("transform editor");
+    try {
+      Class.forName("com.goofans.gootool.movie.TransformEditor");
+      menuItem.setActionCommand("xfed");
+      menuItem.addActionListener(controller);
+    }
+    catch (ClassNotFoundException e) {
+      menuItem.setEnabled(false);
+    }
+    testMenuItem.add(menuItem);
+
+    menuItem = new JMenuItem("level editor");
+    try {
+      Class.forName("com.goofans.gootool.leveledit.view.LevelEditor");
+      menuItem.setActionCommand("leved");
+      menuItem.addActionListener(controller);
+    }
+    catch (ClassNotFoundException e) {
+      menuItem.setEnabled(false);
+    }
+    testMenuItem.add(menuItem);
+
     menu = new JMenu(textProvider.getText("mainMenu.help"));
     menu.setMnemonic(KeyEvent.VK_H);
 
