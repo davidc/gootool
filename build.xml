@@ -35,6 +35,10 @@
            classpathref="build.classpath"
            classname="net.sf.nsisant.Task"/>
 
+  <taskdef name="deb"
+           classpathref="build.classpath"
+           classname="com.googlecode.ant_deb_task.Deb"/>
+
   <!-- Version numbers -->
 
   <property name="release.properties" value="resources/release.properties"/>
@@ -162,12 +166,11 @@
 
   <target name="jar" depends="compile">
     <jar jarfile="${output.jar}">
-      <fileset dir="${output.dir}" excludes="com/goofans/gootool/leveledit/**"/>
-      <fileset dir="${output.dir}" excludes="com/goofans/gootool/movie/**"/>
+      <fileset dir="${output.dir}" excludes="com/goofans/gootool/leveledit/**,com/goofans/gootool/movie/**"/>
     </jar>
   </target>
 
-  <target name="obfuscate" depends="jar">
+  <target name="obfuscate" depends="clean, jar"><!-- We must clean to remove any potential IDEA "make"-created ui designer classes in our build dir -->
     <proguard printmapping="mapping/${gootool.version.full}.mapping" optimizationpasses="3" overloadaggressively="true"
               repackageclasses="com.goofans.gootool"
               allowaccessmodification="true"
@@ -221,7 +224,7 @@
     <copy file="lib/build/AppleJavaExtensions.jar" todir="${dist.win32}/lib"/>
 
     <!--<zip destfile="${dist.dir}/GooTool-${gootool.version.full}-Windows.zip">-->
-      <!--<zipfileset dir="${dist.win32}" prefix="GooTool-${gootool.version.full}"/>-->
+    <!--<zipfileset dir="${dist.win32}" prefix="GooTool-${gootool.version.full}"/>-->
     <!--</zip>-->
 
     <nsis script="installer/installer.nsi" verbosity="2" path="${nsis.dir}" nocd="true">
@@ -284,7 +287,7 @@
 
   </target>
 
-  <target name="dist-linux" description="Build the Linux distribution" depends="obfuscate">
+  <target name="dist-linux" description="Build the Linux distribution"><!-- depends="obfuscate"-->
     <copy todir="${dist.linux}">
       <fileset dir="dist_src/common">
         <patternset refid="ignored.files"/>
@@ -311,6 +314,20 @@
         <exclude name="bin/"/>
       </tarfileset>
     </tar>
+
+    <deb todir="${dist.dir}" package="gootool" section="contrib/games" depends="java5-runtime" suggests="WorldOfGoo">
+      <version upstream="${gootool.version}"/>
+      <maintainer name="David Croft" email="davidc@goofans.com"/>
+      <description synopsis="World of Goo modding tool">
+        GooTool is a utility to enhance your World of Goo experience and enable you to install new levels and mods to provide further gameplay.
+      </description>
+      <tarfileset dir="${dist.dir}/linux/bin" prefix="usr/bin" includes="*" filemode="755" username="root" group="root"/>
+      <tarfileset dir="${dist.dir}/linux/doc" prefix="usr/share/doc/gootool" includes="*" username="root" group="root"/>
+      <tarfileset dir="${dist.dir}/linux/lib" prefix="usr/share/gootool" includes="*" username="root" group="root"/>
+      <conffiles dir="${dist.dir}/linux/etc" prefix="etc/gootool" includes="*" username="root" group="root"/>
+    </deb>
+
+
   </target>
 
   <target name="dist" description="Build the distribution" depends="dist-win32, dist-linux, dist-macosx"/>
