@@ -26,6 +26,7 @@ public class GooTool
   public static TextProvider textProvider;
   private static Controller controller;
 
+
   private GooTool()
   {
   }
