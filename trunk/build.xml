@@ -318,7 +318,7 @@
     <deb todir="${dist.dir}" package="gootool" section="contrib/games" depends="java5-runtime" suggests="WorldOfGoo"
          postinst="dist_src/linux_debian/postinst"
          postrm="dist_src/linux_debian/postrm">
-      <version upstream="${gootool.version}"/>
+      <version upstream="${gootool.version.full}"/>
       <maintainer name="David Croft" email="davidc@goofans.com"/>
       <description synopsis="World of Goo modding tool">
         GooTool is a utility to enhance your World of Goo experience and enable you to install new levels and mods to provide further gameplay.
