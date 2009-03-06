@@ -8,7 +8,7 @@ import java.io.UnsupportedEncodingException;
  * to a runtime exception as every JVM is required to support UTF-8.
  *
  * @author David Croft (david@infotrek.net)
- * @version $Id: EncodingUtil.java 69 2005-05-07 16:51:27Z david $
+ * @version $Id$
  */
 public class EncodingUtil
 {
