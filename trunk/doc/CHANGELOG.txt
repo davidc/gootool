@@ -1,6 +1,7 @@
 0.10.3, ?
 
-- Added a Debian .deb build
+- Added a Debian .deb build, added X menu entry
+- 
 
 0.10.2, 09-Feb-2009
 
