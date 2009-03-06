@@ -315,7 +315,9 @@
       </tarfileset>
     </tar>
 
-    <deb todir="${dist.dir}" package="gootool" section="contrib/games" depends="java5-runtime" suggests="WorldOfGoo">
+    <deb todir="${dist.dir}" package="gootool" section="contrib/games" depends="java5-runtime" suggests="WorldOfGoo"
+         postinst="dist_src/linux_debian/postinst"
+         postrm="dist_src/linux_debian/postrm">
       <version upstream="${gootool.version}"/>
       <maintainer name="David Croft" email="davidc@goofans.com"/>
       <description synopsis="World of Goo modding tool">
@@ -325,6 +327,8 @@
       <tarfileset dir="${dist.dir}/linux/doc" prefix="usr/share/doc/gootool" includes="*" username="root" group="root"/>
       <tarfileset dir="${dist.dir}/linux/lib" prefix="usr/share/gootool" includes="*" username="root" group="root"/>
       <conffiles dir="${dist.dir}/linux/etc" prefix="etc/gootool" includes="*" username="root" group="root"/>
+      <tarfileset dir="dist_src/linux_debian" prefix="usr/share/applications" includes="*.desktop" username="root" group="root"/>
+      <tarfileset dir="resources" prefix="usr/share/gootool" includes="48x48.png" username="root" group="root"/>
     </deb>
 
 
