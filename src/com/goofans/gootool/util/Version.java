@@ -9,7 +9,7 @@ import java.text.SimpleDateFormat;
  * Static access to the build/release version information.
  *
  * @author David Croft (davidc@goofans.com)
- * @version $Id: Version.java 187 2008-05-13 12:18:42Z david $
+ * @version $Id$
  */
 public class Version
 {
