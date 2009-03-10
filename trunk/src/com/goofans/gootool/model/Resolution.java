@@ -42,6 +42,16 @@ public class Resolution implements Comparable
   {
     int gcd = GCD(width, height);
 
+    int widthFactor = width / gcd;
+    int heightFactor = height / gcd;
+
+    if (widthFactor == 5 && heightFactor == 3) {
+      gcd /= 3;
+    }
+    else if (widthFactor == 8 && heightFactor == 5) {
+      gcd /= 2;
+    }
+
     return (width / gcd) + ":" + (height / gcd);
   }
 
