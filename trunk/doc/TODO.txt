@@ -3,7 +3,6 @@
 MILESTONE 0.10.x (Final beta series)
 
 - BUG FIX: Mac image conversion has slight colour shifts due to ColorModel
-- IMPROVEMENT: Warn if using demo version of WoG
 - IMPROVEMENT: Don't SAVE if unmodified on LAUNCH
 
 - NEW FEATURE: Addin author tool: create addin from directory/create addin from wogeditor, create addin from assets

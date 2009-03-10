@@ -2,6 +2,7 @@
 
 - Added a Debian .deb build, added X menu entry
 - Added missing screen resolutions to options tab
+- Warn on startup if using demo version of World of Goo
 
 0.10.2, 09-Feb-2009
 
