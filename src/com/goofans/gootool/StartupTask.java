@@ -88,6 +88,21 @@ public class StartupTask extends ProgressIndicatingTask
         throw new RuntimeException("Unexpected exception locating World of Goo", e);
       }
     }
+
+    warnIfDemo(worldOfGoo);
+  }
+
+  private void warnIfDemo(WorldOfGoo worldOfGoo)
+  {
+    try {
+      if (worldOfGoo.getGameFile("res/levels/island3/island3.level.bin").exists()) {
+        return;
+      }
+    }
+    catch (IOException e) {
+      // do nothing
+    }
+    JOptionPane.showMessageDialog(null, textProvider.getText("launcher.demo.message"), textProvider.getText("launcher.demo.title"), JOptionPane.WARNING_MESSAGE);
   }
 
   private void initProfile()
