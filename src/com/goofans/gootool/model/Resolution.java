@@ -89,9 +89,13 @@ public class Resolution implements Comparable
   public int compareTo(Object o)
   {
     Resolution that = (Resolution) o;
-    if (this.getWidth() < that.getWidth())
+    if (this.width < that.width)
       return -1;
-    else if (this.getWidth() > that.getWidth())
+    else if (this.width > that.width)
+      return 1;
+    else if (this.height < that.height)
+      return -1;
+    else if (this.height > that.height)
       return 1;
     else
       return 0;
@@ -102,20 +106,20 @@ public class Resolution implements Comparable
   public static final Resolution DEFAULT_RESOLUTION;
 
   static {
-    DisplayMode[] displayModes = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().getDisplayModes();
-
     Set<Resolution> resolutions = new TreeSet<Resolution>();
 
     // Make sure there's always a 800x600 resolution!
     resolutions.add(DEFAULT_RESOLUTION = new Resolution(800, 600));
 
-    for (DisplayMode displayMode : displayModes) {
-      int w = displayMode.getWidth();
-      int h = displayMode.getHeight();
-      Resolution resolution = new Resolution(w, h);
-      resolutions.add(resolution);
-    }
+    for (GraphicsDevice screenDevice : GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices()) {
 
+      for (DisplayMode displayMode : screenDevice.getDisplayModes()) {
+        int w = displayMode.getWidth();
+        int h = displayMode.getHeight();
+        Resolution resolution = new Resolution(w, h);
+        resolutions.add(resolution);
+      }
+    }
     RESOLUTIONS = Collections.unmodifiableSet(resolutions);
 
     log.finer("System resolutions " + RESOLUTIONS);
@@ -134,5 +138,11 @@ public class Resolution implements Comparable
       }
     }
     return null;
+  }
+
+  @SuppressWarnings({"UseOfSystemOutOrSystemErr", "HardCodedStringLiteral"})
+  public static void main(String[] args)
+  {
+    System.out.println("getSystemResolutions() = " + getSystemResolutions());
   }
 }
