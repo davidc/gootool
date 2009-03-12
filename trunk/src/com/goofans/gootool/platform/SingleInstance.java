@@ -152,10 +152,13 @@ public class SingleInstance
       log.log(Level.SEVERE, "Unable to determine socket of primary instance", e);
       throw new RuntimeException("Unable to determine socket of primary GooTool", e);
     }
-    log.finer("Connecting to port " + port);
+
 
     try {
-      Socket s = new Socket(getLoopbackAddress(), port);
+      InetAddress addr = getLoopbackAddress();
+      log.finer("Connecting to " + addr + " port " + port);
+
+      Socket s = new Socket(addr, port);
       ObjectOutputStream oos = new ObjectOutputStream(s.getOutputStream());
       oos.writeObject(args);
       oos.close();
@@ -211,7 +214,7 @@ public class SingleInstance
 
   private InetAddress getLoopbackAddress() throws UnknownHostException
   {
-    return InetAddress.getByName("localhost");
+    return InetAddress.getByAddress(new byte[]{127, 0, 0, 1});
   }
 
   private class PrimaryInstanceSocket extends Thread
@@ -231,15 +234,15 @@ public class SingleInstance
         socketFile.deleteOnExit();
       }
       catch (IOException e) {
-        log.log(Level.SEVERE, "Unable to write our socket details to socketfile");
+        log.log(Level.SEVERE, "Unable to write our socket details to socketfile", e);
         throw new RuntimeException("Unable to write our socket details to socketfile");
       }
 
       log.log(Level.FINE, "Primary instance listening on " + serverSocketChannel);
     }
 
-  private static final int MIN_PORT = 20000;
-  private static final int MAX_PORT = 60000;
+    private static final int MIN_PORT = 20000;
+    private static final int MAX_PORT = 60000;
 
     private ServerSocketChannel openSocket() throws IOException
     {
@@ -261,7 +264,7 @@ public class SingleInstance
           break;
         }
         catch (IOException e) {
-          log.log(Level.WARNING, "Unable to open socket on port " + port, e);
+          log.log(Level.WARNING, "Unable to open socket on " + addr + " port " + port, e);
           if (++attempt > 9) throw e;
         }
       }
