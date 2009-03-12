@@ -69,7 +69,7 @@ public class VersionCheck implements Runnable
         {
           public void run()
           {
-            JOptionPane.showMessageDialog(parentWindow, "You are running the latest version " + Version.RELEASE_FULL, "GooTool is up to date", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(parentWindow, "You are running the latest version " + Version.RELEASE_FRIENDLY, "GooTool is up to date", JOptionPane.INFORMATION_MESSAGE);
           }
         });
       }
