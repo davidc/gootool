@@ -18,10 +18,12 @@ public class Version
   public static final int RELEASE_MICRO;
   public static final int RELEASE_REVISION;
   public static final String RELEASE_TYPE;
-  public static final String RELEASE_FULL;
   public static final Date RELEASE_DATE;
 
   public static final VersionSpec RELEASE;
+
+  public static final String RELEASE_FULL;
+  public static final String RELEASE_FRIENDLY;
 
   public static final String BUILD_USER;
   public static final Date BUILD_DATE;
@@ -49,6 +51,13 @@ public class Version
         releaseFull += "-" + RELEASE_TYPE;
       }
       RELEASE_FULL = releaseFull;
+
+      StringBuilder releaseFriendly = new StringBuilder();
+      releaseFriendly.append(RELEASE_MAJOR).append(".").append(RELEASE_MINOR).append(".").append(RELEASE_MICRO);
+      if (RELEASE_TYPE.length() > 0) {
+        releaseFriendly.append("-").append(RELEASE_TYPE);
+      }
+      RELEASE_FRIENDLY = releaseFriendly.toString();
 
       BUILD_USER = p.getProperty("build.user");
       BUILD_DATE = new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.ENGLISH).parse(p.getProperty("build.date"));

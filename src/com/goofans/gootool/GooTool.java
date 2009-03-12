@@ -55,7 +55,7 @@ public class GooTool
 
       ProgressIndicatingTask startupTask = new StartupTask(controller);
 
-      GUIUtil.runTask(null, textProvider.getText("launcher.title", Version.RELEASE_FULL), startupTask);
+      GUIUtil.runTask(null, textProvider.getText("launcher.title", Version.RELEASE_FRIENDLY), startupTask);
     }
     catch (Throwable t) {
       log.log(Level.SEVERE, "Uncaught exception", t);

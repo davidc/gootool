@@ -3,6 +3,7 @@
 - Added a Debian .deb build, added X menu entry
 - Added missing screen resolutions to options tab
 - Warn on startup if using demo version of World of Goo
+- Friendlier version numbers in some places
 
 0.10.2, 09-Feb-2009
 
