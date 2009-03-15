@@ -98,6 +98,9 @@
       <entry name="?*.tld" />
     </wildcardResourcePatterns>
   </component>
+  <component name="CopyrightManager" default="">
+    <module2copyright />
+  </component>
   <component name="DependenciesAnalyzeManager">
     <option name="myForwardDirection" value="false" />
   </component>
@@ -338,11 +341,19 @@
         <default-constraints vsize-policy="6" hsize-policy="0" anchor="0" fill="2" />
       </item>
     </group>
+    <group name="GooTool">
+      <item class="com.goofans.gootool.leveledit.view.BallPalette" icon="/com/intellij/uiDesigner/icons/panel.png" removable="true" auto-create-binding="true" can-attach-label="false" is-container="true">
+        <default-constraints vsize-policy="3" hsize-policy="3" anchor="0" fill="0" />
+      </item>
+    </group>
   </component>
   <component name="ProjectDetails">
     <option name="projectName" value="gootool" />
   </component>
   <component name="ProjectFileVersion" converted="true" />
+  <component name="ProjectKey">
+    <option name="state" value="svn+ssh://david@svn.sargasso.net/svn/gootool/trunk/gootool.ipr" />
+  </component>
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/gootool.iml" filepath="$PROJECT_DIR$/gootool.iml" />
@@ -350,6 +361,24 @@
   </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_1_5" assert-keyword="true" jdk-15="true" project-jdk-name="1.5" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build" />
+  </component>
+  <component name="ProjectRunConfigurationManager">
+    <configuration default="false" name="GooTool" type="Application" factoryName="Application" enabled="false" merge="false" sample_coverage="true" runner="emma">
+      <option name="MAIN_CLASS_NAME" value="com.goofans.gootool.GooTool" />
+      <option name="VM_PARAMETERS" value="" />
+      <option name="PROGRAM_PARAMETERS" value="" />
+      <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" value="" />
+      <option name="ENABLE_SWING_INSPECTOR" value="false" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <module name="gootool" />
+      <envs />
+      <method>
+        <option name="Make" value="true" />
+      </method>
+    </configuration>
   </component>
   <component name="ResourceManagerContainer">
     <option name="myResourceBundles">
@@ -373,17 +402,18 @@
             <SvnBranchConfiguration>
               <option name="branchUrls">
                 <list>
-                  <option value="svn+ssh://david@svn.sargasso.net/svn/gootool/branches" />
-                  <option value="svn+ssh://david@svn.sargasso.net/svn/gootool/tags" />
+                  <option value="svn+ssh://svn.sargasso.net:22/svn/gootool/branches" />
+                  <option value="svn+ssh://svn.sargasso.net:22/svn/gootool/tags" />
                 </list>
               </option>
-              <option name="trunkUrl" value="svn+ssh://david@svn.sargasso.net/svn/gootool/trunk" />
+              <option name="trunkUrl" value="svn+ssh://svn.sargasso.net:22/svn/gootool/trunk" />
             </SvnBranchConfiguration>
           </value>
         </entry>
       </map>
     </option>
     <option name="myVersion" value="124" />
+    <option name="mySupportsUserInfoFilter" value="true" />
   </component>
   <component name="VcsDirectoryMappings">
     <mapping directory="" vcs="svn" />
