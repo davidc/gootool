@@ -251,8 +251,6 @@ public class SingleInstance
 
       ServerSocket sock = ssc.socket();
 
-//      sock.bind(null);
-
       int attempt = 0;
       Random rand = new Random();
       InetAddress addr = getLoopbackAddress();
