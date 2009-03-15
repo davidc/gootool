@@ -4,7 +4,7 @@
 - Added missing screen resolutions to options tab
 - Warn on startup if using demo version of World of Goo
 - Friendlier version numbers in some places
-- Force socket to be IPv4, possible fix for "Address family not supported by protocol family: bind"
+- Use 127.0.0.1 instead of resolving "localhost": prevents it resolving to "::1" on IPv4-only systems giving "Address family not supported by protocol family: bind"
 
 0.10.2, 09-Feb-2009
 
