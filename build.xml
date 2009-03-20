@@ -260,7 +260,7 @@
 
       <documenttype name="World of Goo addin"
                     extensions="goomod"
-                    mimetypes="application/x-goomod"
+                    mimetypes="application/x-world-of-goo-addin"
                     role="Viewer"
                     iconfile="dist_src/macosx/goomod.icns"/>
     </jarbundler>

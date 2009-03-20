@@ -5,6 +5,7 @@
 - Warn on startup if using demo version of World of Goo
 - Friendlier version numbers in some places
 - Use 127.0.0.1 instead of resolving "localhost": prevents it resolving to "::1" on IPv4-only systems giving "Address family not supported by protocol family: bind"
+- Mime type is now application/x-world-of-goo-addin
 
 0.10.2, 09-Feb-2009
 
