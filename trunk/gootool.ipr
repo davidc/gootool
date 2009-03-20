@@ -375,6 +375,8 @@
       <option name="PASS_PARENT_ENVS" value="true" />
       <module name="gootool" />
       <envs />
+      <RunnerSettings RunnerId="Run" />
+      <ConfigurationWrapper RunnerId="Run" />
       <method>
         <option name="Make" value="true" />
       </method>
