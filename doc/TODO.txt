@@ -1,6 +1,7 @@
-- Mime type in installer  for website?
-
 MILESTONE 0.10.x (Final beta series)
+
+Sound mute / music mute
+sound mute - linux: <param name="sound_mute" value="true" />
 
 - BUG FIX: Mac image conversion has slight colour shifts due to ColorModel
 - IMPROVEMENT: Don't SAVE if unmodified on LAUNCH
@@ -149,8 +150,5 @@ maks - maksverver@geocities.com
 
 website how to:
 
-- click on a ball to clear its strand
-
 - last two balls hanging ivy
 
-- esc on signpainter retry
