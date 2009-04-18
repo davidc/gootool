@@ -48,7 +48,7 @@ public class OptionsPanel implements ViewComponent
   private JButton gooFansLoginButton;
   private JCheckBox windowsVolumeControlCheckBox;
   private JPanel soundPanel;
-  private HyperlinkLabel windowsVolumeControlHelp;
+  private HyperlinkLabel windowsVolumeControlHyperlink;
 
   public OptionsPanel(Controller controller)
   {
@@ -78,8 +78,8 @@ public class OptionsPanel implements ViewComponent
 
     if (PlatformSupport.getPlatform() == PlatformSupport.Platform.WINDOWS) {
       try {
-        windowsVolumeControlHelp.setURL(new File("lib\\irrKlang\\README.txt").toURL());
-        windowsVolumeControlHelp.addHyperlinkListener(new HyperlinkLaunchingListener(rootPanel));
+        windowsVolumeControlHyperlink.setURL(new File("lib\\irrKlang\\README.txt").toURL());
+        windowsVolumeControlHyperlink.addHyperlinkListener(new HyperlinkLaunchingListener(rootPanel));
       }
       catch (MalformedURLException e) {
         log.log(Level.WARNING, "Unable to create irrKlang README URL", e);
@@ -175,6 +175,6 @@ public class OptionsPanel implements ViewComponent
 
   private void createUIComponents()
   {
-    windowsVolumeControlHelp = new HyperlinkLabel(GooTool.getTextProvider().getText("options.sound.readme")); 
+    windowsVolumeControlHyperlink = new HyperlinkLabel(GooTool.getTextProvider().getText("options.sound.readme")); 
   }
 }

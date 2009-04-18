@@ -1,6 +1,9 @@
 package com.goofans.gootool.view;
 
 import com.goofans.gootool.Controller;
+import com.goofans.gootool.GooTool;
+import com.goofans.gootool.util.HyperlinkLaunchingListener;
+import com.goofans.gootool.ui.HyperlinkLabel;
 import com.goofans.gootool.model.Configuration;
 import com.goofans.gootool.addins.Addin;
 
@@ -14,6 +17,9 @@ import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.io.IOException;
 import java.util.logging.Logger;
+import java.util.logging.Level;
+import java.net.URL;
+import java.net.MalformedURLException;
 
 /**
  * @author David Croft (davidc@goofans.com)
@@ -34,6 +40,7 @@ public class AddinsPanel implements ViewComponent
   private JLabel description;
   private JButton moveUpButton;
   private JButton moveDownButton;
+  private HyperlinkLabel findMoreHyperlink;
   private MyTableModel addinsModel;
 
   private Controller controller;
@@ -91,6 +98,14 @@ public class AddinsPanel implements ViewComponent
     enableButton.addActionListener(controller);
     disableButton.setActionCommand(Controller.CMD_ADDIN_DISABLE);
     disableButton.addActionListener(controller);
+
+    try {
+      findMoreHyperlink.setURL(new URL("http://goofans.com/"));
+      findMoreHyperlink.addHyperlinkListener(new HyperlinkLaunchingListener(rootPanel));
+    }
+    catch (MalformedURLException e) {
+      log.log(Level.WARNING, "Unable to make GooFans URL", e);
+    }
   }
 
   private void updateButtonStates()
@@ -133,6 +148,11 @@ public class AddinsPanel implements ViewComponent
 
   public void updateModelFromView(Configuration c)
   {
+  }
+
+  private void createUIComponents()
+  {
+    findMoreHyperlink = new HyperlinkLabel(GooTool.getTextProvider().getText("addins.getmore"));
   }
 
   private class MyTableModel extends AbstractTableModel
@@ -320,6 +340,4 @@ public class AddinsPanel implements ViewComponent
       }
     }
   }
-
-
 }
