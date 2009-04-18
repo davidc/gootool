@@ -1,8 +1,9 @@
 0.10.3, 18-Apr-2009
 
 - Windows users can now enable Maks Verver's volume control via a checkbox
+- Added "find more addins" link to the addins tab
 - Added a Debian .deb build, added X Windows menu entry
-- Added missing screen resolutions to options tab
+- Added all the missing screen resolutions to options tab (mostly widescreen)
 - Warn on startup if using demo version of World of Goo
 - Friendlier version numbers in some places
 - Use 127.0.0.1 instead of resolving "localhost": prevents it resolving to "::1" on IPv4-only systems giving "Address family not supported by protocol family: bind"

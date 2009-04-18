@@ -9,7 +9,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.*;
 
 /**
- * Hyperlink label. The whole label should be inside <html><a> so that the cursor/click behaviour is rational.
+ * Hyperlink label. The whole label becomes a hyperlink.
  *
  * @author David Croft (davidc@goofans.com)
  * @version $Id$
@@ -20,19 +20,12 @@ public class HyperlinkLabel extends JLabel
 
   public HyperlinkLabel(String text)
   {
-    super(text);
+    super("<html><a href=\"#\">" + text + "</a></html>");
+
     setCursor(new Cursor(Cursor.HAND_CURSOR));
+
     addMouseListener(new MouseAdapter()
     {
-      public void mouseEntered(MouseEvent me)
-      {
-      }
-
-      public void mouseExited(MouseEvent me)
-      {
-//          label.setCursor(Cursor.getDefaultCursor());
-      }
-
       public void mouseClicked(MouseEvent me)
       {
         HyperlinkEvent he = new HyperlinkEvent(me.getSource(), HyperlinkEvent.EventType.ACTIVATED, url);
