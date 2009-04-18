@@ -41,6 +41,7 @@ public class BinMovie
     System.out.println("stringsOffset = " + stringsOffset);
 
     for (int actorNum = 0; actorNum < numActors; ++actorNum) {
+      System.out.println("\n== ACTOR " + actorNum + " ==\n");
       int binActorOffset = actorsOffset + (actorNum * BINACTOR_LENGTH);
       int actorType = BinaryFormat.getInt(contents, binActorOffset + 0);
 
@@ -62,18 +63,22 @@ public class BinMovie
       System.out.println("actor = " + actor);
 
       int binImageAnimOffset = BinaryFormat.getInt(contents, animsOffset + (actorNum * 4));
+      System.out.println("binImageAnimOffset = " + binImageAnimOffset);
       BinImageAnimation anim = new BinImageAnimation(contents, binImageAnimOffset);
-      System.out.println("anim = " + anim);
+//      System.out.println("anim = " + anim);
     }
   }
 
 
   public static void main(String[] args) throws IOException
   {
-    WorldOfGoo.getTheInstance().init();
-    Document doc = GameFormat.decodeXmlBinFile(new File("C:\\blah\\res\\movie\\credits\\credits.resrc.bin"));
+    String movie = "Chapter5End";
+
+    final WorldOfGoo wog = WorldOfGoo.getTheInstance();
+    wog.init();
+    Document doc = GameFormat.decodeXmlBinFile(wog.getGameFile("res\\movie\\" + movie + "\\" + movie + ".resrc.bin"));
 
     Resources r = new Resources(doc);
-    BinMovie m = new BinMovie(new File("C:\\blah\\res\\movie\\credits\\credits.movie.binltl"), r);
+    BinMovie m = new BinMovie(wog.getGameFile("res\\movie\\" + movie + "\\" + movie + ".movie.binltl"), r);
   }
 }

@@ -17,6 +17,7 @@ public class KeyFrame
   private int nextFrameIndex;
   private int soundStrIndex;
   private int interpolationType;
+  private String soundStr;
 
   public KeyFrame(byte[] contents, int offset, int stringTableOffset)
   {
@@ -27,14 +28,17 @@ public class KeyFrame
     color = BinaryFormat.getInt(contents, offset + 16);
     nextFrameIndex = BinaryFormat.getInt(contents, offset + 20);
     soundStrIndex = BinaryFormat.getInt(contents, offset + 24);
-//    String soundStr = BinaryFormat.getString(contents, stringTableOffset + soundStrIndex);
-//    System.out.println("soundStr = " + soundStr);
+    if (soundStrIndex > 0) {
+      soundStr = BinaryFormat.getString(contents, stringTableOffset + soundStrIndex);
+    }
     interpolationType = BinaryFormat.getInt(contents, offset + 28);
   }
 
   @Override
   public String toString()
   {
+    String itStr = (interpolationType == INTERPOLATION_LINEAR ? "LINEAR" : interpolationType == INTERPOLATION_NONE ? "NONE" : String.valueOf(interpolationType));
+
     return "KeyFrame{" +
             "x=" + x +
             ", y=" + y +
@@ -42,8 +46,8 @@ public class KeyFrame
             ", alpha=" + alpha +
             ", color=" + color +
             ", nextFrameIndex=" + nextFrameIndex +
-            ", soundStrIndex=" + soundStrIndex +
-            ", interpolationType=" + interpolationType +
+            ", soundStrIndex=" + soundStrIndex + (soundStrIndex > 0 ? "(" + soundStr + ")" : "") +
+            ", interpolationType=" + itStr +
             '}';
   }
 }

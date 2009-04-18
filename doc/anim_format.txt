@@ -95,23 +95,23 @@ enum AlignmentV
 
 struct BinActor
 {
-       ActorType mType;
-       int mImageStrIdx;
-       int mLabelTextStrIdx;
-       int mFontStrIdx;
-       float mLabelMaxWidth;
-       float mLabelWrapWidth;
-       AlignmentH mLabelJustification;
-       float mDepth;
++0x00:       ActorType mType;
++0x04:       int mImageStrIdx;
++0x08:       int mLabelTextStrIdx;
++0x0c:       int mFontStrIdx;
++0x10:       float mLabelMaxWidth;
++0x14:       float mLabelWrapWidth;
++0x18:       AlignmentH mLabelJustification;
++0x1c:       float mDepth;
 };
 
 struct BinMovie
 {
-       float length;
-       int numActors;
-       BinActor *pActors;
-       BinImageAnimation **ppAnims;
-       const char *pStringTable;
++0x00:       float length;
++0x04:       int numActors;
++0x08:       BinActor *pActors;
++0x0c:       BinImageAnimation **ppAnims;
++0x10:       const char *pStringTable;
 };
 
 the movie files, once decrypted, have the following contents:

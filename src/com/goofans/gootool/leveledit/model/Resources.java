@@ -30,7 +30,7 @@ public class Resources
     for (int i = 0; i < resourcesNodes.getLength(); i++) {
       Node resourcesEl = resourcesNodes.item(i);
 
-      File rootDir = WorldOfGoo.getTheInstance().getCustomGameFile("");
+      File rootDir = WorldOfGoo.getTheInstance().getGameFile("");
 
       File defaultPath = rootDir;
       String defaultIdPrefix = "";
@@ -52,7 +52,12 @@ public class Resources
             if (id.equals("IMAGE_BALL_FISH_WINGLEFT")) id = "IMAGE_BALL_TIMEBUG_WINGLEFT";
             if (id.equals("IMAGE_BALL_FISH_WINGRIGHT")) id = "IMAGE_BALL_TIMEBUG_WINGRIGHT";
 
-            images.put(id, ImageIO.read(f));
+            try {
+              images.put(id, ImageIO.read(f));
+            }
+            catch (IOException e) {
+              throw new IOException("Can't read " + f.getPath() + ": " + e.getMessage());
+            }
           }
           else if (el.getNodeName().equals("Sound")) {
             String id = defaultIdPrefix + el.getAttribute("id");
