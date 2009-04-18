@@ -60,6 +60,7 @@ public abstract class WorldOfGoo
 
   private static List<Addin> availableAddins = new LinkedList<Addin>();
 
+  // TODO these should move into a new Preferences class
   static final String PREF_LASTVERSION = "gootool_version";
   static final String PREF_ALLOW_WIDESCREEN = "allow_widescreen";
   static final String PREF_SKIP_OPENING_MOVIE = "skip_opening_movie";
@@ -69,6 +70,7 @@ public abstract class WorldOfGoo
   static final String PREF_SCREENHEIGHT = "screen_height";
   static final String PREF_UIINSET = "ui_inset";
   static final String PREF_ADDINS = "addins";
+  static final String PREF_WINDOWS_VOLUME_CONTROL = "windows_volume_control";
 
 
   protected WorldOfGoo()
@@ -192,6 +194,8 @@ public abstract class WorldOfGoo
     }
     c.setResolution(Resolution.getResolutionByDimensions(width, height));
     c.setUiInset(p.getInt(PREF_UIINSET, c.getUiInset()));
+
+    c.setWindowsVolumeControl(p.getBoolean(PREF_WINDOWS_VOLUME_CONTROL, false));
 
     String addins = p.get(PREF_ADDINS, null);
     if (addins != null) {

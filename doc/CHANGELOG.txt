@@ -1,6 +1,7 @@
-0.10.3, ?
+0.10.3, 18-Apr-2009
 
-- Added a Debian .deb build, added X menu entry
+- Windows users can now enable Maks Verver's volume control via a checkbox
+- Added a Debian .deb build, added X Windows menu entry
 - Added missing screen resolutions to options tab
 - Warn on startup if using demo version of World of Goo
 - Friendlier version numbers in some places
