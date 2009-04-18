@@ -3,9 +3,9 @@ package com.goofans.gootool.util;
 import javax.swing.*;
 import java.io.IOException;
 import java.lang.reflect.Method;
+import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.awt.*;
@@ -105,7 +105,7 @@ public class URLLauncher
     }
   }
 
-  private static boolean launchDesktop(URL url)
+  private static boolean launchDesktop(URL url) throws IOException
   {
     // NB The following String is intentionally not inlined to prevent ProGuard trying to locate the unknown class.
     String desktopClassName = "java.awt.Desktop";
@@ -121,7 +121,7 @@ public class URLLauncher
     try {
       Method isDesktopSupportedMethod = desktopClass.getDeclaredMethod("isDesktopSupported", new Class[]{});
       log.finer("invoking isDesktopSupported");
-      boolean isDesktopSupported = (Boolean) isDesktopSupportedMethod.invoke(null, url.toString());
+      boolean isDesktopSupported = (Boolean) isDesktopSupportedMethod.invoke(null);
 
       if (!isDesktopSupported) {
         log.finer("isDesktopSupported: no");
@@ -135,6 +135,15 @@ public class URLLauncher
 
       Method browseMethod = desktopClass.getDeclaredMethod("browse", URI.class);
       browseMethod.invoke(desktopInstance, new URI(url.toExternalForm()));
+    }
+    catch (InvocationTargetException e) {
+      if (e.getCause() instanceof IOException) {
+        throw (IOException) e.getCause();
+      }
+      else {
+        log.log(Level.FINE, "Exception in Desktop operation", e);
+        return false;
+      }
     }
     catch (Exception e) {
       log.log(Level.FINE, "Exception in Desktop operation", e);
@@ -152,7 +161,7 @@ public class URLLauncher
       // NB The following String is intentionally not inlined to prevent ProGuard trying to locate the unknown class.
       String appleClass = "com.apple.eio.FileManager";
       Class fileMgr = Class.forName(appleClass);
-      Method openURL = fileMgr.getDeclaredMethod("openURL", new Class[]{String.class});
+      Method openURL = fileMgr.getDeclaredMethod("openURL", String.class);
 
       log.finer("Mac invoking");
       openURL.invoke(null, url.toString());
