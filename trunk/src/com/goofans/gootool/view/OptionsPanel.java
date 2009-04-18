@@ -5,6 +5,10 @@ import com.goofans.gootool.model.Resolution;
 import com.goofans.gootool.model.Configuration;
 import com.goofans.gootool.Controller;
 import com.goofans.gootool.ToolPreferences;
+import com.goofans.gootool.GooTool;
+import com.goofans.gootool.util.HyperlinkLaunchingListener;
+import com.goofans.gootool.ui.HyperlinkLabel;
+import com.goofans.gootool.platform.PlatformSupport;
 import com.goofans.gootool.profile.ProfileFactory;
 import com.goofans.gootool.wog.WorldOfGoo;
 
@@ -13,8 +17,10 @@ import java.awt.event.ItemListener;
 import java.awt.event.ItemEvent;
 import java.util.Set;
 import java.util.logging.Logger;
+import java.util.logging.Level;
 import java.io.IOException;
 import java.io.File;
+import java.net.MalformedURLException;
 
 /**
  * @author David Croft (davidc@goofans.com)
@@ -40,6 +46,9 @@ public class OptionsPanel implements ViewComponent
   private JTextField goofansUsername;
   private JPasswordField goofansPassword;
   private JButton gooFansLoginButton;
+  private JCheckBox windowsVolumeControlCheckBox;
+  private JPanel soundPanel;
+  private HyperlinkLabel windowsVolumeControlHelp;
 
   public OptionsPanel(Controller controller)
   {
@@ -66,6 +75,19 @@ public class OptionsPanel implements ViewComponent
 
     gooFansLoginButton.addActionListener(controller);
     gooFansLoginButton.setActionCommand(Controller.CMD_GOOFANS_LOGIN);
+
+    if (PlatformSupport.getPlatform() == PlatformSupport.Platform.WINDOWS) {
+      try {
+        windowsVolumeControlHelp.setURL(new File("lib\\irrKlang\\README.txt").toURL());
+        windowsVolumeControlHelp.addHyperlinkListener(new HyperlinkLaunchingListener(rootPanel));
+      }
+      catch (MalformedURLException e) {
+        log.log(Level.WARNING, "Unable to create irrKlang README URL", e);
+      }
+    }
+    else {
+      soundPanel.setVisible(false);
+    }
   }
 
   private void updateResolutions()
@@ -127,6 +149,8 @@ public class OptionsPanel implements ViewComponent
 
     goofansUsername.setText(ToolPreferences.getGooFansUsername());
     goofansPassword.setText(ToolPreferences.getGooFansPassword());
+
+    windowsVolumeControlCheckBox.setSelected(c.isWindowsVolumeControl());
   }
 
   public void updateModelFromView(Configuration c)
@@ -145,5 +169,12 @@ public class OptionsPanel implements ViewComponent
 
     ToolPreferences.setGooFansUsername(goofansUsername.getText());
     ToolPreferences.setGooFansPassword(new String(goofansPassword.getPassword()));
+
+    c.setWindowsVolumeControl(windowsVolumeControlCheckBox.isSelected());
+  }
+
+  private void createUIComponents()
+  {
+    windowsVolumeControlHelp = new HyperlinkLabel(GooTool.getTextProvider().getText("options.sound.readme")); 
   }
 }

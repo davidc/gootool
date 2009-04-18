@@ -66,7 +66,7 @@ public class ConfigurationWriterTask extends ProgressIndicatingTask
       getFilesInFolder(wogDir, filesToCopy, "");
     }
     else {
-      // WINDOWS
+      // WINDOWS/LINUX
       for (String resourceDirName : resourceDirs) {
         File resourceDir = new File(wogDir, resourceDirName);
         if (resourceDir.exists()) {
@@ -83,6 +83,20 @@ public class ConfigurationWriterTask extends ProgressIndicatingTask
     }
 
     log.fine(filesToCopy.size() + " files in source directories");
+
+    // Now truncate what we are going to overwrite or remove anyway.
+    // TODO we can also skip files that are overwritten by addins.
+
+    for (int i = 0; i < filesToCopy.size(); i++) {
+      String s = filesToCopy.get(i);
+      if ((configuration.isSkipOpeningMovie() && s.startsWith("res/movie/2dboyLogo")) // If we're skipping the opening movie
+              ) {
+        System.out.println("Skipping " + s);
+        filesToCopy.remove(i);
+        i--;
+      }
+    }
+    log.fine(filesToCopy.size() + " files after skipping");
 
     beginStep("Copying game files to custom folder", true);
 
@@ -136,6 +150,7 @@ public class ConfigurationWriterTask extends ProgressIndicatingTask
       File exe2 = new File(customDir, WorldOfGooLinux.EXE_FILENAME);
       Runtime.getRuntime().exec(new String[]{"chmod", "+x", exe1.getAbsolutePath(), exe2.getAbsolutePath()});
     }
+
     progressStep(100f);
   }
 
@@ -178,6 +193,8 @@ public class ConfigurationWriterTask extends ProgressIndicatingTask
     }
     p.putInt(WorldOfGoo.PREF_UIINSET, c.getUiInset());
 
+    p.putBoolean(WorldOfGoo.PREF_WINDOWS_VOLUME_CONTROL, c.isWindowsVolumeControl());
+
     StringBuilder sb = new StringBuilder();
     for (String s : c.getEnabledAddins()) {
       if (sb.length() != 0) sb.append(',');
@@ -199,7 +216,9 @@ public class ConfigurationWriterTask extends ProgressIndicatingTask
     /* If we're skipping opening movie, we need to remove res/movie/2dboy */
     if (c.isSkipOpeningMovie()) {
       File movieDir = worldOfGoo.getCustomGameFile("res/movie/2dboyLogo/");
-      Utilities.rmdirAll(movieDir);
+      if (movieDir.exists()) {
+        Utilities.rmdirAll(movieDir);
+      }
     }
 
     /* If we have a watermark, we need to modify properties/text.xml.bin */
@@ -214,6 +233,22 @@ public class ConfigurationWriterTask extends ProgressIndicatingTask
       catch (TransformerException e) {
         throw new IOException("Unable to merge watermark");
       }
+    }
+
+    /* Add new irrKlang.dll if Windows volume control enabled */
+    if (PlatformSupport.getPlatform() == PlatformSupport.Platform.WINDOWS && configuration.isWindowsVolumeControl()) {
+      log.log(Level.FINER, "Copying custom irrKlang.dll");
+
+      File installedIrrKlangFile = worldOfGoo.getCustomGameFile("irrKlang.dll");
+      File realIrrKlangFile = worldOfGoo.getCustomGameFile("RealIrrKlang.dll");
+
+      //noinspection ResultOfMethodCallIgnored
+      realIrrKlangFile.delete(); // ok to fail if it didn't exist
+      if (!installedIrrKlangFile.renameTo(realIrrKlangFile)) {
+        throw new IOException("Unable to rename irrKlang.dll to RealIrrKlang.dll");
+      }
+
+      Utilities.copyFile(new File("lib\\irrKlang\\irrKlang.dll"), installedIrrKlangFile);
     }
   }
 

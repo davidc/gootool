@@ -21,6 +21,7 @@ public class Configuration
   private int uiInset;
   private boolean skipOpeningMovie;
   private String watermark;
+  private boolean windowsVolumeControl;
 
   // this is a list because ordering of addins is important.
   private List<String> enabledAddins = new ArrayList<String>();
@@ -37,6 +38,7 @@ public class Configuration
     uiInset = c.uiInset;
     skipOpeningMovie = c.skipOpeningMovie;
     watermark = c.watermark;
+    windowsVolumeControl = c.windowsVolumeControl;
 
     enabledAddins = new ArrayList<String>(c.enabledAddins);
   }
@@ -103,6 +105,16 @@ public class Configuration
     this.skipOpeningMovie = skipOpeningMovie;
   }
 
+  public boolean isWindowsVolumeControl()
+  {
+    return windowsVolumeControl;
+  }
+
+  public void setWindowsVolumeControl(boolean windowsVolumeControl)
+  {
+    this.windowsVolumeControl = windowsVolumeControl;
+  }
+
   public boolean isEnabledAdddin(String id)
   {
     return (enabledAddins.contains(id.intern()));
@@ -136,6 +148,7 @@ public class Configuration
     if (allowWidescreen != that.allowWidescreen) return false;
     if (skipOpeningMovie != that.skipOpeningMovie) return false;
     if (uiInset != that.uiInset) return false;
+    if (windowsVolumeControl != that.windowsVolumeControl) return false;
     if (language != null ? !language.equals(that.language) : that.language != null) return false;
     if (resolution != null ? !resolution.equals(that.resolution) : that.resolution != null) return false;
     if (watermark != null ? !watermark.equals(that.watermark) : that.watermark != null) return false;
@@ -152,6 +165,7 @@ public class Configuration
     result = 31 * result + (allowWidescreen ? 1 : 0);
     result = 31 * result + uiInset;
     result = 31 * result + (skipOpeningMovie ? 1 : 0);
+    result = 31 * result + (windowsVolumeControl ? 1 : 0);
     result = 31 * result + enabledAddins.hashCode();
     return result;
   }

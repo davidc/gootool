@@ -30,7 +30,7 @@ public class MainMenu
 
     JMenu menu;
     JMenuItem menuItem;
-    HyperlinkLaunchingListener hyperlinkListener = new HyperlinkLaunchingListener();
+    HyperlinkLaunchingListener hyperlinkListener = new HyperlinkLaunchingListener(menuBar);
 
     TextProvider textProvider = GooTool.getTextProvider();
 

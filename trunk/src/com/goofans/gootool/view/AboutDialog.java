@@ -4,7 +4,6 @@ import net.infotrek.util.TextUtil;
 
 import com.goofans.gootool.util.Version;
 import com.goofans.gootool.util.GUIUtil;
-import com.goofans.gootool.util.HyperlinkLaunchingListener;
 import com.goofans.gootool.GooTool;
 import com.goofans.gootool.TextProvider;
 

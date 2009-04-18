@@ -345,6 +345,9 @@
       <item class="com.goofans.gootool.leveledit.view.BallPalette" icon="/com/intellij/uiDesigner/icons/panel.png" removable="true" auto-create-binding="true" can-attach-label="false" is-container="true">
         <default-constraints vsize-policy="3" hsize-policy="3" anchor="0" fill="0" />
       </item>
+      <item class="com.goofans.gootool.ui.HyperlinkLabel" icon="/com/intellij/uiDesigner/icons/label.png" removable="true" auto-create-binding="true" can-attach-label="false">
+        <default-constraints vsize-policy="0" hsize-policy="0" anchor="0" fill="0" />
+      </item>
     </group>
   </component>
   <component name="ProjectDetails">
@@ -365,11 +368,11 @@
   <component name="ProjectRunConfigurationManager">
     <configuration default="false" name="GooTool" type="Application" factoryName="Application" enabled="false" merge="false" sample_coverage="true" runner="emma">
       <option name="MAIN_CLASS_NAME" value="com.goofans.gootool.GooTool" />
-      <option name="VM_PARAMETERS" value="" />
+      <option name="VM_PARAMETERS" value="-Djava.util.logging.config.file=logger_dev.properties" />
       <option name="PROGRAM_PARAMETERS" value="" />
       <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" value="" />
+      <option name="ALTERNATIVE_JRE_PATH" value="$PROJECT_DIR$/../../Program Files/Java/jdk1.6.0_11" />
       <option name="ENABLE_SWING_INSPECTOR" value="false" />
       <option name="ENV_VARIABLES" />
       <option name="PASS_PARENT_ENVS" value="true" />
