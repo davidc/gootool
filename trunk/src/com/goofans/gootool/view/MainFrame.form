@@ -3,7 +3,7 @@
   <grid id="27dc6" binding="rootPanel" layout-manager="GridLayoutManager" row-count="2" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
     <margin top="10" left="10" bottom="10" right="10"/>
     <constraints>
-      <xy x="20" y="20" width="601" height="400"/>
+      <xy x="20" y="20" width="608" height="400"/>
     </constraints>
     <properties/>
     <border type="none"/>
@@ -17,50 +17,6 @@
         <properties/>
         <border type="none"/>
         <children>
-          <grid id="22628" layout-manager="GridLayoutManager" row-count="3" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
-            <margin top="4" left="4" bottom="4" right="4"/>
-            <constraints>
-              <tabbedpane title-resource-bundle="text" title-key="mainFrame.tab.warning"/>
-            </constraints>
-            <properties/>
-            <border type="none"/>
-            <children>
-              <component id="57c80" class="javax.swing.JTextArea" default-binding="true">
-                <constraints>
-                  <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false">
-                    <preferred-size width="150" height="50"/>
-                  </grid>
-                </constraints>
-                <properties>
-                  <editable value="false"/>
-                  <enabled value="true"/>
-                  <font style="1"/>
-                  <opaque value="false"/>
-                  <text resource-bundle="text" key="mainFrame.warningMessage"/>
-                </properties>
-              </component>
-              <hspacer id="ae341">
-                <constraints>
-                  <grid row="1" column="2" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-                </constraints>
-              </hspacer>
-              <vspacer id="9720">
-                <constraints>
-                  <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
-                </constraints>
-              </vspacer>
-              <vspacer id="3c97f">
-                <constraints>
-                  <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
-                </constraints>
-              </vspacer>
-              <hspacer id="87cee">
-                <constraints>
-                  <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-                </constraints>
-              </hspacer>
-            </children>
-          </grid>
           <grid id="444e8" binding="profilePanelPanel" custom-create="true" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
             <margin top="0" left="0" bottom="0" right="0"/>
             <constraints>
