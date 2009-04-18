@@ -33,8 +33,10 @@ public class BinActor
   @Override
   public String toString()
   {
+    String atStr = (actorType == ACTORTYPE_IMAGE ? "IMAGE" : actorType == ACTORTYPE_TEXT ? "TEXT" : String.valueOf(actorType));
+
     return "BinActor{" +
-            "actorType=" + actorType +
+            "actorType=" + atStr +
             ", imageStr='" + imageStr + '\'' +
             ", labelStr='" + labelStr + '\'' +
             ", fontStr='" + fontStr + '\'' +

@@ -27,6 +27,7 @@ public class BinImageAnimation
   private float[] frameTimes;
   private KeyFrame[][] transformFrames;
   private KeyFrame[] alphaFrames;
+  private KeyFrame[] soundFrames;
 
   public BinImageAnimation(File file) throws IOException
   {
@@ -84,49 +85,80 @@ public class BinImageAnimation
     }
 
     if (hasTransform) {
-      transformTypes = new TransformType[numTransforms];
-      int transformTypeOffset = transformTypesOffset;
-      for (int i = 0; i < numTransforms; ++i, transformTypeOffset += 4) {
-        transformTypes[i] = TransformType.getByValue(BinaryFormat.getInt(contents, transformTypeOffset));
-        System.out.println("transformTypes[" + i + "] = " + transformTypes[i]);
-      }
+      loadTransformTypes(contents, transformTypesOffset);
 
-      transformFrames = new KeyFrame[numTransforms][];
-      int transformOffset = xformFramesOffset;
-      for (int i = 0; i < numTransforms; ++i, transformOffset += 4) {
-
-        int frameOffset = BinaryFormat.getInt(contents, transformOffset);
-        System.out.println("frameOffset = " + frameOffset);
-
-        transformFrames[i] = new KeyFrame[numFrames + 1];
-        for (int j = 0; j <= numFrames; ++j, frameOffset += KEYFRAME_LENGTH) {
-          int framePointer = BinaryFormat.getInt(contents, frameOffset);
-          System.out.println("framePointer = " + framePointer);
-          if (framePointer != 0) {
-            transformFrames[i][j] = new KeyFrame(contents, framePointer, stringTableOffset);
-            System.out.println("transformFrames[t=" + i + "," + transformTypes[i] + "][frame=" + j + "] = " + transformFrames[i][j]);
-          }
-        }
-      }
+      loadTransformFrames(contents, offset, xformFramesOffset, stringTableOffset);
     }
 
     if (hasAlpha) {
-      alphaFrames = new KeyFrame[numFrames + 1];
-      int frameOffset = alphaFramesOffset;
-      for (int i = 0; i <= numFrames; ++i, frameOffset += 4) {
-        int framePointer = BinaryFormat.getInt(contents, frameOffset);
-        System.out.println("framePointer = " + framePointer);
-        if (framePointer != 0) {
-          alphaFrames[i] = new KeyFrame(contents, framePointer, stringTableOffset);
-          System.out.println("alphaFrames[" + i + "] = " + alphaFrames[i]);
-        }
-      }
+      loadAlphaFrames(contents, offset, alphaFramesOffset, stringTableOffset);
     }
     if (hasColor) {
       throw new RuntimeException("color frames not yet supported");
     }
+
     if (hasSound) {
-      throw new RuntimeException("sound frames not yet supported");
+      loadSoundFrames(contents, offset, soundFramesOffset, stringTableOffset);
+    }
+  }
+
+  private void loadTransformTypes(byte[] contents, int transformTypesOffset)
+  {
+    transformTypes = new TransformType[numTransforms];
+
+    int transformTypeOffset = transformTypesOffset;
+    for (int i = 0; i < numTransforms; ++i, transformTypeOffset += 4) {
+      transformTypes[i] = TransformType.getByValue(BinaryFormat.getInt(contents, transformTypeOffset));
+      System.out.println("transformTypes[" + i + "] = " + transformTypes[i]);
+    }
+  }
+
+  private void loadTransformFrames(byte[] contents, int offset, int xformFramesOffset, int stringTableOffset)
+  {
+    transformFrames = new KeyFrame[numTransforms][];
+    int transformOffset = xformFramesOffset;
+    for (int i = 0; i < numTransforms; ++i, transformOffset += 4) {
+
+      int frameOffset = BinaryFormat.getInt(contents, transformOffset) + offset;
+      System.out.println("frameOffset = " + frameOffset);
+
+      transformFrames[i] = new KeyFrame[numFrames + 1];
+      for (int j = 0; j <= numFrames; ++j, frameOffset += 4) {
+        int framePointer = BinaryFormat.getInt(contents, frameOffset) + offset;
+//        System.out.println("framePointer = " + framePointer);
+        if (framePointer > 0) {
+          transformFrames[i][j] = new KeyFrame(contents, framePointer, stringTableOffset);
+          System.out.println("transformFrames[t=" + i + "," + transformTypes[i] + "][frame=" + j + "] = " + transformFrames[i][j]);
+        }
+      }
+    }
+  }
+
+  private void loadAlphaFrames(byte[] contents, int offset, int alphaFramesOffset, int stringTableOffset)
+  {
+    alphaFrames = new KeyFrame[numFrames + 1];
+    int frameOffset = alphaFramesOffset;
+    for (int i = 0; i <= numFrames; ++i, frameOffset += 4) {
+      int framePointer = BinaryFormat.getInt(contents, frameOffset) + offset;
+//      System.out.println("framePointer = " + framePointer);
+      if (framePointer != 0) {
+        alphaFrames[i] = new KeyFrame(contents, framePointer, stringTableOffset);
+        System.out.println("alphaFrames[" + i + "] = " + alphaFrames[i]);
+      }
+    }
+  }
+
+  private void loadSoundFrames(byte[] contents, int offset, int soundFramesOffset, int stringTableOffset)
+  {
+    soundFrames = new KeyFrame[numFrames];
+    int frameOffset = soundFramesOffset;
+    for (int i = 0; i < numFrames; ++i, frameOffset += 4) {
+      int framePointer = BinaryFormat.getInt(contents, frameOffset) + offset;
+//      System.out.println("framePointer = " + framePointer);
+      if (framePointer != 0) {
+        soundFrames[i] = new KeyFrame(contents, framePointer, stringTableOffset);
+        System.out.println("soundFrames[" + i + "] = " + soundFrames[i]);
+      }
     }
   }
 
