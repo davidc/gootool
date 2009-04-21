@@ -30,7 +30,7 @@ public class Resources
     for (int i = 0; i < resourcesNodes.getLength(); i++) {
       Node resourcesEl = resourcesNodes.item(i);
 
-      File rootDir = WorldOfGoo.getTheInstance().getGameFile("");
+      File rootDir = WorldOfGoo.getTheInstance().getCustomGameFile("");
 
       File defaultPath = rootDir;
       String defaultIdPrefix = "";

@@ -89,7 +89,7 @@ public class Ball
       }
     }
 
-    drawPoint(g2, offset.x, offset.y, Color.ORANGE);
+//    drawPoint(g2, offset.x, offset.y, Color.ORANGE);
     return img;
   }
 

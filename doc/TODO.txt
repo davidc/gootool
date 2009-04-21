@@ -1,8 +1,5 @@
 MILESTONE 0.10.x (Final beta series)
 
-Sound mute / music mute
-sound mute - linux: <param name="sound_mute" value="true" />
-
 - BUG FIX: Mac image conversion has slight colour shifts due to ColorModel
 - IMPROVEMENT: Don't SAVE if unmodified on LAUNCH
 
@@ -14,8 +11,6 @@ sound mute - linux: <param name="sound_mute" value="true" />
 - NEW FEATURE: Upload profile/tower to goofans.com
 - NEW FEATURE: preference: upload tower on goo exit, or upload tower continuously during play (need to detect when process exits - java.lang.Process?)
 - NEW FEATURE: mark user as cheat - requires X votes or something
-
-- NEW FEATURE: Auto download GooTool updates
 
 - xanax: don't jump mods around when en/disabling
 
@@ -47,8 +42,6 @@ NO MILESTONE SET
 - NEW FEATURE: mute music/mute all sound
 
 - NEW FEATURE: automatically self-update
-
-- reformat b5s and use as wog website server
 
 
 todo
