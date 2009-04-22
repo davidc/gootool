@@ -1,5 +1,7 @@
 package com.goofans.gootool.util;
 
+import net.infotrek.util.DesktopUtil;
+
 import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
 import java.awt.event.ActionEvent;
@@ -22,12 +24,12 @@ public class HyperlinkLaunchingListener implements HyperlinkListener, ActionList
   public void hyperlinkUpdate(HyperlinkEvent event)
   {
     if (event.getEventType() == HyperlinkEvent.EventType.ACTIVATED) {
-      URLLauncher.launchAndWarn(event.getURL(), parentComponent);
+      DesktopUtil.browseAndWarn(event.getURL(), parentComponent);
     }
   }
 
   public void actionPerformed(ActionEvent e)
   {
-    URLLauncher.launchAndWarn(e.getActionCommand(), parentComponent);
+    DesktopUtil.browseAndWarn(e.getActionCommand(), parentComponent);
   }
 }
