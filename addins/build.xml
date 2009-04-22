@@ -1,4 +1,5 @@
 <?xml version="1.0"?>
+<!--$Id$-->
 <project name="addins" default="build" basedir=".">
 
   <property name="addins.src" value="src"/>
