@@ -1,7 +1,5 @@
 package com.goofans.gootool.view;
 
-import net.infotrek.util.EncodingUtil;
-
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -11,7 +9,7 @@ import com.goofans.gootool.GooTool;
 import com.goofans.gootool.ToolPreferences;
 import com.goofans.gootool.TextProvider;
 import com.goofans.gootool.util.GUIUtil;
-import com.goofans.gootool.util.URLLauncher;
+import net.infotrek.util.DesktopUtil;
 import com.goofans.gootool.util.Version;
 import com.goofans.gootool.util.VersionSpec;
 
@@ -59,7 +57,7 @@ public class NewVersionDialog extends JDialog
     {
       public void actionPerformed(ActionEvent e)
       {
-        URLLauncher.launchAndWarn(downloadUrl, parentWindow);
+        DesktopUtil.browseAndWarn(downloadUrl, parentWindow);
         setVisible(false);
       }
     });
