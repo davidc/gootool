@@ -15,6 +15,26 @@ import java.util.logging.Logger;
 /**
  * Surrogate for the 1.6 java.awt.Desktop "browse(url)" and "open(file)" methods. Provides platform-dependent fallback methods
  * where the Desktop class is unavailable.
+ * <p/>
+ * Copyright (c) 2009 David C A Croft.
+ * <p/>
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ * <p/>
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ * <p/>
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
  *
  * @author David Croft (http://www.davidc.net/)
  * @version $Id$
@@ -29,7 +49,7 @@ public class DesktopUtil
 
   private static final String[] UNIX_BROWSE_CMDS = {
           "www-browser", // debian update-alternatives target
-          "firefox", "opera", "konqueror", "epiphany", "mozilla", "netscape"};
+          "firefox", "opera", "konqueror", "epiphany", "mozilla", "netscape", "w3m", "lynx"};
 
   private static final String[] UNIX_OPEN_CMDS = {
           "run-mailcap", // many Unixes, run registered program from /etc/mailcap
@@ -50,7 +70,7 @@ public class DesktopUtil
    */
   public static void browse(final URL url) throws IOException
   {
-    /* Try Java 1.6 Desktop class if supported */
+    // Try Java 1.6 Desktop class if supported
     if (browseDesktop(url)) return;
 
     final String osName = System.getProperty("os.name");
@@ -123,7 +143,7 @@ public class DesktopUtil
    */
   public static void open(final File file) throws IOException
   {
-    /* Try Java 1.6 Desktop class if supported */
+    // Try Java 1.6 Desktop class if supported
     if (openDesktop(file)) return;
 
     final String osName = System.getProperty("os.name");
