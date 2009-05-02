@@ -1,0 +1,17 @@
+<addin spec-version="1.0">
+  <id>net.davidc.test.rotatingplanet</id>
+  <name>Rotating Planet</name>
+  <type>level</type>
+  <version>1.0</version>
+  <description>Demonstration of how to make rotating, walkable geometry.
+    Note how the planet is not exactly positioned on the radialforcefield, to avoid an ODE crash.
+  </description>
+  <author>davidc</author>
+
+  <level>
+    <dir>RotatingPlanet</dir>
+    <name text="Rotating Planet"/>
+    <subtitle text="a mad scientist test"/>
+    <ocd>time,20</ocd>
+  </level>
+</addin>
