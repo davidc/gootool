@@ -105,7 +105,8 @@ public class DesktopUtil
       {
         public void run()
         {
-          JOptionPane.showMessageDialog(parentComponent, "Couldn't open a web browser:\n" + e.getLocalizedMessage(), "Unable to launch web browser", JOptionPane.ERROR_MESSAGE);
+          JOptionPane.showMessageDialog(parentComponent, "Couldn't open a web browser:\n" + e.getLocalizedMessage(),
+                  "Unable to launch web browser", JOptionPane.ERROR_MESSAGE);
         }
       });
     }
@@ -129,7 +130,8 @@ public class DesktopUtil
       {
         public void run()
         {
-          JOptionPane.showMessageDialog(parentComponent, "Couldn't open a web browser:\n" + e.getLocalizedMessage(), "Unable to launch web browser", JOptionPane.ERROR_MESSAGE);
+          JOptionPane.showMessageDialog(parentComponent, "Couldn't open a web browser:\n" + e.getLocalizedMessage(),
+                  "Unable to launch web browser", JOptionPane.ERROR_MESSAGE);
         }
       });
     }
@@ -178,7 +180,8 @@ public class DesktopUtil
       {
         public void run()
         {
-          JOptionPane.showMessageDialog(parentComponent, "Couldn't open " + file + ":\n" + e.getLocalizedMessage(), "Unable to open file", JOptionPane.ERROR_MESSAGE);
+          JOptionPane.showMessageDialog(parentComponent, "Couldn't open " + file + ":\n" + e.getLocalizedMessage(),
+                  "Unable to open file", JOptionPane.ERROR_MESSAGE);
         }
       });
     }

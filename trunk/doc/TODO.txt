@@ -16,6 +16,8 @@ MILESTONE 0.10.x (Final beta series)
 
 - use swingworker for background stuff
 
+rate this addin from gootool
+
 MILESTONE 1.0.0 (First public release)
 
 - All bugs from 0.10 series fixed, no new features
