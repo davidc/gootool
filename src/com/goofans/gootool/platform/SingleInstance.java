@@ -24,7 +24,7 @@ public class SingleInstance
   private static final String SOCKET_FILE = "gootool.socket";
   private static final String TEST_FILE = "gootool.test";
 
-  private File lockFile;
+  private final File lockFile;
   private RandomAccessFile lockFileRAF;
 
   public SingleInstance()
@@ -64,8 +64,7 @@ public class SingleInstance
         throw new RuntimeException("Unable to write to lock temp file " + testFile);
       }
 
-      FileOutputStream fos;
-      fos = new FileOutputStream(randomAccessFile.getFD());
+      FileOutputStream fos = new FileOutputStream(randomAccessFile.getFD());
       fos.write('a');
 
       // Must release it or stupid Linux version of Java thinks that our lock on the REAL lock file is this lock!
@@ -219,7 +218,7 @@ public class SingleInstance
 
   private class PrimaryInstanceSocket extends Thread
   {
-    private ServerSocketChannel serverSocketChannel;
+    private final ServerSocketChannel serverSocketChannel;
 
     public PrimaryInstanceSocket(FileLock lock) throws IOException
     {
