@@ -10,7 +10,7 @@ public enum TransformType
   ROTATE(1),
   TRANSLATE(2);
 
-  private int value;
+  private final int value;
 
   TransformType(int value)
   {

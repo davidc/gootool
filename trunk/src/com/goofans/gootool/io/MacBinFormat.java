@@ -6,6 +6,8 @@ import java.io.File;
 import java.io.IOException;
 
 /**
+ * Encrypt/decrypt .bin files in XOR format (Mac).
+ *
  * @author David Croft (davidc@goofans.com)
  * @version $Id$
  */
