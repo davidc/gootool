@@ -1,26 +1,27 @@
 package com.goofans.gootool.view;
 
-import com.goofans.gootool.model.Language;
-import com.goofans.gootool.model.Resolution;
-import com.goofans.gootool.model.Configuration;
-import com.goofans.gootool.Controller;
-import com.goofans.gootool.ToolPreferences;
-import com.goofans.gootool.GooTool;
-import com.goofans.gootool.util.HyperlinkLaunchingListener;
-import com.goofans.gootool.ui.HyperlinkLabel;
-import com.goofans.gootool.platform.PlatformSupport;
-import com.goofans.gootool.profile.ProfileFactory;
-import com.goofans.gootool.wog.WorldOfGoo;
+import net.infotrek.util.DesktopUtil;
 
 import javax.swing.*;
-import java.awt.event.ItemListener;
+import javax.swing.event.HyperlinkEvent;
+import javax.swing.event.HyperlinkListener;
 import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.io.File;
+import java.io.IOException;
 import java.util.Set;
 import java.util.logging.Logger;
-import java.util.logging.Level;
-import java.io.IOException;
-import java.io.File;
-import java.net.MalformedURLException;
+
+import com.goofans.gootool.Controller;
+import com.goofans.gootool.GooTool;
+import com.goofans.gootool.ToolPreferences;
+import com.goofans.gootool.model.Configuration;
+import com.goofans.gootool.model.Language;
+import com.goofans.gootool.model.Resolution;
+import com.goofans.gootool.platform.PlatformSupport;
+import com.goofans.gootool.profile.ProfileFactory;
+import com.goofans.gootool.ui.HyperlinkLabel;
+import com.goofans.gootool.wog.WorldOfGoo;
 
 /**
  * @author David Croft (davidc@goofans.com)
@@ -77,12 +78,19 @@ public class OptionsPanel implements ViewComponent
     gooFansLoginButton.setActionCommand(Controller.CMD_GOOFANS_LOGIN);
 
     if (PlatformSupport.getPlatform() == PlatformSupport.Platform.WINDOWS) {
-      try {
-        windowsVolumeControlHyperlink.setURL(new File("lib\\irrKlang\\README.txt").toURL());
-        windowsVolumeControlHyperlink.addHyperlinkListener(new HyperlinkLaunchingListener(rootPanel));
+      final File f = new File("lib\\irrKlang\\README.txt");
+      if (f.exists()) {
+        windowsVolumeControlHyperlink.addHyperlinkListener(new HyperlinkListener()
+        {
+          public void hyperlinkUpdate(HyperlinkEvent e)
+          {
+            DesktopUtil.openAndWarn(f, rootPanel);
+          }
+        });
       }
-      catch (MalformedURLException e) {
-        log.log(Level.WARNING, "Unable to create irrKlang README URL", e);
+      else {
+        log.warning("Can't locate " + f.getAbsolutePath());
+        windowsVolumeControlHyperlink.setVisible(false);
       }
     }
     else {
@@ -175,6 +183,6 @@ public class OptionsPanel implements ViewComponent
 
   private void createUIComponents()
   {
-    windowsVolumeControlHyperlink = new HyperlinkLabel(GooTool.getTextProvider().getText("options.sound.readme")); 
+    windowsVolumeControlHyperlink = new HyperlinkLabel(GooTool.getTextProvider().getText("options.sound.readme"));
   }
 }
