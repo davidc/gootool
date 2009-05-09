@@ -1,23 +1,28 @@
 package com.goofans.gootool.movie;
 
+import net.infotrek.util.XMLStringBuffer;
+
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 /**
  * @author David Croft (davidc@goofans.com)
  * @version $Id$
  */
-public class KeyFrame
+public abstract class KeyFrame
 {
-  private static final int INTERPOLATION_NONE = 0;
-  private static final int INTERPOLATION_LINEAR = 1;
+  protected static final int INTERPOLATION_NONE = 0;
+  protected static final int INTERPOLATION_LINEAR = 1;
 
-  private float x;
-  private float y;
-  private float angle;
-  private int alpha;
-  private int color;
-  private int nextFrameIndex;
-  private int soundStrIndex;
-  private int interpolationType;
-  private String soundStr;
+  float x;
+  float y;
+  float angle;
+  int alpha;
+  int color;
+  int nextFrameIndex;
+  int soundStrIndex;
+  int interpolationType;
+  String soundStr;
 
   public KeyFrame(byte[] contents, int offset, int stringTableOffset)
   {
@@ -33,6 +38,21 @@ public class KeyFrame
     }
     interpolationType = BinaryFormat.getInt(contents, offset + 28);
   }
+
+  public void toXML(XMLStringBuffer xml, int frame)
+  {
+    Map<String, String> attributes = new LinkedHashMap<String, String>(8);
+    attributes.put("frame", String.valueOf(frame));
+    attributes.put("nextframe", String.valueOf(nextFrameIndex));
+
+    if (interpolationType == INTERPOLATION_LINEAR) attributes.put("interpolation", "linear");
+
+    setFrameXMLAttributes(attributes);
+
+    xml.addEmptyElement("keyframe", attributes);
+  }
+
+  protected abstract void setFrameXMLAttributes(Map<String, String> attributes);
 
   @Override
   public String toString()

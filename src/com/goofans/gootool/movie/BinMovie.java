@@ -1,23 +1,36 @@
 package com.goofans.gootool.movie;
 
+import net.infotrek.util.XMLStringBuffer;
+
 import java.io.*;
+import java.util.Map;
+import java.util.LinkedHashMap;
 
 import com.goofans.gootool.leveledit.model.Resources;
 import com.goofans.gootool.io.GameFormat;
 import com.goofans.gootool.wog.WorldOfGoo;
+import com.goofans.gootool.util.Utilities;
 import org.w3c.dom.Document;
 
 /**
+ * TODO check number of actors is sensible, and other validation on the file when loading.
+ *
  * @author David Croft (davidc@goofans.com)
  * @version $Id$
  */
 public class BinMovie
 {
-  private static final int BINMOVIE_LENGTH = 20;
+  //  private static final int BINMOVIE_LENGTH = 20;
   private static final int BINACTOR_LENGTH = 32;
-  private static final int BINIMAGEANIMATION_LENGTH = 52;
+//  private static final int BINIMAGEANIMATION_LENGTH = 52;
 
-  public BinMovie(File file, Resources resources) throws IOException
+  private float length;
+  private BinActor[] actors;
+  private BinImageAnimation[] anims;
+
+  private BinImageAnimation soundAnim;
+
+  public BinMovie(File file) throws IOException
   {
     FileInputStream is = new FileInputStream(file);
 
@@ -29,19 +42,17 @@ public class BinMovie
     is.close();
 
 
-    float length = BinaryFormat.getFloat(contents, 0);
-    System.out.println("length = " + length);
+    length = BinaryFormat.getFloat(contents, 0);
     int numActors = BinaryFormat.getInt(contents, 4);
-    System.out.println("numActors = " + numActors);
     int actorsOffset = BinaryFormat.getInt(contents, 8);
-    System.out.println("actorsOffset = " + actorsOffset);
     int animsOffset = BinaryFormat.getInt(contents, 12);
-    System.out.println("animsOffset = " + animsOffset);
     int stringsOffset = BinaryFormat.getInt(contents, 16);
-    System.out.println("stringsOffset = " + stringsOffset);
+
+    actors = new BinActor[numActors];
+    anims = new BinImageAnimation[numActors];
 
     for (int actorNum = 0; actorNum < numActors; ++actorNum) {
-      System.out.println("\n== ACTOR " + actorNum + " ==\n");
+//      System.out.println("\n== ACTOR " + actorNum + " ==\n");
       int binActorOffset = actorsOffset + (actorNum * BINACTOR_LENGTH);
       int actorType = BinaryFormat.getInt(contents, binActorOffset + 0);
 
@@ -60,25 +71,92 @@ public class BinMovie
       float depth = BinaryFormat.getFloat(contents, binActorOffset + 28);
 
       BinActor actor = new BinActor(actorType, imageStr, labelStr, fontStr, labelMaxWidth, labelWrapWidth, labelJustification, depth);
-      System.out.println("actor = " + actor);
+//      System.out.println("actor = " + actor);
 
       int binImageAnimOffset = BinaryFormat.getInt(contents, animsOffset + (actorNum * 4));
-      System.out.println("binImageAnimOffset = " + binImageAnimOffset);
+//      System.out.println("binImageAnimOffset = " + binImageAnimOffset);
       BinImageAnimation anim = new BinImageAnimation(contents, binImageAnimOffset);
 //      System.out.println("anim = " + anim);
+
+      actors[actorNum] = actor;
+      anims[actorNum] = anim;
+
+      if (anim.hasSound) {
+        if (soundAnim != null) {
+          throw new AssertionError("got a second sound actor!");
+        }
+        soundAnim = anim.extractSoundAnim();
+      }
     }
   }
 
+  /**
+   * Produces a well-formed XML document for this BinImageAnimation.
+   *
+   * @return XML document string
+   */
+  public String toXMLDocument()
+  {
+    StringBuffer sb = new StringBuffer();
+    // TODO xml prolog
+    XMLStringBuffer xml = new XMLStringBuffer(sb, "");
+    toXML(xml);
+    return xml.toXML();
+  }
+
+  /**
+   * Produces a &lt;movie&gt; element, not a well-formed document.
+   *
+   * @param xml XMLStringBuffer to write into
+   */
+  public void toXML(XMLStringBuffer xml)
+  {
+    Map<String, String> attributes = new LinkedHashMap<String, String>();
+    attributes.put("length", String.valueOf(length));
+    xml.push("movie", attributes);
+
+    for (int i = 0; i < actors.length; i++) {
+      BinActor actor = actors[i];
+      BinImageAnimation anim = anims[i];
+//      xml.push("element");// todo rename
+      anim.validateContiguousFrames();
+      actor.toXML(xml, anim);
+//      xml.pop("element");
+    }
+
+    if (soundAnim != null) {
+      xml.push("sounds");
+      soundAnim.toXMLSounds(xml);
+      xml.pop("sounds");
+    }
+
+    xml.pop("movie");
+  }
 
   public static void main(String[] args) throws IOException
   {
-    String movie = "Chapter5End";
 
     final WorldOfGoo wog = WorldOfGoo.getTheInstance();
     wog.init();
-    Document doc = GameFormat.decodeXmlBinFile(wog.getGameFile("res\\movie\\" + movie + "\\" + movie + ".resrc.bin"));
 
-    Resources r = new Resources(doc);
-    BinMovie m = new BinMovie(wog.getGameFile("res\\movie\\" + movie + "\\" + movie + ".movie.binltl"), r);
+    File f = wog.getGameFile("res\\movie");
+    for (File file : f.listFiles()) {
+      String movie = file.getName();
+      if (!movie.equals("_generic")) {
+        System.out.println("\n\n>>>>>>>> " + file.getName());
+
+        Document doc = GameFormat.decodeXmlBinFile(wog.getGameFile("res\\movie\\" + movie + "\\" + movie + ".resrc.bin"));
+//        Resources r = new Resources(doc);
+        BinMovie m = new BinMovie(wog.getGameFile("res\\movie\\" + movie + "\\" + movie + ".movie.binltl"));//, r);
+        System.out.println(m.toXMLDocument());
+//        Utilities.writeFile(new File("movie", movie + ".movie.xml"), m.toXMLDocument().getBytes());
+
+      }
+    }
+
+//    String movie = "Chapter5End";
+//    Document doc = GameFormat.decodeXmlBinFile(wog.getGameFile("res\\movie\\" + movie + "\\" + movie + ".resrc.bin"));
+//    Resources r = new Resources(doc);
+//    BinMovie m = new BinMovie(wog.getGameFile("res\\movie\\" + movie + "\\" + movie + ".movie.binltl"), r);
   }
 }

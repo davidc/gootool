@@ -19,6 +19,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
+ * Encrypt/decrypt .bin files in AES format (Windows/Linux).
+ *
  * @author David Croft (davidc@goofans.com)
  * @version $Id$
  */
