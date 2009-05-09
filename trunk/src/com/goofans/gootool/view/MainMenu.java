@@ -91,6 +91,18 @@ public class MainMenu
     menuItem.addActionListener(controller);
     decryptMenuItem.add(menuItem);
 
+    menuItem = new JMenuItem(textProvider.getText("mainMenu.advanced.decrypt.anim"));
+    menuItem.setMnemonic(KeyEvent.VK_A);
+    menuItem.setActionCommand(Controller.CMD_DECRYPT_ANIM);
+    menuItem.addActionListener(controller);
+    decryptMenuItem.add(menuItem);
+
+    menuItem = new JMenuItem(textProvider.getText("mainMenu.advanced.decrypt.movie"));
+    menuItem.setMnemonic(KeyEvent.VK_V);
+    menuItem.setActionCommand(Controller.CMD_DECRYPT_MOVIE);
+    menuItem.addActionListener(controller);
+    decryptMenuItem.add(menuItem);
+
     JMenu encryptMenuItem = new JMenu(textProvider.getText("mainMenu.advanced.encrypt"));
     encryptMenuItem.setMnemonic(KeyEvent.VK_E);
     menu.add(encryptMenuItem);
@@ -123,32 +135,10 @@ public class MainMenu
     testMenuItem.setMnemonic(KeyEvent.VK_T);
     menu.add(testMenuItem);
 
-    menuItem = new JMenuItem("anim decode");
-    try {
-      Class.forName("com.goofans.gootool.movie.BinImageAnimation");
-      menuItem.setActionCommand("animdecode");
-      menuItem.addActionListener(controller);
-    }
-    catch (ClassNotFoundException e) {
-      menuItem.setEnabled(false);
-    }
-    testMenuItem.add(menuItem);
-
     menuItem = new JMenuItem("anim encode");
     try {
       Class.forName("com.goofans.gootool.movie.BinImageAnimation");
       menuItem.setActionCommand("animencode");
-      menuItem.addActionListener(controller);
-    }
-    catch (ClassNotFoundException e) {
-      menuItem.setEnabled(false);
-    }
-    testMenuItem.add(menuItem);
-
-    menuItem = new JMenuItem("movie decode");
-    try {
-      Class.forName("com.goofans.gootool.movie.BinMovie");
-      menuItem.setActionCommand("movdecode");
       menuItem.addActionListener(controller);
     }
     catch (ClassNotFoundException e) {

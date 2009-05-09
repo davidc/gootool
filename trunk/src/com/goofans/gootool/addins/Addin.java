@@ -29,6 +29,7 @@ public class Addin
   private String id;
   private String name;
   private int type;
+  private VersionSpec manifestVersion;
   private VersionSpec version;
   private String description;
   private String author;
@@ -40,12 +41,13 @@ public class Addin
 
 //  private boolean enabled;
 
-  public Addin(File diskFile, String id, String name, int type, VersionSpec version, String description, String author, List<AddinDependency> dependencies, String levelDir, Map<String, String> levelNames, Map<String, String> levelSubtitles, String levelOcd)
+  public Addin(File diskFile, String id, String name, int type, VersionSpec manifestVersion, VersionSpec version, String description, String author, List<AddinDependency> dependencies, String levelDir, Map<String, String> levelNames, Map<String, String> levelSubtitles, String levelOcd)
   {
     this.diskFile = diskFile;
     this.id = id;
     this.name = name;
     this.type = type;
+    this.manifestVersion = manifestVersion;
     this.version = version;
     this.description = description;
     this.author = author;
@@ -81,6 +83,11 @@ public class Addin
     if (type == TYPE_LEVEL) return TYPE_LEVEL_STR;
     else if (type == TYPE_MOD) return TYPE_MOD_STR;
     else return TYPE_UNKNOWN_STR;
+  }
+
+  public VersionSpec getManifestVersion()
+  {
+    return manifestVersion;
   }
 
   public VersionSpec getVersion()

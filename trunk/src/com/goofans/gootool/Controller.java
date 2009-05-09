@@ -64,6 +64,8 @@ public class Controller implements ActionListener
   public static final String CMD_DECRYPT_BIN_PC = "Decrypt>BinPC";
   public static final String CMD_DECRYPT_BIN_MAC = "Decrypt>BinMac";
   public static final String CMD_DECRYPT_PNGBINLTL_MAC = "Decrypt>PngBinLtlMac";
+  public static final String CMD_DECRYPT_ANIM = "Decrypt>Anim";
+  public static final String CMD_DECRYPT_MOVIE = "Decrypt>Movie";
   public static final String CMD_ENCRYPT_BIN_PC = "Encrypt>BinPC";
   public static final String CMD_ENCRYPT_BIN_MAC = "Encrypt>BinMac";
   public static final String CMD_ENCRYPT_PNGBINLTL_MAC = "Encrypt>PngBinLtlMac";
@@ -87,6 +89,8 @@ public class Controller implements ActionListener
     codecs.put(CMD_DECRYPT_BIN_PC, new GameFileCodecTool("bin", "Encrypted Bin File (PC/Linux)", "xml", CodecType.AES_DECODE));
     codecs.put(CMD_DECRYPT_BIN_MAC, new GameFileCodecTool("bin", "Encrypted Bin File (Mac)", "xml", CodecType.XOR_DECODE));
     codecs.put(CMD_DECRYPT_PNGBINLTL_MAC, new GameFileCodecTool("png.binltl", "Encoded Image File", "png", CodecType.PNGBINLTL_DECODE));
+    codecs.put(CMD_DECRYPT_ANIM, new GameFileCodecTool("anim.binltl", "Animation File", "anim.xml", CodecType.ANIM_DECODE));
+    codecs.put(CMD_DECRYPT_MOVIE, new GameFileCodecTool("movie.binltl", "Movie File", "movie.xml", CodecType.MOVIE_DECODE));
     codecs.put(CMD_ENCRYPT_BIN_PC, new GameFileCodecTool("xml", "XML Document", "bin", CodecType.AES_ENCODE));
     codecs.put(CMD_ENCRYPT_BIN_MAC, new GameFileCodecTool("xml", "XML Document", "bin", CodecType.XOR_ENCODE));
     codecs.put(CMD_ENCRYPT_PNGBINLTL_MAC, new GameFileCodecTool("png", "PNG Image File", "png.binltl", CodecType.PNGBINLTL_ENCODE));
