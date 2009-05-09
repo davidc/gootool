@@ -66,7 +66,7 @@ public class AddinInstaller
               InputStream is = zipFile.getInputStream(zipEntry);
 
               try {
-                doPass(pass, fileName, is);
+                doPassOnFile(addin, pass, fileName, is);
               }
               finally {
                 is.close();
@@ -89,7 +89,7 @@ public class AddinInstaller
 
         File passSrcDir = new File(rootDir, passPrefix);
         if (passSrcDir.isDirectory()) {
-          doPassInDir(pass, passSrcDir, "");
+          doPassInDir(addin, pass, passSrcDir, "");
         }
       }
     }
@@ -101,16 +101,16 @@ public class AddinInstaller
     log.log(Level.FINE, "Addin " + addin.getId() + " installed");
   }
 
-  private static void doPassInDir(int pass, File passSrcDir, String pathName) throws IOException, AddinFormatException
+  private static void doPassInDir(Addin addin, int pass, File passSrcDir, String pathName) throws IOException, AddinFormatException
   {
     for (File file : passSrcDir.listFiles()) {
       if (file.isDirectory() && !file.getName().equals(".svn")) {
-        doPassInDir(pass, file, pathName + file.getName() + "/");
+        doPassInDir(addin, pass, file, pathName + file.getName() + "/");
       }
       else if (file.isFile()) {
         InputStream is = new FileInputStream(file);
         try {
-          doPass(pass, pathName + file.getName(), is);
+          doPassOnFile(addin, pass, pathName + file.getName(), is);
         }
         finally {
           is.close();
@@ -119,7 +119,7 @@ public class AddinInstaller
     }
   }
 
-  private static void doPass(int pass, String fileName, InputStream is) throws IOException, AddinFormatException
+  private static void doPassOnFile(Addin addin, int pass, String fileName, InputStream is) throws IOException, AddinFormatException
   {
 //    System.out.println("Doing pass " + pass + " on file " + fileName);
     if (pass == PASS_OVERRIDE) {
@@ -129,7 +129,7 @@ public class AddinInstaller
       processMerge(fileName, is);
     }
     else if (pass == PASS_COMPILE) {
-      processCompile(fileName, is);
+      processCompile(addin, fileName, is);
     }
   }
 
@@ -162,22 +162,15 @@ public class AddinInstaller
       MacGraphicFormat.encodeImage(destFile, image);
     }
     else {
-
       File destFile = WorldOfGoo.getTheInstance().getCustomGameFile(fileName);
-
       Utilities.mkdirsOrException(destFile.getParentFile());
 
+      OutputStream os = new FileOutputStream(destFile);
       try {
-        OutputStream os = new FileOutputStream(destFile);
-        try {
-          Utilities.copyStreams(is, os);
-        }
-        finally {
-          os.close();
-        }
+        Utilities.copyStreams(is, os);
       }
       finally {
-        is.close();
+        os.close();
       }
 
       if (fileName.endsWith(".png")) {
@@ -207,30 +200,31 @@ public class AddinInstaller
     catch (TransformerException e) {
       throw new AddinFormatException("Error transforming " + fileName + ":\n" + e.getMessage(), e);
     }
-    finally {
-      is.close();
-    }
   }
 
-  private static void processCompile(String fileName, InputStream is) throws IOException, AddinFormatException
+  private static void processCompile(Addin addin, String fileName, InputStream is) throws IOException, AddinFormatException
   {
     log.log(Level.FINER, "Compile " + fileName);
     checkDirOk(fileName);
 
-    if (!fileName.endsWith(".xml")) throw new AddinFormatException("Addin has a non-XML file in the compile directory " + fileName);
-
-    File destFile = WorldOfGoo.getTheInstance().getCustomGameFile(fileName.substring(0, fileName.length() - 4) + ".bin");
-
-    Utilities.mkdirsOrException(destFile.getParentFile());
-
-    String xml;
-    try {
-      xml = Utilities.readStreamIntoString(is);
+    if (addin.getManifestVersion().compareTo(AddinFactory.SPEC_VERSION_1_1) >= 0
+            && fileName.endsWith(".anim.xml")) {
+      throw new RuntimeException("compiling animations not yet done"); // TODO
     }
-    finally {
-      is.close();
+    else if (addin.getManifestVersion().compareTo(AddinFactory.SPEC_VERSION_1_1) >= 0
+            && fileName.endsWith(".movie.xml")) {
+      throw new RuntimeException("compiling movies not yet done"); // TODO
     }
-    GameFormat.encodeBinFile(destFile, xml.getBytes(GameFormat.DEFAULT_CHARSET));
+    else if (fileName.endsWith(".xml")) {
+      File destFile = WorldOfGoo.getTheInstance().getCustomGameFile(fileName.substring(0, fileName.length() - 4) + ".bin");
+      Utilities.mkdirsOrException(destFile.getParentFile());
+
+      String xml = Utilities.readStreamIntoString(is);
+      GameFormat.encodeBinFile(destFile, xml.getBytes(GameFormat.DEFAULT_CHARSET));
+    }
+    else {
+      throw new AddinFormatException("Addin has an uncompilable file in the compile directory: " + fileName);
+    }
   }
 
   private static void installLevel(Addin addin) throws IOException, AddinFormatException

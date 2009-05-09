@@ -13,9 +13,12 @@ import com.goofans.gootool.util.Utilities;
 import com.goofans.gootool.io.AESBinFormat;
 import com.goofans.gootool.io.MacBinFormat;
 import com.goofans.gootool.io.MacGraphicFormat;
+import com.goofans.gootool.movie.BinImageAnimation;
+import com.goofans.gootool.movie.BinMovie;
 
 /**
  * TODO put this in a background thread
+ * TODO errors in this must be given back to the user
  * 
  * @author David Croft (davidc@goofans.com)
  * @version $Id$
@@ -29,7 +32,11 @@ public class GameFileCodecTool
     XOR_DECODE(false),
     XOR_ENCODE(true),
     PNGBINLTL_DECODE(false),
-    PNGBINLTL_ENCODE(true);
+    PNGBINLTL_ENCODE(true),
+    ANIM_DECODE(false),
+//   ANIM_ENCODE(true),
+    MOVIE_DECODE(false);
+    //MOVIE_ENCODE(true);
 
     private boolean encode;
 
@@ -206,6 +213,14 @@ public class GameFileCodecTool
         BufferedImage encImage = ImageIO.read(inputFile);
         MacGraphicFormat.encodeImage(outputFile, encImage);
         break;
+      case ANIM_DECODE:
+        BinImageAnimation anim = new BinImageAnimation(inputFile);
+        Utilities.writeFile(outputFile, anim.toXMLDocument().getBytes());
+        break;
+      case MOVIE_DECODE:
+        BinMovie movie = new BinMovie(inputFile);
+          Utilities.writeFile(outputFile, movie.toXMLDocument().getBytes());
+          break;
     }
   }
 

@@ -49,6 +49,7 @@ public class AddinFactory
   private static final String ADDIN_DEPENDS_MAX_VERSION = "max-version";
 
   private static final VersionSpec SPEC_VERSION_1_0 = new VersionSpec("1.0");
+  public static final VersionSpec SPEC_VERSION_1_1 = new VersionSpec("1.1");
 
   private static final String GOOMOD_MANIFEST = "addin.xml";
 
@@ -132,16 +133,19 @@ public class AddinFactory
     try {
       String specVersionStr = getString(document, XPATH_ADDIN_SPECVERSION);
       if (specVersionStr.length() == 0) throw new AddinFormatException("No spec-version found");
-      VersionSpec specVersion = new VersionSpec(specVersionStr);
+      VersionSpec manifestVersion = new VersionSpec(specVersionStr);
 
-      if (specVersion.equals(SPEC_VERSION_1_0)) {
-        return readManifestVersion1_0(document, addinDiskFile);
+      if (manifestVersion.compareTo(SPEC_VERSION_1_0) < 0) {
+        throw new AddinFormatException("This addin uses outdated spec-version " + manifestVersion + ". Please upgrade this addin.");
       }
-      else if (specVersion.compareTo(SPEC_VERSION_1_0) < 0) {
-        throw new AddinFormatException("This addin uses outdated spec-version " + specVersion + ". Please upgrade this addin.");
+      else if (manifestVersion.equals(SPEC_VERSION_1_0)) {
+        return readManifestVersion1_0(document, manifestVersion, addinDiskFile);
+      }
+      else if (manifestVersion.equals(SPEC_VERSION_1_1)) {
+        return readManifestVersion1_1(document, manifestVersion, addinDiskFile);
       }
       else {
-        throw new AddinFormatException("This addin uses unsupported spec-version " + specVersion + ". Please upgrade GooTool.");
+        throw new AddinFormatException("This addin uses unsupported spec-version " + manifestVersion + ". Please upgrade GooTool.");
       }
     }
     catch (XPathExpressionException e) {
@@ -149,8 +153,7 @@ public class AddinFactory
     }
   }
 
-
-  private static Addin readManifestVersion1_0(Document document, File addinDiskFile) throws XPathExpressionException, AddinFormatException
+  private static Addin readManifestVersion1_0(Document document, VersionSpec manifestVersion, File addinDiskFile) throws XPathExpressionException, AddinFormatException
   {
     String id = getStringRequiredValidated(document, XPATH_ADDIN_ID, PATTERN_ID, "id");
     String name = getStringRequiredValidated(document, XPATH_ADDIN_NAME, PATTERN_NAME, "name");
@@ -224,7 +227,22 @@ public class AddinFactory
       if (levelSubtitles.get("text") == null) throw new AddinFormatException("No text attribute on level subtitle");
     }
 
-    return new Addin(addinDiskFile, id, name, type, version, description, author, dependencies, levelDir, levelNames, levelSubtitles, levelOcd);
+    return new Addin(addinDiskFile, id, name, type, manifestVersion, version, description, author, dependencies, levelDir, levelNames, levelSubtitles, levelOcd);
+  }
+
+  /*
+   * Version 1.1 is the same as 1.0, with the following additions:
+   * - .movie.xml and .anim.xml files from compile\ are compiled (by AddinInstaller)
+   * - TODO maybe choose the chapter?
+   * - TODO maybe influence the position?
+   * - TODO maybe required previous levels?
+   * - TODO triggers on level end for movies
+   * - TODO text.xml automation
+   */
+  private static Addin readManifestVersion1_1(Document document, VersionSpec manifestVersion, File addinDiskFile) throws XPathExpressionException, AddinFormatException
+  {
+    Addin addin = readManifestVersion1_0(document, manifestVersion, addinDiskFile);
+    return addin;
   }
 
   private static VersionSpec decodeVersion(String minVersionStr, String errField) throws AddinFormatException
