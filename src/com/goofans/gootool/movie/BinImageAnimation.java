@@ -7,6 +7,8 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.*;
 
+import com.goofans.gootool.util.Utilities;
+
 /**
  * TODO Do some basic validation on the file before trying to load it.
  * 
@@ -659,9 +661,8 @@ public class BinImageAnimation
       System.out.println("\n\n>>>>>>>> " + file.getName());
       BinImageAnimation anim = new BinImageAnimation(file);
 //      anim.validateContiguousFrames();
-      System.out.println("anim.toXML() = " + anim.toXMLDocument());
-      // TODO need a more complex toXML for anims, e.g. ball_counter_ocd
-//      Utilities.writeFile(new File("anim", file.getName().replace(".binltl", ".xml")), anim.toXMLDocument().getBytes());
+//      System.out.println("anim.toXML() = " + anim.toXMLDocument());
+      Utilities.writeFile(new File("anim", file.getName().replace(".binltl", ".xml")), anim.toXMLDocument().getBytes());
     }
   }
 }
