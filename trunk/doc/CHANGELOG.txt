@@ -1,3 +1,10 @@
+0.10.4, unreleased
+
+TODO must complete spec-version 1.1 or remove it before release
+
+- Movie and animation decoding added, also available from the advanced menu
+- Possible fix for "See Controls" link not working for some
+
 0.10.3, 18-Apr-2009
 
 - Windows users can now enable Maks Verver's volume control via a checkbox

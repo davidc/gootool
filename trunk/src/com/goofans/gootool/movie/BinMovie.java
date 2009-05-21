@@ -148,8 +148,8 @@ public class BinMovie
         Document doc = GameFormat.decodeXmlBinFile(wog.getGameFile("res\\movie\\" + movie + "\\" + movie + ".resrc.bin"));
 //        Resources r = new Resources(doc);
         BinMovie m = new BinMovie(wog.getGameFile("res\\movie\\" + movie + "\\" + movie + ".movie.binltl"));//, r);
-        System.out.println(m.toXMLDocument());
-//        Utilities.writeFile(new File("movie", movie + ".movie.xml"), m.toXMLDocument().getBytes());
+//        System.out.println(m.toXMLDocument());
+        Utilities.writeFile(new File("movie", movie + ".movie.xml"), m.toXMLDocument().getBytes());
 
       }
     }
