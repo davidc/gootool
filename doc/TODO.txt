@@ -20,6 +20,10 @@ MILESTONE 0.10.x (Final beta series)
 
 - preferences in a file
 
+- test addin dependencies on: install from double click goomod, check/uncheck addins list
+
+- unsatisfied dependencies should show red?
+
 MILESTONE 1.0.0 (First public release)
 
 - All bugs from 0.10 series fixed, no new features

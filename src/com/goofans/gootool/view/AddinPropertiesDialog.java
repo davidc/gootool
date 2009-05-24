@@ -49,8 +49,8 @@ public class AddinPropertiesDialog extends JDialog
       description.setText(a.getDescription());
     }
     else {
-      // add <html> to make sure it wraps, replace newlines with <br/>, remove any HTML that may be in there already.
-      description.setText("<html>" + a.getDescription().replaceAll("<", "&lt;").replaceAll("\n", "<br/>") + "</html>");
+      // add <html> to make sure it wraps, replace newlines with <br>, remove any HTML that may be in there already.
+      description.setText("<html>" + a.getDescription().replaceAll("<", "&lt;").replaceAll("\n", "<br>") + "</html>");
     }
 
     if (a.getDependencies().size() == 0) {
