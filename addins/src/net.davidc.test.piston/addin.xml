@@ -1,0 +1,17 @@
+<addin spec-version="1.0">
+  <id>net.davidc.test.piston</id>
+  <name>Piston</name>
+  <type>level</type>
+  <version>1.0</version>
+  <description>Demonstration of how to make a sinusoidal linear motion using a piston.
+    Refer to http://goofans.com/download/sample/piston for a description of how it works.
+  </description>
+  <author>davidc</author>
+
+  <level>
+    <dir>Piston</dir>
+    <name text="Piston"/>
+    <subtitle text="a mad scientist test"/>
+    <ocd>balls,11</ocd>
+  </level>
+</addin>
