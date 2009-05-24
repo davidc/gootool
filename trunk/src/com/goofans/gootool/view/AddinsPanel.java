@@ -127,8 +127,8 @@ public class AddinsPanel implements ViewComponent
         description.setText(addin.getDescription());
       }
       else {
-        // add <html> to make sure it wraps, replace newlines with <br/>, remove any HTML that may be in there already.
-        description.setText("<html>" + addin.getDescription().replaceAll("<", "&lt;").replaceAll("\n", "<br/>") + "</html>");
+        // add <html> to make sure it wraps, replace newlines with <br>, remove any HTML that may be in there already.
+        description.setText("<html>" + addin.getDescription().replaceAll("<", "&lt;").replaceAll("\n", "<br>") + "</html>");
       }
       propertiesButton.setEnabled(true);
       enableButton.setEnabled(!isEnabled);
