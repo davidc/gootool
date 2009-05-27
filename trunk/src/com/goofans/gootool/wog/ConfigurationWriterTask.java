@@ -11,6 +11,7 @@ import javax.xml.transform.TransformerException;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.prefs.Preferences;
@@ -26,6 +27,8 @@ public class ConfigurationWriterTask extends ProgressIndicatingTask
   private static final Logger log = Logger.getLogger(ConfigurationWriterTask.class.getName());
 
   private static final String[] resourceDirs = new String[]{"properties", "res", "libs"};
+
+  private static final List<String> skippedFiles = Arrays.asList("Thumbs.db");
 
   private final Configuration configuration;
 
@@ -76,7 +79,7 @@ public class ConfigurationWriterTask extends ProgressIndicatingTask
 
       /* Add all files (but not directories) in the root directory */
       for (File file : wogDir.listFiles()) {
-        if (file.isFile()) {
+        if (file.isFile() && !skippedFiles.contains(file.getName())) {
           filesToCopy.add(file.getName());
         }
       }
@@ -163,7 +166,7 @@ public class ConfigurationWriterTask extends ProgressIndicatingTask
       if (f.isDirectory()) {
         getFilesInFolder(f, filesToCopy, dirStem + "/" + f.getName());
       }
-      else if (f.isFile()) {
+      else if (f.isFile() && !skippedFiles.contains(f.getName())) {
         filesToCopy.add(dirStem + "/" + f.getName());
       }
     }
