@@ -18,7 +18,7 @@ import com.goofans.gootool.util.DebugUtil;
  * The file defaults to [user.home]/.fileprefs, but may be overridden with the system property
  * <tt>net.infotrek.util.prefs.FilePreferencesFactory.file</tt>
  *
- * @author David Croft (<a href="http://www.davidc.net" title="www.davidc.net">www.davidc.net</a>)
+ * @author David Croft (<a href="http://www.davidc.net">www.davidc.net</a>)
  * @version $Id$
  */
 public class FilePreferencesFactory implements PreferencesFactory
@@ -50,11 +50,9 @@ public class FilePreferencesFactory implements PreferencesFactory
     if (preferencesFile == null) {
       String prefsFile = System.getProperty(SYSTEM_PROPERTY_FILE);
       if (prefsFile == null || prefsFile.length() == 0) {
-        preferencesFile = new File(System.getProperty("user.home") + File.separator + ".fileprefs").getAbsoluteFile();
+        prefsFile = System.getProperty("user.home") + File.separator + ".fileprefs";
       }
-      else {
-        preferencesFile = new File(prefsFile).getAbsoluteFile();
-      }
+      preferencesFile = new File(prefsFile).getAbsoluteFile();
       log.finer("Preferences file is " + preferencesFile);
     }
     return preferencesFile;

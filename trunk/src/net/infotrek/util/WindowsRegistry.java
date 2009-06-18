@@ -1,4 +1,4 @@
-package com.goofans.gootool.util;
+package net.infotrek.util;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -9,7 +9,7 @@ import java.util.prefs.Preferences;
  * Very evil class to read from the Windows registry by breaking into the WindowsPreference
  * class methods and forcing them to be accessible.
  * <p/>
- * N.B. All access to WindowsPreference (rather than just Preference) must be through introspection,
+ * N.B. All access to WindowsPreferences (rather than just Preferences) must be through introspection,
  * as this class only exists on Windows platforms.
  *
  * @author David Croft (<a href="http://www.davidc.net">www.davidc.net</a>)
@@ -33,25 +33,29 @@ public class WindowsRegistry
   private static final int ERROR_SUCCESS = 0;
   private static final int ERROR_FILE_NOT_FOUND = 2;
 
-  public static String getKeySz(int hive, String keyName, String valueName) throws BackingStoreException
+  public static String getKeySz(int hive, String keyName, String valueName)
+          throws BackingStoreException
   {
     if (hive != HKEY_CURRENT_USER && hive != HKEY_LOCAL_MACHINE) {
       throw new IllegalArgumentException("Invalid hive " + hive);
     }
 
-    final Class clz = Preferences.userRoot().getClass();
+    final Class clazz = Preferences.userRoot().getClass();
 
     try {
-      final Method mWinRegOpenKey = clz.getDeclaredMethod("WindowsRegOpenKey", int.class, byte[].class, int.class);
-      mWinRegOpenKey.setAccessible(true);
+      final Method openKeyMethod = clazz.getDeclaredMethod("WindowsRegOpenKey",
+              int.class, byte[].class, int.class);
+      openKeyMethod.setAccessible(true);
 
-      final Method mWinRegCloseKey = clz.getDeclaredMethod("WindowsRegCloseKey", int.class);
-      mWinRegCloseKey.setAccessible(true);
+      final Method closeKeyMethod = clazz.getDeclaredMethod("WindowsRegCloseKey",
+              int.class);
+      closeKeyMethod.setAccessible(true);
 
-      final Method mWinRegQueryValue = clz.getDeclaredMethod("WindowsRegQueryValueEx", int.class, byte[].class);
-      mWinRegQueryValue.setAccessible(true);
+      final Method queryValueMethod = clazz.getDeclaredMethod("WindowsRegQueryValueEx",
+              int.class, byte[].class);
+      queryValueMethod.setAccessible(true);
 
-      int[] result = (int[]) mWinRegOpenKey.invoke(null, hive, stringToByteArray(keyName), KEY_READ);
+      int[] result = (int[]) openKeyMethod.invoke(null, hive, stringToByteArray(keyName), KEY_READ);
       if (result[ERROR_CODE] != ERROR_SUCCESS) {
         if (result[ERROR_CODE] == ERROR_FILE_NOT_FOUND) {
           throw new BackingStoreException("Not Found error opening key " + keyName);
@@ -63,8 +67,8 @@ public class WindowsRegistry
 
       int hKey = result[NATIVE_HANDLE];
 
-      byte[] b = (byte[]) mWinRegQueryValue.invoke(null, hKey, stringToByteArray(valueName));
-      mWinRegCloseKey.invoke(null, hKey);
+      byte[] b = (byte[]) queryValueMethod.invoke(null, hKey, stringToByteArray(valueName));
+      closeKeyMethod.invoke(null, hKey);
 
       if (b == null)
         return null;
@@ -135,10 +139,8 @@ public class WindowsRegistry
   @SuppressWarnings({"HardcodedFileSeparator", "DuplicateStringLiteralInspection"})
   public static void main(String args[])
   {
-//    testKey(HKEY_CURRENT_USER, "Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings", "User Agent");
     testKey(HKEY_LOCAL_MACHINE, "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\Steam App 22000", "InstallLocation");
     testKey(HKEY_LOCAL_MACHINE, "SOFTWARE\\Wow6432Node\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\Steam App 22000", "InstallLocation");
-
     testKey(HKEY_LOCAL_MACHINE, "SOFTWARE\\Valve\\Steam", "InstallPath");
     testKey(HKEY_LOCAL_MACHINE, "SOFTWARE\\Valve\\Steam\\Apps\\15660", "");
     testKey(HKEY_LOCAL_MACHINE, "SOFTWARE\\Valve\\Steam\\Apps\\22000", "");
