@@ -11,7 +11,7 @@
   <level>
     <dir>Piston</dir>
     <name text="Piston"/>
-    <subtitle text="a mad scientist test"/>
+    <subtitle text="a mad scientist experiment"/>
     <ocd>balls,11</ocd>
   </level>
 </addin>

@@ -11,7 +11,7 @@
   <level>
     <dir>RotatingPlanet</dir>
     <name text="Rotating Planet"/>
-    <subtitle text="a mad scientist test"/>
+    <subtitle text="a mad scientist experiment"/>
     <ocd>time,20</ocd>
   </level>
 </addin>
