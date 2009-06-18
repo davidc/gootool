@@ -1,5 +1,7 @@
 package com.goofans.gootool.platform;
 
+import java.util.List;
+
 import com.goofans.gootool.Controller;
 
 /**
@@ -23,7 +25,7 @@ public class LinuxSupport extends PlatformSupport
   {
   }
 
-  protected boolean doPreStartup(String[] args)
+  protected boolean doPreStartup(List<String> args)
   {
     return singleInstance.singleInstance(args);
   }

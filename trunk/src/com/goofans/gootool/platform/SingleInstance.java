@@ -5,6 +5,7 @@ import java.net.*;
 import java.nio.channels.*;
 import java.util.Random;
 import java.util.Set;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -32,7 +33,7 @@ public class SingleInstance
     lockFile = getTempFile(LOCK_FILE);
   }
 
-  public boolean singleInstance(String[] args)
+  public boolean singleInstance(List<String> args)
   {
     // First do a quick test to make sure we can write anything to the tmpdir
     testTempDir();
@@ -96,7 +97,7 @@ public class SingleInstance
     return lock;
   }
 
-  private void primaryInstance(final FileLock lock, String[] args)
+  private void primaryInstance(final FileLock lock, List<String> args)
   {
     log.finer("We're the primary instance");
     try {
@@ -126,7 +127,7 @@ public class SingleInstance
     handleCommandLineArgs(args);
   }
 
-  private void secondaryInstance(String[] args)
+  private void secondaryInstance(List<String> args)
   {
     // Sleep just a moment in case the primary is still starting up
     try {
@@ -182,21 +183,22 @@ public class SingleInstance
    *
    * @param args the command-line arguments.
    */
-  private void handleCommandLineArgs(String[] args)
+  private void handleCommandLineArgs(final List<String> args)
   {
     log.finer("Processing arguments:");
-    for (int i = 0; i < args.length; i++) {
-      log.finer("args[" + i + "] = " + args[i]);
+    for (int i = 0; i < args.size(); i++) {
+      log.finer("args[" + i + "] = " + args.get(i));
     }
 
-    if (args.length > 0) {
-      final File addinFile = new File(args[0]);
+    if (args.size() > 0) {
       GooTool.queueTask(new Runnable()
       {
         public void run()
         {
           GooTool.getController().bringToForeground();
-          GooTool.getController().installAddin(addinFile);
+          for (String arg : args) {
+            GooTool.getController().installAddin(new File(arg));
+          }
         }
       });
     }
@@ -287,7 +289,7 @@ public class SingleInstance
               log.finer("Accepting connection from " + clientChannel.socket().getRemoteSocketAddress());
               clientChannel.configureBlocking(true);
               ObjectInputStream ois = new ObjectInputStream(clientChannel.socket().getInputStream());
-              String[] args = (String[]) ois.readObject();
+              List<String> args = (List<String>) ois.readObject();
               ois.close();
               clientChannel.close();
               log.finest("Got args from client");
