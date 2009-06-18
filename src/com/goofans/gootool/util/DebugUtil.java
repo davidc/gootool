@@ -19,6 +19,7 @@ public class DebugUtil
   {
 //    Logger.getLogger("").setLevel(Level.ALL);
     Logger.getLogger("com.goofans").setLevel(Level.ALL);
+    Logger.getLogger("net.infotrek").setLevel(Level.ALL);
     Logger.getLogger("").getHandlers()[0].setLevel(Level.ALL);
   }
 

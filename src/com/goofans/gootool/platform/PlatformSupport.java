@@ -1,10 +1,18 @@
 package com.goofans.gootool.platform;
 
+import net.infotrek.util.prefs.FilePreferencesFactory;
+
 import com.goofans.gootool.Controller;
 
 import java.util.logging.Logger;
+import java.util.prefs.PreferencesFactory;
+import java.util.prefs.Preferences;
 
 /**
+ * Platform support abstraction class. Automatically detects the current platform unless overridden with -Dgootool.platform.
+ * <p/>
+ * Also handles setting up an alternative preferences store if -Dgootool.prefs is set.
+ *
  * @author David Croft (davidc@goofans.com)
  * @version $Id$
  */
@@ -21,6 +29,8 @@ public abstract class PlatformSupport
   private static PlatformSupport support;
 
   static {
+    /* Platform forcing via -Dgootool.platform */
+
     String forcePlatform = System.getProperty("gootool.platform");
 
     if (forcePlatform != null) {
@@ -70,6 +80,19 @@ public abstract class PlatformSupport
     }
 
     log.fine("Platform detected: " + platform);
+
+
+    /* File preferences via -Dgootool.prefs */
+
+    String prefsFile = System.getProperty("gootool.prefs");
+    if (prefsFile != null) {
+      System.setProperty("java.util.prefs.PreferencesFactory", FilePreferencesFactory.class.getName());
+      System.setProperty(FilePreferencesFactory.SYSTEM_PROPERTY_FILE, prefsFile);
+      log.info("Preferences will be stored in " + FilePreferencesFactory.getPreferencesFile());
+    }
+    else {
+      log.finest("Preferences will be stored using system defaults (" + Preferences.systemRoot().getClass() + ")");
+    }
   }
 
   protected PlatformSupport()

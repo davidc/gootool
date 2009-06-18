@@ -8,17 +8,11 @@ MILESTONE 0.10.x (Final beta series)
 - IMPROVEMENT: Move up/down buttons to reorder addins, to replace lost drag-and-drop functionality
 - BUG FIX: Dragging addins below last enabled addin should move it to bottom
 
-- NEW FEATURE: Upload profile/tower to goofans.com
-- NEW FEATURE: preference: upload tower on goo exit, or upload tower continuously during play (need to detect when process exits - java.lang.Process?)
-- NEW FEATURE: mark user as cheat - requires X votes or something
-
 - xanax: don't jump mods around when en/disabling
 
 - use swingworker for background stuff
 
 - rate this addin from gootool
-
-- preferences in a file
 
 - test addin dependencies on: install from double click goomod, check/uncheck addins list
 
