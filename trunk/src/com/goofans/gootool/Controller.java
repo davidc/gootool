@@ -1,5 +1,8 @@
 package com.goofans.gootool;
 
+import net.infotrek.util.DesktopUtil;
+import net.infotrek.util.TextUtil;
+
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -154,6 +157,9 @@ public class Controller implements ActionListener
     }
     else if (cmd.equals(CMD_GOOFANS_RESTORE)) {
       gooFansRestore();
+    }
+    else if (cmd.equals(CMD_GOOFANS_PUBLISH)) {
+      gooFansPublish();
     }
     else if (cmd.equals(CMD_TRANSLATOR_MODE)) {
       boolean enabled = mainFrame.mainMenu.translatorModeMenuItem.isSelected();
@@ -517,7 +523,6 @@ public class Controller implements ActionListener
         return;
       }
 
-
       Object[] values = backups.toArray();
 
       Object selected = JOptionPane.showInputDialog(mainFrame, "Select backup to restore", "Select backup", JOptionPane.QUESTION_MESSAGE, null, values, backups.get(backups.size() - 1));
@@ -539,6 +544,31 @@ public class Controller implements ActionListener
     catch (APIException e) {
       log.log(Level.WARNING, "Restore failed", e);
       showErrorDialog("Restore failed", e.getLocalizedMessage());
+    }
+  }
+
+  // TODO background task this
+  private void gooFansPublish()
+  {
+    try {
+      ProfilePublishRequest request = new ProfilePublishRequest();
+      final String profileUrl = request.publishProfile(mainFrame.profilePanel.getSelectedProfile());
+      StringBuilder sb = new StringBuilder();
+      for (String msg : request.getMessages()) {
+        sb.append(TextUtil.stripHtmlTags(msg)).append('\n');
+      }
+
+      sb.append("\nWould you like to view your published profile now?");
+
+      final int answer = showYesNoDialog("Profile published", sb.toString());
+
+      if (answer == JOptionPane.YES_OPTION) {
+        DesktopUtil.browseAndWarn(profileUrl, mainFrame);
+      }
+    }
+    catch (APIException e) {
+      log.log(Level.WARNING, "Backup failed", e);
+      showErrorDialog("Backup failed", e.getLocalizedMessage());
     }
   }
 

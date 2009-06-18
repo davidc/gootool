@@ -252,6 +252,11 @@ public class TextUtil
     return nf.format(num);
   }
 
+  public static String stripHtmlTags(String s)
+  {
+    return s.replaceAll("\\<.*?\\>", "");
+  }
+
 
   @SuppressWarnings({"UseOfSystemOutOrSystemErr"})
   public static void main(String[] args) throws IOException
