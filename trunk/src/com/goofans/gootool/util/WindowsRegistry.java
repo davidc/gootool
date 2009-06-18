@@ -6,11 +6,13 @@ import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
 
 /**
- * Very evil class to read from the Windows registry by breaking into the WindowsPreference class methods and forcing them to be accessible.
+ * Very evil class to read from the Windows registry by breaking into the WindowsPreference
+ * class methods and forcing them to be accessible.
  * <p/>
- * N.B. All access to WindowsPreference (rather than just Preference) must be through introspection, as this class only exists on Windows platforms.
+ * N.B. All access to WindowsPreference (rather than just Preference) must be through introspection,
+ * as this class only exists on Windows platforms.
  *
- * @author David Croft (davidc@goofans.com)
+ * @author David Croft (<a href="http://www.davidc.net">www.davidc.net</a>)
  * @version $Id$
  */
 @SuppressWarnings({"HardCodedStringLiteral", "StringConcatenation"})
@@ -27,7 +29,7 @@ public class WindowsRegistry
   private static final int NATIVE_HANDLE = 0;
   private static final int ERROR_CODE = 1;
 
-  /*  Windows error codes. */
+  /* Windows error codes. */
   private static final int ERROR_SUCCESS = 0;
   private static final int ERROR_FILE_NOT_FOUND = 2;
 
