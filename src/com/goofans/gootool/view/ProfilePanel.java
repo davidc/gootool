@@ -4,6 +4,8 @@ import net.infotrek.util.TextUtil;
 
 import com.goofans.gootool.ToolPreferences;
 import com.goofans.gootool.Controller;
+import com.goofans.gootool.GooTool;
+import com.goofans.gootool.TextProvider;
 import com.goofans.gootool.model.Configuration;
 import com.goofans.gootool.util.FileNameExtensionFilter;
 import com.goofans.gootool.profile.*;
@@ -64,6 +66,8 @@ public class ProfilePanel implements ActionListener, ViewComponent
   private TowerRenderer tr;
   private JPopupMenu saveTowerMenu;
 
+  private final TextProvider textProvider;
+
   static {
     // TODO load from resources
     COLUMN_NAMES = new String[]{"Level", "Most Balls", "Least Moves", "Least Time"};
@@ -113,6 +117,7 @@ public class ProfilePanel implements ActionListener, ViewComponent
     if (ProfileFactory.isProfileFound()) {
       loadProfiles();
     }
+    textProvider = GooTool.getTextProvider();
   }
 
   public void actionPerformed(ActionEvent event)
@@ -130,7 +135,7 @@ public class ProfilePanel implements ActionListener, ViewComponent
       loadProfiles();
     }
     else if (cmd.equals(CMD_PROFILE_CHANGED) && profilesCombo.getSelectedItem() != currentProfile) {
-      currentProfile = (Profile) profilesCombo.getSelectedItem();
+      currentProfile = getSelectedProfile();
       log.fine("currentProfile = " + currentProfile);
 
       if (currentProfile != null) {
@@ -228,6 +233,11 @@ public class ProfilePanel implements ActionListener, ViewComponent
     else if (cmd.equals(CMD_SAVE_TOWER_TRANS) && tr != null) {
       saveTower(tr.getFullSize());
     }
+  }
+
+  public Profile getSelectedProfile()
+  {
+    return (Profile) profilesCombo.getSelectedItem();
   }
 
   private void saveTower(BufferedImage image)
@@ -345,7 +355,20 @@ public class ProfilePanel implements ActionListener, ViewComponent
 
     profileBackupButton.setEnabled(enabled);
     profileRestoreButton.setEnabled(enabled);
-    profilePublishButton.setEnabled(false); //TODO
+    profilePublishButton.setEnabled(enabled);
+
+    if (enabled) {
+      profileBackupButton.setToolTipText(textProvider.getText("profile.goofans.backup.tooltip"));
+      profileRestoreButton.setToolTipText(textProvider.getText("profile.goofans.restore.tooltip"));
+      profilePublishButton.setToolTipText(textProvider.getText("profile.goofans.publish.tooltip"));
+    }
+    else {
+      String tooltip = textProvider.getText("profile.goofans.disabled.tooltip");
+      profileBackupButton.setToolTipText(tooltip);
+      profileRestoreButton.setToolTipText(tooltip);
+      profilePublishButton.setToolTipText(tooltip);
+    }
+
   }
 
   public void updateModelFromView(Configuration c)
