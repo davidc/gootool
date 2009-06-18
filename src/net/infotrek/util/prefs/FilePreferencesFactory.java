@@ -11,7 +11,14 @@ import com.goofans.gootool.wog.WorldOfGoo;
 import com.goofans.gootool.util.DebugUtil;
 
 /**
- * @author David Croft (davidc@goofans.com)
+ * PreferencesFactory implementation that stores the preferences in a user-defined file. To use it,
+ * set the system property <tt>java.util.prefs.PreferencesFactory</tt> to
+ * <tt>net.infotrek.util.prefs.FilePreferencesFactory</tt>
+ * <p/>
+ * The file defaults to [user.home]/.fileprefs, but may be overridden with the system property
+ * <tt>net.infotrek.util.prefs.FilePreferencesFactory.file</tt>
+ *
+ * @author David Croft (<a href="http://www.davidc.net" title="www.davidc.net">www.davidc.net</a>)
  * @version $Id$
  */
 public class FilePreferencesFactory implements PreferencesFactory
