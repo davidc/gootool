@@ -100,6 +100,8 @@ public class BinMovie
     StringBuffer sb = new StringBuffer();
     // TODO xml prolog
     XMLStringBuffer xml = new XMLStringBuffer(sb, "");
+    xml.addComment("This XML format is subject to change. Do not program against this format yet!");
+    xml.addComment("See: http://goofans.com/forum/world-of-goo/modding/407");
     toXML(xml);
     return xml.toXML();
   }

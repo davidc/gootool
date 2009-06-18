@@ -5,7 +5,7 @@ import java.util.*;
 /**
  * This class allows you to generate an XML text document by pushing and popping tags from a stack maintained
  * internally.
- *
+ * <p/>
  * NB Currently more recent than ec svn.
  */
 public class XMLStringBuffer
@@ -228,6 +228,18 @@ public class XMLStringBuffer
   public void addCDATA(String content)
   {
     buffer.append(currentIndent).append("<![CDATA[").append(content).append("]]>\n");
+  }
+
+  /**
+   * Add a comment.
+   *
+   * @param comment the comment to add
+   */
+  public void addComment(String comment)
+  {
+    buffer.append(currentIndent).append("<!-- ");
+    buffer.append(comment.replaceAll("--", "- -"));
+    buffer.append(" -->\n");
   }
 
   /**
