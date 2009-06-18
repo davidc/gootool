@@ -20,6 +20,7 @@ import java.text.SimpleDateFormat;
 import com.goofans.gootool.ToolPreferences;
 import com.goofans.gootool.util.Version;
 import com.goofans.gootool.util.XMLUtil;
+import com.goofans.gootool.util.Utilities;
 import org.w3c.dom.Document;
 
 /**
@@ -37,17 +38,19 @@ public class APIRequest
   protected static final URL API_PROFILE_BACKUP;
   protected static final URL API_PROFILE_RESTORE;
   protected static final URL API_PROFILE_LIST;
+  protected static final URL API_PROFILE_PUBLISH;
 
   static {
     API_DATEFORMAT.setTimeZone(TimeZone.getTimeZone("UTC"));
 
     try {
-      String apiBase = "http://api.goofans.com/";
+      String apiBase = "http://api.dev.goofans.com/";
       API_CHECKVERSION = new URL(apiBase + "gootool-version-check");
       API_LOGIN_TEST = new URL(apiBase + "login-test");
       API_PROFILE_BACKUP = new URL(apiBase + "profile-backup");
       API_PROFILE_RESTORE = new URL(apiBase + "profile-restore");
       API_PROFILE_LIST = new URL(apiBase + "profile-list");
+      API_PROFILE_PUBLISH = new URL(apiBase + "profile-publish");
     }
     catch (MalformedURLException e) {
       throw new ExceptionInInitializerError(e);
