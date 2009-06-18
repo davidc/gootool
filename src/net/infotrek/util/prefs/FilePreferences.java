@@ -115,9 +115,7 @@ public class FilePreferences extends AbstractPreferences
           String propKey = (String) pnen.nextElement();
           if (propKey.startsWith(path)) {
             String subKey = propKey.substring(path.length());
-            System.out.println("subKey = " + subKey);
             if (subKey.indexOf('.') == -1) {
-              System.out.println("loading " + subKey);
               root.put(subKey, p.getProperty(propKey));
             }
           }
@@ -160,7 +158,6 @@ public class FilePreferences extends AbstractPreferences
             String propKey = (String) pnen.nextElement();
             if (propKey.startsWith(path)) {
               String subKey = propKey.substring(path.length());
-              System.out.println("subKey = " + subKey);
               if (subKey.indexOf('.') == -1) {
                 toRemove.add(propKey);
               }
