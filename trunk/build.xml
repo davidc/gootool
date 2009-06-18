@@ -166,7 +166,7 @@
 
   <target name="jar" depends="compile">
     <jar jarfile="${output.jar}">
-      <fileset dir="${output.dir}" excludes="com/goofans/gootool/leveledit/**,com/goofans/gootool/movie/**"/>
+      <fileset dir="${output.dir}" excludes="com/goofans/gootool/leveledit/**,com/goofans/gootool/balledit/**"/>
     </jar>
   </target>
 
@@ -188,6 +188,7 @@
         <!--public static void main(java.lang.String[]);-->
       </keep>
       <keep name="net.infotrek.util.logging.jdk14.TerseFormatter"/>
+      <keep name="net.infotrek.util.prefs.FilePreferencesFactory"/>
     </proguard>
   </target>
 

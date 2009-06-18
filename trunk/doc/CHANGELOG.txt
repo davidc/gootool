@@ -2,9 +2,11 @@
 
 TODO must complete spec-version 1.1 or remove it before release
 
+- "Publish profile" button added, publishes your tower to GooFans.com
 - Movie and animation decoding added, also available from the advanced menu
 - Possible fix for "See Controls" link not working for some
 - Don't copy Thumbs.db files, fixes Access Denied exceptions for some Windows users
+- GooTool will now store your preferences in a file if you specify -Dgootool.prefs=[filename]
 
 0.10.3, 18-Apr-2009
 
