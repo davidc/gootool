@@ -4,6 +4,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.List;
 import java.util.LinkedList;
+import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -40,7 +42,7 @@ public class GooTool
     try {
       initQueuedTasks();
 
-      if (!PlatformSupport.preStartup(args)) {
+      if (!PlatformSupport.preStartup(new ArrayList<String>(Arrays.asList(args)))) {
         return;
       }
 
@@ -59,7 +61,7 @@ public class GooTool
     }
     catch (Throwable t) {
       log.log(Level.SEVERE, "Uncaught exception", t);
-      JOptionPane.showMessageDialog(null, "Uncaught exception (" + t.getClass().getName() + ") " + t.getLocalizedMessage(), "GooTool Exception", JOptionPane.ERROR_MESSAGE);
+      JOptionPane.showMessageDialog(null, "Uncaught exception (" + t.getClass().getName() + "):\n" + t.getLocalizedMessage(), "GooTool Exception", JOptionPane.ERROR_MESSAGE);
       System.exit(1);
     }
   }

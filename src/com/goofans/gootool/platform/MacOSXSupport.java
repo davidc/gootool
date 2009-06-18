@@ -1,7 +1,5 @@
 package com.goofans.gootool.platform;
 
-import javax.swing.*;
-
 import com.apple.eawt.Application;
 import com.apple.eawt.ApplicationEvent;
 import com.apple.eawt.ApplicationListener;
@@ -10,6 +8,7 @@ import com.goofans.gootool.GooTool;
 
 import java.io.File;
 import java.util.logging.Logger;
+import java.util.List;
 
 /**
  * See http://developer.apple.com/documentation/Java/Reference/1.5.0/appledoc/api/index.html
@@ -32,7 +31,7 @@ public class MacOSXSupport extends PlatformSupport implements ApplicationListene
   {
   }
 
-  protected boolean doPreStartup(String[] args)
+  protected boolean doPreStartup(List<String> args)
   {
     // Mac OS X handles single instance, and our ApplicationListener handles file opening,
     // so we always permit startup.

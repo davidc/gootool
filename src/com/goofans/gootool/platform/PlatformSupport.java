@@ -5,13 +5,13 @@ import net.infotrek.util.prefs.FilePreferencesFactory;
 import com.goofans.gootool.Controller;
 
 import java.util.logging.Logger;
-import java.util.prefs.PreferencesFactory;
 import java.util.prefs.Preferences;
+import java.util.List;
 
 /**
  * Platform support abstraction class. Automatically detects the current platform unless overridden with -Dgootool.platform.
  * <p/>
- * Also handles setting up an alternative preferences store if -Dgootool.prefs is set.
+ * Also handles setting up an alternative preferences store if -preferences &lt;file&gt; is set on command line.
  *
  * @author David Croft (davidc@goofans.com)
  * @version $Id$
@@ -80,19 +80,6 @@ public abstract class PlatformSupport
     }
 
     log.fine("Platform detected: " + platform);
-
-
-    /* File preferences via -Dgootool.prefs */
-
-    String prefsFile = System.getProperty("gootool.prefs");
-    if (prefsFile != null) {
-      System.setProperty("java.util.prefs.PreferencesFactory", FilePreferencesFactory.class.getName());
-      System.setProperty(FilePreferencesFactory.SYSTEM_PROPERTY_FILE, prefsFile);
-      log.info("Preferences will be stored in " + FilePreferencesFactory.getPreferencesFile());
-    }
-    else {
-      log.finest("Preferences will be stored using system defaults (" + Preferences.systemRoot().getClass() + ")");
-    }
   }
 
   protected PlatformSupport()
@@ -106,12 +93,38 @@ public abstract class PlatformSupport
   }
 
 
-  public static boolean preStartup(String[] args)
+  public static boolean preStartup(List<String> args)
   {
+    String prefsFile = null;
+
+    for (int i = 0; i < args.size(); i++) {
+      String arg = args.get(i);
+
+      /* File preferences via -preferences */
+      if (arg.equals("-preferences")) {
+        if (i + 1 >= args.size()) {
+          throw new RuntimeException("Must specify a filename when using -preferences");
+        }
+        args.remove(i);
+        prefsFile = args.get(i);
+        args.remove(i);
+        i--;
+      }
+    }
+
+    if (prefsFile != null) {
+      System.setProperty("java.util.prefs.PreferencesFactory", FilePreferencesFactory.class.getName());
+      System.setProperty(FilePreferencesFactory.SYSTEM_PROPERTY_FILE, prefsFile);
+      log.info("Preferences will be stored in " + FilePreferencesFactory.getPreferencesFile());
+    }
+    else {
+      log.finest("Preferences will be stored using system defaults (" + Preferences.systemRoot().getClass() + ")");
+    }
+
     return support.doPreStartup(args);
   }
 
-  protected abstract boolean doPreStartup(String[] args);
+  protected abstract boolean doPreStartup(List<String> args);
 
   public static void startup(Controller controller)
   {
