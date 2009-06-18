@@ -22,7 +22,7 @@ public class FilePreferences extends AbstractPreferences
 
   private Map<String, String> root;
   private Map<String, FilePreferences> children;
-    private boolean isRemoved = false;
+  private boolean isRemoved = false;
 
   public FilePreferences(AbstractPreferences parent, String name)
   {
@@ -70,7 +70,7 @@ public class FilePreferences extends AbstractPreferences
 
   protected void removeNodeSpi() throws BackingStoreException
   {
-   isRemoved=true;
+    isRemoved = true;
     flush();
   }
 
