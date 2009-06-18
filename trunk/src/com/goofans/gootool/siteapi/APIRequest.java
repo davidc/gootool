@@ -44,7 +44,7 @@ public class APIRequest
     API_DATEFORMAT.setTimeZone(TimeZone.getTimeZone("UTC"));
 
     try {
-      String apiBase = "http://api.dev.goofans.com/";
+      String apiBase = "http://api.goofans.com/";
       API_CHECKVERSION = new URL(apiBase + "gootool-version-check");
       API_LOGIN_TEST = new URL(apiBase + "login-test");
       API_PROFILE_BACKUP = new URL(apiBase + "profile-backup");
