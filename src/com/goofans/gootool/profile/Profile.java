@@ -32,13 +32,15 @@ public class Profile
 
   private Tower tower;
   private int newBalls;
+  private String data;
 
   public Profile(String profileData) throws IOException
   {
     log.finest("Constructing Profile from data: " + profileData);
 
+    data = profileData;
+
     StringTokenizer tok = new StringTokenizer(profileData, ",");
-//    String[] bits = profileData.split(",");
 
     name = tok.nextToken();
     flags = Integer.parseInt(tok.nextToken());
@@ -121,6 +123,11 @@ public class Profile
   public boolean hasFlag(int flag)
   {
     return (flags & flag) != 0;
+  }
+
+  public String getData()
+  {
+    return data;
   }
 
   public String toString()

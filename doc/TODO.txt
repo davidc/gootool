@@ -51,33 +51,16 @@ NO MILESTONE SET
 
 - NEW FEATURE: automatically self-update
 
-
-todo
-
-web report on what balls are used, by what levels, etc.
-- where is this image used?
-
-
 can't access our formatter currently inside the jar/exe
-
-
-- Modify EOL scene automatically depending on resolution?
-
 
 use JFormattedTextField for input field validation
 
-
-
+TODO - World of Goo
 
 - Better level load crash debugging
 
 
-
-
-
-
-
-website how to:
+TODO - GooFans
 
 - last two balls hanging ivy
 
