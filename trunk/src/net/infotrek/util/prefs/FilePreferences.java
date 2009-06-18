@@ -11,7 +11,9 @@ import java.io.IOException;
 import java.io.FileOutputStream;
 
 /**
- * @author David Croft (davidc@goofans.com)
+ * Preferences implementation that stores to a user-defined file. See FilePreferencesFactory.
+ *
+ * @author David Croft (<a href="http://www.davidc.net" title="www.davidc.net">www.davidc.net</a>)
  * @version $Id$
  */
 public class FilePreferences extends AbstractPreferences
@@ -115,6 +117,7 @@ public class FilePreferences extends AbstractPreferences
           String propKey = (String) pnen.nextElement();
           if (propKey.startsWith(path)) {
             String subKey = propKey.substring(path.length());
+            // Only load immediate descendants
             if (subKey.indexOf('.') == -1) {
               root.put(subKey, p.getProperty(propKey));
             }
@@ -153,22 +156,26 @@ public class FilePreferences extends AbstractPreferences
 
           List<String> toRemove = new ArrayList<String>();
 
+          // Make a list of all direct children of this node to be removed
           final Enumeration<?> pnen = p.propertyNames();
           while (pnen.hasMoreElements()) {
             String propKey = (String) pnen.nextElement();
             if (propKey.startsWith(path)) {
               String subKey = propKey.substring(path.length());
+              // Only do immediate descendants
               if (subKey.indexOf('.') == -1) {
                 toRemove.add(propKey);
               }
             }
           }
 
+          // Remove them now that the enumeration is done with
           for (String propKey : toRemove) {
             p.remove(propKey);
           }
         }
 
+        // If this node hasn't been removed, add back in any values
         if (!isRemoved) {
           for (String s : root.keySet()) {
             p.setProperty(path + s, root.get(s));
