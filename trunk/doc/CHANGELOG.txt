@@ -1,11 +1,11 @@
 0.10.4, 22-June-2009
 
 - "Publish profile" button added, publishes your tower to GooFans.com
+- Auto download updates to the billboard contest mod (unless you opt out)
 - Movie and animation decoding/encoding added, also available from the advanced menu (format not finalised)
 - Possible fix for "See Controls" link not working for some
 - Don't copy Thumbs.db files, fixes Access Denied exceptions for some Windows users
 - GooTool will now store your preferences in a file if you specify -preferences <filename> on the commamnd line
-- Auto download updates to the billboard contest mod (unless you opt out)
 
 0.10.3, 18-Apr-2009
 
