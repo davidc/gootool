@@ -207,7 +207,7 @@ public class AddinInstaller
     log.log(Level.FINER, "Compile " + fileName);
     checkDirOk(fileName);
 
-    if (addin.getManifestVersion().compareTo(AddinFactory.SPEC_VERSION_1_1) >= 0
+/*    if (addin.getManifestVersion().compareTo(AddinFactory.SPEC_VERSION_1_1) >= 0
             && fileName.endsWith(".anim.xml")) {
       throw new RuntimeException("compiling animations not yet done"); // TODO
     }
@@ -215,7 +215,7 @@ public class AddinInstaller
             && fileName.endsWith(".movie.xml")) {
       throw new RuntimeException("compiling movies not yet done"); // TODO
     }
-    else if (fileName.endsWith(".xml")) {
+    else */if (fileName.endsWith(".xml")) {
       File destFile = WorldOfGoo.getTheInstance().getCustomGameFile(fileName.substring(0, fileName.length() - 4) + ".bin");
       Utilities.mkdirsOrException(destFile.getParentFile());
 
