@@ -20,7 +20,7 @@ import java.net.MalformedURLException;
  */
 public class StartupTask extends ProgressIndicatingTask
 {
-  private static final Logger log = Logger.getLogger(Controller.class.getName());
+  private static final Logger log = Logger.getLogger(StartupTask.class.getName());
   private Controller controller;
   private TextProvider textProvider;
 
@@ -51,6 +51,9 @@ public class StartupTask extends ProgressIndicatingTask
     catch (MalformedURLException e) {
       log.log(Level.WARNING, "Unable to check version on startup", e);
     }
+
+    // Maybe launch a new thread to download billboards
+    BillboardUpdater.maybeUpdateBillboards();
 
     GooTool.startupIsComplete();
   }
