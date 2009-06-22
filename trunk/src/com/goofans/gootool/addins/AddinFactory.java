@@ -49,7 +49,7 @@ public class AddinFactory
   private static final String ADDIN_DEPENDS_MAX_VERSION = "max-version";
 
   private static final VersionSpec SPEC_VERSION_1_0 = new VersionSpec("1.0");
-  public static final VersionSpec SPEC_VERSION_1_1 = new VersionSpec("1.1");
+//  private static final VersionSpec SPEC_VERSION_1_1 = new VersionSpec("1.1");
 
   private static final String GOOMOD_MANIFEST = "addin.xml";
 
@@ -141,9 +141,9 @@ public class AddinFactory
       else if (manifestVersion.equals(SPEC_VERSION_1_0)) {
         return readManifestVersion1_0(document, manifestVersion, addinDiskFile);
       }
-      else if (manifestVersion.equals(SPEC_VERSION_1_1)) {
-        return readManifestVersion1_1(document, manifestVersion, addinDiskFile);
-      }
+//      else if (manifestVersion.equals(SPEC_VERSION_1_1)) {
+//        return readManifestVersion1_1(document, manifestVersion, addinDiskFile);
+//      }
       else {
         throw new AddinFormatException("This addin uses unsupported spec-version " + manifestVersion + ". Please upgrade GooTool.");
       }
