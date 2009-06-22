@@ -1,0 +1,13 @@
+/* Note: assumes little-endian byte order, 16-bit short, 32-bit int. */
+
+    unsigned short width, height;
+    unsigned int size, fullsize;
+
+followed by <size> bytes of zlib compressed image data (which expands to <fullsize>)
+
+the image data is a power of 2 square
+2x2 4x4 8x8 etc
+
+the largest size that encloses the actual image size
+
+RGBA?

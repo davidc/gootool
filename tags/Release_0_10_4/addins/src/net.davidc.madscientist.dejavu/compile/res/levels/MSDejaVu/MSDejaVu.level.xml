@@ -1,0 +1,85 @@
+<level ballsrequired="18" letterboxed="false" visualdebug="false" autobounds="false" textcolor="255,255,255" texteffects="true" timebugprobability="0" strandgeom="true" allowskip="true" >
+
+	<!-- Camera -->
+	<camera aspect="normal" endpos="3.34,428.79" endzoom="0.705">
+		<poi pos="255.5,437.54" traveltime="0" pause="0.7" zoom="1.185" />
+		<poi pos="-7.08,376.91" traveltime="2" pause="0" zoom="0.812" />
+		<poi pos="-193,363" traveltime="2" pause="0" zoom="1" />
+	</camera>
+	<camera aspect="widescreen" endpos="-1.41,431.46" endzoom="0.926">
+		<poi pos="292.94,325.67" traveltime="0" pause="0.7" zoom="1.783" />
+		<poi pos="10.99,420.78" traveltime="2" pause="0" zoom="0.934" />
+		<poi pos="-129.43,375.15" traveltime="2" pause="0" zoom="1.163" />
+	</camera>
+
+	<!-- Music -->
+	<music id="SOUND_LEVEL_MSDEJAVU_TEMP_DWTD2" />
+
+	<!-- Fire -->
+
+	<signpost name="signpost_brown" depth="-63.2" x="462.81" y="917.91" scalex="0.748" scaley="0.748" rotation="50.94" alpha="1" colorize="255,255,255" image="IMAGE_SCENE_MSDEJAVU_SIGNPOST_BROWN" text="SIGNPOST_MSDEJAVU_2"   />
+	<signpost name="signpost_brown" depth="-63.2" x="-395.3" y="534.44" scalex="0.89" scaley="0.987" rotation="-58.57" alpha="1" colorize="255,255,255" image="IMAGE_SCENE_MSDEJAVU_SIGNPOST_BROWN" text="SIGNPOST_MSDEJAVU_1"   />
+
+	<!-- Pipes -->
+	<pipe id="0" depth="0" >
+		<Vertex x="376" y="652" />
+		<Vertex x="376" y="760" />
+		<Vertex x="502" y="760" />
+		<Vertex x="502" y="692" />
+		<Vertex x="607" y="692" />
+	</pipe>
+
+	<!-- Sleeping Balls -->
+	<BallInstance type="Ivy" x="322.26" y="320.84" id="0" discovered="false" angle="0" />
+	<BallInstance type="Ivy" x="279.26" y="320.84" id="1" discovered="false" angle="0" />
+	<BallInstance type="Ivy" x="366.26" y="316.84" id="2" discovered="false" angle="0" />
+ <!-- Initial structure -->
+    <BallInstance type="common" x="-232.63" y="284.03" id="3" angle="0" />
+	<BallInstance type="common" x="-341.64" y="279.34" id="4" angle="0" />
+	<BallInstance type="common" x="-354.38" y="372.38" id="5" angle="0" />
+	<BallInstance type="common" x="-217.39" y="368.99" id="6" angle="0" />
+	<BallInstance type="common" x="-459.69" y="262.68" id="7" angle="0" />
+
+ <!-- Free balls -->
+    <BallInstance type="Ivy" x="-507" y="286" id="8" angle="0" />
+	<BallInstance type="Ivy" x="-571" y="314" id="9" angle="0" />
+	<BallInstance type="Ivy" x="-512" y="330" id="10" angle="0" />
+	<BallInstance type="Ivy" x="-501" y="456" id="11" angle="0" />
+	<BallInstance type="common" x="-566" y="267" id="12" angle="0" />
+	<BallInstance type="common" x="-540" y="434" id="13" angle="0" />
+	<BallInstance type="common" x="-385.65" y="304.33" id="14" angle="0" />
+	<BallInstance type="common" x="-479.73" y="339.28" id="15" angle="0" />
+	<BallInstance type="common" x="-417.3" y="400.56" id="16" angle="0" />
+	<BallInstance type="common" x="-438.74" y="636.84" id="17" angle="0" />
+	<BallInstance type="common" x="-489.74" y="605.84" id="18" angle="0" />
+	<BallInstance type="common" x="-530.74" y="535.84" id="19" angle="0" />
+	<BallInstance type="common" x="-329.74" y="411.84" id="20" angle="0" />
+	<BallInstance type="common" x="-545" y="337" id="21" angle="0" />
+	<!--<BallInstance type="common" x="-444" y="447" id="22" angle="0" />-->
+	<!--<BallInstance type="common" x="-413.88" y="361.78" id="23" angle="0" />-->
+	<!--<BallInstance type="common" x="-459" y="394.01" id="24" angle="0" />-->
+	<!--<BallInstance type="common" x="-511.5" y="392.51" id="25" angle="0" />-->
+	<!--<BallInstance type="common" x="-376.94" y="421.05" id="26" angle="0" />-->
+	<!--<BallInstance type="common" x="-276.45" y="346.16" id="27" angle="0" />-->
+	<!--<BallInstance type="common" x="-568" y="375" id="28" angle="0" />-->
+
+  <BallInstance type="common" x="280" y="320" id="22" discovered="false" angle="0" />
+  <BallInstance type="common" x="340" y="320.78" id="23" discovered="false" angle="0" />
+  <BallInstance type="common" x="360" y="320.01" id="24" discovered="false" angle="0" />
+
+    <!-- Arms -->
+	<Strand gb1="5" gb2="3" />
+	<Strand gb1="5" gb2="6" />
+	<Strand gb1="6" gb2="3" />
+	<Strand gb1="5" gb2="4" />
+	<Strand gb1="5" gb2="7" />
+	<Strand gb1="7" gb2="4" />
+	<Strand gb1="4" gb2="3" />
+
+	<!-- Level Exit -->
+ <!--<levelexit id="theExit" pos="375.98828125,502.00048828125" radius="75" filter="" >-->
+ <!--</levelexit>-->
+ <levelexit id="theExit" pos="375.98828125,652.00048828125" radius="75" filter="" >
+ </levelexit>
+
+</level>

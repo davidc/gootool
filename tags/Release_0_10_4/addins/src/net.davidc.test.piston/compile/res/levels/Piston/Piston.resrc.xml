@@ -1,0 +1,15 @@
+<ResourceManifest>
+  <Resources id="scene_Piston">
+    <SetDefaults idprefix="" path="./"/>
+    <Image id="IMAGE_SCENE_PISTON_BUSH_FG1A" path="res/images/levelimages/bush_fg1a"/>
+    <Image id="IMAGE_SCENE_PISTON_BUSH_LEAFY_1" path="res/images/levelimages/bush_leafy_1"/>
+    <Image id="IMAGE_SCENE_PISTON_HILL_FG1A" path="res/images/levelimages/hill_fg1a"/>
+    <Image id="IMAGE_SCENE_PISTON_TREE_STRIPE1" path="res/images/levelimages/tree_stripe1"/>
+    <Image id="IMAGE_SCENE_PISTON_BUSH_LEAFY_1B" path="res/images/levelimages/bush_leafy_1b"/>
+    <Image id="IMAGE_SCENE_PISTON_SKY_BLUE2A" path="res/images/levelimages/sky_blue2a"/>
+    <Image id="IMAGE_SCENE_PISTON_TOWERLEFT" path="res/levels/IvyTower/TowerLeft"/>
+    <Image id="IMAGE_SCENE_PISTON_TOWERRIGHT" path="res/levels/IvyTower/TowerRight"/>
+    <SetDefaults idprefix="" path="./"/>
+    <Sound id="SOUND_LEVEL_PISTON_TEMP_CARNIVALLOOP" path="res/music/temp_CarnivalLoop"/>
+  </Resources>
+</ResourceManifest>
