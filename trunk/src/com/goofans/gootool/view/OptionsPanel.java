@@ -50,6 +50,7 @@ public class OptionsPanel implements ViewComponent
   private JCheckBox windowsVolumeControlCheckBox;
   private JPanel soundPanel;
   private HyperlinkLabel windowsVolumeControlHyperlink;
+  private JCheckBox disableBillboardsCheckBox;
 
   public OptionsPanel(Controller controller)
   {
@@ -159,6 +160,8 @@ public class OptionsPanel implements ViewComponent
     goofansPassword.setText(ToolPreferences.getGooFansPassword());
 
     windowsVolumeControlCheckBox.setSelected(c.isWindowsVolumeControl());
+
+    disableBillboardsCheckBox.setSelected(ToolPreferences.isBillboardDisable());
   }
 
   public void updateModelFromView(Configuration c)
@@ -179,6 +182,8 @@ public class OptionsPanel implements ViewComponent
     ToolPreferences.setGooFansPassword(new String(goofansPassword.getPassword()));
 
     c.setWindowsVolumeControl(windowsVolumeControlCheckBox.isSelected());
+
+    ToolPreferences.setBillboardDisable(disableBillboardsCheckBox.isSelected());
   }
 
   private void createUIComponents()

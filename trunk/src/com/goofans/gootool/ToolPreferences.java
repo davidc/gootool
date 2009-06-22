@@ -36,6 +36,9 @@ public class ToolPreferences
   private static final String PREF_GOOFANS_PASSWORD = "goofans_password";
   private static final String PREF_GOOFANS_LOGINOK = "goofans_loginok";
 
+  private static final String PREF_BILLBOARDS_DISABLE = "billboard_disable";
+  private static final String PREF_BILLBOARDS_LASTCHECK = "billboard_lastcheck";
+
   private ToolPreferences()
   {
   }
@@ -176,9 +179,23 @@ public class ToolPreferences
     PREFS.putBoolean(PREF_GOOFANS_LOGINOK, ok);
   }
 
-  @SuppressWarnings({"UseOfSystemOutOrSystemErr"})
-  public static void main(String[] args)
+  public static boolean isBillboardDisable()
   {
-    System.out.println("getGooToolId() = " + getGooToolId());
+    return PREFS.getBoolean(PREF_BILLBOARDS_DISABLE, false);
+  }
+
+  public static void setBillboardDisable(boolean disable)
+  {
+    PREFS.putBoolean(PREF_BILLBOARDS_DISABLE, disable);
+  }
+
+  public static long getBillboardLastCheck()
+  {
+    return PREFS.getLong(PREF_BILLBOARDS_LASTCHECK, 0);
+  }
+
+  public static void setBillboardLastCheck(long lastCheck)
+  {
+    PREFS.putLong(PREF_BILLBOARDS_LASTCHECK, lastCheck);
   }
 }

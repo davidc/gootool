@@ -17,7 +17,7 @@
       <maximumHeapSize value="128" />
       <maximumStackSize value="32" />
       <properties />
-      <executeOn event="beforeRun" target="compile" runConfigurationType="Application" runConfigurationName="GooTool" />
+      <executeOn event="beforeRun" target="compile" />
     </buildFile>
   </component>
   <component name="BuildJarProjectSettings">
@@ -348,6 +348,9 @@
       </item>
       <item class="com.goofans.gootool.ui.HyperlinkLabel" icon="/com/intellij/uiDesigner/icons/label.png" removable="true" auto-create-binding="true" can-attach-label="false">
         <default-constraints vsize-policy="0" hsize-policy="0" anchor="0" fill="0" />
+      </item>
+      <item class="com.goofans.gootool.ui.StarBar" icon="/star-on.png" removable="true" auto-create-binding="false" can-attach-label="false">
+        <default-constraints vsize-policy="0" hsize-policy="2" anchor="0" fill="0" />
       </item>
     </group>
   </component>

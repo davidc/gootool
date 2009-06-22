@@ -1,6 +1,8 @@
 package com.goofans.gootool.wog;
 
 import com.goofans.gootool.GooTool;
+import com.goofans.gootool.ToolPreferences;
+import com.goofans.gootool.BillboardUpdater;
 import com.goofans.gootool.addins.*;
 import com.goofans.gootool.model.Configuration;
 import com.goofans.gootool.model.Resolution;
@@ -94,7 +96,6 @@ public class ConfigurationWriterTask extends ProgressIndicatingTask
       String s = filesToCopy.get(i);
       if ((configuration.isSkipOpeningMovie() && s.startsWith("res/movie/2dboyLogo")) // If we're skipping the opening movie
               ) {
-        System.out.println("Skipping " + s);
         filesToCopy.remove(i);
         i--;
       }
@@ -265,7 +266,7 @@ public class ConfigurationWriterTask extends ProgressIndicatingTask
       String id = addins.get(i);
       beginStep("Merging addin " + id, false);
 
-      List<Addin> availableAddins = WorldOfGoo.getTheInstance().getAvailableAddins();
+      List<Addin> availableAddins = WorldOfGoo.getAvailableAddins();
       boolean addinFound = false;
       for (Addin addin : availableAddins) {
         if (addin.getId().equals(id)) {
@@ -284,6 +285,18 @@ public class ConfigurationWriterTask extends ProgressIndicatingTask
       }
       if (!addinFound) {
         throw new AddinFormatException("Couldn't locate addin " + id + " to install");
+      }
+    }
+
+    if (!ToolPreferences.isBillboardDisable()) {
+      log.info("Installing billboards goomod");
+      try {
+        File addinFile = WorldOfGoo.getTheInstance().getCustomGameFile(BillboardUpdater.BILLBOARDS_GOOMOD_FILENAME);
+        Addin addin = AddinFactory.loadAddin(addinFile);
+        AddinInstaller.installAddin(addin);
+      }
+      catch (IOException e) {
+        throw new AddinFormatException("Couldn't install billboard addin", e);
       }
     }
   }
