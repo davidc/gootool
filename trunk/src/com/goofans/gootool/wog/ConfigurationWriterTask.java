@@ -292,8 +292,10 @@ public class ConfigurationWriterTask extends ProgressIndicatingTask
       log.info("Installing billboards goomod");
       try {
         File addinFile = WorldOfGoo.getTheInstance().getCustomGameFile(BillboardUpdater.BILLBOARDS_GOOMOD_FILENAME);
-        Addin addin = AddinFactory.loadAddin(addinFile);
-        AddinInstaller.installAddin(addin);
+        if (addinFile.exists()) {
+          Addin addin = AddinFactory.loadAddin(addinFile);
+          AddinInstaller.installAddin(addin);
+        }
       }
       catch (IOException e) {
         throw new AddinFormatException("Couldn't install billboard addin", e);

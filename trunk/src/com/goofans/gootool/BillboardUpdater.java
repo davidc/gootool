@@ -99,7 +99,7 @@ public class BillboardUpdater implements Runnable
         log.log(Level.SEVERE, "Unable to download billboard goomod", e);
       }
 
-      log.log(Level.INFO, "Billboards version " + update.version + " downloaded");
+      log.log(Level.INFO, "Billboards version " + update.version + " downloaded to " + billboardModFile);
     }
   }
 
@@ -108,21 +108,30 @@ public class BillboardUpdater implements Runnable
     if (ToolPreferences.isBillboardDisable())
       return;
 
-    long nextCheck = ToolPreferences.getBillboardLastCheck() + UPDATE_INTERVAL;
-    long now = System.currentTimeMillis();
-
-    log.finer("maybe update billboards. nextCheck = " + nextCheck + ", current time = " + now);
-
-    if (now < nextCheck)
-      return;
-
-    log.log(Level.INFO, "Billboard update check is due");
-
     final WorldOfGoo wog = WorldOfGoo.getTheInstance();
     if (!wog.isCustomDirSet()) {
       log.log(Level.WARNING, "Aborting update check as no custom dir set yet");
       return;
     }
+
+    long nextCheck = ToolPreferences.getBillboardLastCheck() + UPDATE_INTERVAL;
+    long now = System.currentTimeMillis();
+
+    log.finer("maybe update billboards. nextCheck = " + nextCheck + ", current time = " + now);
+
+    File billboardModFile;
+    try {
+      billboardModFile = WorldOfGoo.getTheInstance().getCustomGameFile(BILLBOARDS_GOOMOD_FILENAME);
+    }
+    catch (IOException e) {
+      // won't happen due to isCustomDirSet check above
+      return;
+    }
+
+    if (now < nextCheck && billboardModFile.exists())
+      return;
+
+    log.log(Level.INFO, "Billboard update check is due");
 
     new Thread(new BillboardUpdater()).start();
   }
