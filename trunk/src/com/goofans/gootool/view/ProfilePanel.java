@@ -23,6 +23,7 @@ import java.io.File;
 import java.text.NumberFormat;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.lang.reflect.Method;
 
 /**
  * @author David Croft (davidc@goofans.com)
@@ -109,7 +110,17 @@ public class ProfilePanel implements ActionListener, ViewComponent
     columnModel.getColumn(3).setPreferredWidth(50);
 
     levelsTable.getTableHeader().setReorderingAllowed(false);
-    levelsTable.setAutoCreateRowSorter(true);
+
+    /* 1.6 only:
+      levelsTable.setAutoCreateRowSorter(true);
+      */
+    try {
+      Method setAutoCreateRowSorterMethod = levelsTable.getClass().getMethod("setAutoCreateRowSorter", boolean.class);
+      setAutoCreateRowSorterMethod.invoke(levelsTable, true);
+    }
+    catch (Exception e) {
+      log.log(Level.FINE, "No setAutoCreateRowSorter method found or can't execute", e);
+    }
 
     createSaveTowerMenu();
 
