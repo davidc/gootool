@@ -1,3 +1,10 @@
+0.10.5, 28-June-2009
+
+- Fix for bug #0000164 introduced in 0.10.4 - on first save, billboards.goomod doesn't exist
+- Ensure billboards.goomod exists before trying to install it
+- Launch a billboard update when custom dir is selected
+- Override update check interval to check early if billboards.goomod doesn't exist.
+
 0.10.4, 22-June-2009
 
 - "Publish profile" button added, publishes your tower to GooFans.com

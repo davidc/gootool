@@ -452,6 +452,8 @@ public class Controller implements ActionListener
       showErrorDialog("Can't set custom directory", "Can't use that directory: " + e.getLocalizedMessage());
     }
 
+    BillboardUpdater.maybeUpdateBillboards();
+    
     refreshView();
   }
 
