@@ -109,8 +109,7 @@ public class ProfilePanel implements ActionListener, ViewComponent
     columnModel.getColumn(3).setPreferredWidth(50);
 
     levelsTable.getTableHeader().setReorderingAllowed(false);
-//    levelsTable.so
-// TODO sorting
+    levelsTable.setAutoCreateRowSorter(true);
 
     createSaveTowerMenu();
 
