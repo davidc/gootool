@@ -363,7 +363,14 @@ public class ProfilePanel implements ActionListener, ViewComponent
       profilePublishButton.setToolTipText(textProvider.getText("profile.goofans.publish.tooltip"));
     }
     else {
-      String tooltip = textProvider.getText("profile.goofans.disabled.tooltip");
+      String tooltip;
+      if (!ProfileFactory.isProfileFound()) {
+        tooltip = textProvider.getText("profile.goofans.disabled.profile.tooltip");
+      }
+      else {
+        tooltip = textProvider.getText("profile.goofans.disabled.tooltip");
+
+      }
       profileBackupButton.setToolTipText(tooltip);
       profileRestoreButton.setToolTipText(tooltip);
       profilePublishButton.setToolTipText(tooltip);
