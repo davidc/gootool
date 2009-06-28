@@ -1,0 +1,6 @@
+<ResourceManifest>
+  <Resources id="scene_RotatingPlanet">
+    <SetDefaults idprefix="" path="./"/>
+    <Image id="IMG_PLANET" path="res/levels/RotatingPlanet/planet"/>
+  </Resources>
+</ResourceManifest>

@@ -1,0 +1,12 @@
+<addin spec-version="1.0">
+  <id>com.goofans.billboards</id>
+  <name>World of Goo Corporation Billboards</name>
+  <type>mod</type>
+  <version>0.2009.06.20</version>
+   <description><![CDATA[
+  <html>
+  <p>This addin updates your World of Goo Corporation billboards to the latest from the <a href="http://goofans.com/content/billboard-contest">billboard contest</a>.</p>
+  </html>
+  ]]></description>
+  <author>GooFans.com</author>
+</addin>

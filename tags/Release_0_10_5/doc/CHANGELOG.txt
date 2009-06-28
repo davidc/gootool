@@ -1,0 +1,156 @@
+0.10.5, 28-June-2009
+
+- Fix for bug #0000164 introduced in 0.10.4 - on first save, billboards.goomod doesn't exist
+- Ensure billboards.goomod exists before trying to install it
+- Launch a billboard update when custom dir is selected
+- Override update check interval to check early if billboards.goomod doesn't exist.
+- Allow sorting by column in profile panel (#0000165) 
+
+0.10.4, 22-June-2009
+
+- "Publish profile" button added, publishes your tower to GooFans.com
+- Auto download updates to the billboard contest mod (unless you opt out)
+- Movie and animation decoding/encoding added, also available from the advanced menu (format not finalised)
+- Possible fix for "See Controls" link not working for some
+- Don't copy Thumbs.db files, fixes Access Denied exceptions for some Windows users
+- GooTool will now store your preferences in a file if you specify -preferences <filename> on the commamnd line
+
+0.10.3, 18-Apr-2009
+
+- Windows users can now enable Maks Verver's volume control via a checkbox
+- Added "find more addins" link to the addins tab
+- Added a Debian .deb build, added X Windows menu entry
+- Added all the missing screen resolutions to options tab (mostly widescreen)
+- Warn on startup if using demo version of World of Goo
+- Friendlier version numbers in some places
+- Use 127.0.0.1 instead of resolving "localhost": prevents it resolving to "::1" on IPv4-only systems giving "Address family not supported by protocol family: bind"
+- Mime type is now application/x-world-of-goo-addin
+- Removed the initial "WARNING" tab as it seems stable enough now :-)
+
+0.10.2, 09-Feb-2009
+
+- Added GooFans.com login, added profile backup/restore
+- Auto-detect the Linux installation location through ~/.WorldOfGoo/LastRun.txt
+- Adjust layout of Chapter 1 and automatically resize screen to fit installed levels.
+- Send OS and CPU type in CheckVersion API call
+- Fix reading of Unicode characters in profiles under World of Goo 1.40+
+- The checkboxes in addin list can now be clicked to enable/disable the addin
+- Linux startup script now uses /bin/bash due to some strange sh-alikes out there. 
+
+0.10.1, 15-Jan-2009
+
+- Fixed a huge WTF on image encoding on non-Mac platforms.
+
+0.10.0, 15-Jan-2009
+
+- Added Mac support!
+- Added file association and document icon for goomods on Mac
+- Created a Windows installer, added goomod file association and icon
+- rewrote code to support java 1.5 (you can no longer drag addins to reorder them though)
+- fixed size of about dialog
+- added file handling for Windows/refocussing if GooTool clicked on again
+- skip over Unicode byte-order-marks, fixes UTF-8 files saved from Notepad etc
+- Added options to the Advanced menu to encode/decode the various game file formats. You can select whole directories or multiple files.
+- Preliminary support for the World of Goo Linux beta added. If you want to force GooTool to use your WINE World of Goo, run "GOOTOOL_PLATFORM=windows bin/gootool"
+- Moved Addin description to the main Addins tab.
+
+0.9.7, 19-Dec-2008
+
+- fixed addin transform files to be UTF-8, fixes translated texts with non-ASCII characters
+- Added OCD flags for custom levels
+
+0.9.6, 19-Dec-2008
+
+- You can now save the image of your tower (transparent, full-size, or thumbnail)
+- addin.xml assumed to be in UTF-8, fixes non-latin characters in addins
+- Allow user to install an addin that already exists, prompting to downgrade/replace/upgrade it
+- When installing a level addin, notify them again that the level appears on chapter 1.
+- Memory usage in About dialog is now updated each time you open the window
+- Some dialog memory leaks plugged
+- More descriptive errors when saving with an invalid addin enabled
+- Remember the most recently used addin installation folder
+- Automatically enable an addin after installing it
+- Renamed all remaining uses of "wog" abbreviation
+- Layout improvements in profile and addins panels
+
+0.9.5, 21-Nov-2008
+
+- added Linux build, also look in .wine and .PlayOnLinux for exe/profile
+- allow selection of multiple addins to install
+- better error description when l10n source image can't be loaded
+- added new version notification on startup and via help menu
+- added new version ignore option
+- added menu items for various help webpages
+- some initial internationalisation of GooTool itself
+- fixed NPE on save when no resolution selected, various fixes to make sure 800x600 always appears as default 
+- added java JRE/JVM information to About dialog
+- clarify that GooTool doesn't modify existing WoG installation
+
+0.9.4, 17-Nov-2008
+
+- make sure 800x600 resolution is always available
+- fixed charset on wiki downloads (e.g. Cyrillic)
+- added layers and gaussian blur effects to image localisation tool
+- added arched text to l10n tool
+- added fit-to-box (bounding box) positioning to l10n tool
+- added justification to l10n tool
+- added debug boundary drawing to imagegenerator and checkbox to GUI
+- added alpha channel to color spec in l10n tool
+- major refactor of XML format in l10n tool 
+- GUI l10n usage shows a progress dialog
+- building images to output directory added
+
+0.9.3, 15-Nov-2008
+
+- added image localisation tool for translators
+- Addin level OCD requirement is now optional
+- possible fix for pyris NPE (unselected resolution)
+
+0.9.2, 13-Nov-2008
+
+- Fixed bug saving when unrecognised language is selected
+- Added the missing languages to the options pane
+
+0.9.1, 13-Nov-2008
+
+- Profile parsing fixed for certain test cases
+- Added more debugging for NPE on "save" bug
+- Improved logging, removed redundant logging
+- Don't try to build addins that have "vanished" (deleted from addins dir)
+- ESC works to close dialogs
+- Try and create the custom directory if the user hasn't already created it
+- Less cramped GUI
+- Display available tower balls on profile
+
+0.9.0, 10-Nov-2008
+
+- Enabling addins. You can now enable addins and build your World of Goo!
+- You can now install level-type addins. They are now fully merged and appear as new levels at the top left of Chapter 1.
+- Better file/directory support. GooTool will now remember where it last found WorldOfGoo.exe, and it lets you manually locate your profile if it can't find it.
+- You can now choose the custom directory where GooTool will build your World. This enables Vista users with UAC restrictions to still build.
+- Progress bar added for long operations such as initial load and file merging.
+- Skip Opening Movie now works
+- Loading screen watermark now works.
+- Addins can be reordered properly.
+- Taller towers are no longer cropped in the profile pane.
+
+0.8.0, 05-Nov-2008
+
+- Initial release
+- Loading current preferences (language, resolution, ui_inset).
+- Saving preferences (to config.txt.new - does not overwrite config.txt yet)
+- Loading profiles.
+- Displaying profile data. 
+- Displaying level achievements.
+- Displaying tower data.
+- Generating various images of the tower.
+- Installing mod-type addins to the addin directory (but you can't enable them yet).
+- Validating the addins.
+- Uninstalling mod-type addins from the addin directory.
+- Viewing addin properties.
+- Reordering addin priority.
+- Save and Launch.
+- Automatic detection of JRE.
+- Decrypting and encrypting .bin files.
+- Decrypting and parsing profile data.
+- Transformation/merging of XML files.

@@ -1,0 +1,114 @@
+<scene backgroundcolor="0,0,0" maxx="430" maxy="1000" minx="-430" miny="0">
+  <linearforcefield antigrav="true" dampeningfactor="0" force="0,-10" geomonly="false" type="gravity"/>
+  <particles depth="240" effect="bigleaves1" pretick="0"/>
+  <particles depth="-240" effect="smallleaves1" pretick="0"/>
+
+  <!-- general scenery -->
+
+  <SceneLayer alpha="1" colorize="255,255,255" depth="200" image="IMAGE_SCENE_PISTON_BUSH_FG1A" name="bush_fg1a" rotation="1.25" scalex="0.963" scaley="0.963"
+              x="7.25" y="56.95"/>
+  <SceneLayer alpha="1" colorize="255,255,255" depth="200" image="IMAGE_SCENE_PISTON_BUSH_FG1A" name="bush_fg1a" rotation="-17.99" scalex="0.963" scaley="0.963"
+              x="312.25" y="68.93"/>
+  <SceneLayer alpha="1" colorize="255,255,255" depth="200" image="IMAGE_SCENE_PISTON_BUSH_FG1A" name="bush_fg1a" rotation="12.2" scalex="0.833" scaley="0.833"
+              x="-332.74" y="64.51"/>
+  <SceneLayer alpha="1" colorize="255,255,255" depth="120" image="IMAGE_SCENE_PISTON_BUSH_LEAFY_1" name="bush_leafy_1" rotation="12.92" scalex="1.252"
+              scaley="1.252" x="-29.44" y="32.14"/>
+  <SceneLayer alpha="1" colorize="255,255,255" depth="0" image="IMAGE_SCENE_PISTON_HILL_FG1A" name="hill_fg1a" rotation="0" scalex="1.012" scaley="1" x="-0.04"
+              y="50.53"/>
+  <SceneLayer alpha="1" colorize="255,255,255" depth="-8" image="IMAGE_SCENE_PISTON_TREE_STRIPE1" name="tree_stripe1" rotation="-155.58" scalex="0.821"
+              scaley="0.821" x="-386.22" y="200.68"/>
+  <SceneLayer alpha="1" colorize="255,255,255" depth="-80" image="IMAGE_SCENE_PISTON_BUSH_LEAFY_1B" name="bush_leafy_1b" rotation="-6.31" scalex="0.997"
+              scaley="1.001" x="290.8" y="52.17"/>
+  <SceneLayer alpha="1" colorize="255,255,255" depth="-80" image="IMAGE_SCENE_PISTON_BUSH_LEAFY_1B" name="bush_leafy_1b" rotation="18.97" scalex="1.098"
+              scaley="1.1" x="-270.15" y="49.81"/>
+  <SceneLayer alpha="1" colorize="255,255,255" depth="-88" image="IMAGE_SCENE_PISTON_TREE_STRIPE1" name="tree_stripe1" rotation="-27.66" scalex="1.02"
+              scaley="1.02" x="377" y="256"/>
+  <SceneLayer alpha="1" colorize="255,255,255" depth="-120" image="IMAGE_SCENE_PISTON_BUSH_LEAFY_1" name="bush_leafy_1" rotation="-6.41" scalex="1.252"
+              scaley="1.252" x="330.53" y="46.15"/>
+  <SceneLayer alpha="1" colorize="255,255,255" depth="-120" image="IMAGE_SCENE_PISTON_BUSH_LEAFY_1" name="bush_leafy_1" rotation="12.97" scalex="1.253"
+              scaley="1.25" x="-313.65" y="78.78"/>
+  <SceneLayer alpha="1" colorize="255,255,255" depth="-600" image="IMAGE_SCENE_PISTON_SKY_BLUE2A" name="sky_blue2a" rotation="0" scalex="3.361" scaley="6.042"
+              x="-0.08" y="420.94"/>
+
+  <!-- the ground -->
+
+  <circle id="ground" material="verysticky" radius="900" static="true" tag="walkable" x="-7" y="-817"/>
+  <line anchor="-14,18.5" id="" material="rock" normal="-0.0031,1" static="true"/>
+
+  <!-- we can't use lines for walls since our piston is outside and the non-static geometry goes berserk -->
+
+  <!--line anchor="936.5,331.5" id="" material="rock" normal="-1,-0.0071" static="true" tag="detaching"/>
+  <line anchor="-937,321" id="" material="rock" normal="1,-0.0056" static="true" tag="detaching"/-->
+
+  <!-- instead use huge rectangles with nogeomcollisions -->
+
+  <rectangle height="10000" id="fakerightwall" mass="100000" material="rock" nogeomcollisions="true" rotation="0.0" static="true" tag="detaching" width="100"
+             x="490.754035446" y="272.641130803"/>
+  <rectangle height="10000" id="fakeleftwall" mass="100000" material="rock" nogeomcollisions="true" rotation="0.0" static="true" tag="detaching" width="100"
+             x="-495.539204096" y="1022.47516693"/>
+
+  <!-- The flywheel, statically hinged -->
+
+  <circle contacts="false" id="flywheel1" mass="200" material="machine" nogeomcollisions="true" radius="50" rotspeed="0.01" static="false" x="-900" y="300"/>
+  <hinge anchor="-900,300" body1="flywheel1"/>
+
+  <!-- the rod. note contacts=false so it doesn't interact with the shaft -->
+
+  <rectangle contacts="false" height="10" id="rod1a" mass="100" material="machine" rotation="0.0" static="false" width="140" x="-780" y="300"/>
+  <hinge anchor="-850,300" body1="flywheel1" body2="rod1a"/>
+  <rectangle contacts="true" height="50" id="rod1b" mass="100" material="machine" nogeomcollisions="true" rotation="0.0" static="false" width="100" x="-660"
+             y="300"/>
+  <hinge anchor="-710,300" body1="rod1a" body2="rod1b"/>
+
+  <!-- the shaft in which the rod is held -->
+
+  <compositegeom id="shaftleft" material="machine" rotation="0.0" static="true" x="-710" y="300">
+    <rectangle height="40" mass="2000" material="machine" rotation="0.0" static="true" width="200" x="0" y="-45"/>
+    <rectangle height="40" mass="2000" material="machine" rotation="0.0" static="true" width="200" x="0" y="45"/>
+  </compositegeom>
+
+  <!-- for simple pistons, that is enough. in this case however, we want to hinge a large structure horizontally,
+  and we don't want it to sag to the ground, so we build another shaft off the right side of the screen: -->
+
+  <compositegeom id="shaftright" material="machine" rotation="0.0" static="true" x="750" y="300">
+    <rectangle height="40" rotation="0.0" width="200" x="0" y="-40"/>
+    <rectangle height="40" rotation="0.0" width="200" x="0" y="40"/>
+  </compositegeom>
+
+  <!-- with a rod in it: -->
+
+  <rectangle height="40" id="rod2" mass="100" material="machine" rotation="0.0" static="false" width="100" x="800" y="300"/>
+
+  <!-- then we place a large guide rail across the screen, with contacts=false so it doesn't interact
+  with anything else, and then hinge it to the left and right rods -->
+
+  <rectangle contacts="false" height="10" id="guide" mass="2000" material="machine" nogeomcollisions="true" rotation="0.0" static="false" width="1400" x="50"
+             y="300"/>
+
+  <hinge anchor="-650,300" body1="rod1b" body2="guide"/>
+  <hinge anchor="750,300" body1="guide" body2="rod2"/>
+
+  <!-- Finally we add our structure and hinge it at two points, right and left, to the guide rail -->
+
+  <compositegeom id="towerleft" image="IMAGE_SCENE_PISTON_TOWERLEFT" imagepos="-255,290" imagerot="-1.57079632679" imagescale="0.4,0.5" material="rock"
+                 rotation="0.0" static="false" tag="detaching" x="-250" y="300">
+    <rectangle height="50" id="geometry4" mass="1000" rotation="0.0" width="500" x="0" y="0"/>
+    <rectangle height="50" id="geometry5" mass="1000" rotation="-0.142069097005" width="150" x="170.192258065" y="12.7729032258"/>
+    <rectangle height="50" id="geometry6" mass="1000" rotation="0.119251008964" width="500" x="-0.424516129031" y="-28.5109677419"/>
+    <rectangle height="50" id="geometry9" rotation="0.0" width="300" x="-49.1664516129" y="23.0051612903"/>
+  </compositegeom>
+
+  <hinge anchor="0,300" body1="guide" body2="towerleft"/>
+  <hinge anchor="-500,300" body1="guide" body2="towerleft"/>
+
+  <!-- this is just the static right structure: -->
+
+  <SceneLayer alpha="1" colorize="255,255,255" depth="0" image="IMAGE_SCENE_PISTON_TOWERRIGHT" rotation="90" scalex="0.5" scaley="0.8" x="471.591591321"
+              y="277.747832524"/>
+  <compositegeom id="towerright" material="rock" rotation="0.0" static="true" tag="detaching" x="242.641130802" y="296.094131302">
+    <rectangle height="50" id="geometry1" rotation="0.101118625729" width="500" x="70.3590014976" y="23.4530004992"/>
+    <rectangle height="50" id="geometry2" rotation="-0.0866348765168" width="500" x="69.0" y="-24.0"/>
+    <rectangle height="50" id="geometry3" rotation="0.0" width="500" x="68.2" y="-1.24"/>
+  </compositegeom>
+
+</scene>

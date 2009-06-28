@@ -1,0 +1,13 @@
+v1.0: (April 6th, 2009)
+ - simplified hotkeys
+ - made volume scale logarithmic
+ - aligned the volume pop-up dialog pop up better
+ - rebuilt with Microsoft Visual C/C++ 2005 to remove dependency on DLLs not
+   shipped with the game
+
+v0.3:
+ - reworked implementation
+ - made sound and music independently controllable 
+
+v0.2:
+ - initial release

@@ -1,0 +1,19 @@
+<addin spec-version="1.0">
+  <!-- The unique ID of this addin. Used to check if it's already installed or compare its version -->
+  <id>com.2dboy.talic.basketball</id>
+
+  <!-- name shown to user -->
+  <name>GooCorp Basketballs</name>
+
+  <!-- either "mod" or "level". For user display, and to determine whether to create a chapter 5 entry -->
+  <type>mod</type>
+
+  <!-- Version. Must be numerically comparable at each "." boundary. You could also do it without periods. 11281 is a fine version number.-->
+  <version>1.0</version>
+
+  <!-- description shown to user -->
+  <description>This mod replaces the balls in Goo Corporation with basketballs.</description>
+
+  <!-- author shown to user -->
+  <author>talic</author>
+</addin>
