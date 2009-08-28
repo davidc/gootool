@@ -25,7 +25,8 @@ public class WorldOfGooMacOSX extends WorldOfGoo
   private static final String[] SEARCH_PATHS = {
           "/Applications/World of Goo.app",
   };
-  public static final String EXE_FILENAME = "Contents/MacOS/World of Goo";
+  public static final String[] EXE_FILENAMES = {"Contents/MacOS/World of Goo",
+          "Contents/MacOS/BigMacWrapper", "Contents/MacOS/BigMacWrapper_ppc", "Contents/MacOS/BigMacWrapper_x86"};
   private static final String ADDIN_DIR = "Contents/Resources/addins";
 
   private boolean wogFound;
@@ -74,12 +75,14 @@ public class WorldOfGooMacOSX extends WorldOfGoo
 
   private boolean locateWogAtPath(File searchPath)
   {
-    File f = new File(searchPath, EXE_FILENAME);
+    log.finest("looking for World of Goo at " + searchPath);
 
-    log.finest("looking for World of Goo at " + f);
-    if (f.exists()) {
-      foundWog(searchPath);
-      return true;
+    for (String exeFilename : EXE_FILENAMES) {
+      File f = new File(searchPath, exeFilename);
+      if (f.exists()) {
+        foundWog(searchPath);
+        return true;
+      }
     }
     return false;
   }
@@ -168,7 +171,11 @@ public class WorldOfGooMacOSX extends WorldOfGoo
 
   public boolean isFirstCustomBuild() throws IOException
   {
-    return !new File(getCustomDir(), EXE_FILENAME).exists();
+    for (String exeFilename : EXE_FILENAMES) {
+      if (new File(getCustomDir(), exeFilename).exists())
+        return false;
+    }
+    return true;
   }
 
   public File getGameFile(String pathname) throws IOException

@@ -45,8 +45,9 @@ public class WogExeFileFilter extends FileFilter
         case MACOSX:
           if (f.isDirectory()) {
             if (!f.getName().endsWith(".app")) return true;
-            File exeFile = new File(f, WorldOfGooMacOSX.EXE_FILENAME);
-            if (exeFile.exists()) return true;
+            for (String exeFilename : WorldOfGooMacOSX.EXE_FILENAMES) {
+              if (new File(f, exeFilename).exists()) return true;
+            }
           }
           break;
         case LINUX:
