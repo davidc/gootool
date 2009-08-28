@@ -54,8 +54,10 @@ public class WogExeFileFilter extends FileFilter
           if (f.isDirectory()) {
             return true;
           }
-          if (fileName.equalsIgnoreCase(WorldOfGooLinux.EXE_FILENAME)) {
-            return true;
+          for (String exeFilename : WorldOfGooLinux.EXE_FILENAMES) {
+            if (fileName.equalsIgnoreCase(exeFilename)) {
+              return true;
+            }
           }
           break;
 
@@ -77,7 +79,7 @@ public class WogExeFileFilter extends FileFilter
       case MACOSX:
         return "World of Goo";
       case LINUX:
-        return WorldOfGooLinux.EXE_FILENAME;
+        return WorldOfGooLinux.EXE_FILENAMES[0];
     }
     return null;
   }

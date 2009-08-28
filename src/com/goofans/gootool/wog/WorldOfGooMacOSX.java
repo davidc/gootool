@@ -78,8 +78,7 @@ public class WorldOfGooMacOSX extends WorldOfGoo
     log.finest("looking for World of Goo at " + searchPath);
 
     for (String exeFilename : EXE_FILENAMES) {
-      File f = new File(searchPath, exeFilename);
-      if (f.exists()) {
+      if (new File(searchPath, exeFilename).exists()) {
         foundWog(searchPath);
         return true;
       }
