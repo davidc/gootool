@@ -58,6 +58,10 @@ public class GooTool
       ProgressIndicatingTask startupTask = new StartupTask(controller);
 
       GUIUtil.runTask(null, textProvider.getText("launcher.title", Version.RELEASE_FRIENDLY), startupTask);
+      // In preparation for new splash screen:
+//      final ProgressDialog progressDialog = new ProgressDialog(null, textProvider.getText("launcher.title", Version.RELEASE_FRIENDLY));
+//      startupTask.addListener(progressDialog);
+//      GUIUtil.runTask(startupTask, progressDialog);
     }
     catch (Throwable t) {
       log.log(Level.SEVERE, "Uncaught exception", t);

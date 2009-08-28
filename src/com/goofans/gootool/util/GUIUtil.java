@@ -77,7 +77,11 @@ public class GUIUtil
   {
     final ProgressDialog progressDialog = new ProgressDialog(parent, windowTitle);
     task.addListener(progressDialog);
+    runTask(task, progressDialog);
+  }
 
+  public static void runTask(final ProgressIndicatingTask task, final JDialog progressDialog) throws Exception
+  {
     final Exception[] result = new Exception[]{null};
 
     Thread thread = new Thread()
