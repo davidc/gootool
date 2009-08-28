@@ -89,7 +89,7 @@ public class Controller implements ActionListener
   {
     textProvider = GooTool.getTextProvider();
 
-    codecs.put(CMD_DECRYPT_BIN_PC, new GameFileCodecTool("bin", "Encrypted Bin File (PC/Linux)", "xml", CodecType.AES_DECODE));
+    codecs.put(CMD_DECRYPT_BIN_PC, new GameFileCodecTool("bin", "Encrypted Bin File (Windows/Linux)", "xml", CodecType.AES_DECODE));
     codecs.put(CMD_DECRYPT_BIN_MAC, new GameFileCodecTool("bin", "Encrypted Bin File (Mac)", "xml", CodecType.XOR_DECODE));
     codecs.put(CMD_DECRYPT_PNGBINLTL_MAC, new GameFileCodecTool("png.binltl", "Encoded Image File", "png", CodecType.PNGBINLTL_DECODE));
     codecs.put(CMD_DECRYPT_ANIM, new GameFileCodecTool("anim.binltl", "Animation File", "anim.xml", CodecType.ANIM_DECODE));
