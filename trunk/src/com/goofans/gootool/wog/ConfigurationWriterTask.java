@@ -154,10 +154,17 @@ public class ConfigurationWriterTask extends ProgressIndicatingTask
       Utilities.copyStreams(is, os);
     }
     else if (PlatformSupport.getPlatform() == PlatformSupport.Platform.LINUX) {
-      // Make the EXE executable
-      File exe1 = new File(customDir, WorldOfGooLinux.SCRIPT_FILENAME);
-      File exe2 = new File(customDir, WorldOfGooLinux.EXE_FILENAME);
-      Runtime.getRuntime().exec(new String[]{"chmod", "+x", exe1.getAbsolutePath(), exe2.getAbsolutePath()});
+      // Make the script executable
+      File script = new File(customDir, WorldOfGooLinux.SCRIPT_FILENAME);
+      Runtime.getRuntime().exec(new String[]{"chmod", "+x", script.getAbsolutePath()});
+
+      // Make the EXE files executable
+      for (String exeFilename : WorldOfGooLinux.EXE_FILENAMES) {
+        File exe = new File(customDir, exeFilename);
+        if (exe.exists()) {
+          Runtime.getRuntime().exec(new String[]{"chmod", "+x", exe.getAbsolutePath()});
+        }
+      }
     }
 
     progressStep(100f);

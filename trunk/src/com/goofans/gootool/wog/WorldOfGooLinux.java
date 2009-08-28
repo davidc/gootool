@@ -26,7 +26,7 @@ public class WorldOfGooLinux extends WorldOfGoo
 
   private static final String LASTRUN_FILE = "%HOME%/.WorldOfGoo/LastRun.txt";
 
-  public static final String EXE_FILENAME = "WorldOfGoo.bin";
+  public static final String[] EXE_FILENAMES = {"WorldOfGoo.bin", "WorldOfGoo.bin32", "WorldOfGoo.bin64"};
   public static final String SCRIPT_FILENAME = "WorldOfGoo";
 
 
@@ -101,13 +101,16 @@ public class WorldOfGooLinux extends WorldOfGoo
 
   private boolean locateWogAtPath(File searchPath)
   {
-    File f = new File(searchPath, EXE_FILENAME);
+    log.finest("looking for World of Goo at " + searchPath);
 
-    log.finest("looking for World of Goo at " + f);
-    if (f.exists()) {
-      foundWog(searchPath);
-      return true;
+    for (String exeFilename : EXE_FILENAMES) {
+
+      if (new File(searchPath, exeFilename).exists()) {
+        foundWog(searchPath);
+        return true;
+      }
     }
+
     return false;
   }
 
@@ -196,7 +199,11 @@ public class WorldOfGooLinux extends WorldOfGoo
 
   public boolean isFirstCustomBuild() throws IOException
   {
-    return !new File(getCustomDir(), EXE_FILENAME).exists();
+    for (String exeFilename : EXE_FILENAMES) {
+      if (new File(getCustomDir(), exeFilename).exists())
+        return false;
+    }
+    return true;
   }
 
   public File getGameFile(String pathname) throws IOException
