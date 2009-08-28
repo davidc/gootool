@@ -140,9 +140,14 @@ public class ConfigurationWriterTask extends ProgressIndicatingTask
     log.fine(copied + " files copied");
 
     if (PlatformSupport.getPlatform() == PlatformSupport.Platform.MACOSX) {
-      // Make the EXE executable
-      File exe = new File(customDir, WorldOfGooMacOSX.EXE_FILENAME);
-      Runtime.getRuntime().exec(new String[]{"chmod", "+x", exe.getAbsolutePath()});
+      // Make the EXE files executable
+      for (String exeFilename : WorldOfGooMacOSX.EXE_FILENAMES) {
+        File exe = new File(customDir, exeFilename);
+        if (exe.exists()) {
+          Runtime.getRuntime().exec(new String[]{"chmod", "+x", exe.getAbsolutePath()});
+        }
+      }
+
       // Add the Mac icon
       InputStream is = getClass().getResourceAsStream("/customapp.icns");
       OutputStream os = new FileOutputStream(customDir + "/Contents/Resources/gooicon.icns");
