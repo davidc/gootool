@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.LinkedList;
 import java.util.Arrays;
 import java.util.ArrayList;
+import java.util.concurrent.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -28,6 +29,8 @@ public class GooTool
   public static TextProvider textProvider;
   private static Controller controller;
 
+  private static ExecutorService threadPoolExecutor;
+  private static ScheduledExecutorService scheduledExecutor;
 
   private GooTool()
   {
@@ -50,6 +53,9 @@ public class GooTool
 
       initIcon();
       initTextProvider();
+
+      threadPoolExecutor = Executors.newCachedThreadPool();
+      scheduledExecutor = Executors.newScheduledThreadPool(0);
 
       controller = new Controller();
 
@@ -148,5 +154,15 @@ public class GooTool
   public static Controller getController()
   {
     return controller;
+  }
+
+  public static void executeTaskInThreadPool(Runnable task)
+  {
+    threadPoolExecutor.execute(task);
+  }
+
+  public static void scheduleTaskWithFixedDelay(Runnable task, long initialDelayMsec, long delayMsec)
+  {
+    scheduledExecutor.scheduleWithFixedDelay(task, initialDelayMsec, delayMsec, TimeUnit.MILLISECONDS);
   }
 }

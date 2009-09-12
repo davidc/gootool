@@ -46,7 +46,7 @@ public class StartupTask extends ProgressIndicatingTask
 
     // Launch a new thread to check for new version
     try {
-      new Thread(new VersionCheck(mainFrame, false)).start();
+      GooTool.executeTaskInThreadPool(new VersionCheck(mainFrame, false));
     }
     catch (MalformedURLException e) {
       log.log(Level.WARNING, "Unable to check version on startup", e);

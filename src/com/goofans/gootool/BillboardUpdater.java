@@ -19,6 +19,8 @@ import com.goofans.gootool.util.Utilities;
 import com.goofans.gootool.wog.WorldOfGoo;
 
 /**
+ * Checks the billboards goomod file and updates it if a later version is available.
+ *
  * @author David Croft (davidc@goofans.com)
  * @version $Id$
  */
@@ -133,7 +135,7 @@ public class BillboardUpdater implements Runnable
 
     log.log(Level.INFO, "Billboard update check is due");
 
-    new Thread(new BillboardUpdater()).start();
+    GooTool.executeTaskInThreadPool(new BillboardUpdater());
   }
 
   public static void main(String[] args)
@@ -142,5 +144,4 @@ public class BillboardUpdater implements Runnable
 
     BillboardUpdater.maybeUpdateBillboards();
   }
-
 }
