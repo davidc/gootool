@@ -16,6 +16,8 @@ import java.util.logging.Logger;
 import java.net.MalformedURLException;
 
 /**
+ * Sequentially performs GooTool's initialisation tasks before revealing the main UI.
+ *
  * @author David Croft (davidc@goofans.com)
  * @version $Id$
  */

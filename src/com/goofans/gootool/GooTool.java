@@ -109,7 +109,7 @@ public class GooTool
     {
       public void run()
       {
-        /* Run all the queued tasks */
+        /* Run all the queued tasks sequentially */
         for (Runnable task : queuedTasks) {
           log.finest("Running queued task: " + task);
           task.run();
