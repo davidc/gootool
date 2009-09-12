@@ -181,7 +181,7 @@ public class MainMenu
 
     menuItem = new JMenuItem("level editor");
     try {
-      Class.forName("com.goofans.gootool.leveledit.view.LevelEditor");
+      Class.forName("com.goofans.gootoolsp.leveledit.view.LevelEditor");
       menuItem.setActionCommand("leved");
       menuItem.addActionListener(controller);
     }
