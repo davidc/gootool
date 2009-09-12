@@ -55,7 +55,7 @@ public class GooTool
       initTextProvider();
 
       threadPoolExecutor = Executors.newCachedThreadPool();
-      scheduledExecutor = Executors.newScheduledThreadPool(0);
+      scheduledExecutor = Executors.newScheduledThreadPool(1);
 
       controller = new Controller();
 
@@ -158,11 +158,13 @@ public class GooTool
 
   public static void executeTaskInThreadPool(Runnable task)
   {
+    log.log(Level.FINEST, "Executing in thread pool task " + task);
     threadPoolExecutor.execute(task);
   }
 
   public static void scheduleTaskWithFixedDelay(Runnable task, long initialDelayMsec, long delayMsec)
   {
+    log.log(Level.FINEST, "Scheduling task " + task + " with init delay " + initialDelayMsec + " and recurring delay " + delayMsec);
     scheduledExecutor.scheduleWithFixedDelay(task, initialDelayMsec, delayMsec, TimeUnit.MILLISECONDS);
   }
 }
