@@ -17,6 +17,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.IOException;
 import java.util.logging.Logger;
+import static java.util.logging.Level.*;
 import java.text.MessageFormat;
 import java.text.NumberFormat;
 
@@ -181,6 +182,8 @@ public class LevelEditor extends JFrame implements ActionListener
         String strX = mousePosNumberFormat.format(worldCoords.x);
         String strY = mousePosNumberFormat.format(worldCoords.y);
         mousePos.setText(MessageFormat.format(textProvider.getText("leveledit.status.mousePos"), strX, strY));
+
+        //TODO show zoom level in status bar
       }
 
       public void mouseDragged(MouseEvent e)
@@ -262,7 +265,7 @@ public class LevelEditor extends JFrame implements ActionListener
       undoManager.undo();
     }
     catch (CannotUndoException e) {
-      log.log(java.util.logging.Level.WARNING, "Can't undo", e);
+      log.log(WARNING, "Can't undo", e);
       String msg = textProvider.getText("leveledit.edit.cantundo");
       JOptionPane.showMessageDialog(this, msg, msg, JOptionPane.ERROR);
     }
@@ -276,7 +279,7 @@ public class LevelEditor extends JFrame implements ActionListener
       undoManager.redo();
     }
     catch (CannotRedoException e) {
-      log.log(java.util.logging.Level.WARNING, "Can't redo", e);
+      log.log(WARNING, "Can't redo", e);
       String msg = textProvider.getText("leveledit.edit.cantredo");
       JOptionPane.showMessageDialog(this, msg, msg, JOptionPane.ERROR);
     }
@@ -361,7 +364,7 @@ public class LevelEditor extends JFrame implements ActionListener
     /* TODO when selecting something from the LevelDisplay, tree.scrollPathToVisible(new TreePath(childNode.getPath())); */
   }
 
-  private void createUIComponents() throws IOException
+  private void createUIComponents()
   {
     levelDisplay = new LevelDisplay(this);
 
@@ -369,11 +372,16 @@ public class LevelEditor extends JFrame implements ActionListener
 
     contentsTree = new JTree(new DefaultTreeModel(rootNode));
 //    contentsTree.setRootVisible(false);
+    try {
+      ballPalette = new BallPalette();
+      ballPalette.addBalls();
 
-    ballPalette = new BallPalette();
-    ballPalette.addBalls();
-
-    leftToolBar = new Toolbar(SwingConstants.VERTICAL);
+      leftToolBar = new Toolbar(SwingConstants.VERTICAL);
+    }
+    catch (Exception e) {
+      // TODO more robust
+      log.log(SEVERE, "Can't create ball palette", e);
+    }
   }
 
   private void quickAddTool(String toolName, final Tool tool) throws IOException
@@ -385,7 +393,7 @@ public class LevelEditor extends JFrame implements ActionListener
     final String shortcut = textProvider.getText("leveledit.tool." + toolName + ".shortcut");
     if (shortcut.length() > 0) {
       KeyStroke keyStroke = KeyStroke.getKeyStroke(shortcut);
-      log.log(java.util.logging.Level.FINER, "Adding keystroke " + keyStroke + " for tool " + toolName);
+      log.log(FINER, "Adding keystroke " + keyStroke + " for tool " + toolName);
       getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(keyStroke, toolName);
       getRootPane().getActionMap().put(toolName, new AbstractAction()
       {
