@@ -67,7 +67,7 @@ public class Toolbar extends JToolBar implements ActionListener
 //      constraints.fill = GridBagConstraints.VERTICAL;
 //    }
 
-    buttonBackgroundSelected = new ImageIcon(ImageIO.read(Toolbar.class.getResourceAsStream("/leveledit/toolbar/bgselected.png")));
+    buttonBackgroundSelected = new ImageIcon(ImageIO.read(Toolbar.class.getResourceAsStream("/gootoolsp/leveledit/toolbar/bgselected.png")));
   }
 
 
@@ -207,6 +207,6 @@ public class Toolbar extends JToolBar implements ActionListener
 
   private static void quickAddTool(Toolbar bar, String toolName) throws IOException
   {
-    bar.addTool(new SelectTool(), toolName, new ImageIcon(ImageIO.read(Toolbar.class.getResourceAsStream("/leveledit/toolbar/" + toolName + ".png"))));
+    bar.addTool(new SelectTool(), toolName, new ImageIcon(ImageIO.read(Toolbar.class.getResourceAsStream("/gootoolsp/leveledit/toolbar/" + toolName + ".png"))));
   }
 }

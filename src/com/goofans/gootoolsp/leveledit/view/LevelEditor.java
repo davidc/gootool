@@ -386,7 +386,7 @@ public class LevelEditor extends JFrame implements ActionListener
 
   private void quickAddTool(String toolName, final Tool tool) throws IOException
   {
-    ImageIcon icon = new ImageIcon(ImageIO.read(Toolbar.class.getResourceAsStream("/leveledit/toolbar/" + toolName + ".png")));
+    ImageIcon icon = new ImageIcon(ImageIO.read(Toolbar.class.getResourceAsStream("/gootoolsp/leveledit/toolbar/" + toolName + ".png")));
     String tooltip = textProvider.getText("leveledit.tool." + toolName + ".tooltip");
     leftToolBar.addTool(tool, tooltip, icon);
 
