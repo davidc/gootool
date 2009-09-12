@@ -4,6 +4,9 @@ import net.infotrek.util.TextUtil;
 
 import java.util.prefs.Preferences;
 import java.util.Random;
+import java.util.Map;
+import java.util.TreeMap;
+import java.util.StringTokenizer;
 import java.util.logging.Logger;
 import java.util.logging.Level;
 import java.io.IOException;
@@ -38,6 +41,10 @@ public class ToolPreferences
 
   private static final String PREF_BILLBOARDS_DISABLE = "billboard_disable";
   private static final String PREF_BILLBOARDS_LASTCHECK = "billboard_lastcheck";
+
+  private static final String PREF_RATINGS = "ratings";
+  private static final String RATINGS_SEPARATOR = "|";
+  private static final String RATINGS_VALUE_SEPARATOR = "=";
 
   private ToolPreferences()
   {
@@ -197,5 +204,37 @@ public class ToolPreferences
   public static void setBillboardLastCheck(long lastCheck)
   {
     PREFS.putLong(PREF_BILLBOARDS_LASTCHECK, lastCheck);
+  }
+
+  public static void setRatings(Map<String, Integer> ratings)
+  {
+    StringBuilder sb = new StringBuilder();
+    for (Map.Entry<String, Integer> rating : ratings.entrySet()) {
+      if (sb.length() > 0) sb.append(RATINGS_SEPARATOR);
+      sb.append(rating.getKey()).append(RATINGS_VALUE_SEPARATOR).append(rating.getValue());
+    }
+    PREFS.put(PREF_RATINGS, sb.toString());
+  }
+
+  public static Map<String, Integer> getRatings()
+  {
+    String ratingsReg = PREFS.get(PREF_RATINGS, null);
+    if (ratingsReg == null) {
+      return new TreeMap<String, Integer>();
+    }
+
+    StringTokenizer tok = new StringTokenizer(ratingsReg, RATINGS_SEPARATOR);
+
+    Map<String, Integer> ratings = new TreeMap<String, Integer>();
+
+    while (tok.hasMoreTokens()) {
+      StringTokenizer tok2 = new StringTokenizer(tok.nextToken(), RATINGS_VALUE_SEPARATOR);
+      String addinId = tok2.nextToken();
+      String vote = tok2.nextToken();
+
+      ratings.put(addinId, Integer.valueOf(vote));
+    }
+
+    return ratings;
   }
 }

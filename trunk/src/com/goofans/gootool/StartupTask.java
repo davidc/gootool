@@ -7,6 +7,7 @@ import com.goofans.gootool.platform.PlatformSupport;
 import com.goofans.gootool.view.MainFrame;
 import com.goofans.gootool.wog.WorldOfGoo;
 import com.goofans.gootool.siteapi.VersionCheck;
+import com.goofans.gootool.siteapi.RatingUpdateTask;
 
 import javax.swing.*;
 import java.io.IOException;
@@ -54,6 +55,9 @@ public class StartupTask extends ProgressIndicatingTask
 
     // Maybe launch a new thread to download billboards
     BillboardUpdater.maybeUpdateBillboards();
+
+    // Launch thread to retrieve user ratings. Initially in 0.5 seconds, thereafter every 15 minutes.
+    GooTool.scheduleTaskWithFixedDelay(new RatingUpdateTask(), 500, 15*60*1000);
 
     GooTool.startupIsComplete();
   }
