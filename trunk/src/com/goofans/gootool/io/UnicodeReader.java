@@ -115,9 +115,9 @@ public class UnicodeReader extends Reader
       encoding = defaultEnc;
       unread = n;
     }
-    if (unread != n) {
-      log.finest("skipped BOM, " + (n - unread) + " bytes");
-    }
+//    if (unread != n) {
+//      log.finest("skipped BOM, " + (n - unread) + " bytes");
+//    }
     //System.out.println("read=" + n + ", unread=" + unread);
 
     if (unread > 0) internalIn.unread(bom, (n - unread), unread);
