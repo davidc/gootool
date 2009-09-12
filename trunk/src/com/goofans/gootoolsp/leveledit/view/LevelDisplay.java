@@ -130,7 +130,7 @@ public class LevelDisplay extends JPanel implements Scrollable, FocusListener
                 dragBall = newBall;
                 dragPoint = newDragPoint;
                 repaint();// TODO only repaint the current and previous drop location
-                System.out.println("Repaint requetsed");
+                System.out.println("Repaint requested");
               }
             }
           }

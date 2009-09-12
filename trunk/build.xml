@@ -166,7 +166,7 @@
 
   <target name="jar" depends="compile">
     <jar jarfile="${output.jar}">
-      <fileset dir="${output.dir}" excludes="com/goofans/gootool/leveledit/**,com/goofans/gootool/balledit/**"/>
+      <fileset dir="${output.dir}" excludes="com/goofans/gootoolsp/**,com/goofans/datamining/**,gootoolsp/**"/>
     </jar>
   </target>
 
