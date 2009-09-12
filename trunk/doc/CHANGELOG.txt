@@ -1,5 +1,6 @@
 0.10.6, unreleased
 
+- You can now rate addins from the Addins tab within GooTool (#0000175)
 - Allow GooTool to find the 1.41 (bin32/bin64) version of World of Goo under Linux (#0000218)
 - Allow GooTool to find the Big Fish version of World of Goo under Mac OS X (#0000225)
 - Rename PC/Linux to Windows/Linux (#0000221)

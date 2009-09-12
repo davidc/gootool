@@ -2,8 +2,12 @@ package com.goofans.gootool.view;
 
 import com.goofans.gootool.Controller;
 import com.goofans.gootool.GooTool;
+import com.goofans.gootool.ToolPreferences;
+import com.goofans.gootool.siteapi.RatingSubmitRequest;
+import com.goofans.gootool.siteapi.APIException;
 import com.goofans.gootool.util.HyperlinkLaunchingListener;
 import com.goofans.gootool.ui.HyperlinkLabel;
+import com.goofans.gootool.ui.StarBar;
 import com.goofans.gootool.model.Configuration;
 import com.goofans.gootool.addins.Addin;
 
@@ -18,14 +22,17 @@ import java.awt.datatransfer.UnsupportedFlavorException;
 import java.io.IOException;
 import java.util.logging.Logger;
 import java.util.logging.Level;
+import java.util.Map;
 import java.net.URL;
 import java.net.MalformedURLException;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeEvent;
 
 /**
  * @author David Croft (davidc@goofans.com)
  * @version $Id$
  */
-public class AddinsPanel implements ViewComponent
+public class AddinsPanel implements ViewComponent, PropertyChangeListener
 {
   private static final Logger log = Logger.getLogger(AddinsPanel.class.getName());
 
@@ -41,12 +48,14 @@ public class AddinsPanel implements ViewComponent
   private JButton moveUpButton;
   private JButton moveDownButton;
   private HyperlinkLabel findMoreHyperlink;
+  private StarBar ratingBar;
   private MyTableModel addinsModel;
 
   private Controller controller;
 
   private static final String[] COLUMN_NAMES;
   private static final Class[] COLUMN_CLASSES = new Class[]{String.class, String.class, String.class, String.class, Boolean.class};
+  private static final int RATING_FACTOR = 20;
 
   static {
     // TODO load from resources
@@ -99,6 +108,8 @@ public class AddinsPanel implements ViewComponent
     disableButton.setActionCommand(Controller.CMD_ADDIN_DISABLE);
     disableButton.addActionListener(controller);
 
+    ratingBar.addPropertyChangeListener("rating", this);
+
     try {
       findMoreHyperlink.setURL(new URL("http://goofans.com/"));
       findMoreHyperlink.addHyperlinkListener(new HyperlinkLaunchingListener(rootPanel));
@@ -118,6 +129,8 @@ public class AddinsPanel implements ViewComponent
       enableButton.setEnabled(false);
       disableButton.setEnabled(false);
       uninstallButton.setEnabled(false);
+      ratingBar.setEnabled(false);
+      ratingBar.setRatingQuietly(0);
     }
     else {
       Addin addin = controller.getDisplayAddins().get(row);
@@ -134,6 +147,25 @@ public class AddinsPanel implements ViewComponent
       enableButton.setEnabled(!isEnabled);
       disableButton.setEnabled(isEnabled);
       uninstallButton.setEnabled(true);
+
+      // Maybe enable the rating bar
+
+      if (ToolPreferences.isGooFansLoginOk()) {
+        ratingBar.setEnabled(true);
+
+        // See if we've rated this addin
+        Integer rating = ToolPreferences.getRatings().get(addin.getId());
+        if (rating == null) {
+          ratingBar.setRatingQuietly(0);
+        }
+        else {
+          ratingBar.setRatingQuietly(rating / RATING_FACTOR);
+        }
+      }
+      else {
+        ratingBar.setEnabled(false);
+        ratingBar.setRatingQuietly(0);
+      }
     }
   }
 
@@ -153,6 +185,37 @@ public class AddinsPanel implements ViewComponent
   private void createUIComponents()
   {
     findMoreHyperlink = new HyperlinkLabel(GooTool.getTextProvider().getText("addins.getmore"));
+  }
+
+  public void propertyChange(PropertyChangeEvent evt)
+  {
+    if (evt.getSource() instanceof StarBar && evt.getPropertyName().equals("rating")) {
+      int row = addinTable.getSelectedRow();
+
+      if (row >= 0 && !controller.getDisplayAddins().isEmpty()) {
+        final Addin addin = controller.getDisplayAddins().get(row);
+        final int rating = (Integer) evt.getNewValue() * RATING_FACTOR;
+
+        /* Update our ToolPreferences for this addin */
+        Map<String, Integer> ratings = ToolPreferences.getRatings();
+        ratings.put(addin.getId(), rating);
+        ToolPreferences.setRatings(ratings);
+
+        /* Send the rating update to the server */
+        GooTool.executeTaskInThreadPool(new Runnable()
+        {
+          public void run()
+          {
+            try {
+              new RatingSubmitRequest().submitRating(addin.getId(), rating);
+            }
+            catch (APIException e) {
+              log.log(Level.SEVERE, "Unable to submit rating for " + addin.getId(), e);
+            }
+          }
+        });
+      }
+    }
   }
 
   private class MyTableModel extends AbstractTableModel
