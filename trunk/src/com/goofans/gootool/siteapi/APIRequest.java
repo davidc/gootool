@@ -8,14 +8,14 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.Locale;
+import java.util.Map;
 import java.util.TimeZone;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 
 import com.goofans.gootool.ToolPreferences;
 import com.goofans.gootool.util.Version;
@@ -30,7 +30,7 @@ public class APIRequest
 {
   private static final Logger log = Logger.getLogger(APIRequest.class.getName());
 
-  protected static final DateFormat API_DATEFORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH); //NON-NLS 
+  protected static final DateFormat API_DATEFORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH); //NON-NLS
 
   protected static final URL API_CHECKVERSION;
   protected static final URL API_LOGIN_TEST;
@@ -39,6 +39,8 @@ public class APIRequest
   protected static final URL API_PROFILE_LIST;
   protected static final URL API_PROFILE_PUBLISH;
   protected static final URL API_ADDIN_UPDATES_CHECK;
+  protected static final URL API_RATING_LIST;
+  protected static final URL API_RATING_SUBMIT;
 
   static {
     API_DATEFORMAT.setTimeZone(TimeZone.getTimeZone("UTC"));
@@ -52,6 +54,8 @@ public class APIRequest
       API_PROFILE_LIST = new URL(apiBase + "profile-list");
       API_PROFILE_PUBLISH = new URL(apiBase + "profile-publish");
       API_ADDIN_UPDATES_CHECK = new URL(apiBase + "addin-updates-check");
+      API_RATING_LIST = new URL(apiBase + "rating-list");
+      API_RATING_SUBMIT = new URL(apiBase + "rating-submit");
     }
     catch (MalformedURLException e) {
       throw new ExceptionInInitializerError(e);
