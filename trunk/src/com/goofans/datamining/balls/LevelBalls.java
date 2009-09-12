@@ -1,4 +1,4 @@
-package com.goofans.gootool.balledit;
+package com.goofans.datamining.balls;
 
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;

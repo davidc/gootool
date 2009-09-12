@@ -1,4 +1,4 @@
-package com.goofans.gootool.datamining;
+package com.goofans.datamining;
 
 import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPath;
