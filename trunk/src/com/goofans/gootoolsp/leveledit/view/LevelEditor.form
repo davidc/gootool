@@ -126,7 +126,7 @@
                         <properties/>
                         <border type="none"/>
                         <children>
-                          <component id="95945" classcom.goofans.gootoolsp.leveleditit.view.LevelDisplay" binding="levelDisplay" custom-create="true">
+                          <component id="95945" class="com.goofans.gootoolsp.leveledit.view.LevelDisplay" binding="levelDisplay" custom-create="true">
                             <constraints/>
                             <properties>
                               <focusable value="true"/>
@@ -272,7 +272,7 @@
                         <properties/>
                         <border type="none"/>
                         <children>
-                          <grid id="3ee3" clacom.goofans.gootoolsp.leveleditedit.view.BallPalette" binding="ballPalette" custom-create="true" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                          <grid id="3ee3" class="com.goofans.gootoolsp.leveledit.view.BallPalette" binding="ballPalette" custom-create="true" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
                             <margin top="0" left="0" bottom="0" right="0"/>
                             <constraints/>
                             <properties/>
@@ -331,7 +331,7 @@
               </tabbedpane>
             </children>
           </splitpane>
-          <toolbar id="adebf" classcom.goofans.gootoolsp.leveleditit.ui.Toolbar" binding="leftToolBar" custom-create="true">
+          <toolbar id="adebf" class="com.goofans.gootoolsp.leveledit.ui.Toolbar" binding="leftToolBar" custom-create="true">
             <constraints border-constraint="West"/>
             <properties>
               <orientation value="1"/>
