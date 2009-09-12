@@ -1,17 +1,13 @@
-package com.goofans.gootool.balledit;
+package com.goofans.datamining.balls;
 
-import javax.swing.*;
 import javax.imageio.ImageIO;
 import java.io.File;
 import java.io.IOException;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
 import com.goofans.gootool.wog.WorldOfGoo;
-import com.goofans.gootool.leveledit.resource.Ball;
-import com.goofans.gootool.leveledit.view.BallPaletteBall;
+import com.goofans.gootoolsp.leveledit.resource.Ball;
 
 /**
  * @author David Croft (davidc@goofans.com)
