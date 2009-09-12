@@ -6,7 +6,6 @@ import java.io.*;
 import java.util.Map;
 import java.util.LinkedHashMap;
 
-import com.goofans.gootool.leveledit.model.Resources;
 import com.goofans.gootool.io.GameFormat;
 import com.goofans.gootool.wog.WorldOfGoo;
 import com.goofans.gootool.util.Utilities;
