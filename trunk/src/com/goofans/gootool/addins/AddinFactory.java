@@ -3,14 +3,16 @@ package com.goofans.gootool.addins;
 import com.goofans.gootool.util.VersionSpec;
 import com.goofans.gootool.util.XMLUtil;
 
+import javax.imageio.ImageIO;
+import javax.imageio.ImageReader;
+import javax.imageio.stream.ImageInputStream;
 import javax.xml.xpath.*;
-import java.io.*;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.TreeMap;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.*;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
 
@@ -40,6 +42,7 @@ public class AddinFactory
   private static final XPathExpression XPATH_ADDIN_LEVEL_NAME;
   private static final XPathExpression XPATH_ADDIN_LEVEL_SUBTITLE;
   private static final XPathExpression XPATH_ADDIN_LEVEL_OCD;
+  private static final XPathExpression XPATH_ADDIN_THUMBNAIL;
 
   private static final Pattern PATTERN_ID = Pattern.compile("^[-\\p{Alnum}]+(\\.[-\\p{Alnum}]+)+$"); // require at least 1 domain component
   private static final Pattern PATTERN_NAME = Pattern.compile("^\\p{Alnum}[\\p{Graph} ]+$");
@@ -49,7 +52,7 @@ public class AddinFactory
   private static final String ADDIN_DEPENDS_MAX_VERSION = "max-version";
 
   private static final VersionSpec SPEC_VERSION_1_0 = new VersionSpec("1.0");
-//  private static final VersionSpec SPEC_VERSION_1_1 = new VersionSpec("1.1");
+  private static final VersionSpec SPEC_VERSION_1_1 = new VersionSpec("1.1");
 
   private static final String GOOMOD_MANIFEST = "addin.xml";
 
@@ -70,6 +73,7 @@ public class AddinFactory
       XPATH_ADDIN_LEVEL_NAME = path.compile("/addin/level/name");
       XPATH_ADDIN_LEVEL_SUBTITLE = path.compile("/addin/level/subtitle");
       XPATH_ADDIN_LEVEL_OCD = path.compile("/addin/level/ocd");
+      XPATH_ADDIN_THUMBNAIL = path.compile("/addin/thumbnail");
     }
     catch (XPathExpressionException e) {
       throw new ExceptionInInitializerError(e);
@@ -84,40 +88,42 @@ public class AddinFactory
   public static Addin loadAddin(File file) throws AddinFormatException, IOException
   {
     log.fine("Loading addin from goomod " + file);
-    ZipFile zipFile = new ZipFile(file);
+    AddinReader addinReader = new GoomodFileReader(file);
 
     try {
-      ZipEntry manifestEntry = zipFile.getEntry(GOOMOD_MANIFEST);
-
-      if (manifestEntry == null) {
-        throw new AddinFormatException("No manifest found, is this an addin?");
-      }
-
-      InputStream is = zipFile.getInputStream(manifestEntry);
-      try {
-        return readManifest(is, file);
-      }
-      finally {
-        is.close();
-      }
+      return loadAddinFromReader(addinReader, file);
     }
     finally {
-      zipFile.close();
+      addinReader.close();
     }
   }
 
   public static Addin loadAddinFromDir(File dir) throws AddinFormatException, IOException
   {
     log.fine("Loading addin from expanded dir " + dir);
-    File manifestFile = new File(dir, GOOMOD_MANIFEST);
+    AddinReader addinReader = new ExpandedAddinReader(dir);
 
-    if (!manifestFile.exists()) {
+    try {
+      return loadAddinFromReader(addinReader, dir);
+    }
+    finally {
+      addinReader.close();
+    }
+  }
+
+  private static Addin loadAddinFromReader(AddinReader addinReader, File addinDiskFile) throws AddinFormatException, IOException
+  {
+    InputStream is;
+
+    try {
+      is = addinReader.getInputStream(GOOMOD_MANIFEST);
+    }
+    catch (FileNotFoundException e) {
       throw new AddinFormatException("No manifest found, is this an addin?");
     }
 
-    InputStream is = new FileInputStream(manifestFile);
     try {
-      return readManifest(is, dir);
+      return readManifest(is, addinDiskFile, addinReader);
     }
     finally {
       is.close();
@@ -126,7 +132,7 @@ public class AddinFactory
 
 
   // Synchronized since xpath expressions and patterns aren't thread safe
-  private static synchronized Addin readManifest(InputStream is, File addinDiskFile) throws IOException, AddinFormatException
+  private static synchronized Addin readManifest(InputStream is, File addinDiskFile, AddinReader addinReader) throws IOException, AddinFormatException
   {
     Document document = XMLUtil.loadDocumentFromInputStream(is);
 
@@ -141,9 +147,9 @@ public class AddinFactory
       else if (manifestVersion.equals(SPEC_VERSION_1_0)) {
         return readManifestVersion1_0(document, manifestVersion, addinDiskFile);
       }
-//      else if (manifestVersion.equals(SPEC_VERSION_1_1)) {
-//        return readManifestVersion1_1(document, manifestVersion, addinDiskFile);
-//      }
+      else if (manifestVersion.equals(SPEC_VERSION_1_1)) {
+        return readManifestVersion1_1(document, manifestVersion, addinDiskFile, addinReader);
+      }
       else {
         throw new AddinFormatException("This addin uses unsupported spec-version " + manifestVersion + ". Please upgrade GooTool.");
       }
@@ -152,6 +158,18 @@ public class AddinFactory
       throw new AddinFormatException("Unable to parse XPath: " + e.getLocalizedMessage(), e);
     }
   }
+
+  /**
+   * Reads the manifest for spec-version 1.0, the first version supported by GooTool.
+   *
+   * @param document        the DOM document of the manifest file.
+   * @param manifestVersion The spec-version of the manifest.
+   * @param addinDiskFile   The addin file or directory on disk.
+   * @return The constructed addin.
+   * @throws AddinFormatException if the addin was somehow invalid.
+   * @throws javax.xml.xpath.XPathExpressionException
+   *                              if the manifest was unparseable (really, should be AddinFormatException).
+   */
 
   private static Addin readManifestVersion1_0(Document document, VersionSpec manifestVersion, File addinDiskFile) throws XPathExpressionException, AddinFormatException
   {
@@ -231,18 +249,76 @@ public class AddinFactory
   }
 
   /*
-   * Version 1.1 is the same as 1.0, with the following additions:
-   * - .movie.xml and .anim.xml files from compile\ are compiled (by AddinInstaller)
+   * Reads the manifest for spec-version 1.1, first supported in GooTool 1.0.0
+    * Version 1.1 is the same as 1.0, with the following additions:
+   * - Thumbnails
+   * - TODO .movie.xml and .anim.xml files from compile\ are compiled (by AddinInstaller)
    * - TODO maybe choose the chapter?
    * - TODO maybe influence the position?
    * - TODO maybe required previous levels?
    * - TODO triggers on level end for movies
    * - TODO text.xml automation
+   *
+   * @param document        the DOM document of the manifest file.
+   * @param manifestVersion The spec-version of the manifest.
+   * @param addinDiskFile   The addin file or directory on disk.
+   * @return The constructed addin.
+   * @throws AddinFormatException if the addin was somehow invalid.
+   * @throws javax.xml.xpath.XPathExpressionException
+   *                              if the manifest was unparseable (really, should be AddinFormatException).
    */
-  private static Addin readManifestVersion1_1(Document document, VersionSpec manifestVersion, File addinDiskFile) throws XPathExpressionException, AddinFormatException
+  private static Addin readManifestVersion1_1(Document document, VersionSpec manifestVersion, File addinDiskFile, AddinReader addinReader) throws XPathExpressionException, AddinFormatException, IOException
   {
     Addin addin = readManifestVersion1_0(document, manifestVersion, addinDiskFile);
+
+    readThumbnail(document, addinReader, addin);
+
     return addin;
+  }
+
+  private static void readThumbnail(Document document, AddinReader addinReader, Addin addin)
+          throws XPathExpressionException, IOException, AddinFormatException
+  {
+    Node thumbnailNode = getNode(document, XPATH_ADDIN_THUMBNAIL);
+
+    if (thumbnailNode != null) {
+      int expectedWidth = XMLUtil.getAttributeIntegerRequired(thumbnailNode, "width");
+      int expectedHeight = XMLUtil.getAttributeIntegerRequired(thumbnailNode, "height");
+      String expectedType = XMLUtil.getAttributeStringRequired(thumbnailNode, "type");
+      String fileName = thumbnailNode.getTextContent().trim();
+
+      InputStream is = addinReader.getInputStream(fileName);
+      BufferedImage thumbnailImage;
+      try {
+        Iterator<ImageReader> readerIterator = ImageIO.getImageReadersByMIMEType(expectedType);
+        if (!readerIterator.hasNext()) {
+          throw new AddinFormatException("Unable to read image of type " + expectedType);
+        }
+        ImageReader reader = readerIterator.next();
+
+        ImageInputStream iis = ImageIO.createImageInputStream(is);
+        try {
+          reader.setInput(iis, true, true);
+          thumbnailImage = reader.read(0);
+        }
+        catch (IOException e) {
+          throw new AddinFormatException("Couldn't load the thumbnail file " + fileName, e);
+        }
+        finally {
+          reader.dispose();
+        }
+      }
+      finally {
+        is.close();
+      }
+
+      if (thumbnailImage.getWidth(null) != expectedWidth)
+        throw new AddinFormatException("Thumbnail width should be " + expectedWidth);
+      if (thumbnailImage.getHeight(null) != expectedHeight)
+        throw new AddinFormatException("Thumbnail height should be " + expectedHeight);
+
+      addin.setThumbnail(thumbnailImage);
+    }
   }
 
   private static VersionSpec decodeVersion(String minVersionStr, String errField) throws AddinFormatException
@@ -299,12 +375,23 @@ public class AddinFactory
     return s.trim();
   }
 
+  /**
+   * Gets the node, or null if node not found.
+   */
+  private static Node getNode(Document document, XPathExpression expression) throws XPathExpressionException
+  {
+    return (Node) expression.evaluate(document, XPathConstants.NODE);
+  }
+
   @SuppressWarnings({"UseOfSystemOutOrSystemErr"})
   public static void main(String[] args) throws IOException, AddinFormatException
   {
-    String file = "addins/src/com.goofans.davidc.jingleballs/addin.xml";
-    Addin addin = readManifest(new FileInputStream(file), null);
+//    String file = "addins/src/com.goofans.davidc.jingleballs/addin.xml";
+//    Addin addin = readManifest(new FileInputStream(file), null);
+//    System.out.println("addin = " + addin);
 
+    Addin addin = loadAddin(new File("addins/dist/com.goofans.davidc.jingleballs_1.3.goomod"));
     System.out.println("addin = " + addin);
+    System.out.println("addin.getThumbnail() = " + addin.getThumbnail());
   }
 }

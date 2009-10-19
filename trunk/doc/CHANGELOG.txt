@@ -4,6 +4,7 @@
 - Allow GooTool to find the 1.41 (bin32/bin64) version of World of Goo under Linux (#0000218)
 - Allow GooTool to find the Big Fish version of World of Goo under Mac OS X (#0000225)
 - Rename PC/Linux to Windows/Linux (#0000221)
+- Goomod 1.1: You can now specify a thumbnail image for addins.
 
 0.10.5, 28-June-2009
 

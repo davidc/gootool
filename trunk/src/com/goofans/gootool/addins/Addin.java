@@ -6,9 +6,10 @@ import java.io.File;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
+import java.awt.image.BufferedImage;
 
 /**
- * Immutable after construction
+ * Immutable after construction. There are setters for the purpose of easier construction in AddinFactory, but they are package-local.
  *
  * @author David Croft (davidc@goofans.com)
  * @version $Id$
@@ -38,8 +39,7 @@ public class Addin
   private Map<String, String> levelNames;
   private Map<String, String> levelSubtitles;
   private String levelOcd;
-
-//  private boolean enabled;
+  private BufferedImage thumbnail; // 1.1+
 
   public Addin(File diskFile, String id, String name, int type, VersionSpec manifestVersion, VersionSpec version, String description, String author, List<AddinDependency> dependencies, String levelDir, Map<String, String> levelNames, Map<String, String> levelSubtitles, String levelOcd)
   {
@@ -139,6 +139,16 @@ public class Addin
   public String getLevelOcd()
   {
     return levelOcd;
+  }
+
+  void setThumbnail(BufferedImage thumbnail)
+  {
+    this.thumbnail = thumbnail;
+  }
+
+  public BufferedImage getThumbnail()
+  {
+    return thumbnail;
   }
 
   public String toString()
