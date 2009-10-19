@@ -13,7 +13,6 @@ import javax.swing.*;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.net.MalformedURLException;
 
 /**
  * Sequentially performs GooTool's initialisation tasks before revealing the main UI.
@@ -47,13 +46,8 @@ public class StartupTask extends ProgressIndicatingTask
     beginStep(textProvider.getText("launcher.initgui"), false);
     MainFrame mainFrame = initControllerAndView(c);
 
-    // Launch a new thread to check for new version
-    try {
-      GooTool.executeTaskInThreadPool(new VersionCheck(mainFrame, false));
-    }
-    catch (MalformedURLException e) {
-      log.log(Level.WARNING, "Unable to check version on startup", e);
-    }
+    // Schedule a check for new version in 2 seconds
+    GooTool.scheduleTask(new VersionCheck(mainFrame, false), 2000);
 
     // Maybe launch a new thread to download billboards
     BillboardUpdater.maybeUpdateBillboards();

@@ -159,7 +159,7 @@ public class MainMenu
 
     menuItem = new JMenuItem("timeline editor");
     try {
-      Class.forName("com.goofans.gootool.movie.TimelineEditor");
+      Class.forName("com.goofans.gootoolsp.movie.TimelineEditor");
       menuItem.setActionCommand("tled");
       menuItem.addActionListener(controller);
     }
@@ -170,7 +170,7 @@ public class MainMenu
 
     menuItem = new JMenuItem("transform editor");
     try {
-      Class.forName("com.goofans.gootool.movie.TransformEditor");
+      Class.forName("com.goofans.gootoolsp.movie.TransformEditor");
       menuItem.setActionCommand("xfed");
       menuItem.addActionListener(controller);
     }
@@ -222,6 +222,12 @@ public class MainMenu
     menuItem = new JMenuItem(textProvider.getText("mainMenu.help.checkForUpdates"));
     menuItem.setMnemonic(KeyEvent.VK_U);
     menuItem.setActionCommand(Controller.CMD_CHECK_FOR_UPDATES);
+    menuItem.addActionListener(controller);
+    menu.add(menuItem);
+
+    menuItem = new JMenuItem(textProvider.getText("mainMenu.help.diagnostics"));
+    menuItem.setMnemonic(KeyEvent.VK_D);
+    menuItem.setActionCommand(Controller.CMD_DIAGNOSTICS);
     menuItem.addActionListener(controller);
     menu.add(menuItem);
 

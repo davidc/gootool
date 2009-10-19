@@ -3,7 +3,6 @@ package com.goofans.gootool.siteapi;
 import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -14,6 +13,8 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 /**
+ * API call to check whether we have the latest version of GooTool.
+ *
  * @author David Croft (davidc@goofans.com)
  * @version $Id$
  */
@@ -27,8 +28,11 @@ public class VersionCheck implements Runnable
 
   private boolean alwaysAlertUser;
   private Frame parentWindow;
+  private VersionSpec newVersion;
+  private String newVersionMessage;
+  private String newVersionDownloadUrl;
 
-  public VersionCheck(Frame parentWindow, boolean alwaysAlertUser) throws MalformedURLException
+  public VersionCheck(Frame parentWindow, boolean alwaysAlertUser)
   {
     this.alwaysAlertUser = alwaysAlertUser;
     this.parentWindow = parentWindow;
@@ -37,24 +41,42 @@ public class VersionCheck implements Runnable
   public void run()
   {
     try {
-      APIRequest request = new APIRequest(APIRequest.API_CHECKVERSION);
-      request.addGetParameter("version", Version.RELEASE.toString());
+      runUpdateCheck();
 
-      log.log(Level.FINE, "Checkversion " + request);
-
-      Document doc = request.doRequest();
-
-      if (findUpToDate(doc)) return;
-      if (findUpdateAvailable(doc)) return;
-
-      completed = true;
-      failureReason = new Exception("No result received from server!");
+      if (!upToDate && (alwaysAlertUser || !ToolPreferences.isIgnoreUpdate(newVersion))) {
+        SwingUtilities.invokeLater(new Runnable()
+        {
+          public void run()
+          {
+            new NewVersionDialog(parentWindow, newVersion, newVersionMessage, newVersionDownloadUrl).setVisible(true);
+          }
+        });
+      }
     }
     catch (Exception e) {
       log.log(Level.WARNING, "Unable to check version", e);
       completed = true;
       failureReason = e;
+
+      if (alwaysAlertUser) {
+        JOptionPane.showMessageDialog(parentWindow, "Can't check version: " + e.getLocalizedMessage(), "Can't check version", JOptionPane.ERROR_MESSAGE);
+      }
     }
+  }
+
+  public void runUpdateCheck() throws APIException, IOException
+  {
+    APIRequest request = new APIRequest(APIRequest.API_CHECKVERSION);
+    request.addGetParameter("version", Version.RELEASE.toString());
+
+    log.log(Level.FINE, "Checkversion " + request);
+
+    Document doc = request.doRequest();
+
+    if (findUpToDate(doc)) return;
+    if (findUpdateAvailable(doc)) return;
+
+    throw new APIException("No result received from server!");
   }
 
   private boolean findUpToDate(Document doc)
@@ -86,23 +108,14 @@ public class VersionCheck implements Runnable
       return false;
     }
 
-    final VersionSpec newVersion = new VersionSpec(XMLUtil.getElementStringRequired(updateAvailableEl, "version"));
-    final String message = XMLUtil.getElementString(updateAvailableEl, "message");
-    final String downloadUrl = XMLUtil.getElementString(updateAvailableEl, "download-url");
+    newVersion = new VersionSpec(XMLUtil.getElementStringRequired(updateAvailableEl, "version"));
+    newVersionMessage = XMLUtil.getElementString(updateAvailableEl, "message");
+    newVersionDownloadUrl = XMLUtil.getElementString(updateAvailableEl, "download-url");
 
-    log.log(Level.FINE, "New version available, ver=" + newVersion + ", message=" + message + ", downloadUrl=" + downloadUrl);
+    log.log(Level.FINE, "New version available, ver=" + newVersion + ", message=" + newVersionMessage + ", downloadUrl=" + newVersionDownloadUrl);
     completed = true;
     upToDate = false;
 
-    if (alwaysAlertUser || !ToolPreferences.isIgnoreUpdate(newVersion)) {
-      SwingUtilities.invokeLater(new Runnable()
-      {
-        public void run()
-        {
-          new NewVersionDialog(parentWindow, newVersion, message, downloadUrl).setVisible(true);
-        }
-      });
-    }
     return true;
   }
 

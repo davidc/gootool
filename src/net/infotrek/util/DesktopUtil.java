@@ -164,7 +164,7 @@ public class DesktopUtil
   }
 
   /**
-   * Launches the given URL and shows a dialog to the user if a browser couldn't be found or if the URL failed to launch.
+   * Opens the given File in the system default viewer application and shows a dialog to the user if the file couldn't be opened.
    *
    * @param file            the File to open
    * @param parentComponent The parent Component over which the error dialog should be shown

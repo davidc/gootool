@@ -7,6 +7,8 @@ import java.text.SimpleDateFormat;
 
 /**
  * Static access to the build/release version information.
+ * FULL includes the full version and the type (-dev etc).
+ * FRIENDLY is like FULL but without the final version component (SVN revision).
  *
  * @author David Croft (davidc@goofans.com)
  * @version $Id$

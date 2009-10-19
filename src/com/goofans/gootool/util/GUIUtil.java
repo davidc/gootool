@@ -6,6 +6,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.goofans.gootool.view.ProgressDialog;
+import com.goofans.gootool.GooTool;
 
 /**
  * @author David Croft (davidc@goofans.com)
@@ -84,7 +85,7 @@ public class GUIUtil
   {
     final Exception[] result = new Exception[]{null};
 
-    Thread thread = new Thread()
+    GooTool.executeTaskInThreadPool(new Runnable()
     {
       public void run()
       {
@@ -106,9 +107,7 @@ public class GUIUtil
           });
         }
       }
-    };
-
-    thread.start();
+    });
 
     progressDialog.setVisible(true); // blocks
 
