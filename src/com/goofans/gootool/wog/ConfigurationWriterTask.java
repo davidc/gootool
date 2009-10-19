@@ -207,6 +207,7 @@ public class ConfigurationWriterTask extends ProgressIndicatingTask
       p.putInt(WorldOfGoo.PREF_SCREENWIDTH, resolution.getWidth());
       p.putInt(WorldOfGoo.PREF_SCREENHEIGHT, resolution.getHeight());
     }
+    p.putInt(WorldOfGoo.PREF_REFRESHRATE, c.getRefreshRate());
     p.putInt(WorldOfGoo.PREF_UIINSET, c.getUiInset());
 
     p.putBoolean(WorldOfGoo.PREF_WINDOWS_VOLUME_CONTROL, c.isWindowsVolumeControl());

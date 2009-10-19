@@ -51,6 +51,7 @@ public class OptionsPanel implements ViewComponent
   private JPanel soundPanel;
   private HyperlinkLabel windowsVolumeControlHyperlink;
   private JCheckBox disableBillboardsCheckBox;
+  private JComboBox refreshRateCombo;
 
   public OptionsPanel(Controller controller)
   {
@@ -97,6 +98,27 @@ public class OptionsPanel implements ViewComponent
     else {
       soundPanel.setVisible(false);
     }
+
+    Set<Integer> refreshRates = Resolution.getSystemRefreshRates();
+    for (int refreshRate : refreshRates) {
+      refreshRateCombo.addItem(new RefreshRate(refreshRate));
+    }
+  }
+
+  private static class RefreshRate
+  {
+    int refreshRate;
+
+    private RefreshRate(int refreshRate)
+    {
+      this.refreshRate = refreshRate;
+    }
+
+    @Override
+    public String toString()
+    {
+      return refreshRate + " Hz";
+    }
   }
 
   private void updateResolutions()
@@ -129,10 +151,18 @@ public class OptionsPanel implements ViewComponent
     skipOpeningMovieCheckBox.setSelected(c.isSkipOpeningMovie());
     watermark.setText(c.getWatermark());
 
-// NB order matters here:
+    // NB order matters here:
     allowWidescreen.setSelected(c.isAllowWidescreen());
     updateResolutions();
     resolutionCombo.setSelectedItem(c.getResolution());
+
+    // Set selected refresh rate
+    for (int i = 0; i < refreshRateCombo.getItemCount(); ++i) {
+      if (((RefreshRate) refreshRateCombo.getItemAt(i)).refreshRate == c.getRefreshRate()) {
+        refreshRateCombo.setSelectedIndex(i);
+        break;
+      }
+    }
 
     try {
       installDirText.setText(WorldOfGoo.getTheInstance().getWogDir().getAbsolutePath());
@@ -177,6 +207,7 @@ public class OptionsPanel implements ViewComponent
     c.setWatermark(watermark.getText());
     c.setAllowWidescreen(allowWidescreen.isSelected());
     c.setResolution((Resolution) resolutionCombo.getSelectedItem());
+    c.setRefreshRate(((RefreshRate)refreshRateCombo.getSelectedItem()).refreshRate);
 
     ToolPreferences.setGooFansUsername(goofansUsername.getText());
     ToolPreferences.setGooFansPassword(new String(goofansPassword.getPassword()));

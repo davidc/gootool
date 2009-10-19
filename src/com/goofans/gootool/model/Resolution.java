@@ -14,8 +14,8 @@ public class Resolution implements Comparable
 {
   private static final Logger log = Logger.getLogger(Resolution.class.getName());
 
-  private int width;
-  private int height;
+  private final int width;
+  private final int height;
 
   private Resolution(int width, int height)
   {
@@ -113,10 +113,12 @@ public class Resolution implements Comparable
 
 
   private static final Set<Resolution> RESOLUTIONS;
+  private static final Set<Integer> REFRESH_RATES;
   public static final Resolution DEFAULT_RESOLUTION;
 
   static {
     Set<Resolution> resolutions = new TreeSet<Resolution>();
+    Set<Integer> refreshRates = new TreeSet<Integer>();
 
     // Make sure there's always a 800x600 resolution!
     resolutions.add(DEFAULT_RESOLUTION = new Resolution(800, 600));
@@ -124,15 +126,18 @@ public class Resolution implements Comparable
     for (GraphicsDevice screenDevice : GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices()) {
 
       for (DisplayMode displayMode : screenDevice.getDisplayModes()) {
-        int w = displayMode.getWidth();
-        int h = displayMode.getHeight();
-        Resolution resolution = new Resolution(w, h);
+        Resolution resolution = new Resolution(displayMode.getWidth(), displayMode.getHeight());
         resolutions.add(resolution);
+        
+        refreshRates.add(displayMode.getRefreshRate());
       }
     }
+
     RESOLUTIONS = Collections.unmodifiableSet(resolutions);
+    REFRESH_RATES = Collections.unmodifiableSet(refreshRates);
 
     log.finer("System resolutions " + RESOLUTIONS);
+    log.finer("Refresh rates " + REFRESH_RATES);
   }
 
   public static Set<Resolution> getSystemResolutions()
@@ -150,9 +155,15 @@ public class Resolution implements Comparable
     return null;
   }
 
+  public static Set<Integer> getSystemRefreshRates()
+  {
+    return REFRESH_RATES;
+  }
+
   @SuppressWarnings({"UseOfSystemOutOrSystemErr", "HardCodedStringLiteral"})
   public static void main(String[] args)
   {
     System.out.println("getSystemResolutions() = " + getSystemResolutions());
+    System.out.println("getSystemRefreshRates() = " + getSystemRefreshRates());
   }
 }
