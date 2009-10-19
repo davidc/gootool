@@ -17,6 +17,7 @@ public class Configuration
 {
   private Language language;
   private Resolution resolution;
+  private Integer refreshRate;
   private boolean allowWidescreen;
   private int uiInset;
   private boolean skipOpeningMovie;
@@ -34,6 +35,7 @@ public class Configuration
   {
     language = c.language;
     resolution = c.resolution;
+    refreshRate = c.refreshRate;
     allowWidescreen = c.allowWidescreen;
     uiInset = c.uiInset;
     skipOpeningMovie = c.skipOpeningMovie;
@@ -62,6 +64,16 @@ public class Configuration
   public void setResolution(Resolution resolution)
   {
     this.resolution = resolution;
+  }
+
+  public Integer getRefreshRate()
+  {
+    return refreshRate;
+  }
+
+  public void setRefreshRate(Integer refreshRate)
+  {
+    this.refreshRate = refreshRate;
   }
 
   public int getUiInset()
@@ -151,6 +163,7 @@ public class Configuration
     if (windowsVolumeControl != that.windowsVolumeControl) return false;
     if (language != null ? !language.equals(that.language) : that.language != null) return false;
     if (resolution != null ? !resolution.equals(that.resolution) : that.resolution != null) return false;
+    if (refreshRate != null ? !refreshRate.equals(that.refreshRate) : that.refreshRate != null) return false;
     if (watermark != null ? !watermark.equals(that.watermark) : that.watermark != null) return false;
 
     return enabledAddins.equals(that.enabledAddins);
@@ -161,6 +174,7 @@ public class Configuration
     int result;
     result = (language != null ? language.hashCode() : 0);
     result = 31 * result + (resolution != null ? resolution.hashCode() : 0);
+    result = 31 * result + (refreshRate != null ? refreshRate.hashCode() : 0);
     result = 31 * result + (watermark != null ? watermark.hashCode() : 0);
     result = 31 * result + (allowWidescreen ? 1 : 0);
     result = 31 * result + uiInset;

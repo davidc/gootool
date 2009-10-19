@@ -25,6 +25,7 @@ public class GamePreferences
   static final XPathExpression USER_CONFIG_XPATH_LANGUAGE;
   static final XPathExpression USER_CONFIG_XPATH_SCREENWIDTH;
   static final XPathExpression USER_CONFIG_XPATH_SCREENHEIGHT;
+  static final XPathExpression USER_CONFIG_XPATH_REFRESHRATE;
   static final XPathExpression USER_CONFIG_XPATH_UIINSET;
 
   static {
@@ -33,6 +34,7 @@ public class GamePreferences
       USER_CONFIG_XPATH_LANGUAGE = path.compile("/config/param[@name='language']/@value");
       USER_CONFIG_XPATH_SCREENWIDTH = path.compile("/config/param[@name='screen_width']/@value");
       USER_CONFIG_XPATH_SCREENHEIGHT = path.compile("/config/param[@name='screen_height']/@value");
+      USER_CONFIG_XPATH_REFRESHRATE = path.compile("/config/param[@name='refreshrate']/@value");
       USER_CONFIG_XPATH_UIINSET = path.compile("/config/param[@name='ui_inset']/@value");
     }
     catch (XPathExpressionException e) {
@@ -63,6 +65,13 @@ public class GamePreferences
       Resolution res = Resolution.getResolutionByDimensions(screenWidth, screenHeight);
       log.fine("Found selected resolution " + res);
       c.setResolution(res);
+
+      Object refreshRateResult = USER_CONFIG_XPATH_REFRESHRATE.evaluate(document, XPathConstants.NUMBER);
+      if (refreshRateResult != null) {
+        int refreshRate = ((Double) refreshRateResult).intValue();
+        log.fine("Found selected refresh rate " + refreshRate);
+        c.setRefreshRate(refreshRate);
+      }
 
       int ui_inset = ((Double) USER_CONFIG_XPATH_UIINSET.evaluate(document, XPathConstants.NUMBER)).intValue();
       c.setUiInset(ui_inset);
@@ -95,6 +104,14 @@ public class GamePreferences
 
         n = (Node) USER_CONFIG_XPATH_SCREENHEIGHT.evaluate(document, XPathConstants.NODE);
         n.setNodeValue(String.valueOf(resolution.getHeight()));
+      }
+
+      Integer refreshRate = c.getRefreshRate();
+      if (refreshRate != null) {
+        n = (Node) USER_CONFIG_XPATH_REFRESHRATE.evaluate(document, XPathConstants.NODE);
+        if (n != null) {
+          n.setNodeValue(refreshRate.toString());
+        }
       }
 
       n = (Node) USER_CONFIG_XPATH_UIINSET.evaluate(document, XPathConstants.NODE);

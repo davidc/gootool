@@ -8,6 +8,7 @@
 - Provide scrollbars for long addin descriptions in the addins tab and properties dialog. (#0000226)
 - Skip Thumbs.db, .DS_Store and .svn when installing addins (#0000215)
 - Make AddinInstaller use AddinReader, allowing installation of an addin from an extracted directory.
+- Allow changing refresh rate from the Options tab (#0000182)
 
 0.10.5, 28-June-2009
 

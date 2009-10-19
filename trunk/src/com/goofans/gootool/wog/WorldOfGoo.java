@@ -68,6 +68,7 @@ public abstract class WorldOfGoo
   static final String PREF_LANGUAGE = "language";
   static final String PREF_SCREENWIDTH = "screen_width";
   static final String PREF_SCREENHEIGHT = "screen_height";
+  static final String PREF_REFRESHRATE = "refresh_rate";
   static final String PREF_UIINSET = "ui_inset";
   static final String PREF_ADDINS = "addins";
   static final String PREF_WINDOWS_VOLUME_CONTROL = "windows_volume_control";
@@ -193,6 +194,7 @@ public abstract class WorldOfGoo
       height = 600;
     }
     c.setResolution(Resolution.getResolutionByDimensions(width, height));
+    c.setRefreshRate(p.getInt(PREF_REFRESHRATE, 60));
     c.setUiInset(p.getInt(PREF_UIINSET, c.getUiInset()));
 
     c.setWindowsVolumeControl(p.getBoolean(PREF_WINDOWS_VOLUME_CONTROL, false));
