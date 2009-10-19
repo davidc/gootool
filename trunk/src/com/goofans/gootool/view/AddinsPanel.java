@@ -44,7 +44,7 @@ public class AddinsPanel implements ViewComponent, PropertyChangeListener
   private JButton enableButton;
   private JButton disableButton;
   private JButton propertiesButton;
-  private JLabel description;
+  private JTextPane description;
   private JButton moveUpButton;
   private JButton moveDownButton;
   private HyperlinkLabel findMoreHyperlink;
@@ -143,6 +143,8 @@ public class AddinsPanel implements ViewComponent, PropertyChangeListener
         // add <html> to make sure it wraps, replace newlines with <br>, remove any HTML that may be in there already.
         description.setText("<html>" + addin.getDescription().replaceAll("<", "&lt;").replaceAll("\n", "<br>") + "</html>");
       }
+      description.setCaretPosition(0);
+      
       propertiesButton.setEnabled(true);
       enableButton.setEnabled(!isEnabled);
       disableButton.setEnabled(isEnabled);
