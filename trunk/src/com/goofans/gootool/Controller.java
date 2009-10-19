@@ -15,7 +15,6 @@ import java.util.Map;
 import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.net.MalformedURLException;
 
 import com.goofans.gootool.addins.Addin;
 import com.goofans.gootool.addins.AddinFactory;
@@ -42,6 +41,7 @@ public class Controller implements ActionListener
 
   public static final String CMD_ABOUT = "Help>About";
   public static final String CMD_CHECK_FOR_UPDATES = "Help>CheckForUpdates";
+  public static final String CMD_DIAGNOSTICS = "Help>Diagnostics";
 
   public static final String CMD_ADDIN_INSTALL = "Addin>Install";
   public static final String CMD_ADDIN_PROPERTIES = "Addin>Properties";
@@ -80,10 +80,10 @@ public class Controller implements ActionListener
 
   // The configuration we're editing
   private Configuration editorConfig;
-  private TextProvider textProvider;
+  private final TextProvider textProvider;
 
   // The codecs
-  private Map<String, GameFileCodecTool> codecs = new HashMap<String, GameFileCodecTool>(6);
+  private final Map<String, GameFileCodecTool> codecs = new HashMap<String, GameFileCodecTool>(6);
 
   public Controller()
   {
@@ -167,14 +167,11 @@ public class Controller implements ActionListener
       ToolPreferences.setL10nEnabled(enabled);
     }
     else if (cmd.equals(CMD_CHECK_FOR_UPDATES)) {
-      VersionCheck versionCheck = null;
-      try {
-        versionCheck = new VersionCheck(mainFrame, true);
-      }
-      catch (MalformedURLException e) {
-        showErrorDialog("Error checking version", e.getLocalizedMessage());
-      }
-      new Thread(versionCheck).start();
+      VersionCheck versionCheck = new VersionCheck(mainFrame, true);
+      GooTool.executeTaskInThreadPool(versionCheck);
+    }
+    else if (cmd.equals(CMD_DIAGNOSTICS)) {
+      runDiagnostics();
     }
     else if (codecs.containsKey(cmd)) {
       try {
@@ -453,7 +450,7 @@ public class Controller implements ActionListener
     }
 
     BillboardUpdater.maybeUpdateBillboards();
-    
+
     refreshView();
   }
 
@@ -745,6 +742,33 @@ public class Controller implements ActionListener
     JDialog aboutDialog = new AboutDialog(mainFrame);
 
     aboutDialog.setVisible(true);
+  }
+
+  public void runDiagnostics()
+  {
+    JFileChooser chooser = new JFileChooser();
+    chooser.setDialogTitle("Save diagnostic report");
+    chooser.setSelectedFile(new File(chooser.getCurrentDirectory(), "gootool_diagnostics.txt"));
+    FileNameExtensionFilter filter = new FileNameExtensionFilter("Text file", "txt");
+    chooser.setFileFilter(filter);
+    int returnVal = chooser.showSaveDialog(mainFrame);
+
+    if (returnVal != JFileChooser.APPROVE_OPTION) {
+      log.finer("User cancelled diagnostics file chooser");
+      return;
+    }
+
+    File outFile = chooser.getSelectedFile();
+    try {
+      Diagnostics diagnostics = new Diagnostics(outFile);
+      GUIUtil.runTask(mainFrame, "Running diagnostics", diagnostics);
+    }
+    catch (Exception e) {
+      showErrorDialog("Unable to run diagnostics", "Unable to run diagnostics: " + e.getLocalizedMessage());
+      return;
+    }
+
+    DesktopUtil.openAndWarn(outFile, mainFrame);
   }
 
 

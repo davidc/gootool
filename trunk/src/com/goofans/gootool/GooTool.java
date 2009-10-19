@@ -162,6 +162,12 @@ public class GooTool
     threadPoolExecutor.execute(task);
   }
 
+  public static void scheduleTask(Runnable task, long delay)
+  {
+    log.log(Level.FINEST, "Scheduling task " + task + " in " + delay + " msec");
+    scheduledExecutor.schedule(task, delay, TimeUnit.MILLISECONDS);
+  }
+
   public static void scheduleTaskWithFixedDelay(Runnable task, long initialDelayMsec, long delayMsec)
   {
     log.log(Level.FINEST, "Scheduling task " + task + " with init delay " + initialDelayMsec + " and recurring delay " + delayMsec);

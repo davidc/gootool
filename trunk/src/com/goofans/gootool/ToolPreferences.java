@@ -3,6 +3,7 @@ package com.goofans.gootool;
 import net.infotrek.util.TextUtil;
 
 import java.util.prefs.Preferences;
+import java.util.prefs.BackingStoreException;
 import java.util.Random;
 import java.util.Map;
 import java.util.TreeMap;
@@ -10,6 +11,7 @@ import java.util.StringTokenizer;
 import java.util.logging.Logger;
 import java.util.logging.Level;
 import java.io.IOException;
+import java.io.PrintStream;
 
 import com.goofans.gootool.util.VersionSpec;
 
@@ -236,5 +238,26 @@ public class ToolPreferences
     }
 
     return ratings;
+  }
+
+  /**
+   * Prints preferences to the specified output stream, hiding the user's GooFans password.
+   * This method is useful for debugging.
+   *
+   * @param out an output stream.
+   * @throws java.util.prefs.BackingStoreException if the BackingStore cannot be reacehd
+   */
+  public static void list(PrintStream out) throws BackingStoreException
+  {
+    String[] prefKeys = PREFS.keys();
+    for (String prefKey : prefKeys) {
+      out.print(prefKey + "=");
+      if (prefKey.equals(PREF_GOOFANS_PASSWORD)) {
+        out.println("[hidden]");
+      }
+      else {
+        out.println(PREFS.get(prefKey, null));
+      }
+    }
   }
 }
