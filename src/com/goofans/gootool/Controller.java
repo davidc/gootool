@@ -10,24 +10,24 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import static com.goofans.gootool.GameFileCodecTool.CodecType;
 import com.goofans.gootool.addins.Addin;
 import com.goofans.gootool.addins.AddinFactory;
 import com.goofans.gootool.model.Configuration;
 import com.goofans.gootool.profile.ProfileFactory;
+import com.goofans.gootool.siteapi.*;
 import com.goofans.gootool.util.*;
 import com.goofans.gootool.view.AboutDialog;
 import com.goofans.gootool.view.AddinPropertiesDialog;
 import com.goofans.gootool.view.MainFrame;
 import com.goofans.gootool.wog.ConfigurationWriterTask;
 import com.goofans.gootool.wog.WorldOfGoo;
-import com.goofans.gootool.siteapi.*;
-import static com.goofans.gootool.GameFileCodecTool.CodecType;
 
 /**
  * @author David Croft (davidc@goofans.com)
@@ -167,8 +167,21 @@ public class Controller implements ActionListener
       ToolPreferences.setL10nEnabled(enabled);
     }
     else if (cmd.equals(CMD_CHECK_FOR_UPDATES)) {
-      VersionCheck versionCheck = new VersionCheck(mainFrame, true);
-      GooTool.executeTaskInThreadPool(versionCheck);
+      try {
+        GUIUtil.runTask(mainFrame, "Checking for updates...", new ProgressIndicatingTask()
+        {
+          @Override
+          public void run() throws Exception
+          {
+            VersionCheck versionCheck = new VersionCheck(mainFrame, true);
+            versionCheck.run();
+          }
+        });
+      }
+      catch (Exception e) {
+        // should never happen.
+        showErrorDialog("Can't check version", e.getLocalizedMessage());
+      }
     }
     else if (cmd.equals(CMD_DIAGNOSTICS)) {
       runDiagnostics();
