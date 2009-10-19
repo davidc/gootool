@@ -2,14 +2,12 @@ package com.goofans.gootool.addins;
 
 import javax.imageio.ImageIO;
 import javax.xml.transform.TransformerException;
-import java.awt.*;
+import java.awt.Image;
 import java.io.*;
-import java.util.Enumeration;
-import java.util.Map;
+import java.util.*;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
 
 import com.goofans.gootool.io.GameFormat;
 import com.goofans.gootool.io.MacGraphicFormat;
@@ -22,6 +20,8 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
 /**
+ * Installs an addin into the current custom WoG.
+ *
  * @author David Croft (davidc@goofans.com)
  * @version $Id$
  */
@@ -40,6 +40,12 @@ public class AddinInstaller
   private static final int PASS_MERGE = 1;
   private static final int PASS_COMPILE = 2;
 
+  private static final List<String> SKIP_FILES = Arrays.asList(".svn", "Thumbs.db", "thumbs.db", ".DS_Store");
+  private static final String EXTENSION_PNG = ".png";
+  private static final String EXTENSION_XSL = ".xsl";
+  private static final String EXTENSION_BIN = ".bin";
+  private static final String EXTENSION_XML = ".xml";
+
   private AddinInstaller()
   {
   }
@@ -48,50 +54,31 @@ public class AddinInstaller
   {
     log.log(Level.FINE, "Installing addin " + addin.getId());
 
-    if (addin.getDiskFile().isFile()) {
-      ZipFile zipFile = new ZipFile(addin.getDiskFile());
+    AddinReader addinReader = AddinFactory.getAddinReader(addin.getDiskFile());
 
-      try {
-        for (int pass = 0; pass < PASSES.length; ++pass) {
-          String passPrefix = PASSES[pass];
-          log.log(Level.FINER, "Pass " + pass + " (looking in " + passPrefix + ")");
-
-          Enumeration<? extends ZipEntry> zipEntries = zipFile.entries();
-
-          while (zipEntries.hasMoreElements()) {
-            ZipEntry zipEntry = zipEntries.nextElement();
-
-            if (!zipEntry.isDirectory() && zipEntry.getName().startsWith(passPrefix)) {
-              String fileName = zipEntry.getName().substring(passPrefix.length());
-              InputStream is = zipFile.getInputStream(zipEntry);
-
-              try {
-                doPassOnFile(addin, pass, fileName, is);
-              }
-              finally {
-                is.close();
-              }
-            }
-          }
-        }
-      }
-      finally {
-        zipFile.close();
-      }
-    }
-    else {
-      File rootDir;
-      rootDir = addin.getDiskFile();
-
+    try {
       for (int pass = 0; pass < PASSES.length; ++pass) {
         String passPrefix = PASSES[pass];
         log.log(Level.FINER, "Pass " + pass + " (looking in " + passPrefix + ")");
 
-        File passSrcDir = new File(rootDir, passPrefix);
-        if (passSrcDir.isDirectory()) {
-          doPassInDir(addin, pass, passSrcDir, "");
+        Iterator<String> passEntries = addinReader.getEntriesInDirectory(passPrefix, SKIP_FILES);
+
+        while (passEntries.hasNext()) {
+          String fileName = passEntries.next();
+
+          InputStream is = addinReader.getInputStream(passPrefix + fileName);
+
+          try {
+            doPassOnFile(addin, pass, fileName, is);
+          }
+          finally {
+            is.close();
+          }
         }
       }
+    }
+    finally {
+      addinReader.close();
     }
 
     if (addin.getType() == Addin.TYPE_LEVEL) {
@@ -99,24 +86,6 @@ public class AddinInstaller
     }
 
     log.log(Level.FINE, "Addin " + addin.getId() + " installed");
-  }
-
-  private static void doPassInDir(Addin addin, int pass, File passSrcDir, String pathName) throws IOException, AddinFormatException
-  {
-    for (File file : passSrcDir.listFiles()) {
-      if (file.isDirectory() && !file.getName().equals(".svn")) {
-        doPassInDir(addin, pass, file, pathName + file.getName() + "/");
-      }
-      else if (file.isFile()) {
-        InputStream is = new FileInputStream(file);
-        try {
-          doPassOnFile(addin, pass, pathName + file.getName(), is);
-        }
-        finally {
-          is.close();
-        }
-      }
-    }
   }
 
   private static void doPassOnFile(Addin addin, int pass, String fileName, InputStream is) throws IOException, AddinFormatException
@@ -153,7 +122,7 @@ public class AddinInstaller
     log.log(Level.FINER, "Override " + fileName);
     checkDirOk(fileName);
 
-    if (fileName.endsWith(".png") && PlatformSupport.getPlatform() == PlatformSupport.Platform.MACOSX) {
+    if (fileName.endsWith(EXTENSION_PNG) && PlatformSupport.getPlatform() == PlatformSupport.Platform.MACOSX) {
       // Mac PNG files need to be "compiled"
       File destFile = WorldOfGoo.getTheInstance().getCustomGameFile(fileName + ".binltl");
       Utilities.mkdirsOrException(destFile.getParentFile());
@@ -173,7 +142,7 @@ public class AddinInstaller
         os.close();
       }
 
-      if (fileName.endsWith(".png")) {
+      if (fileName.endsWith(EXTENSION_PNG)) {
         // Force the image to be read, so Windows users can detect images that Java can't read and prevent
         // problems on Mac
         ImageIO.read(destFile);
@@ -186,9 +155,9 @@ public class AddinInstaller
     log.log(Level.FINER, "Merge " + fileName);
     checkDirOk(fileName);
 
-    if (!fileName.endsWith(".xsl")) throw new AddinFormatException("Addin has a non-XSLT file in the merge directory: " + fileName);
+    if (!fileName.endsWith(EXTENSION_XSL)) throw new AddinFormatException("Addin has a non-XSLT file in the merge directory: " + fileName);
 
-    File mergeFile = WorldOfGoo.getTheInstance().getCustomGameFile(fileName.substring(0, fileName.length() - 4) + ".bin");
+    File mergeFile = WorldOfGoo.getTheInstance().getCustomGameFile(fileName.substring(0, fileName.length() - 4) + EXTENSION_BIN);
 
     if (!mergeFile.exists()) throw new AddinFormatException("Addin tries to merge a nonexistent file: " + fileName);
 
@@ -215,8 +184,9 @@ public class AddinInstaller
             && fileName.endsWith(".movie.xml")) {
       throw new RuntimeException("compiling movies not yet done"); // TODO
     }
-    else */if (fileName.endsWith(".xml")) {
-      File destFile = WorldOfGoo.getTheInstance().getCustomGameFile(fileName.substring(0, fileName.length() - 4) + ".bin");
+    else */
+    if (fileName.endsWith(EXTENSION_XML)) {
+      File destFile = WorldOfGoo.getTheInstance().getCustomGameFile(fileName.substring(0, fileName.length() - 4) + EXTENSION_BIN);
       Utilities.mkdirsOrException(destFile.getParentFile());
 
       String xml = Utilities.readStreamIntoString(is);

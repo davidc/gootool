@@ -130,6 +130,16 @@ public class AddinFactory
     }
   }
 
+  // for use by AddinInstaller, since it shouldn't need to know whether the addin is a file or disk. still not an ideal arrangement though.
+  static AddinReader getAddinReader(File diskFile) throws IOException
+  {
+    if (diskFile.isDirectory()) {
+      return new ExpandedAddinReader(diskFile);
+    }
+    else {
+      return new GoomodFileReader(diskFile);
+    }
+  }
 
   // Synchronized since xpath expressions and patterns aren't thread safe
   private static synchronized Addin readManifest(InputStream is, File addinDiskFile, AddinReader addinReader) throws IOException, AddinFormatException
