@@ -2,7 +2,6 @@ package com.goofans.gootool.view;
 
 import com.goofans.gootool.addins.Addin;
 import com.goofans.gootool.addins.AddinDependency;
-import com.goofans.gootool.GooTool;
 import com.goofans.gootool.util.GUIUtil;
 import com.goofans.gootool.wog.WorldOfGoo;
 
@@ -15,7 +14,7 @@ import java.util.List;
  */
 public class AddinPropertiesDialog extends JDialog
 {
-  private JLabel description;
+  private JTextPane description;
   private JButton okButton;
   private JLabel name;
   private JLabel version;
@@ -23,6 +22,8 @@ public class AddinPropertiesDialog extends JDialog
   private JLabel id;
   private JLabel depends;
   private JPanel rootPanel;
+  private JPanel thumbnailPanel;
+  private JLabel thumbnail;
 
   public AddinPropertiesDialog(JFrame mainFrame, Addin a)
   {
@@ -52,8 +53,16 @@ public class AddinPropertiesDialog extends JDialog
       // add <html> to make sure it wraps, replace newlines with <br>, remove any HTML that may be in there already.
       description.setText("<html>" + a.getDescription().replaceAll("<", "&lt;").replaceAll("\n", "<br>") + "</html>");
     }
+    description.setCaretPosition(0);
 
-    if (a.getDependencies().size() == 0) {
+    if (a.getThumbnail() == null) {
+      rootPanel.remove(thumbnailPanel);
+    }
+    else {
+      thumbnail.setIcon(new ImageIcon(a.getThumbnail()));
+    }
+
+    if (a.getDependencies().isEmpty()) {
       depends.setText("Nothing");
     }
     else {
@@ -83,7 +92,7 @@ public class AddinPropertiesDialog extends JDialog
 
         if (!isSatisfied) sb.append("</font>");
 
-        sb.append("<br/>");
+        sb.append("<br>");
       }
       sb.append("</html>");
 
@@ -91,6 +100,8 @@ public class AddinPropertiesDialog extends JDialog
     }
 
     pack();
+
+    okButton.requestFocusInWindow();
 
     setLocationRelativeTo(mainFrame);
   }
