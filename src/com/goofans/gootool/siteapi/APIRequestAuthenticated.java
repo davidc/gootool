@@ -6,12 +6,14 @@ import java.util.logging.Logger;
 import com.goofans.gootool.ToolPreferences;
 
 /**
+ * An API request that requires a user login.
+ *
  * @author David Croft (davidc@goofans.com)
  * @version $Id$
  */
 public class APIRequestAuthenticated extends APIRequest
 {
-  private static final Logger log = Logger.getLogger(ProfileBackupRequest.class.getName());
+  private static final Logger log = Logger.getLogger(APIRequestAuthenticated.class.getName());
 
   public APIRequestAuthenticated(URL url) throws APIException
   {
