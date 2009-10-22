@@ -28,7 +28,25 @@ public class AddinUpdatesCheckRequest extends APIRequest
     super(API_ADDIN_UPDATES_CHECK);
   }
 
-  public Map<String, AvailableUpdate> checkUpdates(List<String> addinIds) throws APIException
+  public Map<String, AvailableUpdate> checkUpdates() throws APIException
+  {
+
+    final List<Addin> availableAddins = WorldOfGoo.getAvailableAddins();
+    return checkUpdates(availableAddins);
+  }
+
+  public Map<String, AvailableUpdate> checkUpdates(List<Addin> addins) throws APIException
+  {
+    List<String> checkAddins = new ArrayList<String>(addins.size());
+
+    for (Addin addin : addins) {
+      checkAddins.add(addin.getId());
+    }
+
+    return checkUpdatesById(checkAddins);
+  }
+
+  public Map<String, AvailableUpdate> checkUpdatesById(List<String> addinIds) throws APIException
   {
     log.log(Level.FINE, "Addin update check started");
 
@@ -42,12 +60,6 @@ public class AddinUpdatesCheckRequest extends APIRequest
       sb.append(addinId);
     }
     addPostParameter("addins", sb.toString());
-
-//    try {
-//      InputStream is = doRequestInt();
-//      Utilities.copyStreams(is, System.out);
-//    }
-//    catch (IOException e) {}
 
     Document doc = doRequest();
 
@@ -130,18 +142,10 @@ public class AddinUpdatesCheckRequest extends APIRequest
     final WorldOfGoo wog = WorldOfGoo.getTheInstance();
     wog.init();
 
-    final List<Addin> availableAddins = WorldOfGoo.getAvailableAddins();
+//    new AddinUpdatesCheckRequest().checkUpdatesById(Arrays.asList(new String[]{"goas", "com.goofans.billboards"}));
+    final Map<String, AvailableUpdate> updates = new AddinUpdatesCheckRequest().checkUpdates();
 
-    List<String> checkAddins = new ArrayList<String>(availableAddins.size());
-
-    for (Addin addin : availableAddins) {
-      checkAddins.add(addin.getId());
-    }
-
-//    new AddinUpdatesCheckRequest().checkUpdates(Arrays.asList(new String[]{"goas", "com.goofans.billboards"}));
-    final Map<String, AvailableUpdate> updates = new AddinUpdatesCheckRequest().checkUpdates(checkAddins);
-
-    for (Addin addin : availableAddins) {
+    for (Addin addin : WorldOfGoo.getAvailableAddins()) {
       AvailableUpdate update = updates.get(addin.getId());
       if (update != null) {
         System.out.println("addin.getId() = " + addin.getId());
@@ -151,6 +155,13 @@ public class AddinUpdatesCheckRequest extends APIRequest
           System.out.println("Update available!!!");
         }
       }
+    }
+
+    System.out.println();
+    System.out.println("-- Update map --");
+    for (Map.Entry<String, AvailableUpdate> update : updates.entrySet()) {
+      System.out.println("update.getKey() = " + update.getKey());
+      System.out.println("update.getValue() = " + update.getValue());
     }
   }
 

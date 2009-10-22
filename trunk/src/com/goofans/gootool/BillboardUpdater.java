@@ -42,7 +42,7 @@ public class BillboardUpdater implements Runnable
         AddinUpdatesCheckRequest checkRequest = new AddinUpdatesCheckRequest();
         ArrayList<String> checkList = new ArrayList<String>(1);
         checkList.add(BILLBOARDS_ADDIN_ID);
-        Map<String, AddinUpdatesCheckRequest.AvailableUpdate> updates = checkRequest.checkUpdates(checkList);
+        Map<String, AddinUpdatesCheckRequest.AvailableUpdate> updates = checkRequest.checkUpdatesById(checkList);
         update = updates.get(BILLBOARDS_ADDIN_ID);
       }
       catch (APIException e) {

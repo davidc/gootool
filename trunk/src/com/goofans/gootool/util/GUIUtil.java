@@ -5,8 +5,8 @@ import java.awt.event.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.goofans.gootool.view.ProgressDialog;
 import com.goofans.gootool.GooTool;
+import com.goofans.gootool.view.ProgressDialog;
 
 /**
  * @author David Croft (davidc@goofans.com)
@@ -74,9 +74,16 @@ public class GUIUtil
     }
   }
 
-  public static void runTask(JFrame parent, String windowTitle, final ProgressIndicatingTask task) throws Exception
+  public static void runTask(JFrame owner, String windowTitle, final ProgressIndicatingTask task) throws Exception
   {
-    final ProgressDialog progressDialog = new ProgressDialog(parent, windowTitle);
+    final ProgressDialog progressDialog = new ProgressDialog(owner, windowTitle);
+    task.addListener(progressDialog);
+    runTask(task, progressDialog);
+  }
+
+  public static void runTask(JDialog owner, String windowTitle, final ProgressIndicatingTask task) throws Exception
+  {
+    final ProgressDialog progressDialog = new ProgressDialog(owner, windowTitle);
     task.addListener(progressDialog);
     runTask(task, progressDialog);
   }
