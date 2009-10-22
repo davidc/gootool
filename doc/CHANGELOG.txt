@@ -13,6 +13,7 @@
 - Allow changing refresh rate from the Options tab (#0000182).
 - Added a diagnostic report to the Help menu to aid debugging GooTool problems (#0000232).
 - Run lengthy operations in a background thread so the GUI doesn't lock up (#0000174).
+- Initial work on iPhone version.
 
 0.10.5, 28-June-2009
 
