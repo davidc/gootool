@@ -195,7 +195,7 @@ public class Controller implements ActionListener
       try {
         codecs.get(cmd).runTool(mainFrame);
       }
-      catch (IOException e) {
+      catch (Exception e) {
         log.log(Level.SEVERE, "Error coding file", e);
         showErrorDialog("Error coding file", e.getLocalizedMessage());
       }
