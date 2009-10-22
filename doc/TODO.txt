@@ -1,7 +1,5 @@
 MILESTONE 0.10.x (Final beta series)
 
-- Scrollbar needed for addins panel to revael buttons (see infinitive windows freezer) (#0000226)
-
 - BUG FIX: Mac image conversion has slight colour shifts due to ColorModel
 - IMPROVEMENT: Don't SAVE if unmodified on LAUNCH
 
@@ -13,8 +11,6 @@ MILESTONE 0.10.x (Final beta series)
 - xanax: don't jump mods around when en/disabling
 
 - use swingworker for background stuff
-
-- rate this addin from gootool
 
 - test addin dependencies on: install from double click goomod, check/uncheck addins list
 

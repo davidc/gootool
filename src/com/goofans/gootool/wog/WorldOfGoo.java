@@ -106,7 +106,7 @@ public abstract class WorldOfGoo
 
   protected abstract File getAddinInstalledDir() throws IOException;
 
-  protected void updateInstalledAddins()
+  public void updateInstalledAddins()
   {
     availableAddins = new LinkedList<Addin>();
 
@@ -119,10 +119,6 @@ public abstract class WorldOfGoo
       return;
     }
 
-//    if (!addinsDir.exists()) {
-//      addinsDir.mkdir();
-//    }
-//    else {
     File[] files = addinsDir.listFiles();
 
     for (File file : files) {
@@ -138,7 +134,6 @@ public abstract class WorldOfGoo
         }
       }
     }
-//    }
   }
 
   public Configuration readConfiguration() throws IOException
@@ -238,14 +233,15 @@ public abstract class WorldOfGoo
   protected abstract File getAddinInstalledFile(String addinId) throws IOException;
 
 
-  // TODO need a flag to defer updateInstalledAddins (for callers who know they're going to do multiple installs)
-  public void installAddin(File addinFile, String addinId) throws IOException
+  public void installAddin(File addinFile, String addinId, boolean skipUpdate) throws IOException
   {
-    // Check we don't already have an addin with this ID
-    //TODO replace it
-    for (Addin availableAddin : availableAddins) {
-      if (availableAddin.getId().equals(addinId)) {
-        throw new IOException("An addin with id " + addinId + " already exists!");
+    // If we're skipping the auto-update, we're in a batch process, so don't check the addin already exists
+    if (!skipUpdate) {
+      // Check we don't already have an addin with this ID
+      for (Addin availableAddin : availableAddins) {
+        if (availableAddin.getId().equals(addinId)) {
+          throw new IOException("An addin with id " + addinId + " already exists!");
+        }
       }
     }
 
@@ -255,11 +251,11 @@ public abstract class WorldOfGoo
 
     Utilities.copyFile(addinFile, destFile);
 
-    updateInstalledAddins();
+    if (!skipUpdate)
+      updateInstalledAddins();
   }
 
-  // TODO need a flag to defer updateInstalledAddins (for callers who know they're going to do multiple installs)
-  public void uninstallAddin(Addin addin) throws IOException
+  public void uninstallAddin(Addin addin, boolean skipUpdate) throws IOException
   {
     File addinFile = addin.getDiskFile();
     log.log(Level.INFO, "Uninstalling addin, deleting " + addinFile);
@@ -268,7 +264,8 @@ public abstract class WorldOfGoo
       throw new IOException("Couldn't delete " + addinFile);
     }
 
-    updateInstalledAddins();
+    if (!skipUpdate)
+      updateInstalledAddins();
   }
 
   public abstract File chooseCustomDir(Component mainFrame);

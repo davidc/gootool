@@ -244,6 +244,9 @@ public class Controller implements ActionListener
 
     AddinUpdatesChooser dialog = new AddinUpdatesChooser(mainFrame, updates[0]);
     dialog.setVisible(true);
+
+    // Refresh the addins table
+    refreshView();
   }
 
   private void installAddin()
@@ -357,12 +360,12 @@ public class Controller implements ActionListener
             log.info("User cancelled overwriting installation of " + addin);
             return;
           }
-          worldOfGoo.uninstallAddin(installedAddin);
+          worldOfGoo.uninstallAddin(installedAddin, false);
           break;
         }
       }
 
-      worldOfGoo.installAddin(addinFile, addin.getId());
+      worldOfGoo.installAddin(addinFile, addin.getId(), false);
     }
     catch (IOException e) {
       log.log(Level.SEVERE, "Unable to copy to addins directory", e);
@@ -395,7 +398,7 @@ public class Controller implements ActionListener
 //    }
 
     try {
-      WorldOfGoo.getTheInstance().uninstallAddin(addin);
+      WorldOfGoo.getTheInstance().uninstallAddin(addin, false);
     }
     catch (IOException e) {
       log.log(Level.SEVERE, "Unable to uninstall addin", e);
