@@ -1,22 +1,22 @@
 package com.goofans.gootool.wog;
 
+import javax.xml.transform.TransformerException;
+import java.io.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.prefs.Preferences;
+
+import com.goofans.gootool.BillboardUpdater;
 import com.goofans.gootool.GooTool;
 import com.goofans.gootool.ToolPreferences;
-import com.goofans.gootool.BillboardUpdater;
 import com.goofans.gootool.addins.*;
 import com.goofans.gootool.model.Configuration;
 import com.goofans.gootool.model.Resolution;
 import com.goofans.gootool.platform.PlatformSupport;
 import com.goofans.gootool.util.*;
-
-import javax.xml.transform.TransformerException;
-import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Arrays;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import java.util.prefs.Preferences;
 
 /**
  * Handles the actual writing of the configuration to the World of Goo directory.
@@ -33,6 +33,8 @@ public class ConfigurationWriterTask extends ProgressIndicatingTask
   private static final List<String> skippedFiles = Arrays.asList("Thumbs.db");
 
   private final Configuration configuration;
+  private static final String IRRKLANG_DLL = "irrKlang.dll";
+  private static final String REAL_IRRKLANG_DLL = "RealIrrKlang.dll";
 
   public ConfigurationWriterTask(Configuration configuration)
   {
@@ -132,6 +134,15 @@ public class ConfigurationWriterTask extends ProgressIndicatingTask
           Utilities.copyFile(srcFile, destFile);
           copied++;
         }
+      }
+    }
+
+    // Windows hack: If the user already had a RealIrrKlang.dll in the source directory, they must have manually
+    // installed Maks' volume control in the past, so move that to irrKlang.dll (#0000219)
+    if (PlatformSupport.getPlatform() == PlatformSupport.Platform.WINDOWS) {
+      File realIrrKlangFile = new File(wogDir, REAL_IRRKLANG_DLL);
+      if (realIrrKlangFile.exists()) {
+        Utilities.copyFile(realIrrKlangFile, new File(customDir, IRRKLANG_DLL));
       }
     }
 
@@ -256,13 +267,13 @@ public class ConfigurationWriterTask extends ProgressIndicatingTask
     if (PlatformSupport.getPlatform() == PlatformSupport.Platform.WINDOWS && configuration.isWindowsVolumeControl()) {
       log.log(Level.FINER, "Copying custom irrKlang.dll");
 
-      File installedIrrKlangFile = worldOfGoo.getCustomGameFile("irrKlang.dll");
-      File realIrrKlangFile = worldOfGoo.getCustomGameFile("RealIrrKlang.dll");
+      File installedIrrKlangFile = worldOfGoo.getCustomGameFile(IRRKLANG_DLL);
+      File realIrrKlangFile = worldOfGoo.getCustomGameFile(REAL_IRRKLANG_DLL);
 
       //noinspection ResultOfMethodCallIgnored
       realIrrKlangFile.delete(); // ok to fail if it didn't exist
       if (!installedIrrKlangFile.renameTo(realIrrKlangFile)) {
-        throw new IOException("Unable to rename irrKlang.dll to RealIrrKlang.dll");
+        throw new IOException("Unable to rename " + IRRKLANG_DLL + " to " + REAL_IRRKLANG_DLL);
       }
 
       Utilities.copyFile(new File("lib\\irrKlang\\irrKlang.dll"), installedIrrKlangFile);
