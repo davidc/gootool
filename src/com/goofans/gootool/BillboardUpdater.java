@@ -1,9 +1,7 @@
 package com.goofans.gootool;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Map;
@@ -15,6 +13,7 @@ import com.goofans.gootool.addins.AddinFactory;
 import com.goofans.gootool.addins.AddinFormatException;
 import com.goofans.gootool.siteapi.APIException;
 import com.goofans.gootool.siteapi.AddinUpdatesCheckRequest;
+import com.goofans.gootool.util.DebugUtil;
 import com.goofans.gootool.util.Utilities;
 import com.goofans.gootool.wog.WorldOfGoo;
 
@@ -93,9 +92,7 @@ public class BillboardUpdater implements Runnable
       log.log(Level.INFO, "Billboards update is available, downloading " + update.downloadUrl);
 
       try {
-        InputStream downloadStream = new URL(update.downloadUrl).openStream();
-        FileOutputStream outputStream = new FileOutputStream(billboardModFile);
-        Utilities.copyStreams(downloadStream, outputStream);
+        Utilities.downloadFile(new URL(update.downloadUrl), billboardModFile);
       }
       catch (IOException e) {
         log.log(Level.SEVERE, "Unable to download billboard goomod", e);
@@ -140,6 +137,8 @@ public class BillboardUpdater implements Runnable
 
   public static void main(String[] args)
   {
+    DebugUtil.setAllLogging();
+    GooTool.initExecutors();
     WorldOfGoo.getTheInstance().init();
 
     BillboardUpdater.maybeUpdateBillboards();

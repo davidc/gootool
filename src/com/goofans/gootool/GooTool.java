@@ -2,11 +2,14 @@ package com.goofans.gootool;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.List;
-import java.util.LinkedList;
-import java.util.Arrays;
 import java.util.ArrayList;
-import java.util.concurrent.*;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -53,9 +56,7 @@ public class GooTool
 
       initIcon();
       initTextProvider();
-
-      threadPoolExecutor = Executors.newCachedThreadPool();
-      scheduledExecutor = Executors.newScheduledThreadPool(1);
+      initExecutors();
 
       controller = new Controller();
 
@@ -74,6 +75,18 @@ public class GooTool
       JOptionPane.showMessageDialog(null, "Uncaught exception (" + t.getClass().getName() + "):\n" + t.getLocalizedMessage(), "GooTool Exception", JOptionPane.ERROR_MESSAGE);
       System.exit(1);
     }
+  }
+
+  /**
+   * This is public so it can be used by the main() function of test cases.
+   */
+  public static void initExecutors()
+  {
+    if (threadPoolExecutor != null) {
+      throw new RuntimeException("Executors are already initialised");
+    }
+    threadPoolExecutor = Executors.newCachedThreadPool();
+    scheduledExecutor = Executors.newScheduledThreadPool(1);
   }
 
   private static List<Runnable> queuedTasks;
