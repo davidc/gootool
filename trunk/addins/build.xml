@@ -13,8 +13,7 @@
 
     <foreach target="-foreach-addin" param="src.dir">
       <path>
-        <dirset dir="${addins.src}" includes="/*/">
-        </dirset>
+        <dirset dir="${addins.src}" includes="*"/>
       </path>
     </foreach>
   </target>
