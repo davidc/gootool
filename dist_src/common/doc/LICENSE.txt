@@ -25,3 +25,5 @@ Under Windows, this program uses launch4j. Copyright (c) 2004, 2008 Grzegorz Kow
 This program uses user interface classes Copyright 2000-2005 JetBrains s.r.o. See LICENSE.jetbrains.txt for the license.
 
 This program uses cryptographic functions from the BouncyCastle library. Copyright (c) 2000 - 2008 The Legion Of The Bouncy Castle (http://www.bouncycastle.org). See LICENSE.bouncycastle.txt for the license.
+
+This program uses JSch. Copyright (c) 2002,2003,2004,2005,2006,2007,2008,2009 Atsuhiko Yamanaka, JCraft,Inc. See LICENSE.jsch.txt for the license.
