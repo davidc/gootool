@@ -134,6 +134,7 @@ public class Utilities
 
   /**
    * Delete the given file if it exists, otherwise do nothing. Throws an exception if deletion failed.
+   *
    * @param file The file to delete.
    * @throws IOException if the deletion failed.
    */
@@ -225,18 +226,33 @@ public class Utilities
    */
   public static void downloadFile(URL url, File outputFile) throws IOException
   {
-    log.fine("Downloading " + url + " to " + outputFile);
+    File tempFile = downloadFileToTemp(url);
 
+    // Move temp file into place
+    deleteFileIfExists(outputFile);
+    moveFile(tempFile, outputFile);
+  }
+
+  /**
+   * Downloads a URL to a temporary file.
+   *
+   * @param url the URL to download.
+   * @return the temporary File with the contents.
+   * @throws IOException if the download failed.
+   */
+  public static File downloadFileToTemp(URL url) throws IOException
+  {
     // Generate a temporary file
     File tempFile = File.createTempFile("goodownload-", null);
+
+    log.fine("Downloading " + url + " to " + tempFile);
 
     // Download to temp file
     InputStream downloadStream = url.openStream();
     try {
       FileOutputStream outputStream = new FileOutputStream(tempFile);
-      copyStreams(downloadStream, outputStream);
       try {
-        outputStream.close();
+        copyStreams(downloadStream, outputStream);
       }
       finally {
         outputStream.close();
@@ -245,9 +261,6 @@ public class Utilities
     finally {
       downloadStream.close();
     }
-
-    // Move temp file into place
-    deleteFileIfExists(outputFile);
-    moveFile(tempFile, outputFile);
+    return tempFile;
   }
 }

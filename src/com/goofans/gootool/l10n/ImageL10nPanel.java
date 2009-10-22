@@ -126,7 +126,7 @@ public class ImageL10nPanel implements ActionListener
 
       ImageTool imageTool = new ImageTool(inputDirectory, null, languages, colorChooser.getBackground(), debugModeCheckBox.isSelected());
 
-      GUIUtil.runTask(null, "Preparing images", imageTool);
+      GUIUtil.runTask((JFrame) null, "Preparing images", imageTool);
 
       imageTool.showWindow();
     }
@@ -154,7 +154,7 @@ public class ImageL10nPanel implements ActionListener
 
       ImageTool imageTool = new ImageTool(inputDirectory, outputDirectory, languages, null, false);
 
-      GUIUtil.runTask(null, "Preparing images", imageTool);
+      GUIUtil.runTask((JFrame) null, "Preparing images", imageTool);
 
       JOptionPane.showMessageDialog(rootPanel, "Build complete in " + outputDirectory + "!", "Build complete", JOptionPane.INFORMATION_MESSAGE);
     }
@@ -201,7 +201,7 @@ public class ImageL10nPanel implements ActionListener
     final String wikiBase = wikiBaseURLTextField.getText();
     final Map<String, Map<String, String>> languages = new HashMap<String, Map<String, String>>();
 
-    GUIUtil.runTask(null, "Downloading translations", new ProgressIndicatingTask()
+    GUIUtil.runTask((JFrame) null, "Downloading translations", new ProgressIndicatingTask()
     {
       public void run() throws Exception
       {

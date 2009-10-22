@@ -1,16 +1,5 @@
 package com.goofans.gootool.view;
 
-import com.goofans.gootool.Controller;
-import com.goofans.gootool.GooTool;
-import com.goofans.gootool.ToolPreferences;
-import com.goofans.gootool.siteapi.RatingSubmitRequest;
-import com.goofans.gootool.siteapi.APIException;
-import com.goofans.gootool.util.HyperlinkLaunchingListener;
-import com.goofans.gootool.ui.HyperlinkLabel;
-import com.goofans.gootool.ui.StarBar;
-import com.goofans.gootool.model.Configuration;
-import com.goofans.gootool.addins.Addin;
-
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -19,14 +8,25 @@ import javax.swing.table.TableColumnModel;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
-import java.io.IOException;
-import java.util.logging.Logger;
-import java.util.logging.Level;
-import java.util.Map;
-import java.net.URL;
-import java.net.MalformedURLException;
-import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import com.goofans.gootool.Controller;
+import com.goofans.gootool.GooTool;
+import com.goofans.gootool.ToolPreferences;
+import com.goofans.gootool.addins.Addin;
+import com.goofans.gootool.model.Configuration;
+import com.goofans.gootool.siteapi.APIException;
+import com.goofans.gootool.siteapi.RatingSubmitRequest;
+import com.goofans.gootool.ui.HyperlinkLabel;
+import com.goofans.gootool.ui.StarBar;
+import com.goofans.gootool.util.HyperlinkLaunchingListener;
 
 /**
  * @author David Croft (davidc@goofans.com)
@@ -49,6 +49,7 @@ public class AddinsPanel implements ViewComponent, PropertyChangeListener
   private JButton moveDownButton;
   private HyperlinkLabel findMoreHyperlink;
   private StarBar ratingBar;
+  private JButton updateCheckButton;
   private MyTableModel addinsModel;
 
   private Controller controller;
@@ -101,6 +102,8 @@ public class AddinsPanel implements ViewComponent, PropertyChangeListener
     propertiesButton.addActionListener(controller);
     installButton.setActionCommand(Controller.CMD_ADDIN_INSTALL);
     installButton.addActionListener(controller);
+    updateCheckButton.setActionCommand(Controller.CMD_ADDIN_UPDATECHECK);
+    updateCheckButton.addActionListener(controller);
     uninstallButton.setActionCommand(Controller.CMD_ADDIN_UNINSTALL);
     uninstallButton.addActionListener(controller);
     enableButton.setActionCommand(Controller.CMD_ADDIN_ENABLE);

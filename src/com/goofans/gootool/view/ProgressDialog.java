@@ -1,6 +1,7 @@
 package com.goofans.gootool.view;
 
 import javax.swing.*;
+import java.awt.*;
 
 import com.goofans.gootool.GooTool;
 import com.goofans.gootool.util.ProgressListener;
@@ -17,10 +18,20 @@ public class ProgressDialog extends JDialog implements ProgressListener
   private JLabel iconLabel;
 
 
-  public ProgressDialog(JFrame mainFrame, String title)
+  public ProgressDialog(JFrame owner, String title)
   {
-    super(mainFrame, title, true);
+    super(owner, title, true);
+    init(owner);
+  }
 
+  public ProgressDialog(JDialog owner, String title)
+  {
+    super(owner, title, true);
+    init(owner);
+  }
+
+  private void init(Component owner)
+  {
     setResizable(false);
 
     setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
@@ -42,7 +53,7 @@ public class ProgressDialog extends JDialog implements ProgressListener
     iconLabel.setIcon(GooTool.getMainIcon());
 
     pack();
-    setLocationRelativeTo(mainFrame);
+    setLocationRelativeTo(owner);
   }
 
   public void beginStep(final String taskDescription, final boolean progressAvailable)

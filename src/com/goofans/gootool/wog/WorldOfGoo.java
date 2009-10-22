@@ -1,5 +1,18 @@
 package com.goofans.gootool.wog;
 
+import java.awt.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.StringTokenizer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.prefs.Preferences;
+
+import com.goofans.gootool.GooTool;
 import com.goofans.gootool.addins.Addin;
 import com.goofans.gootool.addins.AddinFactory;
 import com.goofans.gootool.addins.AddinFormatException;
@@ -8,15 +21,6 @@ import com.goofans.gootool.model.Language;
 import com.goofans.gootool.model.Resolution;
 import com.goofans.gootool.platform.PlatformSupport;
 import com.goofans.gootool.util.Utilities;
-import com.goofans.gootool.GooTool;
-
-import java.io.*;
-import java.util.*;
-import java.util.List;
-import java.util.prefs.Preferences;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import java.awt.*;
 
 /**
  * Encapsulates the static data about World of Goo, i.e. path and version.
@@ -234,6 +238,7 @@ public abstract class WorldOfGoo
   protected abstract File getAddinInstalledFile(String addinId) throws IOException;
 
 
+  // TODO need a flag to defer updateInstalledAddins (for callers who know they're going to do multiple installs)
   public void installAddin(File addinFile, String addinId) throws IOException
   {
     // Check we don't already have an addin with this ID
@@ -253,6 +258,7 @@ public abstract class WorldOfGoo
     updateInstalledAddins();
   }
 
+  // TODO need a flag to defer updateInstalledAddins (for callers who know they're going to do multiple installs)
   public void uninstallAddin(Addin addin) throws IOException
   {
     File addinFile = addin.getDiskFile();

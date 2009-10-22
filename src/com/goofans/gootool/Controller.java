@@ -25,6 +25,7 @@ import com.goofans.gootool.siteapi.*;
 import com.goofans.gootool.util.*;
 import com.goofans.gootool.view.AboutDialog;
 import com.goofans.gootool.view.AddinPropertiesDialog;
+import com.goofans.gootool.view.AddinUpdatesChooser;
 import com.goofans.gootool.view.MainFrame;
 import com.goofans.gootool.wog.ConfigurationWriterTask;
 import com.goofans.gootool.wog.WorldOfGoo;
@@ -44,6 +45,7 @@ public class Controller implements ActionListener
   public static final String CMD_DIAGNOSTICS = "Help>Diagnostics";
 
   public static final String CMD_ADDIN_INSTALL = "Addin>Install";
+  public static final String CMD_ADDIN_UPDATECHECK = "Addin>UpdateCheck";
   public static final String CMD_ADDIN_PROPERTIES = "Addin>Properties";
   public static final String CMD_ADDIN_UNINSTALL = "Addin>Uninstall";
   public static final String CMD_ADDIN_ENABLE = "Addin>Enable";
@@ -131,6 +133,9 @@ public class Controller implements ActionListener
     else if (cmd.equals(CMD_ADDIN_INSTALL)) {
       installAddin();
     }
+    else if (cmd.equals(CMD_ADDIN_UPDATECHECK)) {
+      addinUpdateCheck();
+    }
     else if (cmd.equals(CMD_ADDIN_ENABLE)) {
       enableAddin();
     }
@@ -191,6 +196,7 @@ public class Controller implements ActionListener
         codecs.get(cmd).runTool(mainFrame);
       }
       catch (IOException e) {
+        log.log(Level.SEVERE, "Error coding file", e);
         showErrorDialog("Error coding file", e.getLocalizedMessage());
       }
     }
@@ -211,6 +217,33 @@ public class Controller implements ActionListener
   {
     int selectedRow = mainFrame.addinsPanel.addinTable.getSelectedRow();
     return getDisplayAddins().get(selectedRow);
+  }
+
+  private void addinUpdateCheck()
+  {
+    final Map<String, AddinUpdatesCheckRequest.AvailableUpdate>[] updates = new Map[1];
+
+    try {
+      GUIUtil.runTask(mainFrame, "Checking for Updates", new ProgressIndicatingTask()
+      {
+        @Override
+        public void run() throws Exception
+        {
+          beginStep("Checking for updates", false);
+          AddinUpdatesCheckRequest checkRequest = new AddinUpdatesCheckRequest();
+
+          updates[0] = checkRequest.checkUpdates();
+        }
+      });
+    }
+    catch (Exception e) {
+      log.log(Level.SEVERE, "Error checking for updates", e);
+      showErrorDialog("Error checking for updates", e.getLocalizedMessage());
+      return;
+    }
+
+    AddinUpdatesChooser dialog = new AddinUpdatesChooser(mainFrame, updates[0]);
+    dialog.setVisible(true);
   }
 
   private void installAddin()
@@ -438,6 +471,7 @@ public class Controller implements ActionListener
     if (!selectedFile.exists()) {
       if (!selectedFile.mkdir()) {
         showErrorDialog("Can't create directory", "Couldn't create the directory " + selectedFile.getAbsolutePath());
+        return;
       }
     }
 
@@ -708,6 +742,7 @@ public class Controller implements ActionListener
       liveConfig = WorldOfGoo.getTheInstance().readConfiguration();
     }
     catch (IOException e) {
+      log.log(Level.SEVERE, "Error reading configuration", e);
       showErrorDialog("Error re-reading configuration!", "We recommend you restart GooTool. " + e.getMessage());
       errored = true;
     }
@@ -777,6 +812,7 @@ public class Controller implements ActionListener
       GUIUtil.runTask(mainFrame, "Running diagnostics", diagnostics);
     }
     catch (Exception e) {
+      log.log(Level.SEVERE, "Unable to run diagnostics", e);
       showErrorDialog("Unable to run diagnostics", "Unable to run diagnostics: " + e.getLocalizedMessage());
       return;
     }

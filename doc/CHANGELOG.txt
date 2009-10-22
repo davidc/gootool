@@ -1,6 +1,7 @@
 0.10.6, unreleased
 
 - You can now rate addins from the Addins tab within GooTool (#0000175).
+- Added a "Check for Updates" button so you can automatically update your addins (#0000179).  
 - Allow GooTool to find and work with the 1.41 (bin32/bin64) version of World of Goo under Linux (#0000218).
 - Allow GooTool to find and work with the Big Fish version of World of Goo under Mac OS X (#0000225).
 - Rename PC/Linux to Windows/Linux (#0000221).

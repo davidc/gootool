@@ -2,17 +2,15 @@ package com.goofans.gootool.view;
 
 import net.infotrek.util.TextUtil;
 
-import com.goofans.gootool.util.Version;
-import com.goofans.gootool.util.GUIUtil;
-import com.goofans.gootool.GooTool;
-import com.goofans.gootool.TextProvider;
-
 import javax.swing.*;
 import java.text.DateFormat;
-import java.util.Properties;
 import java.util.Map;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.util.Properties;
+
+import com.goofans.gootool.GooTool;
+import com.goofans.gootool.TextProvider;
+import com.goofans.gootool.util.GUIUtil;
+import com.goofans.gootool.util.Version;
 
 /**
  * @author David Croft (davidc@goofans.com)
@@ -40,9 +38,6 @@ public class AboutDialog extends JDialog
     setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 
     setResizable(false);
-
-    // TODO 1.6
-//    setIconImage(GooTool.getMainIconImage());
 
     setContentPane(rootPanel);
 
