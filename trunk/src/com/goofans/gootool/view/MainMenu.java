@@ -1,13 +1,13 @@
 package com.goofans.gootool.view;
 
+import javax.swing.*;
+import java.awt.event.KeyEvent;
+
 import com.goofans.gootool.Controller;
 import com.goofans.gootool.GooTool;
 import com.goofans.gootool.TextProvider;
 import com.goofans.gootool.platform.PlatformSupport;
 import com.goofans.gootool.util.HyperlinkLaunchingListener;
-
-import javax.swing.*;
-import java.awt.event.KeyEvent;
 
 /**
  * TODO internationalise the mnemonics!
@@ -54,6 +54,21 @@ public class MainMenu
     menuItem.setActionCommand(Controller.CMD_REVERT);
     menuItem.addActionListener(controller);
     menu.add(menuItem);
+
+    JMenuItem iphoneMenuItem = new JMenu(textProvider.getText("mainMenu.file.iphone"));
+    iphoneMenuItem.setMnemonic(KeyEvent.VK_I);
+    iphoneMenuItem.setEnabled(false);
+    menu.add(iphoneMenuItem);
+
+    menuItem = new JMenuItem(textProvider.getText("mainMenu.file.iphone.prepare"));
+    menuItem.setMnemonic(KeyEvent.VK_P);
+    menuItem.setEnabled(false);
+    iphoneMenuItem.add(menuItem);
+
+    menuItem = new JMenuItem(textProvider.getText("mainMenu.file.iphone.deploy"));
+    menuItem.setMnemonic(KeyEvent.VK_D);
+    menuItem.setEnabled(false);
+    iphoneMenuItem.add(menuItem);
 
     if (PlatformSupport.getPlatform() != PlatformSupport.Platform.MACOSX) {
       menuItem = new JMenuItem(textProvider.getText("mainMenu.file.exit"));
