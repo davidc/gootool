@@ -17,6 +17,7 @@ import java.util.logging.Logger;
 import com.goofans.gootool.GooTool;
 import com.goofans.gootool.TextProvider;
 import com.goofans.gootool.addins.Addin;
+import com.goofans.gootool.addins.AddinFactory;
 import com.goofans.gootool.siteapi.APIException;
 import com.goofans.gootool.siteapi.AddinUpdatesCheckRequest;
 import com.goofans.gootool.util.DebugUtil;
@@ -141,16 +142,25 @@ public class AddinUpdatesChooser extends JDialog
 
               File tempFile = Utilities.downloadFileToTemp(new URL(updateRow.update.downloadUrl));
 
-              beginStep(textProvider.getText("addinUpdating.status.installing", updateRow.addin.getId()), false);
+              try {
+                beginStep(textProvider.getText("addinUpdating.status.installing", updateRow.addin.getId()), false);
 
-              wog.uninstallAddin(updateRow.addin);
-              wog.installAddin(tempFile, updateRow.addin.getId());
+                // Load the addin once to get its ID and ensure it is valid.
+                Addin addin = AddinFactory.loadAddin(tempFile);
 
-              Utilities.deleteFileIfExists(tempFile);
+                wog.uninstallAddin(updateRow.addin, true);
+                wog.installAddin(tempFile, addin.getId(), true);
+              }
+              finally {
+                Utilities.deleteFileIfExists(tempFile);
+              }
 
               numSuccess[0]++;
             }
+
           }
+          beginStep(textProvider.getText("addinUpdating.status.reloading"), false);
+          wog.updateInstalledAddins();
         }
       });
     }
