@@ -1,25 +1,26 @@
 package com.goofans.gootool;
 
-import javax.swing.*;
 import javax.imageio.ImageIO;
+import javax.swing.*;
+import java.awt.image.BufferedImage;
+import java.awt.image.RenderedImage;
 import java.io.File;
 import java.io.IOException;
-import java.awt.*;
-import java.awt.image.RenderedImage;
-import java.awt.image.BufferedImage;
 
-import com.goofans.gootool.util.FileNameExtensionFilter;
-import com.goofans.gootool.util.Utilities;
 import com.goofans.gootool.io.AESBinFormat;
 import com.goofans.gootool.io.MacBinFormat;
 import com.goofans.gootool.io.MacGraphicFormat;
 import com.goofans.gootool.movie.BinImageAnimation;
 import com.goofans.gootool.movie.BinMovie;
+import com.goofans.gootool.util.FileNameExtensionFilter;
+import com.goofans.gootool.util.GUIUtil;
+import com.goofans.gootool.util.ProgressIndicatingTask;
+import com.goofans.gootool.util.Utilities;
 
 /**
  * TODO put this in a background thread
  * TODO errors in this must be given back to the user
- * 
+ *
  * @author David Croft (davidc@goofans.com)
  * @version $Id$
  */
@@ -38,7 +39,7 @@ public class GameFileCodecTool
     MOVIE_DECODE(false);
     //MOVIE_ENCODE(true);
 
-    private boolean encode;
+    private final boolean encode;
 
     CodecType(boolean encode)
     {
@@ -51,14 +52,14 @@ public class GameFileCodecTool
     }
   }
 
-  private String inputExtension;
-  private String inputDescription;
-  private String outputExtension;
+  private final String inputExtension;
+  private final String inputDescription;
+  private final String outputExtension;
+
+  private final CodecType codecType;
 
   private File currentInputDir;
   private File currentOutputDir;
-
-  private CodecType codecType;
 
   public GameFileCodecTool(String inputExtension, String inputDescription, String outputExtension, CodecType codecType)
   {
@@ -68,7 +69,7 @@ public class GameFileCodecTool
     this.codecType = codecType;
   }
 
-  public void runTool(Component parent) throws IOException
+  public void runTool(JFrame parent) throws Exception
   {
     JFileChooser inputChooser = new JFileChooser(currentInputDir);
     inputChooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
@@ -90,7 +91,7 @@ public class GameFileCodecTool
     }
 
 
-    File[] inputFiles = inputChooser.getSelectedFiles();
+    final File[] inputFiles = inputChooser.getSelectedFiles();
 
     for (File inputFile : inputFiles) {
       if (!inputFile.exists()) {
@@ -127,48 +128,58 @@ public class GameFileCodecTool
       }
     }
 
-    File outputFile = null;
+    File outputFileSelection = null;
 
-    while (outputFile == null) {
+    while (outputFileSelection == null) {
       if (outputChooser.showSaveDialog(parent) != JFileChooser.APPROVE_OPTION) {
         return;
       }
 
-      outputFile = outputChooser.getSelectedFile();
-      if (outputFile.exists()) {
-        int retval = JOptionPane.showConfirmDialog(parent, outputFile.getName() + " already exist, would you like to overwrite it?", "Confirm overwrite", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
+      outputFileSelection = outputChooser.getSelectedFile();
+      if (outputFileSelection.exists()) {
+        int retval = JOptionPane.showConfirmDialog(parent, outputFileSelection.getName() + " already exists, would you like to overwrite it?", "Confirm overwrite", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
         if (retval == JOptionPane.CANCEL_OPTION) {
           return;
         }
         else if (retval == JOptionPane.NO_OPTION) {
-          outputFile = null;
+          outputFileSelection = null;
         }
       }
     }
 
     currentOutputDir = outputChooser.getCurrentDirectory();
+    final File outputFile = outputFileSelection;
 
-    if (inputFiles.length == 1) {
-      File inputFile = inputFiles[0];
-      if (inputFile.isFile()) {
-        doConversion(inputFile, outputFile);
-      }
-      else if (inputFile.isDirectory()) {
-        doDirectory(inputFile, outputFile);
-      }
-    }
-    else {
-      Utilities.mkdirsOrException(outputFile);
+    GUIUtil.runTask(parent, "Running conversion", new ProgressIndicatingTask()
+    {
+      @Override
+      public void run() throws Exception
+      {
+        beginStep("Converting...", false);
 
-      for (File inputFile : inputFiles) {
-        if (inputFile.isFile()) {
-          doConversion(inputFile, new File(outputFile, generateOutputName(inputFile.getName())));
+        if (inputFiles.length == 1) {
+          File inputFile = inputFiles[0];
+          if (inputFile.isFile()) {
+            doConversion(inputFile, outputFile);
+          }
+          else if (inputFile.isDirectory()) {
+            doDirectory(inputFile, outputFile);
+          }
         }
-        else if (inputFile.isDirectory()) {
-          doDirectory(inputFile, new File(outputFile, inputFile.getName()));
+        else {
+          Utilities.mkdirsOrException(outputFile);
+
+          for (File inputFile : inputFiles) {
+            if (inputFile.isFile()) {
+              doConversion(inputFile, new File(outputFile, generateOutputName(inputFile.getName())));
+            }
+            else if (inputFile.isDirectory()) {
+              doDirectory(inputFile, new File(outputFile, inputFile.getName()));
+            }
+          }
         }
       }
-    }
+    });
   }
 
   private void doDirectory(File inputDir, File outputDir) throws IOException
@@ -219,8 +230,8 @@ public class GameFileCodecTool
         break;
       case MOVIE_DECODE:
         BinMovie movie = new BinMovie(inputFile);
-          Utilities.writeFile(outputFile, movie.toXMLDocument().getBytes());
-          break;
+        Utilities.writeFile(outputFile, movie.toXMLDocument().getBytes());
+        break;
     }
   }
 
