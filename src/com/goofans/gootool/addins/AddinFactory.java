@@ -1,8 +1,5 @@
 package com.goofans.gootool.addins;
 
-import com.goofans.gootool.util.VersionSpec;
-import com.goofans.gootool.util.XMLUtil;
-
 import javax.imageio.ImageIO;
 import javax.imageio.ImageReader;
 import javax.imageio.stream.ImageInputStream;
@@ -16,6 +13,8 @@ import java.util.*;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
 
+import com.goofans.gootool.util.VersionSpec;
+import com.goofans.gootool.util.XMLUtil;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -157,7 +156,7 @@ public class AddinFactory
       else if (manifestVersion.equals(SPEC_VERSION_1_0)) {
         return readManifestVersion1_0(document, manifestVersion, addinDiskFile);
       }
-      else if (manifestVersion.equals(SPEC_VERSION_1_1)) {
+      else if (false && manifestVersion.equals(SPEC_VERSION_1_1)) {
         return readManifestVersion1_1(document, manifestVersion, addinDiskFile, addinReader);
       }
       else {
