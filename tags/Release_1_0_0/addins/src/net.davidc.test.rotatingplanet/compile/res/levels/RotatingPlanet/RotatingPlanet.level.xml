@@ -1,0 +1,32 @@
+<level allowskip="true" autobounds="false" ballsrequired="1" letterboxed="false" strandgeom="false" textcolor="255,255,255" timebugprobability="0.5"
+       visualdebug="false">
+  <camera aspect="normal" endpos="0,0" endzoom="1">
+    <poi pause="0" pos="0,0" traveltime="0" zoom="0.6"/>
+  </camera>
+  <camera aspect="widescreen" endpos="0,0" endzoom="1.273">
+    <poi pause="0" pos="0,0" traveltime="0" zoom="0.7"/>
+  </camera>
+  <pipe depth="0" id="0">
+    <Vertex x="-500" y="0"/>
+    <Vertex x="-700" y="0"/>
+    <Vertex x="-700" y="-1000"/>
+  </pipe>
+  <levelexit filter="" id="theExit" pos="-500,0" radius="75"/>
+  <BallInstance angle="0" discovered="true" id="0" type="Anchor" x="721.846387917" y="694.530137293"/>
+  <BallInstance angle="0" discovered="true" id="1" type="Ivy" x="666.666887168" y="590.042883174"/>
+  <BallInstance angle="0" discovered="true" id="2" type="Ivy" x="619.966010982" y="503.59837993"/>
+  <BallInstance angle="0" discovered="true" id="3" type="Ivy" x="570.581385421" y="411.401752371"/>
+  <BallInstance angle="0" discovered="true" id="4" type="Ivy" x="634.0" y="530.0"/>
+  <BallInstance angle="0" discovered="true" id="5" type="Ivy" x="709.0" y="671.0"/>
+  <BallInstance angle="0" discovered="true" id="6" type="Ivy" x="594.0" y="454.0"/>
+  <BallInstance angle="0" discovered="true" id="7" type="Ivy" x="646.0" y="554.0"/>
+  <BallInstance angle="0" discovered="true" id="8" type="Ivy" x="694.0" y="644.0"/>
+  <BallInstance angle="0" discovered="true" id="9" type="Ivy" x="694.0" y="644.0"/>
+  <BallInstance angle="0" discovered="true" id="10" type="Ivy" x="694.0" y="644.0"/>
+  <BallInstance angle="0" discovered="true" id="11" type="Ivy" x="694.0" y="644.0"/>
+  <BallInstance angle="0" discovered="true" id="12" type="Ivy" x="694.0" y="644.0"/>
+  <BallInstance angle="0" discovered="true" id="13" type="Ivy" x="694.0" y="644.0"/>
+  <Strand gb1="0" gb2="1"/>
+  <Strand gb1="1" gb2="2"/>
+  <Strand gb1="2" gb2="3"/>
+</level>

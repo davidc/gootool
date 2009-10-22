@@ -1,0 +1,112 @@
+<addin spec-version="1.1">
+  <id>com.goofans.davidc.jingleballs</id>
+  <name>Jingle Balls</name>
+  <type>level</type>
+  <thumbnail type="image/jpeg" width="200" height="150">thumbnail.jpg</thumbnail>
+  <version>1.3</version>
+  <description><![CDATA[
+  <html>
+  <p>The night before Christmas. The Goo Balls are nestled all snug by the fire, but Ebenezer Sign Painter has other ideas...</p>
+  <p>Translated into German, Russian, Spanish, Dutch and French.</p>
+
+  <ul>
+    <li>Level design: David Croft (davidc)</li>
+    <li>Graphics: S&eacute;bastien Kerguen (xanax)</li>
+    <li>Music: Cosmin Mirza</li>
+  </ul>
+
+  <p>Many thanks to the translators and beta-testers.</p>
+  </html>
+  ]]></description>
+  <author>davidc/xanax/cosminmirza</author>
+
+  <level>
+    <dir>JingleBalls</dir>
+    <name text="Jingle Balls"
+            ru="Рождественские бубенцы"/>
+    <subtitle text="goo balls roasting on an open fire"
+            de="Die Goo-Bälle rösten über dem Feuer"
+            ru="шарики, поджаривающиеся на открытом огне"
+            es="las bolas de goo tocan a fuego"
+            nl="goo-ballen bij de open haard"
+            fr="boules de goo rôtissant sur un feu ouvert"/>
+    <ocd>balls,57</ocd>
+  </level>
+
+  <!-- Changelog:
+
+  0.1
+   - initial release to sebastien and cosmin
+  0.2
+   - added 3 unique "glee" sounds for XmasIvy balls
+   - moved the invisible left "wall" off screen
+   - stop sign doesn't send balls berserk when they fall in fire
+   - set maxy to prevent scrolling off background 
+   - better window scene image
+  0.3
+   - block off top of chimney
+   - move right wall off to the right to avoid throwing-fuse-ball exploit
+   - slight anti-gravity to help building up the chimney
+   - added some graphics from sebastien
+   - changed shape of chimney and gift box to match graphic
+   - added mantel above fireplace for building on
+   - added smoke particle effect up chimney
+   - moved sleeping balls right to avoid waking them too early
+  0.4
+   - added an XmasGift ball type that produces 14 XmasProducts when it is busted
+   - added a ballbuster under the gift geom to bust the XmasGift
+   - Adjusted chimney width
+   - Brought level walls closer in and angled them to nudge balls down
+   - Added stopsign to right side of chimney
+   - made treeBase walkable
+   - upped OCD to 43 balls
+   - more new graphics from Sebastien
+  0.5
+   - adjusted particle effect to suit window
+   - added de, ru, es translations
+   - made the bomb explosion zone smaller
+  0.6
+   - center fireplace and all related elements around x-coord 600
+   - new fireplace and chimney graphics
+   - merge chimney into compositegeom
+   - reduce time bug prob from 0.33 to 0.25
+   - put giftbox ball at back so bomb is in front of it
+   - moved snow effect back behind wall
+   - sent to beta testers
+  0.7
+   - Made the gift box walls much thicker to prevent balls being thrown inside, fit gift box ball snugly in center
+   - Made the gift box background image the same size and position as the foreground ball image to prevent ball shrinking when off screen
+   - Moved ballbuster up above floor level so that it busts quicker and made it smaller
+   - timebug prob reduced from 0.25 to 0.15
+   - moved left wall slightly off-screen, moved right wall slightly in
+   - updated german subtitle, added dutch translation
+   - fixed text.xml.xsl charset to fix russian translation
+   - sent to beta testers
+  0.8
+   - updated signpost 1 to include hint about gift box
+   - updated dutch translation, added french translation
+   - number of balls in gift increased; level requirements and ocd increased to prevent completion without exploding the box
+   - added window and snow scene
+   - added music!
+   - sent to cosmin and sebastien
+  0.9
+   - moved gift box down to visually rest on floor
+   - minor position updates on signposts
+   - zoomed out a bit
+   - sent to beta testers
+  1.0 - 21 Dec 2008
+   - time bug probability from 0.15 to 0.2
+   - adjust tree size so star is better positioned
+   - updated music from cosmin
+   - first public release!
+  1.1 - 22 Dec 2008
+   - fixed the accidentally truncated music in 1.0
+   - second public release!
+  1.2 - 22 Dec 2008
+   - made the gift box ball invisible to fix the weird-looking explosion
+   - third public release!
+  1.3 - unreleased
+   - added thumbnail image
+  -->
+
+</addin>

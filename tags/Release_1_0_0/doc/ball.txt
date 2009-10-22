@@ -1,0 +1,73 @@
+Node "ball", attribute "alwayslookatmouse" is optional, occurrences with/without attribute: 10/44
+Node "ball", attribute "antigrav" is optional, occurrences with/without attribute: 7/47
+Node "ball", attribute "attenuationdeselect" is optional, occurrences with/without attribute: 8/46
+Node "ball", attribute "attenuationdrag" is optional, occurrences with/without attribute: 8/46
+Node "ball", attribute "attenuationdrop" is optional, occurrences with/without attribute: 8/46
+Node "ball", attribute "attenuationselect" is optional, occurrences with/without attribute: 8/46
+Node "ball", attribute "autoattach" is optional, occurrences with/without attribute: 1/53
+Node "ball", attribute "autobounds" is optional, occurrences with/without attribute: 9/45
+Node "ball", attribute "autoboundsunattached" is optional, occurrences with/without attribute: 16/38
+Node "ball", attribute "autodisable" is optional, occurrences with/without attribute: 4/50
+Node "ball", attribute "blinkcolor" is optional, occurrences with/without attribute: 26/28
+Node "ball", attribute "burntime" is optional, occurrences with/without attribute: 12/42
+Node "ball", attribute "climber" is optional, occurrences with/without attribute: 11/43
+Node "ball", attribute "climbspeed" is optional, occurrences with/without attribute: 53/1
+Node "ball", attribute "collideattached" is optional, occurrences with/without attribute: 11/43
+Node "ball", attribute "collidewithattached" is optional, occurrences with/without attribute: 12/42
+Node "ball", attribute "contains" is optional, occurrences with/without attribute: 8/46
+Node "ball", attribute "dampening" is optional, occurrences with/without attribute: 5/49
+Node "ball", attribute "detachable" is optional, occurrences with/without attribute: 45/9
+Node "ball", attribute "detonateforce" is optional, occurrences with/without attribute: 12/42
+Node "ball", attribute "detonateradius" is optional, occurrences with/without attribute: 12/42
+Node "ball", attribute "distantsounds" is optional, occurrences with/without attribute: 1/53
+Node "ball", attribute "draggable" is optional, occurrences with/without attribute: 31/23
+Node "ball", attribute "dragmass" is optional, occurrences with/without attribute: 4/50
+Node "ball", attribute "explosionparticles" is optional, occurrences with/without attribute: 7/47
+Node "ball", attribute "fallingattachment" is optional, occurrences with/without attribute: 1/53
+Node "ball", attribute "flammable" is optional, occurrences with/without attribute: 1/53
+Node "ball", attribute "fling" is optional, occurrences with/without attribute: 2/52
+Node "ball", attribute "grumpy" is optional, occurrences with/without attribute: 29/25
+Node "ball", attribute "hideeyes" is optional, occurrences with/without attribute: 16/38
+Node "ball", attribute "hingedrag" is optional, occurrences with/without attribute: 5/49
+Node "ball", attribute "invulnerable" is optional, occurrences with/without attribute: 27/27
+Node "ball", attribute "isantigravunattached" is optional, occurrences with/without attribute: 4/50
+Node "ball", attribute "isbehindstrands" is optional, occurrences with/without attribute: 6/48
+Node "ball", attribute "jump" is optional, occurrences with/without attribute: 46/8
+Node "ball", attribute "jumponwakeup" is optional, occurrences with/without attribute: 5/49
+Node "ball", attribute "mass" is mandatory (54 occurrences found)
+Node "ball", attribute "material" is optional, occurrences with/without attribute: 10/44
+Node "ball", attribute "maxattachspeed" is optional, occurrences with/without attribute: 5/49
+Node "ball", attribute "name" is mandatory (54 occurrences found)
+Node "ball", attribute "popdelay" is optional, occurrences with/without attribute: 2/52
+Node "ball", attribute "popduration" is optional, occurrences with/without attribute: 8/46
+Node "ball", attribute "popparticles" is optional, occurrences with/without attribute: 8/46
+Node "ball", attribute "popsound" is optional, occurrences with/without attribute: 8/46
+Node "ball", attribute "shape" is mandatory (54 occurrences found)
+Node "ball", attribute "spawn" is optional, occurrences with/without attribute: 2/52
+Node "ball", attribute "speedvariance" is mandatory (54 occurrences found)
+Node "ball", attribute "stacking" is optional, occurrences with/without attribute: 6/48
+Node "ball", attribute "statescales" is optional, occurrences with/without attribute: 8/46
+Node "ball", attribute "static" is optional, occurrences with/without attribute: 7/47
+Node "ball", attribute "staticwhensleeping" is optional, occurrences with/without attribute: 5/49
+Node "ball", attribute "sticky" is optional, occurrences with/without attribute: 7/47
+Node "ball", attribute "stickyattached" is optional, occurrences with/without attribute: 4/50
+Node "ball", attribute "stickyunattached" is optional, occurrences with/without attribute: 4/50
+Node "ball", attribute "strands" is mandatory (54 occurrences found)
+Node "ball", attribute "stuckattachment" is optional, occurrences with/without attribute: 10/44
+Node "ball", attribute "suckable" is optional, occurrences with/without attribute: 20/34
+Node "ball", attribute "towermass" is optional, occurrences with/without attribute: 53/1
+Node "ball", attribute "wakedist" is optional, occurrences with/without attribute: 10/44
+Node "ball", attribute "walkforce" is optional, occurrences with/without attribute: 19/35
+Node "ball", attribute "walkspeed" is mandatory (54 occurrences found)
+61 attributes found
+
+Node "ball" have [0-1] occurrences of child tag "detachstrand"
+Node "ball" have [0-1] occurrences of child tag "marker"
+Node "ball" have [0-10] occurrences of child tag "part"
+Node "ball" have [0-3] occurrences of child tag "particles"
+Node "ball" have [0-1] occurrences of child tag "shadow"
+Node "ball" have [0-7] occurrences of child tag "sinvariance"
+Node "ball" have [0-28] occurrences of child tag "sound"
+Node "ball" have [0-1] occurrences of child tag "splat"
+Node "ball" have [0-1] occurrences of child tag "strand"
+9 child tags found for node "ball"

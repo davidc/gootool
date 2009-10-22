@@ -1,0 +1,63 @@
+MILESTONE 0.10.x (Final beta series)
+
+- BUG FIX: Mac image conversion has slight colour shifts due to ColorModel
+- IMPROVEMENT: Don't SAVE if unmodified on LAUNCH
+
+- NEW FEATURE: Addin author tool: create addin from directory/create addin from wogeditor, create addin from assets
+
+- IMPROVEMENT: Move up/down buttons to reorder addins, to replace lost drag-and-drop functionality
+- BUG FIX: Dragging addins below last enabled addin should move it to bottom
+
+- xanax: don't jump mods around when en/disabling
+
+- use swingworker for background stuff
+
+- test addin dependencies on: install from double click goomod, check/uncheck addins list
+
+- unsatisfied dependencies should show red?
+
+MILESTONE 1.0.0 (First public release)
+
+- All bugs from 0.10 series fixed, no new features
+
+sp level editor needs to loads balls (resources, etc) from a custom resource manager that ONLY includes:
+- main game files
+- additional and modified files from dependent addins
+- files within this mod itself
+
+MILESTONE 1.1.0
+
+- NEW FEATURE: Option to check mods for updates on goofans.com from within GooTool
+- NEW FEATURE: Auto-download required dependencies from goofans.com
+- NEW FEATURE: command line interface to image l10n tool for the wiki site, no gui
+
+- NEW FEATURE: Integrated ball editor
+- NEW FEATURE: Finalise the level editor
+- NEW FEATURE: Changing refreshrate in config.txt - NEW IN 1.10? 1.20?
+
+NO MILESTONE SET
+
+- IMPROVEMENT: dev releases should have the actual svn version in their build filename/about version - may need to separate svn revision into an svn:ignored file
+- NEW FEATURE: Check for new WorldOfGoo releases
+- NEW FEATURE: fullscreen preference? Involves editing pers2.dat so maybe not
+- NEW FEATURE: Perhaps stop overrides of Drained files, to prevent cheating in goocorp?
+- NEW FEATURE: Addin XML: conflicts <addin>
+- NEW FEATURE: Addin XML: provides <x> (to include mods in a packaged download)
+- BUGFIX: Addins build.xml ANT task doesn't work under Linux.
+- NEW FEATURE: mute music/mute all sound
+
+- NEW FEATURE: automatically self-update
+
+can't access our formatter currently inside the jar/exe
+
+use JFormattedTextField for input field validation
+
+TODO - World of Goo
+
+- Better level load crash debugging
+
+
+TODO - GooFans
+
+- last two balls hanging ivy
+
