@@ -2,7 +2,9 @@ package com.goofans.gootoolsp.leveledit.view;
 
 import javax.swing.*;
 
-import com.goofans.gootool.TextProvider;
+import java.util.ResourceBundle;
+import java.util.MissingResourceException;
+
 import com.goofans.gootool.GooTool;
 
 /**
@@ -11,7 +13,7 @@ import com.goofans.gootool.GooTool;
  */
 public class LevelEditorMenuBar extends JMenuBar
 {
-  private final TextProvider textProvider;
+  private final ResourceBundle resourceBundle;
   JCheckBoxMenuItem snapGridItem;
   JCheckBoxMenuItem showGridItem;
 
@@ -20,49 +22,53 @@ public class LevelEditorMenuBar extends JMenuBar
     JMenu menu;
     JMenuItem menuItem;
 
-    textProvider = GooTool.getTextProvider();
+    resourceBundle = GooTool.getTextProvider();
 
-    menu = new JMenu(getText("view"));
+    menu = new JMenu(getMenuText("view"));
     menu.setMnemonic(getMnemonic("view"));
     add(menu);
 
-    showGridItem = new JCheckBoxMenuItem(getText("view.showGrid"));
-    showGridItem.setMnemonic(getMnemonic("view.showGrid"));
-    showGridItem.setActionCommand(LevelEditor.CMD_SHOW_GRID);
-    showGridItem.addActionListener(editor);
-    showGridItem.setAccelerator(getAccelerator("view.showGrid"));
+    showGridItem = new JCheckBoxMenuItem();
+    prepareMenuItem(showGridItem, "view.showGrid", LevelEditor.CMD_SHOW_GRID, editor);
     menu.add(showGridItem);
 
-    snapGridItem = new JCheckBoxMenuItem(getText("view.snapGrid"));
-    snapGridItem.setMnemonic(getMnemonic("view.snapGrid"));
-    snapGridItem.setActionCommand(LevelEditor.CMD_SNAP_GRID);
-    snapGridItem.addActionListener(editor);
-    snapGridItem.setAccelerator(getAccelerator("view.snapGrid"));
+    snapGridItem = new JCheckBoxMenuItem();
+    prepareMenuItem(snapGridItem, "view.snapGrid", LevelEditor.CMD_SNAP_GRID, editor);
     menu.add(snapGridItem);
   }
 
-  private String getText(String key)
+  private void prepareMenuItem(JMenuItem menuItem, String menuKey, String command, LevelEditor editor)
   {
-    return textProvider.getText("leveledit.menu." + key);
+    menuItem.setText(getMenuText(menuKey));
+    menuItem.setMnemonic(getMnemonic(menuKey));
+    menuItem.setActionCommand(command);
+    menuItem.addActionListener(editor);
+    menuItem.setAccelerator(getAccelerator(menuKey));
+  }
+
+  private String getMenuText(String key)
+  {
+    return resourceBundle.getString("leveledit.menu." + key);
   }
 
   private int getMnemonic(String key)
   {
-    String shortcutText = textProvider.getText("leveledit.menu." + key + ".shortcut");
-    KeyStroke keyStroke = KeyStroke.getKeyStroke(shortcutText);
-    if (keyStroke == null) throw new RuntimeException("Invalid shortcut " + shortcutText + " for " + key);
+    String mnemonicText = resourceBundle.getString("leveledit.menu." + key + ".mnemonic");
+    KeyStroke keyStroke = KeyStroke.getKeyStroke(mnemonicText);
+    if (keyStroke == null) throw new RuntimeException("Invalid mnemonic " + mnemonicText + " for " + key);
     return keyStroke.getKeyCode();
   }
 
   private KeyStroke getAccelerator(String key)
   {
-    String accelText = textProvider.getOptionalText("leveledit.menu." + key + ".accelerator");
-    if (accelText != null && accelText.length() > 0) {
+    try {
+      String accelText = resourceBundle.getString("leveledit.menu." + key + ".accelerator");
       KeyStroke keyStroke = KeyStroke.getKeyStroke(accelText);
       if (keyStroke == null) throw new RuntimeException("Invalid accelerator " + accelText + " for " + key);
       return keyStroke;
     }
-
-    return null;
+    catch (MissingResourceException e) {
+      return null;
+    }
   }
 }

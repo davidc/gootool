@@ -189,7 +189,7 @@ public class AddinsPanel implements ViewComponent, PropertyChangeListener
 
   private void createUIComponents()
   {
-    findMoreHyperlink = new HyperlinkLabel(GooTool.getTextProvider().getText("addins.getmore"));
+    findMoreHyperlink = new HyperlinkLabel(GooTool.getTextProvider().getString("addins.getmore"));
   }
 
   public void propertyChange(PropertyChangeEvent evt)

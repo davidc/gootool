@@ -8,7 +8,7 @@ import java.util.Map;
 import java.util.Properties;
 
 import com.goofans.gootool.GooTool;
-import com.goofans.gootool.TextProvider;
+import com.goofans.gootool.GooToolResourceBundle;
 import com.goofans.gootool.util.GUIUtil;
 import com.goofans.gootool.util.Version;
 
@@ -29,11 +29,11 @@ public class AboutDialog extends JDialog
   private JLabel vmType;
   private JLabel vmMemory;
 
-  private static final TextProvider textProvider = GooTool.getTextProvider();
+  private static final GooToolResourceBundle resourceBundle = GooTool.getTextProvider();
 
   public AboutDialog(JFrame mainFrame)
   {
-    super(mainFrame, textProvider.getText("about.title"), true);
+    super(mainFrame, resourceBundle.getString("about.title"), true);
 
     setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 
@@ -49,9 +49,9 @@ public class AboutDialog extends JDialog
 //    infoPane.addHyperlinkListener(new HyperlinkLaunchingListener());
 
     DateFormat df = DateFormat.getDateInstance(DateFormat.MEDIUM);
-    versionField.setText(textProvider.getText("about.version.value", Version.RELEASE_FULL, df.format(Version.RELEASE_DATE)));
+    versionField.setText(resourceBundle.formatString("about.version.value", Version.RELEASE_FULL, df.format(Version.RELEASE_DATE)));
     df = DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.MEDIUM);
-    buildField.setText(textProvider.getText("about.build.value", df.format(Version.BUILD_DATE), Version.BUILD_USER, Version.BUILD_JAVA));
+    buildField.setText(resourceBundle.formatString("about.build.value", df.format(Version.BUILD_DATE), Version.BUILD_USER, Version.BUILD_JAVA));
 
     javaVersion.setText(System.getProperty("java.version"));
     javaVendor.setText(System.getProperty("java.vendor"));
@@ -61,7 +61,7 @@ public class AboutDialog extends JDialog
     long totalMem = Runtime.getRuntime().totalMemory();
     long usedMem = totalMem - Runtime.getRuntime().freeMemory();
 
-    vmMemory.setText(textProvider.getText("about.vmMemory.value", TextUtil.binaryNumToString(usedMem), TextUtil.binaryNumToString(totalMem)));
+    vmMemory.setText(resourceBundle.formatString("about.vmMemory.value", TextUtil.binaryNumToString(usedMem), TextUtil.binaryNumToString(totalMem)));
 
     pack();
     setLocationRelativeTo(mainFrame);

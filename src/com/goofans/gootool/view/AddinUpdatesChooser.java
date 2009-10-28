@@ -15,7 +15,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.goofans.gootool.GooTool;
-import com.goofans.gootool.TextProvider;
+import com.goofans.gootool.GooToolResourceBundle;
 import com.goofans.gootool.addins.Addin;
 import com.goofans.gootool.addins.AddinFactory;
 import com.goofans.gootool.siteapi.APIException;
@@ -38,21 +38,21 @@ public class AddinUpdatesChooser extends JDialog
 
   private static final String[] COLUMN_NAMES;
   private static final Class[] COLUMN_CLASSES = new Class[]{Boolean.class, String.class, String.class, String.class, String.class};
-  private static final TextProvider textProvider = GooTool.getTextProvider();
+  private static final GooToolResourceBundle resourceBundle = GooTool.getTextProvider();
 
   static {
     COLUMN_NAMES = new String[]{
-            textProvider.getText("addinUpdates.column.install"),
-            textProvider.getText("addinUpdates.column.name"),
-            textProvider.getText("addinUpdates.column.yourVersion"),
-            textProvider.getText("addinUpdates.column.latestVersion"),
-            textProvider.getText("addinUpdates.column.releaseDate")
+            resourceBundle.getString("addinUpdates.column.install"),
+            resourceBundle.getString("addinUpdates.column.name"),
+            resourceBundle.getString("addinUpdates.column.yourVersion"),
+            resourceBundle.getString("addinUpdates.column.latestVersion"),
+            resourceBundle.getString("addinUpdates.column.releaseDate")
     };
   }
 
   public AddinUpdatesChooser(JFrame owner, Map<String, AddinUpdatesCheckRequest.AvailableUpdate> updates)
   {
-    super(owner, textProvider.getText("addinUpdates.title"), true);
+    super(owner, resourceBundle.getString("addinUpdates.title"), true);
 
     setContentPane(contentPane);
     getRootPane().setDefaultButton(installUpdatesButton);
@@ -128,7 +128,7 @@ public class AddinUpdatesChooser extends JDialog
     final int[] numSuccess = new int[]{0};
 
     try {
-      GUIUtil.runTask(this, textProvider.getText("addinUpdating.title"), new ProgressIndicatingTask()
+      GUIUtil.runTask(this, resourceBundle.getString("addinUpdating.title"), new ProgressIndicatingTask()
       {
         @Override
         public void run() throws Exception
@@ -138,12 +138,12 @@ public class AddinUpdatesChooser extends JDialog
             if (updateRow.install) {
               log.log(Level.INFO, "Downloading update " + updateRow.addin.getId() + " version " + updateRow.update.version);
 
-              beginStep(textProvider.getText("addinUpdating.status.downloading", updateRow.addin.getId()), false);
+              beginStep(resourceBundle.formatString("addinUpdating.status.downloading", updateRow.addin.getId()), false);
 
               File tempFile = Utilities.downloadFileToTemp(new URL(updateRow.update.downloadUrl));
 
               try {
-                beginStep(textProvider.getText("addinUpdating.status.installing", updateRow.addin.getId()), false);
+                beginStep(resourceBundle.formatString("addinUpdating.status.installing", updateRow.addin.getId()), false);
 
                 // Load the addin once to get its ID and ensure it is valid.
                 Addin addin = AddinFactory.loadAddin(tempFile);
@@ -159,19 +159,19 @@ public class AddinUpdatesChooser extends JDialog
             }
 
           }
-          beginStep(textProvider.getText("addinUpdating.status.reloading"), false);
+          beginStep(resourceBundle.getString("addinUpdating.status.reloading"), false);
           wog.updateInstalledAddins();
         }
       });
     }
     catch (Exception e) {
       log.log(Level.SEVERE, "Error downloading updates", e);
-      JOptionPane.showMessageDialog(this, textProvider.getText("addinUpdating.failed.message", e.getLocalizedMessage()),
-              textProvider.getText("addinUpdating.failed.title"), JOptionPane.ERROR_MESSAGE);
+      JOptionPane.showMessageDialog(this, resourceBundle.formatString("addinUpdating.failed.message", e.getLocalizedMessage()),
+              resourceBundle.getString("addinUpdating.failed.title"), JOptionPane.ERROR_MESSAGE);
     }
 
-    JOptionPane.showMessageDialog(this, textProvider.getText("addinUpdating.completed.message", numSuccess[0], numSuccess[0] == 1 ? "" : "s"),
-            textProvider.getText("addinUpdating.completed.title"), JOptionPane.INFORMATION_MESSAGE);
+    JOptionPane.showMessageDialog(this, resourceBundle.formatString("addinUpdating.completed.message", numSuccess[0], numSuccess[0] == 1 ? "" : "s"),
+            resourceBundle.getString("addinUpdating.completed.title"), JOptionPane.INFORMATION_MESSAGE);
 
     //TODO force WOG to rescan addins if we installed updates, once the "skip recheck" option is implemented
     dispose();

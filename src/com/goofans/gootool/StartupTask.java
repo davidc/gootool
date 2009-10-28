@@ -24,27 +24,27 @@ public class StartupTask extends ProgressIndicatingTask
 {
   private static final Logger log = Logger.getLogger(StartupTask.class.getName());
   private final Controller controller;
-  private final TextProvider textProvider;
+  private final GooToolResourceBundle resourceBundle;
 
   public StartupTask(Controller controller)
   {
     this.controller = controller;
-    textProvider = GooTool.getTextProvider();
+    resourceBundle = GooTool.getTextProvider();
   }
 
   @Override
   public void run() throws Exception
   {
-    beginStep(textProvider.getText("launcher.locategoo"), false);
+    beginStep(resourceBundle.getString("launcher.locategoo"), false);
     initWog();
 
-    beginStep(textProvider.getText("launcher.profile"), false);
+    beginStep(resourceBundle.getString("launcher.profile"), false);
     initProfile();
 
-    beginStep(textProvider.getText("launcher.loadconfig"), false);
+    beginStep(resourceBundle.getString("launcher.loadconfig"), false);
     Configuration c = initModel();
 
-    beginStep(textProvider.getText("launcher.initgui"), false);
+    beginStep(resourceBundle.getString("launcher.initgui"), false);
     MainFrame mainFrame = initControllerAndView(c);
 
     // Schedule a check for new version in 2 seconds
@@ -73,9 +73,9 @@ public class StartupTask extends ProgressIndicatingTask
         {
           public void run()
           {
-            String message = textProvider.getText("launcher.locategoo.notfound.message." + PlatformSupport.getPlatform().toString().toLowerCase());
+            String message = resourceBundle.getString("launcher.locategoo.notfound.message." + PlatformSupport.getPlatform().toString().toLowerCase());
             log.finer("dialog opening");
-            JOptionPane.showMessageDialog(null, message, textProvider.getText("launcher.locategoo.notfound.title"), JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(null, message, resourceBundle.getString("launcher.locategoo.notfound.title"), JOptionPane.WARNING_MESSAGE);
 
             log.finer("dialog closed");
             while (!worldOfGoo.isWogFound()) {
@@ -106,7 +106,7 @@ public class StartupTask extends ProgressIndicatingTask
     catch (IOException e) {
       // do nothing
     }
-    JOptionPane.showMessageDialog(null, textProvider.getText("launcher.demo.message"), textProvider.getText("launcher.demo.title"), JOptionPane.WARNING_MESSAGE);
+    JOptionPane.showMessageDialog(null, resourceBundle.getString("launcher.demo.message"), resourceBundle.getString("launcher.demo.title"), JOptionPane.WARNING_MESSAGE);
   }
 
   private void initProfile()
@@ -122,7 +122,7 @@ public class StartupTask extends ProgressIndicatingTask
     }
     catch (IOException e) {
       log.log(Level.SEVERE, "Error reading configuration", e);
-      JOptionPane.showMessageDialog(null, textProvider.getText("launcher.loadconfig.error.message", e.getLocalizedMessage()), textProvider.getText("launcher.loadconfig.error.title"), JOptionPane.ERROR_MESSAGE);
+      JOptionPane.showMessageDialog(null, resourceBundle.formatString("launcher.loadconfig.error.message", e.getLocalizedMessage()), resourceBundle.getString("launcher.loadconfig.error.title"), JOptionPane.ERROR_MESSAGE);
       System.exit(2);
       return null;
     }

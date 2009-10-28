@@ -22,7 +22,7 @@ import java.text.MessageFormat;
 import java.text.NumberFormat;
 
 import com.goofans.gootool.GooTool;
-import com.goofans.gootool.TextProvider;
+import com.goofans.gootool.GooToolResourceBundle;
 import com.goofans.gootoolsp.leveledit.model.Level;
 import com.goofans.gootoolsp.leveledit.model.LevelContentsItem;
 import com.goofans.gootoolsp.leveledit.tools.*;
@@ -69,7 +69,7 @@ public class LevelEditor extends JFrame implements ActionListener
   static final String CMD_SHOW_GRID = "ShowGrid";
   static final String CMD_SNAP_GRID = "SnapGrid";
 
-  private final TextProvider textProvider;
+  private final GooToolResourceBundle resourceBundle;
   private final NumberFormat mousePosNumberFormat;
 
   private final UndoManager undoManager;
@@ -88,7 +88,7 @@ public class LevelEditor extends JFrame implements ActionListener
     menu = new LevelEditorMenuBar(this);
     setJMenuBar(menu);
 
-    textProvider = GooTool.getTextProvider();
+    resourceBundle = GooTool.getTextProvider();
 
     setContentPane(contentPane);
 //    setModal(true);
@@ -181,7 +181,7 @@ public class LevelEditor extends JFrame implements ActionListener
 
         String strX = mousePosNumberFormat.format(worldCoords.x);
         String strY = mousePosNumberFormat.format(worldCoords.y);
-        mousePos.setText(MessageFormat.format(textProvider.getText("leveledit.status.mousePos"), strX, strY));
+        mousePos.setText(resourceBundle.formatString("leveledit.status.mousePos", strX, strY));
 
         //TODO show zoom level in status bar
       }
@@ -252,11 +252,11 @@ public class LevelEditor extends JFrame implements ActionListener
   {
     boolean canUndo = undoManager.canUndo();
     undoButton.setEnabled(canUndo);
-    undoButton.setToolTipText(canUndo ? undoManager.getUndoPresentationName() : textProvider.getText("leveledit.edit.cantundo"));
+    undoButton.setToolTipText(canUndo ? undoManager.getUndoPresentationName() : resourceBundle.getString("leveledit.edit.cantundo"));
 
     boolean canRedo = undoManager.canRedo();
     redoButton.setEnabled(canRedo);
-    redoButton.setToolTipText(canRedo ? undoManager.getRedoPresentationName() : textProvider.getText("leveledit.edit.cantredo"));
+    redoButton.setToolTipText(canRedo ? undoManager.getRedoPresentationName() : resourceBundle.getString("leveledit.edit.cantredo"));
   }
 
   private void undo()
@@ -266,7 +266,7 @@ public class LevelEditor extends JFrame implements ActionListener
     }
     catch (CannotUndoException e) {
       log.log(WARNING, "Can't undo", e);
-      String msg = textProvider.getText("leveledit.edit.cantundo");
+      String msg = resourceBundle.getString("leveledit.edit.cantundo");
       JOptionPane.showMessageDialog(this, msg, msg, JOptionPane.ERROR);
     }
     levelDisplay.repaint();
@@ -280,7 +280,7 @@ public class LevelEditor extends JFrame implements ActionListener
     }
     catch (CannotRedoException e) {
       log.log(WARNING, "Can't redo", e);
-      String msg = textProvider.getText("leveledit.edit.cantredo");
+      String msg = resourceBundle.getString("leveledit.edit.cantredo");
       JOptionPane.showMessageDialog(this, msg, msg, JOptionPane.ERROR);
     }
     levelDisplay.repaint();
@@ -387,10 +387,10 @@ public class LevelEditor extends JFrame implements ActionListener
   private void quickAddTool(String toolName, final Tool tool) throws IOException
   {
     ImageIcon icon = new ImageIcon(ImageIO.read(Toolbar.class.getResourceAsStream("/gootoolsp/leveledit/toolbar/" + toolName + ".png")));
-    String tooltip = textProvider.getText("leveledit.tool." + toolName + ".tooltip");
+    String tooltip = resourceBundle.getString("leveledit.tool." + toolName + ".tooltip");
     leftToolBar.addTool(tool, tooltip, icon);
 
-    final String shortcut = textProvider.getText("leveledit.tool." + toolName + ".shortcut");
+    final String shortcut = resourceBundle.getString("leveledit.tool." + toolName + ".shortcut");
     if (shortcut.length() > 0) {
       KeyStroke keyStroke = KeyStroke.getKeyStroke(shortcut);
       log.log(FINER, "Adding keystroke " + keyStroke + " for tool " + toolName);
