@@ -18,8 +18,7 @@ import com.goofans.gootool.util.ProgressIndicatingTask;
 import com.goofans.gootool.util.Utilities;
 
 /**
- * TODO put this in a background thread
- * TODO errors in this must be given back to the user
+ * Handles the GUI interaction of encoding/decoding and launches the actual codec in the background.
  *
  * @author David Croft (davidc@goofans.com)
  * @version $Id$
@@ -89,7 +88,6 @@ public class GameFileCodecTool
     if (inputChooser.showOpenDialog(parent) != JFileChooser.APPROVE_OPTION) {
       return;
     }
-
 
     final File[] inputFiles = inputChooser.getSelectedFiles();
 

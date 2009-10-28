@@ -13,6 +13,12 @@ import net.infotrek.util.DesktopUtil;
 import com.goofans.gootool.util.Version;
 import com.goofans.gootool.util.VersionSpec;
 
+/**
+ * Popup to inform user of a new version of GooTool.
+ *
+ * @author David Croft (davidc@goofans.com)
+ * @version $Id$
+ */
 public class NewVersionDialog extends JDialog
 {
   private JPanel contentPane;
@@ -32,8 +38,6 @@ public class NewVersionDialog extends JDialog
     setContentPane(contentPane);
     getRootPane().setDefaultButton(yesButton);
 
-    // TODO 1.6
-//    setIconImage(GooTool.getMainIconImage());
     setModal(true);
     setResizable(false);
 

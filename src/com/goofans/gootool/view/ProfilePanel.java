@@ -5,6 +5,7 @@ import net.infotrek.util.TextUtil;
 import com.goofans.gootool.ToolPreferences;
 import com.goofans.gootool.Controller;
 import com.goofans.gootool.GooTool;
+import com.goofans.gootool.GooToolResourceBundle;
 import com.goofans.gootool.model.Configuration;
 import com.goofans.gootool.util.FileNameExtensionFilter;
 import com.goofans.gootool.profile.*;
@@ -20,16 +21,16 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.File;
 import java.text.NumberFormat;
+import java.text.MessageFormat;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.ResourceBundle;
 import java.lang.reflect.Method;
 
 /**
  * @author David Croft (davidc@goofans.com)
  * @version $Id$
  */
-public class ProfilePanel implements ActionListener, ViewComponent
+public final class ProfilePanel implements ActionListener, ViewComponent
 {
   private static final Logger log = Logger.getLogger(ProfilePanel.class.getName());
 
@@ -67,11 +68,16 @@ public class ProfilePanel implements ActionListener, ViewComponent
   private TowerRenderer tr;
   private JPopupMenu saveTowerMenu;
 
-  private final ResourceBundle resourceBundle;
+  private static final GooToolResourceBundle resourceBundle = GooTool.getTextProvider();
+  private static final String BR = "<br>";
 
   static {
-    // TODO load from resources
-    COLUMN_NAMES = new String[]{"Level", "Most Balls", "Least Moves", "Least Time"};
+    COLUMN_NAMES = new String[]{
+            resourceBundle.getString("profile.column.level"),
+            resourceBundle.getString("profile.column.balls"),
+            resourceBundle.getString("profile.column.moves"),
+            resourceBundle.getString("profile.column.time")
+    };
   }
 
 
@@ -127,7 +133,6 @@ public class ProfilePanel implements ActionListener, ViewComponent
     if (ProfileFactory.isProfileFound()) {
       loadProfiles();
     }
-    resourceBundle = GooTool.getTextProvider();
   }
 
   public void actionPerformed(ActionEvent event)
@@ -138,7 +143,7 @@ public class ProfilePanel implements ActionListener, ViewComponent
 
     if (cmd.equals(CMD_REFRESH)) {
       if (!ProfileFactory.isProfileFound()) {
-        JOptionPane.showMessageDialog(rootPanel, "Sorry, GooTool couldn't find your profile. Please specify the location of your profile on the Options tab.", "Profile not found", JOptionPane.ERROR_MESSAGE);
+        JOptionPane.showMessageDialog(rootPanel, resourceBundle.getString("profile.error.notfound.message"), resourceBundle.getString("profile.error.notfound.title"), JOptionPane.ERROR_MESSAGE);
         return;
       }
 
@@ -156,38 +161,38 @@ public class ProfilePanel implements ActionListener, ViewComponent
         Tower t = currentProfile.getTower();
 
         towerHeight.setText(formatHeight(t.getHeight()));
-        towerTotalBalls.setText(String.valueOf(t.getUsedStrandBalls() + t.getUsedNodeBalls()) + " of " + t.getTotalBalls());
+        towerTotalBalls.setText(MessageFormat.format(resourceBundle.getString("profile.tower.balls.value"), t.getUsedStrandBalls() + t.getUsedNodeBalls(), t.getTotalBalls()));
         towerNodeBalls.setText(String.valueOf(t.getUsedNodeBalls()));
         towerStrandBalls.setText(String.valueOf(t.getUsedStrandBalls()));
 
         StringBuilder flagInfo = new StringBuilder();
         if (currentProfile.hasFlag(Profile.FLAG_ONLINE)) {
-          flagInfo.append("Online Enabled.<br>");
+          flagInfo.append(resourceBundle.getString("profile.info.flags.online")).append(BR);
         }
         if (currentProfile.hasFlag(Profile.FLAG_GOOCORP_UNLOCKED)) {
-          flagInfo.append("GooCorp Unlocked.<br>");
+          flagInfo.append(resourceBundle.getString("profile.info.flags.goocorpunlocked")).append(BR);
         }
         if (currentProfile.hasFlag(Profile.FLAG_GOOCORP_DESTROYED)) {
-          flagInfo.append("GooCorp Destroyed.<br>");
+          flagInfo.append(resourceBundle.getString("profile.info.flags.goocorpdestroyed")).append(BR);
         }
         if (currentProfile.hasFlag(Profile.FLAG_WHISTLE)) {
-          flagInfo.append("Whistle Found.<br>");
+          flagInfo.append(resourceBundle.getString("profile.info.flags.whistle")).append(BR);
         }
         if (currentProfile.hasFlag(Profile.FLAG_TERMS)) {
-          flagInfo.append("Terms Accepted.<br>");
+          flagInfo.append(resourceBundle.getString("profile.info.flags.terms")).append(BR);
         }
-        if (currentProfile.hasFlag(32)) {
-          flagInfo.append("Flag32.<br>");
+        if (currentProfile.hasFlag(Profile.FLAG_32)) {
+          flagInfo.append(resourceBundle.getString("profile.info.flags.flag32")).append(BR);
         }
-        if (currentProfile.hasFlag(64)) {
-          flagInfo.append("Flag64.<br>");
+        if (currentProfile.hasFlag(Profile.FLAG_64)) {
+          flagInfo.append(resourceBundle.getString("profile.info.flags.flag64")).append(BR);
         }
-        if (currentProfile.hasFlag(128)) {
-          flagInfo.append("Flag128.<br>");
+        if (currentProfile.hasFlag(Profile.FLAG_128)) {
+          flagInfo.append(resourceBundle.getString("profile.info.flags.flag128")).append(BR);
         }
 
         if (flagInfo.length() == 0) {
-          flagInfo.append("None.");
+          flagInfo.append(resourceBundle.getString("profile.info.flags.none"));
         }
         flags.setText("<html>" + flagInfo + "</html>");
 
@@ -222,7 +227,7 @@ public class ProfilePanel implements ActionListener, ViewComponent
         }
         catch (IOException e1) {
           log.log(Level.SEVERE, "Unable to render tower", e1);
-          towerPanel.add(new JLabel("Sorry, couldn't\nrender your tower."));
+          towerPanel.add(new JLabel(resourceBundle.getString("profile.tower.error")));
 //          viewTowerButton.setEnabled(false);
           saveTowerButton.setEnabled(false);
         }
@@ -266,7 +271,10 @@ public class ProfilePanel implements ActionListener, ViewComponent
       }
 
       if (file.exists()) {
-        returnVal = JOptionPane.showConfirmDialog(this.rootPanel, file.getName() + " already exists, would you like to overwrite it?", "Overwrite file?", JOptionPane.YES_NO_OPTION);
+        returnVal = JOptionPane.showConfirmDialog(this.rootPanel,
+                MessageFormat.format(resourceBundle.getString("profile.tower.saveimage.overwrite.message"), file.getName()),
+                resourceBundle.getString("profile.tower.saveimage.overwrite.title"),
+                JOptionPane.YES_NO_OPTION);
         if (returnVal != JOptionPane.YES_OPTION) return;
       }
 
@@ -276,7 +284,10 @@ public class ProfilePanel implements ActionListener, ViewComponent
       }
       catch (IOException e) {
         log.log(Level.WARNING, "Unable to save tower", e);
-        JOptionPane.showMessageDialog(this.rootPanel, "Unable to save file: " + e.getLocalizedMessage(), "Unable to save tower", JOptionPane.ERROR_MESSAGE);
+        JOptionPane.showMessageDialog(this.rootPanel,
+                MessageFormat.format(resourceBundle.getString("profile.tower.saveimage.error.message"), e.getLocalizedMessage()),
+                resourceBundle.getString("profile.tower.saveimage.error.title"),
+                JOptionPane.ERROR_MESSAGE);
       }
 
       ToolPreferences.setMruTowerDir(chooser.getCurrentDirectory().getPath());
@@ -287,15 +298,15 @@ public class ProfilePanel implements ActionListener, ViewComponent
   {
     saveTowerMenu = new JPopupMenu();
     JMenuItem menuItem;
-    menuItem = new JMenuItem("Save full-size");
+    menuItem = new JMenuItem(resourceBundle.getString("profile.tower.saveimage.fullsize"));
     menuItem.setActionCommand(CMD_SAVE_TOWER_FULL);
     menuItem.addActionListener(this);
     saveTowerMenu.add(menuItem);
-    menuItem = new JMenuItem("Save thumbnail");
+    menuItem = new JMenuItem(resourceBundle.getString("profile.tower.saveimage.thumbnail"));
     menuItem.setActionCommand(CMD_SAVE_TOWER_THUMB);
     menuItem.addActionListener(this);
     saveTowerMenu.add(menuItem);
-    menuItem = new JMenuItem("Save transparent");
+    menuItem = new JMenuItem(resourceBundle.getString("profile.tower.saveimage.transparent"));
     menuItem.setActionCommand(CMD_SAVE_TOWER_TRANS);
     menuItem.addActionListener(this);
     saveTowerMenu.add(menuItem);
@@ -307,7 +318,7 @@ public class ProfilePanel implements ActionListener, ViewComponent
     // TODO parent frame
     final JDialog d = new JDialog();
     d.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-    d.setTitle("Tower");
+    d.setTitle(resourceBundle.getString("profile.tower.popup.title"));
     BufferedImage prettyImg = tr.getPretty();
     d.setPreferredSize(new Dimension(prettyImg.getWidth(), prettyImg.getHeight()));
     // TODO 1.6
@@ -343,7 +354,7 @@ public class ProfilePanel implements ActionListener, ViewComponent
     }
     catch (IOException e) {
       log.log(Level.SEVERE, "Unable to read profile", e);
-      JOptionPane.showMessageDialog(rootPanel, "Sorry, GooTool can't read your profile.", "Profile corrupt", JOptionPane.ERROR_MESSAGE);
+      JOptionPane.showMessageDialog(rootPanel, resourceBundle.getString("profile.error.corrupt.message"), resourceBundle.getString("profile.error.corrupt.title"), JOptionPane.ERROR_MESSAGE);
       return;
     }
 

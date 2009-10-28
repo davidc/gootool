@@ -20,6 +20,7 @@ import java.util.logging.Logger;
 import com.goofans.gootool.Controller;
 import com.goofans.gootool.GooTool;
 import com.goofans.gootool.ToolPreferences;
+import com.goofans.gootool.GooToolResourceBundle;
 import com.goofans.gootool.addins.Addin;
 import com.goofans.gootool.model.Configuration;
 import com.goofans.gootool.siteapi.APIException;
@@ -56,11 +57,17 @@ public class AddinsPanel implements ViewComponent, PropertyChangeListener
 
   private static final String[] COLUMN_NAMES;
   private static final Class[] COLUMN_CLASSES = new Class[]{String.class, String.class, String.class, String.class, Boolean.class};
+  private static final GooToolResourceBundle resourceBundle = GooTool.getTextProvider();
   private static final int RATING_FACTOR = 20;
 
   static {
-    // TODO load from resources
-    COLUMN_NAMES = new String[]{"Mod Name", "Type", "Version", "Author", "Enabled"};
+    COLUMN_NAMES = new String[]{
+            resourceBundle.getString("addins.column.name"),
+            resourceBundle.getString("addins.column.type"),
+            resourceBundle.getString("addins.column.version"),
+            resourceBundle.getString("addins.column.author"),
+            resourceBundle.getString("addins.column.enabled")
+    };
   }
 
 
@@ -147,7 +154,7 @@ public class AddinsPanel implements ViewComponent, PropertyChangeListener
         description.setText("<html>" + addin.getDescription().replaceAll("<", "&lt;").replaceAll("\n", "<br>") + "</html>");
       }
       description.setCaretPosition(0);
-      
+
       propertiesButton.setEnabled(true);
       enableButton.setEnabled(!isEnabled);
       disableButton.setEnabled(isEnabled);
