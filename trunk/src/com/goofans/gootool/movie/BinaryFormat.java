@@ -6,6 +6,10 @@ package com.goofans.gootool.movie;
  */
 public class BinaryFormat
 {
+  private BinaryFormat()
+  {
+  }
+
   static float getFloat(byte[] arr, int offset)
   {
     int accum = 0;

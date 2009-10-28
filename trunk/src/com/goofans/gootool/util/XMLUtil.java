@@ -24,6 +24,10 @@ public class XMLUtil
 {
   private static final Logger log = Logger.getLogger(XMLUtil.class.getName());
 
+  private XMLUtil()
+  {
+  }
+
   public static Document loadDocumentFromFile(File file) throws IOException
   {
     try {

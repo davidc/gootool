@@ -18,7 +18,7 @@ import com.goofans.gootoolsp.leveledit.resource.BallTransferable;
  */
 public class BallPaletteBall extends JLabel
 {
-  private Ball ball;
+  private final Ball ball;
   private int currentIconSize;
   private boolean selected;
 

@@ -20,10 +20,10 @@ public interface AddinReader
    *
    * @param fileName the file name to read, path separated by "/".
    * @return an InputStream for this file.
-   * @throws java.io.FileNotFoundException if the requested file does not exist.
-   * @throws java.io.IOException           if the file could not be read for another reason.
+   * @throws FileNotFoundException if the requested file does not exist.
+   * @throws IOException           if the file could not be read for another reason.
    */
-  public InputStream getInputStream(String fileName) throws FileNotFoundException, IOException;
+  public InputStream getInputStream(String fileName) throws IOException;
 
   /**
    * Gives an iterator for all the files that are descendants of the given directory name (including files in subdirectories).
@@ -38,7 +38,7 @@ public interface AddinReader
   /**
    * Closes the addin once work is complete.
    *
-   * @throws java.io.IOException if the addin could not be closed successfully.
+   * @throws IOException if the addin could not be closed successfully.
    */
   public void close() throws IOException;
 }

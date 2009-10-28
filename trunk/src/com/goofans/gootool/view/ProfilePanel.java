@@ -63,7 +63,7 @@ public class ProfilePanel implements ActionListener, ViewComponent
   private Profile currentProfile;
 
   private static final String[] COLUMN_NAMES;
-  private ProfilePanel.LevelsTableModel levelsModel;
+  private final LevelsTableModel levelsModel;
   private TowerRenderer tr;
   private JPopupMenu saveTowerMenu;
 
@@ -189,7 +189,7 @@ public class ProfilePanel implements ActionListener, ViewComponent
         if (flagInfo.length() == 0) {
           flagInfo.append("None.");
         }
-        flags.setText("<html>" + flagInfo.toString() + "</html>");
+        flags.setText("<html>" + flagInfo + "</html>");
 
         levelsModel.fireTableDataChanged();
 
@@ -210,6 +210,7 @@ public class ProfilePanel implements ActionListener, ViewComponent
           thumb.setMinimumSize(thumbDim);
           thumb.addMouseListener(new MouseAdapter()
           {
+            @Override
             public void mouseClicked(MouseEvent e)
             {
               showTower();
@@ -320,6 +321,7 @@ public class ProfilePanel implements ActionListener, ViewComponent
 
     d.addKeyListener(new KeyAdapter()
     {
+      @Override
       public void keyPressed(KeyEvent e)
       {
         if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
@@ -417,6 +419,7 @@ public class ProfilePanel implements ActionListener, ViewComponent
       return null;
     }
 
+    @Override
     public String getColumnName(int column)
     {
       return COLUMN_NAMES[column];

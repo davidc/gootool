@@ -30,7 +30,7 @@ public class RatingSubmitRequest extends APIRequestAuthenticated
     addPostParameter("vote", Integer.toString(vote));
 
     Document doc = doRequest();
-    if (!doc.getDocumentElement().getTagName().equalsIgnoreCase("rating-submit-success")) {
+    if (!"rating-submit-success".equalsIgnoreCase(doc.getDocumentElement().getTagName())) {
       throw new APIException("Rating submission failed");
     }
   }

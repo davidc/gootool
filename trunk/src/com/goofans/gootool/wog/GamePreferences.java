@@ -42,6 +42,10 @@ public class GamePreferences
     }
   }
 
+  private GamePreferences()
+  {
+  }
+
   /*
    * Loads the defaults from main config.txt. These are overwritten by our preferences if we have any.
    */

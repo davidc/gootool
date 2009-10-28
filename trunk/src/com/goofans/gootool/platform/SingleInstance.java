@@ -10,6 +10,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.goofans.gootool.GooTool;
+import com.goofans.gootool.Controller;
 
 /**
  * Handles ensuring that only a single instance of the tool is running, for Windows and Linux platforms.
@@ -100,13 +101,6 @@ public class SingleInstance
   private void primaryInstance(final FileLock lock, List<String> args)
   {
     log.finer("We're the primary instance");
-    try {
-      new PrimaryInstanceSocket(lock).start();
-    }
-    catch (IOException e) {
-      throw new RuntimeException("Can't start primary instance server", e);
-    }
-
 
     Runtime.getRuntime().addShutdownHook(new Thread()
     {
@@ -120,9 +114,17 @@ public class SingleInstance
         catch (IOException e) {
           log.log(Level.WARNING, "Unable to release lock on shutdown", e);
         }
+        //noinspection ResultOfMethodCallIgnored
         lockFile.delete();
       }
     });
+
+    try {
+      new PrimaryInstanceSocket().start();
+    }
+    catch (IOException e) {
+      throw new RuntimeException("Can't start primary instance server", e);
+    }
 
     handleCommandLineArgs(args);
   }
@@ -190,27 +192,19 @@ public class SingleInstance
       log.finer("args[" + i + "] = " + args.get(i));
     }
 
-    if (args.size() > 0) {
-      GooTool.queueTask(new Runnable()
+    GooTool.queueTask(new Runnable()
+    {
+      public void run()
       {
-        public void run()
-        {
-          GooTool.getController().bringToForeground();
+        Controller controller = GooTool.getController();
+        controller.bringToForeground();
+        if (!args.isEmpty()) {
           for (String arg : args) {
-            GooTool.getController().installAddin(new File(arg));
+            controller.installAddin(new File(arg));
           }
         }
-      });
-    }
-    else {
-      GooTool.queueTask(new Runnable()
-      {
-        public void run()
-        {
-          GooTool.getController().bringToForeground();
-        }
-      });
-    }
+      }
+    });
   }
 
   private InetAddress getLoopbackAddress() throws UnknownHostException
@@ -222,7 +216,7 @@ public class SingleInstance
   {
     private final ServerSocketChannel serverSocketChannel;
 
-    public PrimaryInstanceSocket(FileLock lock) throws IOException
+    public PrimaryInstanceSocket() throws IOException
     {
       // Open a listening socket
       serverSocketChannel = openSocket();

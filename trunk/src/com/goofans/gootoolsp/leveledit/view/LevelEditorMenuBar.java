@@ -11,7 +11,7 @@ import com.goofans.gootool.GooTool;
  */
 public class LevelEditorMenuBar extends JMenuBar
 {
-  private TextProvider textProvider;
+  private final TextProvider textProvider;
   JCheckBoxMenuItem snapGridItem;
   JCheckBoxMenuItem showGridItem;
 

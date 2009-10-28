@@ -32,24 +32,24 @@ public class WindowsSupport extends PlatformSupport
           "%HOME%/.wine/drive_c/windows/profiles/All Users/Application Data/2DBoy/WorldOfGoo", //wine, old format
   };
 
-  private Controller controller;
-
-  private SingleInstance singleInstance = new SingleInstance();
+  private final SingleInstance singleInstance = new SingleInstance();
 
   WindowsSupport()
   {
   }
 
+  @Override
   protected boolean doPreStartup(List<String> args)
   {
     return singleInstance.singleInstance(args);
   }
 
+  @Override
   protected void doStartup(Controller controller)
   {
-    this.controller = controller;
   }
 
+  @Override
   public String[] doGetProfileSearchPaths()
   {
     return PROFILE_SEARCH_PATHS;

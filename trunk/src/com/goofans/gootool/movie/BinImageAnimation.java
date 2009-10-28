@@ -651,6 +651,7 @@ public class BinImageAnimation
     }
   }
 
+  @SuppressWarnings({"UseOfSystemOutOrSystemErr", "HardcodedFileSeparator", "HardcodedLineSeparator", "HardCodedStringLiteral", "DuplicateStringLiteralInspection"})
   public static void main(String[] args) throws IOException
   {
 //    BinImageAnimation anim = new BinImageAnimation(new File("C:\\blah\\res\\anim\\ball_counter_ocd.anim.binltl"));

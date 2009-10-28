@@ -4,11 +4,9 @@ import javax.imageio.IIOException;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.Border;
-import javax.xml.xpath.XPathExpressionException;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -33,13 +31,12 @@ public class ImageTool extends ProgressIndicatingTask
   private JPanel contentPanel;
   public JPanel rootPanel;
 
-  private boolean debug;
-  private Map<String, Map<String, String>> languages;
-  private File sourceDir;
-  private File outputDir;
-  public static ImageTool imageTool;
+  private final boolean debug;
+  private final Map<String, Map<String, String>> languages;
+  private final File sourceDir;
+  private final File outputDir;
 
-  public ImageTool(File sourceDir, File outputDir, Map<String, Map<String, String>> languages, Color background, boolean debug) throws IOException, FontFormatException, XPathExpressionException
+  public ImageTool(File sourceDir, File outputDir, Map<String, Map<String, String>> languages, Color background, boolean debug)
   {
     if (outputDir == null) {
       GridBagLayout layout = new GridBagLayout();
@@ -60,6 +57,7 @@ public class ImageTool extends ProgressIndicatingTask
     this.outputDir = outputDir;
   }
 
+  @Override
   public void run() throws Exception
   {
     GridBagConstraints constraints = new GridBagConstraints();
@@ -85,7 +83,7 @@ public class ImageTool extends ProgressIndicatingTask
       Node node = processImageNodes.item(i);
       if (node instanceof Element) {
         Element el = (Element) node;
-        if (el.getTagName().equals("process-image")) {
+        if ("process-image".equals(el.getTagName())) {
           String sourceFileName = el.getElementsByTagName("source").item(0).getTextContent().trim();
           String destFileName = el.getElementsByTagName("dest").item(0).getTextContent().trim();
 
@@ -138,13 +136,7 @@ public class ImageTool extends ProgressIndicatingTask
     frame.setVisible(true);
   }
 
-  static Color randomColor()
-  {
-    Random r = new Random();
-    return new Color(r.nextInt(256), r.nextInt(256), r.nextInt(256));
-  }
-
-  private static JLabel makeLabel(BufferedImage image) throws IOException, FontFormatException
+  private static JLabel makeLabel(BufferedImage image)
   {
     JLabel label = new JLabel(new ImageIcon(image));
     label.setMinimumSize(new Dimension(image.getWidth(), image.getHeight()));
@@ -152,6 +144,7 @@ public class ImageTool extends ProgressIndicatingTask
     return label;
   }
 
+  @SuppressWarnings({"HardCodedStringLiteral", "DuplicateStringLiteralInspection", "HardcodedFileSeparator"})
   public static void main(String[] args) throws Exception
   {
     WorldOfGoo.getTheInstance().init();
@@ -169,35 +162,32 @@ public class ImageTool extends ProgressIndicatingTask
 
     Map<String, Map<String, String>> languages = new HashMap<String, Map<String, String>>();
 
-
-    Map<String, String> en = new HashMap<String, String>();
-    en.put("IMG_RESULTS_CONTINUE", "continue");
-    en.put("IMG_WOGC_SIGN1_CONNECT", "connect");
-    en.put("IMAGE_GOINGUP_TUTORIALPOST", "Drag n'|drop to|build|to the|pipe");
-
-    Map<String, String> es = new HashMap<String, String>();
-    es.put("IMG_RESULTS_CONTINUE", "continuar");
-    Map<String, String> fr = new HashMap<String, String>();
-    fr.put("IMG_RESULTS_CONTINUE", "continuer");
-
+//    Map<String, String> en = new HashMap<String, String>();
+//    en.put("IMG_RESULTS_CONTINUE", "continue");
+//    en.put("IMG_WOGC_SIGN1_CONNECT", "connect");
+//    en.put("IMAGE_GOINGUP_TUTORIALPOST", "Drag n'|drop to|build|to the|pipe");
+//
+//    Map<String, String> es = new HashMap<String, String>();
+//    es.put("IMG_RESULTS_CONTINUE", "continuar");
+//    Map<String, String> fr = new HashMap<String, String>();
+//    fr.put("IMG_RESULTS_CONTINUE", "continuer");
 //    Map<String,String> de = new HashMap<String, String>();
 //    de.put("IMG_RESULTS_CONTINUE", "weiter");
+//
+//    Map<String, String> it = new HashMap<String, String>();
+//    it.put("IMG_RESULTS_CONTINUE", "continua");
+//    it.put("IMG_WOGC_SIGN1_CONNECT", "connetti");
+//    it.put("IMAGE_GOINGUP_TUTORIALPOST1", "Trascina e");
+//    it.put("IMAGE_GOINGUP_TUTORIALPOST2", "rilascia per ");
+//    it.put("IMAGE_GOINGUP_TUTORIALPOST3", "costruire");
+//    it.put("IMAGE_GOINGUP_TUTORIALPOST4", "fino al");
+//    it.put("IMAGE_GOINGUP_TUTORIALPOST5", "tubo");
+//
+//    Map<String, String> nl = new HashMap<String, String>();
+//    nl.put("IMG_RESULTS_CONTINUE", "verda");
 
 
-    Map<String, String> it = new HashMap<String, String>();
-    it.put("IMG_RESULTS_CONTINUE", "continua");
-    it.put("IMG_WOGC_SIGN1_CONNECT", "connetti");
-    it.put("IMAGE_GOINGUP_TUTORIALPOST1", "Trascina e");
-    it.put("IMAGE_GOINGUP_TUTORIALPOST2", "rilascia per ");
-    it.put("IMAGE_GOINGUP_TUTORIALPOST3", "costruire");
-    it.put("IMAGE_GOINGUP_TUTORIALPOST4", "fino al");
-    it.put("IMAGE_GOINGUP_TUTORIALPOST5", "tubo");
-
-    Map<String, String> nl = new HashMap<String, String>();
-    nl.put("IMG_RESULTS_CONTINUE", "verda");
-
-
-    String wikiBase = "http://hell.student.utwente.nl/wog/mediawiki/";
+    String wikiBase = TranslationDownloader.DEFAULT_WIKI_URL;
     languages.put("en", TranslationDownloader.getTranslations(wikiBase, "Italian_translation", false));
     languages.put("ru", TranslationDownloader.getTranslations(wikiBase, "Russian_translation", true));
 //    languages.put("fr", fr);
@@ -205,7 +195,7 @@ public class ImageTool extends ProgressIndicatingTask
     languages.put("it", TranslationDownloader.getTranslations(wikiBase, "Italian_translation", true));
 //    languages.put("nl", nl);
 
-    imageTool = new ImageTool(new File("C:\\Users\\david\\Downloads\\wog-translate\\"), null, languages, Color.WHITE, true);
+    ImageTool imageTool = new ImageTool(new File("C:\\Users\\david\\Downloads\\wog-translate\\"), null, languages, Color.WHITE, true);
     imageTool.run();
     imageTool.showWindow();
   }

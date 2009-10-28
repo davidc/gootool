@@ -83,9 +83,7 @@ public class ToolPreferences
     String ignoreVersion = PREFS.get(PREF_IGNORE_UPDATE, null);
     log.finer("Current setting: " + ignoreVersion);
 
-    if (ignoreVersion == null) return false;
-
-    return ignoreVersion.equals(version.toString());
+    return ignoreVersion != null && ignoreVersion.equals(version.toString());
   }
 
   /**

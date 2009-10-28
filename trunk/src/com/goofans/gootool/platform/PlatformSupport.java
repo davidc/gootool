@@ -33,18 +33,22 @@ public abstract class PlatformSupport
 
     String forcePlatform = System.getProperty("gootool.platform");
 
-    if (forcePlatform != null) {
-      if (forcePlatform.equalsIgnoreCase("windows")) {
+    if (forcePlatform == null) {
+      platform = null;
+    }
+    else {
+      if ("windows".equalsIgnoreCase(forcePlatform)) {
         platform = Platform.WINDOWS;
       }
-      else if (forcePlatform.equalsIgnoreCase("macosx")) {
+      else if ("macosx".equalsIgnoreCase(forcePlatform)) {
         platform = Platform.MACOSX;
       }
-      else if (forcePlatform.equalsIgnoreCase("linux")) {
+      else if ("linux".equalsIgnoreCase(forcePlatform)) {
         platform = Platform.LINUX;
       }
       else {
         log.warning("Unknown gootool.platform " + forcePlatform + ", valid values are: WINDOWS, LINUX, MACOSX");
+        platform = null;
       }
     }
 
@@ -92,7 +96,6 @@ public abstract class PlatformSupport
     return platform;
   }
 
-
   public static boolean preStartup(List<String> args)
   {
     String prefsFile = null;
@@ -101,7 +104,7 @@ public abstract class PlatformSupport
       String arg = args.get(i);
 
       /* File preferences via -preferences */
-      if (arg.equals("-preferences")) {
+      if ("-preferences".equals(arg)) {
         if (i + 1 >= args.size()) {
           throw new RuntimeException("Must specify a filename when using -preferences");
         }

@@ -41,6 +41,7 @@ public class ConfigurationWriterTask extends ProgressIndicatingTask
     this.configuration = configuration;
   }
 
+  @Override
   public void run() throws Exception
   {
     writePrivateConfig(configuration);

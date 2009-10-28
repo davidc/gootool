@@ -50,9 +50,9 @@ public class AddinsPanel implements ViewComponent, PropertyChangeListener
   private HyperlinkLabel findMoreHyperlink;
   private StarBar ratingBar;
   private JButton updateCheckButton;
-  private MyTableModel addinsModel;
+  private final MyTableModel addinsModel;
 
-  private Controller controller;
+  private final Controller controller;
 
   private static final String[] COLUMN_NAMES;
   private static final Class[] COLUMN_CLASSES = new Class[]{String.class, String.class, String.class, String.class, Boolean.class};
@@ -194,7 +194,7 @@ public class AddinsPanel implements ViewComponent, PropertyChangeListener
 
   public void propertyChange(PropertyChangeEvent evt)
   {
-    if (evt.getSource() instanceof StarBar && evt.getPropertyName().equals("rating")) {
+    if (evt.getSource() instanceof StarBar && "rating".equals(evt.getPropertyName())) {
       int row = addinTable.getSelectedRow();
 
       if (row >= 0 && !controller.getDisplayAddins().isEmpty()) {
@@ -294,11 +294,13 @@ public class AddinsPanel implements ViewComponent, PropertyChangeListener
       this.controller = controller;
     }
 
+    @Override
     public int getSourceActions(JComponent c)
     {
       return MOVE;
     }
 
+    @Override
     protected Transferable createTransferable(JComponent c)
     {
       int row = ((JTable) c).getSelectedRow();
@@ -313,6 +315,7 @@ public class AddinsPanel implements ViewComponent, PropertyChangeListener
       return new MyTransferable(row);
     }
 
+    @Override
     public boolean canImport(JComponent comp, DataFlavor[] transferFlavors)
     {
       for (DataFlavor transferFlavor : transferFlavors) {
@@ -337,6 +340,7 @@ public class AddinsPanel implements ViewComponent, PropertyChangeListener
 //      return true;
 //    }
 
+    @Override
     public boolean importData(JComponent comp, Transferable t)
     {
       return super.importData(comp, t);    //To change body of overridden methods use File | Settings | File Templates.
@@ -381,7 +385,7 @@ public class AddinsPanel implements ViewComponent, PropertyChangeListener
 
   private class MyTransferable implements Transferable
   {
-    private int row;
+    private final int row;
 
     MyTransferable(int row)
     {

@@ -69,16 +69,16 @@ public class LevelEditor extends JFrame implements ActionListener
   static final String CMD_SHOW_GRID = "ShowGrid";
   static final String CMD_SNAP_GRID = "SnapGrid";
 
-  private TextProvider textProvider;
-  private NumberFormat mousePosNumberFormat;
+  private final TextProvider textProvider;
+  private final NumberFormat mousePosNumberFormat;
 
-  private UndoManager undoManager;
+  private final UndoManager undoManager;
   private DefaultMutableTreeNode rootNode;
-  private Level level;
+  private final Level level;
 
   private boolean showGrid, snapGrid;
 
-  private LevelEditorMenuBar menu;
+  private final LevelEditorMenuBar menu;
 
   public LevelEditor(Level level) throws IOException
   {

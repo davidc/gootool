@@ -26,13 +26,13 @@ public class LevelContents
     LEVEL_CONTENT_TYPES.put("strand", Strand.class);
   }
 
-  private List<LevelContentsItem> items = new LinkedList<LevelContentsItem>();
+  private final List<LevelContentsItem> items = new LinkedList<LevelContentsItem>();
 
   public LevelContents(Document d) throws IOException
   {
     Element rootElement = d.getDocumentElement();
 
-    if (!rootElement.getNodeName().equals("level")) {
+    if (!"level".equals(rootElement.getNodeName())) {
       throw new IOException("Root element isn't a level");
     }
 

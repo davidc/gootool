@@ -33,9 +33,9 @@ public class UnicodeReader extends Reader
 {
   private static final Logger log = Logger.getLogger(UnicodeReader.class.getName());
 
-  private PushbackInputStream internalIn;
+  private final PushbackInputStream internalIn;
   private InputStreamReader internalIn2 = null;
-  private String defaultEnc;
+  private final String defaultEnc;
 
   private static final int BOM_SIZE = 4;
   private static final String ENCODING_UTF_32BE = "UTF-32BE";
@@ -83,7 +83,7 @@ public class UnicodeReader extends Reader
     if (internalIn2 != null) return;
 
     String encoding;
-    byte bom[] = new byte[BOM_SIZE];
+    byte[] bom = new byte[BOM_SIZE];
     int n, unread;
     n = internalIn.read(bom, 0, bom.length);
 
@@ -131,12 +131,14 @@ public class UnicodeReader extends Reader
     }
   }
 
+  @Override
   public void close() throws IOException
   {
     init();
     internalIn2.close();
   }
 
+  @Override
   public int read(char[] cbuf, int off, int len) throws IOException
   {
     init();

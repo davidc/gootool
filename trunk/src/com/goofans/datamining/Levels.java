@@ -18,9 +18,10 @@ import org.w3c.dom.Element;
  * @author David Croft (davidc@goofans.com)
  * @version $Id$
  */
+@SuppressWarnings({"UseOfSystemOutOrSystemErr", "HardCodedStringLiteral", "HardcodedFileSeparator", "DuplicateStringLiteralInspection", "StringConcatenation"})
 public class Levels
 {
-  private static XPath xpath = XPathFactory.newInstance().newXPath();
+  private static final XPath xpath = XPathFactory.newInstance().newXPath();
 
   public static void main(String[] args) throws IOException, XPathExpressionException
   {

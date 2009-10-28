@@ -181,6 +181,92 @@
         <inspection_tool class="HardcodedLineSeparators" level="WARNING" enabled="true" />
         <inspection_tool class="UseOfSunClasses" level="WARNING" enabled="true" />
         <inspection_tool class="FieldMayBeFinal" level="WARNING" enabled="true" />
+        <inspection_tool class="AssignmentToCatchBlockParameter" level="WARNING" enabled="true" />
+        <inspection_tool class="AssignmentToStaticFieldFromInstanceMethod" level="WARNING" enabled="true" />
+        <inspection_tool class="MagicNumber" level="WARNING" enabled="true">
+          <option name="m_ignoreInHashCode" value="true" />
+        </inspection_tool>
+        <inspection_tool class="OverlyStrongTypeCast" level="WARNING" enabled="true">
+          <option name="ignoreInMatchingInstanceof" value="false" />
+        </inspection_tool>
+        <inspection_tool class="MethodOnlyUsedFromInnerClass" level="WARNING" enabled="true">
+          <option name="ignoreMethodsAccessedFromAnonymousClass" value="false" />
+        </inspection_tool>
+        <inspection_tool class="StaticMethodOnlyUsedInOneClass" level="WARNING" enabled="true" />
+        <inspection_tool class="ClassMayBeInterface" level="WARNING" enabled="true" />
+        <inspection_tool class="ClassNameDiffersFromFileName" level="WARNING" enabled="true" />
+        <inspection_tool class="ClassInTopLevelPackage" level="WARNING" enabled="true" />
+        <inspection_tool class="EmptyClass" level="WARNING" enabled="true" />
+        <inspection_tool class="MissingDeprecatedAnnotation" level="WARNING" enabled="true" />
+        <inspection_tool class="MissingOverrideAnnotation" level="WARNING" enabled="true" />
+        <inspection_tool class="MultipleTopLevelClassesInFile" level="WARNING" enabled="true" />
+        <inspection_tool class="ProtectedMemberInFinalClass" level="WARNING" enabled="true" />
+        <inspection_tool class="UtilityClassWithPublicConstructor" level="WARNING" enabled="true" />
+        <inspection_tool class="UtilityClassWithoutPrivateConstructor" level="WARNING" enabled="true">
+          <option name="ignoreClassesWithOnlyMain" value="false" />
+        </inspection_tool>
+        <inspection_tool class="CStyleArrayDeclaration" level="WARNING" enabled="true" />
+        <inspection_tool class="LiteralAsArgToStringEquals" level="WARNING" enabled="true" />
+        <inspection_tool class="ListIndexOfReplaceableByContains" level="WARNING" enabled="true" />
+        <inspection_tool class="UnnecessaryFinalOnLocalVariable" level="WARNING" enabled="true" />
+        <inspection_tool class="UnnecessaryCallToStringValueOf" level="WARNING" enabled="true" />
+        <inspection_tool class="UnnecessaryFullyQualifiedName" level="WARNING" enabled="true">
+          <option name="m_ignoreJavadoc" value="false" />
+        </inspection_tool>
+        <inspection_tool class="UnnecessaryQualifierForThis" level="WARNING" enabled="true" />
+        <inspection_tool class="MultipleTypedDeclaration" level="WARNING" enabled="true" />
+        <inspection_tool class="AbstractMethodCallInConstructor" level="WARNING" enabled="true" />
+        <inspection_tool class="OverridableMethodCallDuringObjectConstruction" level="WARNING" enabled="true" />
+        <inspection_tool class="OverriddenMethodCallDuringObjectConstruction" level="WARNING" enabled="true" />
+        <inspection_tool class="StaticVariableInitialization" level="WARNING" enabled="true">
+          <option name="m_ignorePrimitives" value="false" />
+        </inspection_tool>
+        <inspection_tool class="StaticVariableUninitializedUse" level="WARNING" enabled="true">
+          <option name="m_ignorePrimitives" value="false" />
+        </inspection_tool>
+        <inspection_tool class="ThisEscapedInConstructor" level="WARNING" enabled="true" />
+        <inspection_tool class="NonThreadSafeLazyInitialization" level="WARNING" enabled="true" />
+        <inspection_tool class="SimplifiableIfStatement" level="WARNING" enabled="false" />
+        <inspection_tool class="IndexOfReplaceableByContains" level="WARNING" enabled="true" />
+        <inspection_tool class="ClassWithMultipleLoggers" level="WARNING" enabled="true">
+          <option name="loggerClassName" value="java.util.logging.Logger" />
+        </inspection_tool>
+        <inspection_tool class="LoggerInitializedWithForeignClass" level="WARNING" enabled="true">
+          <option name="loggerClassName" value="java.util.logging.Logger" />
+          <option name="loggerFactoryMethodName" value="getLogger" />
+        </inspection_tool>
+        <inspection_tool class="NonStaticFinalLogger" level="WARNING" enabled="true">
+          <option name="loggerClassName" value="java.util.logging.Logger" />
+        </inspection_tool>
+        <inspection_tool class="ConfusingMainMethod" level="WARNING" enabled="true" />
+        <inspection_tool class="UnaryPlus" level="WARNING" enabled="true" />
+        <inspection_tool class="UnnecessaryUnaryMinus" level="WARNING" enabled="true" />
+        <inspection_tool class="ComparisonToNaN" level="WARNING" enabled="true" />
+        <inspection_tool class="CollectionAddedToSelf" level="WARNING" enabled="true" />
+        <inspection_tool class="ComparableImplementedButEqualsNotOverridden" level="WARNING" enabled="true" />
+        <inspection_tool class="MisspelledCompareTo" level="WARNING" enabled="true" />
+        <inspection_tool class="MisspelledEquals" level="WARNING" enabled="true" />
+        <inspection_tool class="CovariantCompareTo" level="WARNING" enabled="true" />
+        <inspection_tool class="CovariantEquals" level="WARNING" enabled="true" />
+        <inspection_tool class="MisspelledHashcode" level="WARNING" enabled="true" />
+        <inspection_tool class="InstantiationOfUtilityClass" level="WARNING" enabled="true" />
+        <inspection_tool class="IteratorNextDoesNotThrowNoSuchElementException" level="WARNING" enabled="true" />
+        <inspection_tool class="ObjectEquality" level="WARNING" enabled="true">
+          <option name="m_ignoreEnums" value="true" />
+          <option name="m_ignoreClassObjects" value="true" />
+          <option name="m_ignorePrivateConstructors" value="false" />
+        </inspection_tool>
+        <inspection_tool class="SubtractionInCompareTo" level="WARNING" enabled="true" />
+        <inspection_tool class="TextLabelInSwitchStatement" level="WARNING" enabled="true" />
+        <inspection_tool class="SuspiciousIndentAfterControlStatement" level="WARNING" enabled="true" />
+        <inspection_tool class="MisspelledToString" level="WARNING" enabled="true" />
+        <inspection_tool class="ArchaicSystemPropertyAccess" level="WARNING" enabled="true" />
+        <inspection_tool class="UseOfPropertiesAsHashtable" level="WARNING" enabled="true" />
+        <inspection_tool class="UnusedProperty" level="WARNING" enabled="true" />
+        <inspection_tool class="ChannelResource" level="WARNING" enabled="true" />
+        <inspection_tool class="IOResource" level="WARNING" enabled="true" />
+        <inspection_tool class="SocketResource" level="WARNING" enabled="true" />
+        <inspection_tool class="AnonymousClassVariableHidesContainingMethodVariable" level="WARNING" enabled="true" />
       </profile>
     </profiles>
     <list size="4">

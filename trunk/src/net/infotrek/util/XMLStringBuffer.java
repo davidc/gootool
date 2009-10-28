@@ -10,9 +10,10 @@ import java.util.*;
  */
 public class XMLStringBuffer
 {
+  private static final String INDENT_INCREMENT = "  ";
+
   private StringBuffer buffer;
-  private Stack<Tag> stack = new Stack<Tag>();
-  private String indentIncrement = "  ";
+  private final Stack<Tag> stack = new Stack<Tag>();
   private String currentIndent = "";
 
   public XMLStringBuffer()
@@ -64,7 +65,7 @@ public class XMLStringBuffer
   {
     xmlOpen(buffer, currentIndent, tagName + schema, attributes, false, false);
     stack.push(new Tag(currentIndent, tagName));
-    currentIndent += indentIncrement;
+    currentIndent += INDENT_INCREMENT;
   }
 
   /**
@@ -77,7 +78,7 @@ public class XMLStringBuffer
   {
     xmlOpen(buffer, currentIndent, tagName, attributes, false, false);
     stack.push(new Tag(currentIndent, tagName));
-    currentIndent += indentIncrement;
+    currentIndent += INDENT_INCREMENT;
   }
 
   /**
@@ -124,7 +125,7 @@ public class XMLStringBuffer
         throw new AssertionError("Popping the wrong tag: " + t.tagName + " but expected " + tagName);
       }
     }
-    currentIndent = currentIndent.substring(0, currentIndent.length() - indentIncrement.length());
+    currentIndent = currentIndent.substring(0, currentIndent.length() - INDENT_INCREMENT.length());
     xmlClose(buffer, currentIndent, t.tagName);
   }
 
@@ -329,7 +330,7 @@ public class XMLStringBuffer
 
   private static String encodeXml(String in)
   {
-    StringBuffer out = new StringBuffer();
+    StringBuilder out = new StringBuilder();
 
     for (int i = 0; i < in.length(); ++i) {
       char ch = in.charAt(i);
@@ -352,6 +353,3 @@ public class XMLStringBuffer
     return out.toString();
   }
 }
-
-////////////////////////
-

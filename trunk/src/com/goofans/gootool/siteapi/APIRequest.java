@@ -63,7 +63,7 @@ public class APIRequest
   }
 
   private URL url;
-  private Map<String, String> postParameters = new HashMap<String, String>();
+  private final Map<String, String> postParameters = new HashMap<String, String>();
   private boolean executed;
 
   protected APIRequest(URL url)
@@ -104,7 +104,7 @@ public class APIRequest
       InputStream is = doRequestInt();
       Document doc = XMLUtil.loadDocumentFromInputStream(is);
 
-      if (doc.getDocumentElement().getNodeName().equals("error")) {
+      if ("error".equals(doc.getDocumentElement().getNodeName())) {
         String message = XMLUtil.getElementString(doc.getDocumentElement(), "message");
         log.log(Level.WARNING, "API error. Message from server: " + message);
 
@@ -168,6 +168,8 @@ public class APIRequest
   }
 
 
+  @Override
+  @SuppressWarnings({"StringConcatenation"})
   public String toString()
   {
     return "APIRequest{" +

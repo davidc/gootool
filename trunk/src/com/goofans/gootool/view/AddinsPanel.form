@@ -195,5 +195,10 @@
   </grid>
   <inspectionSuppressions>
     <suppress inspection="MissingMnemonic" id="3f296"/>
+    <suppress inspection="MissingMnemonic" id="9aab8"/>
+    <suppress inspection="MissingMnemonic" id="c93b7"/>
+    <suppress inspection="NoLabelFor" id="d2355"/>
+    <suppress inspection="NoLabelFor" id="b704e"/>
+    <suppress inspection="HardCodedStringLiteral" id="b704e"/>
   </inspectionSuppressions>
 </form>

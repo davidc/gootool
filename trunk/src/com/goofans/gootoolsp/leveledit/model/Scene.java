@@ -17,16 +17,16 @@ import org.w3c.dom.NodeList;
  */
 public class Scene
 {
-  private double minX, minY, maxX, maxY;
+  private final double minX, minY, maxX, maxY;
 //  private Color backgroundColor;
 
-  private List<SceneObject> sceneObjects = new LinkedList<SceneObject>();
+  private final List<SceneObject> sceneObjects = new LinkedList<SceneObject>();
 
   public Scene(Document d) throws IOException
   {
     Element rootElement = d.getDocumentElement();
 
-    if (!rootElement.getNodeName().equals("scene")) {
+    if (!"scene".equals(rootElement.getNodeName())) {
       throw new IOException("Root element isn't a scene");
     }
 

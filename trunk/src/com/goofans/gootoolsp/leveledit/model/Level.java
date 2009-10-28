@@ -13,9 +13,9 @@ import org.w3c.dom.Document;
  */
 public class Level
 {
-  private Scene scene;
-  private Resources resources;
-  private LevelContents levelContents;
+  private final Scene scene;
+  private final Resources resources;
+  private final LevelContents levelContents;
 
   public Level(String levelName) throws IOException
   {
@@ -51,7 +51,7 @@ public class Level
     return levelContents;
   }
 
-  @SuppressWarnings({"UseOfSystemOutOrSystemErr"})
+  @SuppressWarnings({"UseOfSystemOutOrSystemErr", "HardCodedStringLiteral"})
   public static void main(String[] args) throws IOException
   {
     WorldOfGoo worldOfGoo = WorldOfGoo.getTheInstance();

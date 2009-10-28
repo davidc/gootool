@@ -6,10 +6,8 @@ import java.io.*;
 import java.util.Map;
 import java.util.LinkedHashMap;
 
-import com.goofans.gootool.io.GameFormat;
 import com.goofans.gootool.wog.WorldOfGoo;
 import com.goofans.gootool.util.Utilities;
-import org.w3c.dom.Document;
 
 /**
  * TODO check number of actors is sensible, and other validation on the file when loading.
@@ -23,23 +21,27 @@ public class BinMovie
   private static final int BINACTOR_LENGTH = 32;
 //  private static final int BINIMAGEANIMATION_LENGTH = 52;
 
-  private float length;
-  private BinActor[] actors;
-  private BinImageAnimation[] anims;
+  private final float length;
+  private final BinActor[] actors;
+  private final BinImageAnimation[] anims;
 
   private BinImageAnimation soundAnim;
 
   public BinMovie(File file) throws IOException
   {
+    byte[] contents;
+
     FileInputStream is = new FileInputStream(file);
-
-    int fileLength = (int) file.length();
-    byte[] contents = new byte[fileLength];
-    if (is.read(contents) != fileLength) {
-      throw new IOException("short read on movie " + file.getName());
+    try {
+      int fileLength = (int) file.length();
+      contents = new byte[fileLength];
+      if (is.read(contents) != fileLength) {
+        throw new IOException("short read on movie " + file.getName());
+      }
     }
-    is.close();
-
+    finally {
+      is.close();
+    }
 
     length = BinaryFormat.getFloat(contents, 0);
     int numActors = BinaryFormat.getInt(contents, 4);
@@ -134,19 +136,19 @@ public class BinMovie
     xml.pop("movie");
   }
 
+  @SuppressWarnings({"UseOfSystemOutOrSystemErr", "HardcodedLineSeparator", "HardCodedStringLiteral", "HardcodedFileSeparator", "StringConcatenation"})
   public static void main(String[] args) throws IOException
   {
-
-    final WorldOfGoo wog = WorldOfGoo.getTheInstance();
+    WorldOfGoo wog = WorldOfGoo.getTheInstance();
     wog.init();
 
     File f = wog.getGameFile("res\\movie");
     for (File file : f.listFiles()) {
       String movie = file.getName();
-      if (!movie.equals("_generic")) {
+      if (!"_generic".equals(movie)) {
         System.out.println("\n\n>>>>>>>> " + file.getName());
 
-        Document doc = GameFormat.decodeXmlBinFile(wog.getGameFile("res\\movie\\" + movie + "\\" + movie + ".resrc.bin"));
+//        Document doc = GameFormat.decodeXmlBinFile(wog.getGameFile("res\\movie\\" + movie + "\\" + movie + ".resrc.bin"));
 //        Resources r = new Resources(doc);
         BinMovie m = new BinMovie(wog.getGameFile("res\\movie\\" + movie + "\\" + movie + ".movie.binltl"));//, r);
 //        System.out.println(m.toXMLDocument());

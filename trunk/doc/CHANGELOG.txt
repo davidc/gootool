@@ -1,3 +1,5 @@
+1.0.1, unreleased
+
 1.0.0, 22-October-2009
 
 - You can now rate addins from the Addins tab within GooTool (#0000175).

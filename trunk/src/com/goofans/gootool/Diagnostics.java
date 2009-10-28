@@ -35,6 +35,7 @@ public class Diagnostics extends ProgressIndicatingTask
     this.out = new PrintStream(new BufferedOutputStream(new FileOutputStream(outFile)));
   }
 
+  @Override
   public void run()
   {
     beginStep("Producing report", false);

@@ -31,7 +31,7 @@ public class ProfileRestoreRequest extends APIRequestAuthenticated
     addPostParameter("backup_id", String.valueOf(backupId));
 
     Document doc = doRequest();
-    if (!doc.getDocumentElement().getTagName().equalsIgnoreCase("profile-restore-success")) {
+    if (!"profile-restore-success".equalsIgnoreCase(doc.getDocumentElement().getTagName())) {
       throw new APIException("Profile restore failed");
     }
 

@@ -26,7 +26,7 @@ public class MainFrame extends JFrame implements ViewComponent
   private JPanel profilePanelPanel;
   public JTabbedPane tabbedPane;
 
-  private Controller controller;
+  private final Controller controller;
 
   public AddinsPanel addinsPanel;
   private OptionsPanel optionsPanel;
@@ -48,6 +48,7 @@ public class MainFrame extends JFrame implements ViewComponent
 
     addWindowListener(new WindowAdapter()
     {
+      @Override
       public void windowClosing(WindowEvent e)
       {
         controller.maybeExit();

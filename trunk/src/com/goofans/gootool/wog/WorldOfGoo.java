@@ -187,12 +187,11 @@ public abstract class WorldOfGoo
     if (configResolution != null) {
       width = p.getInt(PREF_SCREENWIDTH, configResolution.getWidth());
       height = p.getInt(PREF_SCREENHEIGHT, configResolution.getHeight());
+      c.setResolution(Resolution.getResolutionByDimensions(width, height));
     }
     else {
-      width = 800;
-      height = 600;
+      c.setResolution(Resolution.DEFAULT_RESOLUTION);
     }
-    c.setResolution(Resolution.getResolutionByDimensions(width, height));
     c.setRefreshRate(p.getInt(PREF_REFRESHRATE, 60));
     c.setUiInset(p.getInt(PREF_UIINSET, c.getUiInset()));
 

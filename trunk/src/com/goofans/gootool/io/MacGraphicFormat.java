@@ -72,8 +72,7 @@ public class MacGraphicFormat
   private static PixelInterleavedSampleModel getSampleModel(int width, int height, int squareSide)
   {
     int[] bandOffsets = new int[]{0, 1, 2, 3};
-    PixelInterleavedSampleModel sampleModel = new PixelInterleavedSampleModel(DataBuffer.TYPE_BYTE, width, height, 4, squareSide * 4, bandOffsets);
-    return sampleModel;
+    return new PixelInterleavedSampleModel(DataBuffer.TYPE_BYTE, width, height, 4, squareSide * 4, bandOffsets);
   }
 
   public static void encodeImage(File file, Image image) throws IOException
@@ -138,8 +137,7 @@ public class MacGraphicFormat
   {
     ColorSpace colorSpace = ColorSpace.getInstance(ColorSpace.CS_sRGB);
     int[] pixInfo = new int[]{8, 8, 8, 8};
-    ComponentColorModel colorModel = new ComponentColorModel(colorSpace, pixInfo, true, false, Transparency.TRANSLUCENT, DataBuffer.TYPE_BYTE);
-    return colorModel;
+    return new ComponentColorModel(colorSpace, pixInfo, true, false, Transparency.TRANSLUCENT, DataBuffer.TYPE_BYTE);
   }
 
   private static int readUnsignedShort(InputStream is) throws IOException

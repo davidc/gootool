@@ -6,10 +6,10 @@ package com.goofans.gootool.profile;
  */
 public class LevelAchievement
 {
-  private String levelId;
-  private int mostBalls;
-  private int leastMoves;
-  private int leastTime;
+  private final String levelId;
+  private final int mostBalls;
+  private final int leastMoves;
+  private final int leastTime;
 
   public LevelAchievement(String levelId, int maxBalls, int leastMoves, int leastTime)
   {
@@ -39,6 +39,8 @@ public class LevelAchievement
     return leastTime;
   }
 
+  @Override
+  @SuppressWarnings({"StringConcatenation"})
   public String toString()
   {
     return "LevelAchievement{" +

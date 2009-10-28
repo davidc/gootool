@@ -33,6 +33,10 @@ public class WindowsRegistry
   private static final int ERROR_SUCCESS = 0;
   private static final int ERROR_FILE_NOT_FOUND = 2;
 
+  private WindowsRegistry()
+  {
+  }
+
   public static String getKeySz(int hive, String keyName, String valueName)
           throws BackingStoreException
   {
@@ -137,7 +141,7 @@ public class WindowsRegistry
   }
 
   @SuppressWarnings({"HardcodedFileSeparator", "DuplicateStringLiteralInspection"})
-  public static void main(String args[])
+  public static void main(String[] args)
   {
     testKey(HKEY_LOCAL_MACHINE, "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\Steam App 22000", "InstallLocation");
     testKey(HKEY_LOCAL_MACHINE, "SOFTWARE\\Wow6432Node\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\Steam App 22000", "InstallLocation");

@@ -2,15 +2,16 @@ package com.goofans.gootool;
 
 import java.util.ResourceBundle;
 import java.util.MissingResourceException;
+import java.util.ListResourceBundle;
 import java.text.MessageFormat;
 
 /**
  * @author David Croft (davidc@goofans.com)
  * @version $Id$
  */
-public class TextProvider
+public class TextProvider // TODO extends ResourceBundle
 {
-  private ResourceBundle resources;
+  private final ResourceBundle resources;
 
   public TextProvider(String baseName)
   {

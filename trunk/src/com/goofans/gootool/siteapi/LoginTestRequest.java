@@ -7,13 +7,13 @@ import com.goofans.gootool.util.DebugUtil;
 import org.w3c.dom.Document;
 
 /**
+ * A simple authenticated request that does nothing, but does throw an APIException if the user login failed.
+ *
  * @author David Croft (davidc@goofans.com)
  * @version $Id$
  */
 public class LoginTestRequest extends APIRequestAuthenticated
 {
-  private static final Logger log = Logger.getLogger(ProfileBackupRequest.class.getName());
-
   public LoginTestRequest() throws APIException
   {
     super(API_LOGIN_TEST);
@@ -23,7 +23,7 @@ public class LoginTestRequest extends APIRequestAuthenticated
   {
     Document doc = doRequest();
 
-    if (!doc.getDocumentElement().getTagName().equalsIgnoreCase("login-test-success")) {
+    if (!"login-test-success".equalsIgnoreCase(doc.getDocumentElement().getTagName())) {
       throw new APIException("Login test failed");
     }
   }

@@ -17,24 +17,24 @@ public class LinuxSupport extends PlatformSupport
           "%HOME%/.WorldOfGoo"
   };
 
-  private Controller controller;
-
-  private SingleInstance singleInstance = new SingleInstance();
+  private final SingleInstance singleInstance = new SingleInstance();
 
   LinuxSupport()
   {
   }
 
+  @Override
   protected boolean doPreStartup(List<String> args)
   {
     return singleInstance.singleInstance(args);
   }
 
+  @Override
   protected void doStartup(Controller controller)
   {
-    this.controller = controller;
   }
 
+  @Override
   public String[] doGetProfileSearchPaths()
   {
     return PROFILE_SEARCH_PATHS;

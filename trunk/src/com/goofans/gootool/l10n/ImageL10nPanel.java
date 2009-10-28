@@ -71,7 +71,7 @@ public class ImageL10nPanel implements ActionListener
     buildAndSaveButton.addActionListener(this);
 
     Preferences p = WorldOfGoo.getPreferences();
-    wikiBaseURLTextField.setText(p.get(PREF_L10N_WIKI_BASE, "http://hell.student.utwente.nl/wog/mediawiki/"));
+    wikiBaseURLTextField.setText(p.get(PREF_L10N_WIKI_BASE, TranslationDownloader.DEFAULT_WIKI_URL));
 
     colorChooser.setBackground(Color.WHITE);
     colorChooser.setForeground(Color.WHITE);
@@ -168,11 +168,13 @@ public class ImageL10nPanel implements ActionListener
     JFileChooser chooser = new JFileChooser(inputDirectoryTextField.getText());
     chooser.setFileFilter(new FileFilter()
     {
+      @Override
       public boolean accept(File f)
       {
-        return (f.getName().equals("l10n_images.xml")) || f.isDirectory();
+        return ("l10n_images.xml".equals(f.getName())) || f.isDirectory();
       }
 
+      @Override
       public String getDescription()
       {
         return "l10n_images.xml file";
@@ -203,6 +205,7 @@ public class ImageL10nPanel implements ActionListener
 
     GUIUtil.runTask((JFrame) null, "Downloading translations", new ProgressIndicatingTask()
     {
+      @Override
       public void run() throws Exception
       {
         for (LanguagesTableModel.L10nLanguage language : languagesDataModel.getLanguages()) {

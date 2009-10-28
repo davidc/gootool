@@ -26,19 +26,19 @@ public class Addin
   private static final String TYPE_MOD_STR = "Mod";
   private static final String TYPE_LEVEL_STR = "Level";
 
-  private File diskFile;
-  private String id;
-  private String name;
-  private int type;
-  private VersionSpec manifestVersion;
-  private VersionSpec version;
-  private String description;
-  private String author;
-  private List<AddinDependency> dependencies;
-  private String levelDir;
-  private Map<String, String> levelNames;
-  private Map<String, String> levelSubtitles;
-  private String levelOcd;
+  private final File diskFile;
+  private final String id;
+  private final String name;
+  private final int type;
+  private final VersionSpec manifestVersion;
+  private final VersionSpec version;
+  private final String description;
+  private final String author;
+  private final List<AddinDependency> dependencies;
+  private final String levelDir;
+  private final Map<String, String> levelNames;
+  private final Map<String, String> levelSubtitles;
+  private final String levelOcd;
   private BufferedImage thumbnail; // 1.1+
 
   public Addin(File diskFile, String id, String name, int type, VersionSpec manifestVersion, VersionSpec version, String description, String author, List<AddinDependency> dependencies, String levelDir, Map<String, String> levelNames, Map<String, String> levelSubtitles, String levelOcd)
@@ -151,6 +151,8 @@ public class Addin
     return thumbnail;
   }
 
+  @Override
+  @SuppressWarnings({"StringConcatenation"})
   public String toString()
   {
     return "Addin{" +

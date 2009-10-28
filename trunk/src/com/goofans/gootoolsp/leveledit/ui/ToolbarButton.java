@@ -10,8 +10,7 @@ import java.awt.event.*;
  */
 public class ToolbarButton extends JLabel
 {
-
-  private Icon backgroundSelected;
+  private final Icon backgroundSelected;
   private boolean mouseOver;
   private boolean isSelected;
 

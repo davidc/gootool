@@ -16,6 +16,10 @@ public class Utilities
 {
   private static final Logger log = Logger.getLogger(Utilities.class.getName());
 
+  private Utilities()
+  {
+  }
+
   /**
    * Expands the string with any %envvars% expanded.
    *
@@ -262,5 +266,32 @@ public class Utilities
       downloadStream.close();
     }
     return tempFile;
+  }
+
+  /**
+   * Test that the given directory exists and can be written in.
+   *
+   * @param dir the directory to test.
+   * @throws IOException if the test failed.
+   */
+  public static void testDirectoryWriteable(File dir) throws IOException
+  {
+    if (!dir.isDirectory()) {
+      throw new IOException("Not a directory: " + dir);
+    }
+
+    //test write
+    File testFile = new File(dir, "writeTest");
+    FileOutputStream os = new FileOutputStream(testFile);
+    try {
+      os.write(65);
+    }
+    finally {
+      os.close();
+    }
+
+    if (!testFile.delete()) {
+      throw new IOException("Can't delete test file " + testFile);
+    }
   }
 }

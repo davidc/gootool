@@ -32,23 +32,23 @@ public class TowerRenderer implements ImageObserver
 
   private static final Dimension THUMBNAIL_MAXSIZE = new Dimension(200, 300);
 
-  private Tower t;
+  private final Tower t;
   private Dimension fullSizeDimension;
   private BufferedImage fullSize;
   private BufferedImage pretty;
   private BufferedImage thumbnail;
 
-  private BufferedImage ballImage;
-  private BufferedImage strandImage;
-  private BufferedImage groundImage;
-  private BufferedImage skyImage;
+  private final BufferedImage ballImage;
+  private final BufferedImage strandImage;
+  private final BufferedImage groundImage;
+  private final BufferedImage skyImage;
 
   private int xOffset;
   private int yOffset;
-  private int ballNudgeX;
-  private int ballNudgeY;
-  private int strandHeight;
-  private int strandXOffset;
+  private final int ballNudgeX;
+  private final int ballNudgeY;
+  private final int strandHeight;
+  private final int strandXOffset;
 
   public TowerRenderer(Tower t) throws IOException
   {
@@ -341,7 +341,7 @@ public class TowerRenderer implements ImageObserver
   }
 
 
-  @SuppressWarnings({"UseOfSystemOutOrSystemErr"})
+  @SuppressWarnings({"UseOfSystemOutOrSystemErr", "HardCodedStringLiteral", "DuplicateStringLiteralInspection"})
   public static void main(String[] args) throws IOException
   {
     WorldOfGoo.getTheInstance().init();

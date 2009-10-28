@@ -20,8 +20,8 @@ public class FilePreferences extends AbstractPreferences
 {
   private static final Logger log = Logger.getLogger(FilePreferences.class.getName());
 
-  private Map<String, String> root;
-  private Map<String, FilePreferences> children;
+  private final Map<String, String> root;
+  private final Map<String, FilePreferences> children;
   private boolean isRemoved = false;
 
   public FilePreferences(AbstractPreferences parent, String name)
@@ -41,6 +41,7 @@ public class FilePreferences extends AbstractPreferences
     }
   }
 
+  @Override
   protected void putSpi(String key, String value)
   {
     root.put(key, value);
@@ -52,11 +53,13 @@ public class FilePreferences extends AbstractPreferences
     }
   }
 
+  @Override
   protected String getSpi(String key)
   {
     return root.get(key);
   }
 
+  @Override
   protected void removeSpi(String key)
   {
     root.remove(key);
@@ -68,22 +71,26 @@ public class FilePreferences extends AbstractPreferences
     }
   }
 
+  @Override
   protected void removeNodeSpi() throws BackingStoreException
   {
     isRemoved = true;
     flush();
   }
 
+  @Override
   protected String[] keysSpi() throws BackingStoreException
   {
     return root.keySet().toArray(new String[root.keySet().size()]);
   }
 
+  @Override
   protected String[] childrenNamesSpi() throws BackingStoreException
   {
     return children.keySet().toArray(new String[children.keySet().size()]);
   }
 
+  @Override
   protected FilePreferences childSpi(String name)
   {
     FilePreferences child = children.get(name);
@@ -94,54 +101,60 @@ public class FilePreferences extends AbstractPreferences
     return child;
   }
 
-
+  @Override
   protected void syncSpi() throws BackingStoreException
   {
     if (isRemoved()) return;
 
-    final File file = FilePreferencesFactory.getPreferencesFile();
-
+    File file = FilePreferencesFactory.getPreferencesFile();
     if (!file.exists()) return;
 
     synchronized (file) {
       Properties p = new Properties();
       try {
-        p.load(new FileInputStream(file));
-
-        StringBuilder sb = new StringBuilder();
-        getPath(sb);
-        String path = sb.toString();
-
-        final Enumeration<?> pnen = p.propertyNames();
-        while (pnen.hasMoreElements()) {
-          String propKey = (String) pnen.nextElement();
-          if (propKey.startsWith(path)) {
-            String subKey = propKey.substring(path.length());
-            // Only load immediate descendants
-            if (subKey.indexOf('.') == -1) {
-              root.put(subKey, p.getProperty(propKey));
-            }
-          }
+        FileInputStream is = new FileInputStream(file);
+        try {
+          p.load(is);
+        }
+        finally {
+          is.close();
         }
       }
       catch (IOException e) {
         throw new BackingStoreException(e);
+      }
+
+      StringBuilder sb = new StringBuilder();
+      getPath(sb);
+      String path = sb.toString();
+
+      Enumeration<?> pnen = p.propertyNames();
+      while (pnen.hasMoreElements()) {
+        String propKey = (String) pnen.nextElement();
+        if (propKey.startsWith(path)) {
+          String subKey = propKey.substring(path.length());
+          // Only load immediate descendants
+          if (subKey.indexOf('.') == -1) {
+            root.put(subKey, p.getProperty(propKey));
+          }
+        }
       }
     }
   }
 
   private void getPath(StringBuilder sb)
   {
-    final FilePreferences parent = (FilePreferences) parent();
+    FilePreferences parent = (FilePreferences) parent();
     if (parent == null) return;
 
     parent.getPath(sb);
     sb.append(name()).append('.');
   }
 
+  @Override
   protected void flushSpi() throws BackingStoreException
   {
-    final File file = FilePreferencesFactory.getPreferencesFile();
+    File file = FilePreferencesFactory.getPreferencesFile();
 
     synchronized (file) {
       Properties p = new Properties();
@@ -152,7 +165,13 @@ public class FilePreferences extends AbstractPreferences
         String path = sb.toString();
 
         if (file.exists()) {
-          p.load(new FileInputStream(file));
+          FileInputStream is = new FileInputStream(file);
+          try {
+            p.load(is);
+          }
+          finally {
+            is.close();
+          }
 
           List<String> toRemove = new ArrayList<String>();
 
@@ -182,12 +201,17 @@ public class FilePreferences extends AbstractPreferences
           }
         }
 
-        p.store(new FileOutputStream(file), "FilePreferences");
+        FileOutputStream os = new FileOutputStream(file);
+        try {
+          p.store(os, "FilePreferences");
+        }
+        finally {
+          os.close();
+        }
       }
       catch (IOException e) {
         throw new BackingStoreException(e);
       }
-
     }
   }
 }

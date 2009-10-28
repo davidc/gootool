@@ -16,6 +16,8 @@ MILESTONE 0.10.x (Final beta series)
 
 - unsatisfied dependencies should show red?
 
+- Diagnostics: show IP address as reported by server
+
 MILESTONE 1.0.0 (First public release)
 
 - All bugs from 0.10 series fixed, no new features

@@ -87,4 +87,7 @@
       </grid>
     </children>
   </grid>
+  <inspectionSuppressions>
+    <suppress inspection="MissingMnemonic" id="fe2fa"/>
+  </inspectionSuppressions>
 </form>

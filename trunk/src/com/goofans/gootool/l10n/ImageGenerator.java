@@ -32,6 +32,7 @@ public class ImageGenerator
 
   private static final int WORKING_SCALE = 1;
 
+  @SuppressWarnings({"HardCodedStringLiteral"})
   private static final Pattern COLOR_PATTERN = Pattern.compile("^#([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})(,([0-9.]+))?$", Pattern.CASE_INSENSITIVE);
 
   private static final String XML_DRAW = "draw";
@@ -67,21 +68,21 @@ public class ImageGenerator
 
   //  private BufferedImage workImage;
   private BufferedImage finalImage;
-  private BufferedImage srcImage;
-  private int srcWidth;
-  private int srcHeight;
-  private int workWidth;
-  private int workHeight;
+  private final BufferedImage srcImage;
+  private final int srcWidth;
+  private final int srcHeight;
+  private final int workWidth;
+  private final int workHeight;
 //  private Graphics2D g;
 
-  private FontManager fontManager;
+  private final FontManager fontManager;
   private Map<String, String> language;
 
-  private Element el;
+  private final Element el;
 
-  private boolean debug;
+  private final boolean debug;
 
-  public ImageGenerator(File sourceFile, Element el, FontManager fontManager, boolean debug) throws IOException, FontFormatException
+  public ImageGenerator(File sourceFile, Element el, FontManager fontManager, boolean debug) throws IOException
   {
 //    System.out.println("sourceFile = " + sourceFile);
     try {
@@ -103,7 +104,7 @@ public class ImageGenerator
     this.debug = debug;
   }
 
-  public void drawText(Graphics2D g, String text, Font font, float fontSize, double stretch, float outline, Color color, Position pos, double rotation, double archHeight, double archAngle) throws IOException, FontFormatException
+  public void drawText(Graphics2D g, String text, Font font, float fontSize, double stretch, float outline, Color color, Position pos, double rotation, double archHeight, double archAngle)
   {
     if (stretch == 0) stretch = 1;
     Font f = font.deriveFont(fontSize * WORKING_SCALE);
@@ -370,21 +371,21 @@ public class ImageGenerator
 
   private int decodeXJustify(String val) throws IOException
   {
-    if (val.equalsIgnoreCase("left")) return FixedPosition.X_JUSTIFY_LEFT;
-    if (val.equalsIgnoreCase("center")) return FixedPosition.X_JUSTIFY_CENTER;
-    if (val.equalsIgnoreCase("right")) return FixedPosition.X_JUSTIFY_RIGHT;
+    if ("left".equalsIgnoreCase(val)) return FixedPosition.X_JUSTIFY_LEFT;
+    if ("center".equalsIgnoreCase(val)) return FixedPosition.X_JUSTIFY_CENTER;
+    if ("right".equalsIgnoreCase(val)) return FixedPosition.X_JUSTIFY_RIGHT;
     throw new IOException("Invalid x-justify value " + val);
   }
 
   private int decodeYJustify(String val) throws IOException
   {
-    if (val.equalsIgnoreCase("top")) return FixedPosition.Y_JUSTIFY_TOP;
-    if (val.equalsIgnoreCase("middle")) return FixedPosition.Y_JUSTIFY_MIDDLE;
-    if (val.equalsIgnoreCase("bottom")) return FixedPosition.Y_JUSTIFY_BOTTOM;
+    if ("top".equalsIgnoreCase(val)) return FixedPosition.Y_JUSTIFY_TOP;
+    if ("middle".equalsIgnoreCase(val)) return FixedPosition.Y_JUSTIFY_MIDDLE;
+    if ("bottom".equalsIgnoreCase(val)) return FixedPosition.Y_JUSTIFY_BOTTOM;
     throw new IOException("Invalid y-justify value " + val);
   }
 
-  private void doTextNode(Element addTextEl, Graphics2D g, Position pos) throws XPathExpressionException, IOException, FontFormatException
+  private void doTextNode(Element addTextEl, Graphics2D g, Position pos) throws IOException, FontFormatException
   {
     Element fontElement = XMLUtil.getElementRequired(addTextEl, XML_DRAW_TEXT_FONT);
 

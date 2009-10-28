@@ -13,8 +13,8 @@ import com.goofans.gootool.GooTool;
  */
 public class NewBallEdit extends AbstractEdit
 {
-  private Level level;
-  private BallInstance addedBall;
+  private final Level level;
+  private final BallInstance addedBall;
 
   public NewBallEdit(Level level, BallInstance addedBall)
   {

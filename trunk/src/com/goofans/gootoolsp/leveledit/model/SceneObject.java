@@ -17,10 +17,10 @@ import org.w3c.dom.Node;
  */
 public class SceneObject
 {
-  private Map<SceneObjectTypeAttribute, Object> values = new HashMap<SceneObjectTypeAttribute, Object>();
-  private SceneObjectType type;
+  private final Map<SceneObjectTypeAttribute, Object> values = new HashMap<SceneObjectTypeAttribute, Object>();
+  private final SceneObjectType type;
 
-  private java.util.List<SceneObject> childObjects;
+  private final List<SceneObject> childObjects;
 
   public SceneObject(Element el) throws IOException
   {
@@ -41,6 +41,9 @@ public class SceneObject
           childObjects.add(sceneObject);
         }
       }
+    }
+    else {
+      childObjects = null;
     }
   }
 
@@ -179,6 +182,7 @@ public class SceneObject
     return point;
   }
 
+  @Override
   public String toString()
   {
     StringBuilder sb = new StringBuilder();

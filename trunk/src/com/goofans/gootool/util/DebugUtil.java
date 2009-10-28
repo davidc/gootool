@@ -15,6 +15,10 @@ import java.awt.*;
 @SuppressWarnings({"HardCodedStringLiteral"})
 public class DebugUtil
 {
+  private DebugUtil()
+  {
+  }
+
   public static void setAllLogging()
   {
 //    Logger.getLogger("").setLevel(Level.ALL);

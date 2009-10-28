@@ -25,23 +25,21 @@ import org.w3c.dom.NodeList;
  */
 public class Ball
 {
-  private String ballName;
-  private File ballDir;
-  private Resources resources;
-  private Shape outlineShape;
+  private final String ballName;
+  private final Shape outlineShape;
 
-  private List<BallPart> parts;
+  private final List<BallPart> parts;
 
   public Ball(String ballName) throws IOException
   {
     this.ballName = ballName;
-    ballDir = WorldOfGoo.getTheInstance().getCustomGameFile("res/balls/" + ballName);
+    File ballDir = WorldOfGoo.getTheInstance().getCustomGameFile("res/balls/" + ballName);
     if (!ballDir.isDirectory()) {
       throw new IOException("Ball dir " + ballDir + " doesn't exist");
     }
 
     Document resDoc = GameFormat.decodeXmlBinFile(new File(ballDir, "resources.xml.bin"));
-    resources = new Resources(resDoc);
+    Resources resources = new Resources(resDoc);
 
     Document ballDoc = GameFormat.decodeXmlBinFile(new File(ballDir, "balls.xml.bin"));
 
@@ -53,10 +51,10 @@ public class Ball
 
     StringTokenizer tok = new StringTokenizer(shapeStr, ",");
     String shapeName = tok.nextToken();
-    if (shapeName.equals("rectangle")) {
+    if ("rectangle".equals(shapeName)) {
       outlineShape = new Rectangle2D.Double(0, 0, Double.valueOf(tok.nextToken()), Double.valueOf(tok.nextToken()));
     }
-    else if (shapeName.equals("circle")) {
+    else if ("circle".equals(shapeName)) {
       double radius = Double.valueOf(tok.nextToken());
       outlineShape = new Ellipse2D.Double(0, 0, radius *2, radius*2);
     }
@@ -130,8 +128,8 @@ public class Ball
 
   public Bounds getBoundsInState(String state)
   {
-    BufferedImage img = new BufferedImage(50, 50, BufferedImage.TYPE_4BYTE_ABGR);
-    Graphics2D g2 = img.createGraphics();
+//    BufferedImage img = new BufferedImage(50, 50, BufferedImage.TYPE_4BYTE_ABGR);
+//    Graphics2D g2 = img.createGraphics();
 
     Bounds b = new Bounds();
 
@@ -205,6 +203,7 @@ public class Ball
     return ballName;
   }
 
+  @SuppressWarnings({"HardCodedStringLiteral", "DuplicateStringLiteralInspection", "MagicNumber"})
   public static void main(String[] args) throws IOException
   {
     WorldOfGoo.getTheInstance().init();

@@ -5,6 +5,7 @@ import java.util.Arrays;
 
 /**
  * Specification of a version in n.n.n.n format. (up to 4 numbers)
+ * Immutable after construction.
  *
  * @author David Croft (davidc@goofans.com)
  * @version $Id$
@@ -13,8 +14,7 @@ public class VersionSpec implements Comparable<VersionSpec>
 {
   private static final int MAX_FIELDS = 4;
 
-  private int[] version = new int[MAX_FIELDS];
-
+  private final int[] version = new int[MAX_FIELDS];
   private int numDisplayFields;
 
   public VersionSpec(int major, int minor, int micro)
@@ -46,6 +46,7 @@ public class VersionSpec implements Comparable<VersionSpec>
     }
   }
 
+  @Override
   public String toString()
   {
     StringBuilder sb = new StringBuilder();
@@ -56,12 +57,10 @@ public class VersionSpec implements Comparable<VersionSpec>
     return sb.toString();
   }
 
-
   public int compareTo(VersionSpec that)
   {
     // Compare all 0-3. Since unused fields default to 0, this allows correct comparison of 1.1 and 1.1.5.
     for (int i = 0; i < MAX_FIELDS; ++i) {
-
       if (this.version[i] < that.version[i]) return -1;
       if (this.version[i] > that.version[i]) return +1;
     }
@@ -69,6 +68,7 @@ public class VersionSpec implements Comparable<VersionSpec>
     return 0;
   }
 
+  @Override
   public boolean equals(Object o)
   {
     if (this == o) return true;
@@ -79,11 +79,13 @@ public class VersionSpec implements Comparable<VersionSpec>
     return (compareTo(that) == 0);
   }
 
+  @Override
   public int hashCode()
   {
     return Arrays.hashCode(version);
   }
 
+  @SuppressWarnings({"HardCodedStringLiteral"})
   public static void main(String[] args)
   {
     testCreation("1", new int[]{1, 0, 0, 0});
@@ -117,7 +119,7 @@ public class VersionSpec implements Comparable<VersionSpec>
     testEquality("1", "1.0.0.1", false);
   }
 
-  @SuppressWarnings({"UseOfSystemOutOrSystemErr"})
+  @SuppressWarnings({"UseOfSystemOutOrSystemErr", "HardCodedStringLiteral"})
   private static void testCreation(String s, int[] expected)
   {
     VersionSpec v = new VersionSpec(s);
@@ -126,7 +128,7 @@ public class VersionSpec implements Comparable<VersionSpec>
     if (!Arrays.equals(v.version, expected)) throw new RuntimeException("creation test failed");
   }
 
-  @SuppressWarnings({"UseOfSystemOutOrSystemErr"})
+  @SuppressWarnings({"UseOfSystemOutOrSystemErr", "HardCodedStringLiteral"})
   private static void testCreationThatShouldFail(String s)
   {
     try {
@@ -146,7 +148,7 @@ public class VersionSpec implements Comparable<VersionSpec>
     testComparison(v1, v2, expected);
   }
 
-  @SuppressWarnings({"UseOfSystemOutOrSystemErr"})
+  @SuppressWarnings({"UseOfSystemOutOrSystemErr", "HardCodedStringLiteral"})
   private static void testComparison(VersionSpec v1, VersionSpec v2, int expected)
   {
     int result = v1.compareTo(v2);
@@ -161,7 +163,7 @@ public class VersionSpec implements Comparable<VersionSpec>
     if (result != expected) throw new RuntimeException("comparison test failed");
   }
 
-  @SuppressWarnings({"UseOfSystemOutOrSystemErr"})
+  @SuppressWarnings({"UseOfSystemOutOrSystemErr", "HardCodedStringLiteral"})
   private static void testEquality(String s1, String s2, boolean expectEquality)
   {
     VersionSpec v1 = new VersionSpec(s1);

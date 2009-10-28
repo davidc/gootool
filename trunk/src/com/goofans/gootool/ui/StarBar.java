@@ -232,6 +232,7 @@ public class StarBar extends JPanel implements MouseListener
 //    add(new Spacer(), gbc);
   }
 
+  @SuppressWarnings({"UseOfSystemOutOrSystemErr", "HardCodedStringLiteral", "DuplicateStringLiteralInspection"})
   public static void main(String[] args)
   {
     GUIUtil.switchToSystemLookAndFeel();

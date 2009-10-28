@@ -23,6 +23,7 @@ public class WrappingGridLayout extends GridLayout
 
   private static final int PREFERRED_COLUMNS = 5;
 
+  @Override
   public Dimension preferredLayoutSize(Container parent)
   {
     synchronized (parent.getTreeLock()) {
@@ -71,6 +72,7 @@ public class WrappingGridLayout extends GridLayout
     return cellSize;
   }
 
+  @Override
   public Dimension minimumLayoutSize(Container parent)
   {
     synchronized (parent.getTreeLock()) {
@@ -87,6 +89,7 @@ public class WrappingGridLayout extends GridLayout
     }
   }
 
+  @Override
   public void layoutContainer(Container parent)
   {
     synchronized (parent.getTreeLock()) {
@@ -107,15 +110,16 @@ public class WrappingGridLayout extends GridLayout
       Insets insets = parent.getInsets();
 
       int w = parent.getWidth() - (insets.left + insets.right);
-      int h = parent.getHeight() - (insets.top + insets.bottom);
       w = (w - (ncols - 1) * hgap) / ncols;
-      h = (h - (nrows - 1) * vgap) / nrows;
+
+//      int h = parent.getHeight() - (insets.top + insets.bottom);
+//      h = (h - (nrows - 1) * vgap) / nrows;
 
       if (w < cellSize.width) {
         w = cellSize.width;
       }
 //      if (h < cellSize.height) {
-      h = cellSize.height;
+      int h = cellSize.height;
 //      }
 
       for (int c = 0, x = insets.left; c < ncols; c++, x += w + hgap) {

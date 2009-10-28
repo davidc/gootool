@@ -44,7 +44,7 @@ public class ProfileBackupRequest extends APIRequestAuthenticated
     addPostParameter("description", description);
 
     Document doc = doRequest();
-    if (!doc.getDocumentElement().getTagName().equalsIgnoreCase("profile-backup-success")) {
+    if (!"profile-backup-success".equalsIgnoreCase(doc.getDocumentElement().getTagName())) {
       throw new APIException("Profile backup failed");
     }
 

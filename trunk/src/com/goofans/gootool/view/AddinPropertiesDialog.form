@@ -182,4 +182,9 @@
       </grid>
     </children>
   </grid>
+  <inspectionSuppressions>
+    <suppress inspection="NoLabelFor" id="d263f"/>
+    <suppress inspection="NoLabelFor" id="a7b7d"/>
+    <suppress inspection="HardCodedStringLiteral" id="a7b7d"/>
+  </inspectionSuppressions>
 </form>

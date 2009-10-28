@@ -15,6 +15,7 @@ import com.goofans.gootoolsp.leveledit.resource.Ball;
  */
 public class GenerateBallImages
 {
+  @SuppressWarnings({"UseOfSystemOutOrSystemErr", "HardCodedStringLiteral", "HardcodedFileSeparator", "StringConcatenation", "DuplicateStringLiteralInspection"})
   public static void main(String[] args) throws IOException
   {
     WorldOfGoo.getTheInstance().init();
@@ -22,7 +23,6 @@ public class GenerateBallImages
     File ballsDir = WorldOfGoo.getTheInstance().getCustomGameFile("res/balls");
 
     File[] ballsDirs = ballsDir.listFiles();
-    int i = 0;
     for (File dir : ballsDirs) {
       if (dir.isDirectory() && !dir.getName().startsWith("_")) {
         Ball ball = new Ball(dir.getName());
