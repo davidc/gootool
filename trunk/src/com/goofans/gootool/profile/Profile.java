@@ -21,6 +21,9 @@ public class Profile
   public static final int FLAG_GOOCORP_DESTROYED = 4;
   public static final int FLAG_WHISTLE = 8;
   public static final int FLAG_TERMS = 16;
+  public static final int FLAG_32 = 32;
+  public static final int FLAG_64 = 64;
+  public static final int FLAG_128 = 128;
 
   private final String name;
   private final int flags;

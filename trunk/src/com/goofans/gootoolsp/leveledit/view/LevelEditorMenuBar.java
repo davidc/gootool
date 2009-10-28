@@ -37,13 +37,13 @@ public class LevelEditorMenuBar extends JMenuBar
     menu.add(snapGridItem);
   }
 
-  private void prepareMenuItem(JMenuItem menuItem, String menuKey, String command, LevelEditor editor)
+  private void prepareMenuItem(JMenuItem menuItem, String key, String command, LevelEditor editor)
   {
-    menuItem.setText(getMenuText(menuKey));
-    menuItem.setMnemonic(getMnemonic(menuKey));
+    menuItem.setText(getMenuText(key));
+    menuItem.setMnemonic(getMnemonic(key));
     menuItem.setActionCommand(command);
     menuItem.addActionListener(editor);
-    menuItem.setAccelerator(getAccelerator(menuKey));
+    menuItem.setAccelerator(getAccelerator(key));
   }
 
   private String getMenuText(String key)
