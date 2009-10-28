@@ -10,7 +10,6 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.text.MessageFormat;
 
 import com.goofans.gootool.platform.PlatformSupport;
 import com.goofans.gootool.util.GUIUtil;
@@ -63,7 +62,7 @@ public class GooTool
 
       ProgressIndicatingTask startupTask = new StartupTask(controller);
 
-      GUIUtil.runTask((JFrame) null, MessageFormat.format(resourceBundle.getString("launcher.title"), Version.RELEASE_FRIENDLY), startupTask);
+      GUIUtil.runTask((JFrame) null, resourceBundle.formatString("launcher.title", Version.RELEASE_FRIENDLY), startupTask);
       // In preparation for new splash screen:
 //      final ProgressDialog progressDialog = new ProgressDialog(null, resourceBundle.getText("launcher.title", Version.RELEASE_FRIENDLY));
 //      startupTask.addListener(progressDialog);

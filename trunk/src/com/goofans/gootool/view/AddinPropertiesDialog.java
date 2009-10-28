@@ -33,9 +33,6 @@ public class AddinPropertiesDialog extends JDialog
 
     setResizable(false);
 
-    // TODO 1.6
-//    setIconImage(GooTool.getMainIconImage());
-
     setContentPane(rootPanel);
 
     GUIUtil.setDefaultClosingOkButton(okButton, this);

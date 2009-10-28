@@ -89,7 +89,7 @@ public class MainMenu
 
     menu.add(new JSeparator());
 
-    menu.add(createMenuItem("help.checkForUpdates", Controller.CMD_CHECK_FOR_UPDATES));
+    menu.add(createMenuItem("help.gootoolUpdateCheck", Controller.CMD_GOOTOOL_UPDATE_CHECK));
     menu.add(createMenuItem("help.diagnostics", Controller.CMD_DIAGNOSTICS));
 
     if (PlatformSupport.getPlatform() != PlatformSupport.Platform.MACOSX) {

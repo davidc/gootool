@@ -9,7 +9,10 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -38,7 +41,7 @@ public class Controller implements ActionListener
   public static final String CMD_EXIT = "Exit";
 
   public static final String CMD_ABOUT = "Help>About";
-  public static final String CMD_CHECK_FOR_UPDATES = "Help>CheckForUpdates";
+  public static final String CMD_GOOTOOL_UPDATE_CHECK = "Help>GooToolUpdateCheck";
   public static final String CMD_DIAGNOSTICS = "Help>Diagnostics";
 
   public static final String CMD_ADDIN_INSTALL = "Addin>Install";
@@ -72,6 +75,8 @@ public class Controller implements ActionListener
   public static final String CMD_ENCRYPT_BIN_MAC = "Encrypt>BinMac";
   public static final String CMD_ENCRYPT_PNGBINLTL_MAC = "Encrypt>PngBinLtlMac";
 
+  private static final GooToolResourceBundle resourceBundle = GooTool.getTextProvider();
+
   private MainFrame mainFrame;
 
   // The configuration currently live on disk.
@@ -79,15 +84,12 @@ public class Controller implements ActionListener
 
   // The configuration we're editing
   private Configuration editorConfig;
-  private final ResourceBundle resourceBundle;
 
   // The codecs
   private final Map<String, GameFileCodecTool> codecs = new HashMap<String, GameFileCodecTool>(6);
 
   public Controller()
   {
-    resourceBundle = GooTool.getTextProvider();
-
     codecs.put(CMD_DECRYPT_BIN_PC, new GameFileCodecTool("bin", "Encrypted Bin File (Windows/Linux)", "xml", CodecType.AES_DECODE));
     codecs.put(CMD_DECRYPT_BIN_MAC, new GameFileCodecTool("bin", "Encrypted Bin File (Mac)", "xml", CodecType.XOR_DECODE));
     codecs.put(CMD_DECRYPT_PNGBINLTL_MAC, new GameFileCodecTool("png.binltl", "Encoded Image File", "png", CodecType.PNGBINLTL_DECODE));
@@ -168,9 +170,9 @@ public class Controller implements ActionListener
       updateImageLocalisationPanel(enabled);
       ToolPreferences.setL10nEnabled(enabled);
     }
-    else if (cmd.equals(CMD_CHECK_FOR_UPDATES)) {
+    else if (cmd.equals(CMD_GOOTOOL_UPDATE_CHECK)) {
       try {
-        GUIUtil.runTask(mainFrame, "Checking for updates...", new ProgressIndicatingTask()
+        GUIUtil.runTask(mainFrame, resourceBundle.getString("gootoolUpdateCheck.checking"), new ProgressIndicatingTask()
         {
           @Override
           public void run() throws Exception
@@ -182,7 +184,7 @@ public class Controller implements ActionListener
       }
       catch (Exception e) {
         // should never happen.
-        showErrorDialog("Can't check version", e.getLocalizedMessage());
+        showErrorDialog(resourceBundle.getString("gootoolUpdateCheck.error.title"), resourceBundle.formatString("gootoolUpdateCheck.error.message", e.getLocalizedMessage()));
       }
     }
     else if (cmd.equals(CMD_DIAGNOSTICS)) {
@@ -305,7 +307,8 @@ public class Controller implements ActionListener
     }
     catch (Exception e) {
       log.log(Level.SEVERE, "Error opening file " + addinFile, e);
-      showErrorDialog("Error opening " + addinFile.getName(), "Invalid addin: " + e.getLocalizedMessage());
+      showErrorDialog(resourceBundle.getString("installAddin.invalid.title"),
+              resourceBundle.formatString("installAddin.invalid.message", addinFile.getName(), e.getLocalizedMessage()));
       return;
     }
 
@@ -318,12 +321,9 @@ public class Controller implements ActionListener
 //      return;
 //    }
 
-    StringBuilder msg = new StringBuilder("Are you sure you wish to install this addin?\n");
-    msg.append("Name: ").append(addin.getName()).append("\n");
-    msg.append("Author: ").append(addin.getAuthor()).append("\n");
-    msg.append("Version: ").append(addin.getVersion()).append("\n");
+    String msg = resourceBundle.formatString("installAddin.confirm.message", addin.getName(), addin.getAuthor(), addin.getVersion());
 
-    int returnVal = showYesNoDialog("Install Addin?", msg.toString());
+    int returnVal = showYesNoDialog(resourceBundle.getString("installAddin.confirm.title"), msg);
     if (returnVal != JOptionPane.YES_OPTION) {
       log.info("User cancelled installation of " + addin);
       return;
@@ -334,25 +334,22 @@ public class Controller implements ActionListener
     try {
       for (Addin installedAddin : WorldOfGoo.getAvailableAddins()) {
         if (installedAddin.getId().equals(addin.getId())) {
-          msg = new StringBuilder();
-          msg.append("Addin ").append(installedAddin.getName()).append(" version ").append(installedAddin.getVersion());
-          msg.append(" already exists.\n");
+          msg = resourceBundle.formatString("installAddin.exists.message", installedAddin.getName(), installedAddin.getVersion());
 
           VersionSpec installedVersion = installedAddin.getVersion();
           VersionSpec newVersion = addin.getVersion();
 
           if (installedVersion.compareTo(newVersion) < 0) {
-            msg.append("Would you like to upgrade it to version ").append(addin.getVersion());
+            msg += resourceBundle.formatString("installAddin.exists.message.upgrade", addin.getVersion());
           }
           else if (installedVersion.compareTo(newVersion) > 0) {
-            msg.append("Would you like to replace it with the earlier version ").append(addin.getVersion());
+            msg += resourceBundle.formatString("installAddin.exists.message.downgrade", addin.getVersion());
           }
           else {
-            msg.append("Would you like to replace it");
+            msg += resourceBundle.getString("installAddin.exists.message.sameVersion");
           }
-          msg.append("?");
 
-          returnVal = showYesNoDialog("Replace Addin?", msg.toString());
+          returnVal = showYesNoDialog(resourceBundle.getString("installAddin.exists.title"), msg);
           if (returnVal != JOptionPane.YES_OPTION) {
             log.info("User cancelled overwriting installation of " + addin);
             return;
@@ -366,20 +363,20 @@ public class Controller implements ActionListener
     }
     catch (IOException e) {
       log.log(Level.SEVERE, "Unable to copy to addins directory", e);
-      showErrorDialog("Error installing addin", e.getLocalizedMessage());
+      showErrorDialog(resourceBundle.getString("installAddin.error.title"), resourceBundle.formatString("installAddin.error.message", e.getLocalizedMessage()));
       return;
     }
 
     editorConfig.enableAddin(addin.getId());
 
-    msg = new StringBuilder();
-    msg.append("Addin ").append(addin.getName()).append(" installed and enabled!");
     if (addin.getType() == Addin.TYPE_LEVEL) {
-      msg.append("\nYour new level will appear in Chapter 1, at the far top-left.");
+      msg = resourceBundle.formatString("installAddin.installed.message.level", addin.getName());
     }
-    msg.append("\nDon't forget to save!");
+    else {
+      msg = resourceBundle.formatString("installAddin.installed.mod", addin.getName());
+    }
 
-    showMessageDialog("Addin installed", msg.toString());
+    showMessageDialog(resourceBundle.getString("installAddin.installed.title"), msg);
     refreshView();
   }
 
@@ -399,11 +396,13 @@ public class Controller implements ActionListener
     }
     catch (IOException e) {
       log.log(Level.SEVERE, "Unable to uninstall addin", e);
-      showErrorDialog("Error uninstalling addin", e.getLocalizedMessage());
+      showErrorDialog(resourceBundle.getString("uninstallAddin.error.title"),
+              resourceBundle.formatString("uninstallAddin.error.message", e.getLocalizedMessage()));
       return;
     }
 
-    showMessageDialog("Addin uninstalled", "Addin " + addin.getName() + " uninstalled!");
+    showMessageDialog(resourceBundle.getString("uninstallAddin.uninstalled.title"),
+            resourceBundle.formatString("uninstallAddin.uninstalled.message", addin.getName()));
 
     editorConfig.disableAddin(addin.getId());
     refreshView();
@@ -413,7 +412,7 @@ public class Controller implements ActionListener
   {
     Addin addin = getSelectedAddin();
 
-    // TODO better checking of satisfaction here (use editor config, i.e. what's enabled
+    // TODO better checking of satisfaction here (use editor config, i.e. what's enabled)
 
     if (!addin.areDependenciesSatisfiedBy(WorldOfGoo.getAvailableAddins())) {
       log.info("Not installing because dependencies not satisfied");

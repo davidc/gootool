@@ -21,7 +21,6 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.File;
 import java.text.NumberFormat;
-import java.text.MessageFormat;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.lang.reflect.Method;
@@ -161,7 +160,7 @@ public final class ProfilePanel implements ActionListener, ViewComponent
         Tower t = currentProfile.getTower();
 
         towerHeight.setText(formatHeight(t.getHeight()));
-        towerTotalBalls.setText(MessageFormat.format(resourceBundle.getString("profile.tower.balls.value"), t.getUsedStrandBalls() + t.getUsedNodeBalls(), t.getTotalBalls()));
+        towerTotalBalls.setText(resourceBundle.formatString("profile.tower.balls.value", t.getUsedStrandBalls() + t.getUsedNodeBalls(), t.getTotalBalls()));
         towerNodeBalls.setText(String.valueOf(t.getUsedNodeBalls()));
         towerStrandBalls.setText(String.valueOf(t.getUsedStrandBalls()));
 
@@ -272,7 +271,7 @@ public final class ProfilePanel implements ActionListener, ViewComponent
 
       if (file.exists()) {
         returnVal = JOptionPane.showConfirmDialog(this.rootPanel,
-                MessageFormat.format(resourceBundle.getString("profile.tower.saveimage.overwrite.message"), file.getName()),
+                resourceBundle.formatString("profile.tower.saveimage.overwrite.message", file.getName()),
                 resourceBundle.getString("profile.tower.saveimage.overwrite.title"),
                 JOptionPane.YES_NO_OPTION);
         if (returnVal != JOptionPane.YES_OPTION) return;
@@ -285,7 +284,7 @@ public final class ProfilePanel implements ActionListener, ViewComponent
       catch (IOException e) {
         log.log(Level.WARNING, "Unable to save tower", e);
         JOptionPane.showMessageDialog(this.rootPanel,
-                MessageFormat.format(resourceBundle.getString("profile.tower.saveimage.error.message"), e.getLocalizedMessage()),
+                resourceBundle.formatString("profile.tower.saveimage.error.message", e.getLocalizedMessage()),
                 resourceBundle.getString("profile.tower.saveimage.error.title"),
                 JOptionPane.ERROR_MESSAGE);
       }
@@ -315,14 +314,12 @@ public final class ProfilePanel implements ActionListener, ViewComponent
   private void showTower()
   {
     // TODO make this a proper gui frame, with scrollbars etc.
-    // TODO parent frame
+    // TODO This needs to be passed the parent frame, so it gets the right icon. Probably will mean the controller handles the popup.
     final JDialog d = new JDialog();
     d.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
     d.setTitle(resourceBundle.getString("profile.tower.popup.title"));
     BufferedImage prettyImg = tr.getPretty();
     d.setPreferredSize(new Dimension(prettyImg.getWidth(), prettyImg.getHeight()));
-    // TODO 1.6
-//    d.setIconImage(GooTool.getMainIconImage());
     JLabel jLabel = new JLabel(new ImageIcon(prettyImg));
     jLabel.setBorder(new LineBorder(Color.BLACK));
     d.add(jLabel);
