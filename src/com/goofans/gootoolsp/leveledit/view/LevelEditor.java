@@ -18,7 +18,6 @@ import java.awt.event.*;
 import java.io.IOException;
 import java.util.logging.Logger;
 import static java.util.logging.Level.*;
-import java.text.MessageFormat;
 import java.text.NumberFormat;
 
 import com.goofans.gootool.GooTool;
