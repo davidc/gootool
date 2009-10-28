@@ -223,12 +223,12 @@ public class Controller implements ActionListener
     final Map<String, AddinUpdatesCheckRequest.AvailableUpdate>[] updates = new Map[1];
 
     try {
-      GUIUtil.runTask(mainFrame, "Checking for Updates", new ProgressIndicatingTask()
+      GUIUtil.runTask(mainFrame, resourceBundle.getString("addinUpdateCheck.checking.title"), new ProgressIndicatingTask()
       {
         @Override
         public void run() throws Exception
         {
-          beginStep("Checking for updates", false);
+          beginStep(resourceBundle.getString("addinUpdateCheck.checking.message"), false);
           AddinUpdatesCheckRequest checkRequest = new AddinUpdatesCheckRequest();
 
           updates[0] = checkRequest.checkUpdates();
@@ -237,7 +237,8 @@ public class Controller implements ActionListener
     }
     catch (Exception e) {
       log.log(Level.SEVERE, "Error checking for updates", e);
-      showErrorDialog("Error checking for updates", e.getLocalizedMessage());
+      showErrorDialog(resourceBundle.getString("addinUpdateCheck.error.title"),
+              resourceBundle.formatString("addinUpdateCheck.error.message", e.getLocalizedMessage()));
       return;
     }
 
@@ -294,7 +295,7 @@ public class Controller implements ActionListener
   {
     if (!addinFile.exists()) {
       log.info("File not found: " + addinFile);
-      showErrorDialog("File not found", addinFile + " not found");
+      showErrorDialog(resourceBundle.getString("installAddin.notfound.title"), resourceBundle.formatString("installAddin.notfound.message", addinFile));
       return;
     }
 
@@ -416,7 +417,7 @@ public class Controller implements ActionListener
 
     if (!addin.areDependenciesSatisfiedBy(WorldOfGoo.getAvailableAddins())) {
       log.info("Not installing because dependencies not satisfied");
-      showErrorDialog("Can't enable " + addin.getName(), "Can't enable this addin because its dependencies aren't satisfied");
+      showErrorDialog(resourceBundle.getString("enableAddin.dependencies.title"), resourceBundle.formatString("enableAddin.dependencies.message", addin.getName()));
       return;
     }
 
@@ -452,7 +453,8 @@ public class Controller implements ActionListener
     }
     catch (IOException e) {
       log.log(Level.WARNING, "Can't get World of Goo dir", e);
-      showErrorDialog("Find World of Goo first", "Please select your World of Goo installation first!");
+      showErrorDialog(resourceBundle.getString("changeCustomDir.sourceNotFound.title"),
+              resourceBundle.getString("changeCustomDir.sourceNotFound.message"));
       return;
     }
 
@@ -463,13 +465,15 @@ public class Controller implements ActionListener
     }
 
     if (selectedFile.equals(wogDir)) {
-      showErrorDialog("Bad choice", "You can't install to same directory that World of Goo's already in! Make a new directory.");
+      showErrorDialog(resourceBundle.getString("changeCustomDir.sameAsSource.title"),
+              resourceBundle.getString("changeCustomDir.sameAsSource.message"));
       return;
     }
 
     if (!selectedFile.exists()) {
       if (!selectedFile.mkdir()) {
-        showErrorDialog("Can't create directory", "Couldn't create the directory " + selectedFile.getAbsolutePath());
+        showErrorDialog(resourceBundle.getString("changeCustomDir.cantCreate.title"),
+                resourceBundle.formatString("changeCustomDir.cantCreate.message", selectedFile.getAbsolutePath()));
         return;
       }
     }
@@ -477,12 +481,14 @@ public class Controller implements ActionListener
     // Check if it's not empty
 
     if (selectedFile.list().length > 0) {
-      if (showYesNoDialog("Directory not empty", "Warning! This directory isn't empty.\nAre you sure you wish to install into " + selectedFile.getAbsolutePath() + "?\n\nALL FILES IN THIS DIRECTORY WILL BE DELETED.") != JOptionPane.YES_OPTION) {
+      if (showYesNoDialog(resourceBundle.getString("changeCustomDir.notEmpty.title"),
+              resourceBundle.formatString("changeCustomDir.notEmpty.message", selectedFile.getAbsolutePath())) != JOptionPane.YES_OPTION) {
         return;
       }
     }
     else {
-      if (showYesNoDialog("Confirm directory selection", "Are you sure you wish to install into " + selectedFile.getAbsolutePath() + "?") != JOptionPane.YES_OPTION) {
+      if (showYesNoDialog(resourceBundle.getString("changeCustomDir.confirm.title"),
+              resourceBundle.formatString("changeCustomDir.confirm.message", selectedFile.getAbsolutePath())) != JOptionPane.YES_OPTION) {
         return;
       }
     }
@@ -492,7 +498,8 @@ public class Controller implements ActionListener
     }
     catch (IOException e) {
       log.log(Level.SEVERE, "Can't set custom dir to " + selectedFile, e);
-      showErrorDialog("Can't set custom directory", "Can't use that directory: " + e.getLocalizedMessage());
+      showErrorDialog(resourceBundle.getString("changeCustomDir.error.title"),
+              resourceBundle.getString("changeCustomDir.error.message") + e.getLocalizedMessage());
     }
 
     BillboardUpdater.maybeUpdateBillboards();
@@ -511,7 +518,8 @@ public class Controller implements ActionListener
 
     File selectedFile = chooser.getSelectedFile();
     if (!ProfileFactory.locateProfileAtFile(selectedFile)) {
-      JOptionPane.showMessageDialog(null, "Sorry, this isn't a valid profile file", "Profile not found", JOptionPane.ERROR_MESSAGE);
+      showErrorDialog(resourceBundle.getString("changeProfileFile.error.title"),
+              resourceBundle.getString("changeProfileFile.error.message"));
       return;
     }
 
@@ -527,13 +535,13 @@ public class Controller implements ActionListener
       LoginTestRequest request = new LoginTestRequest();
       request.loginTest();
 
-      showMessageDialog("Login success", "You are now logged in to goofans.com");
+      showMessageDialog(resourceBundle.getString("gooFansLogin.success.title"), resourceBundle.getString("gooFansLogin.success.message"));
       ToolPreferences.setGooFansLoginOk(true);
     }
     catch (APIException e) {
       log.log(Level.WARNING, "Login test failed", e);
       ToolPreferences.setGooFansLoginOk(false);
-      showErrorDialog("Login failed", e.getLocalizedMessage());
+      showErrorDialog(resourceBundle.getString("gooFansLogin.error.title"), resourceBundle.formatString("gooFansLogin.error.message", e.getLocalizedMessage()));
     }
 
     updateViewFromModel(editorConfig);
@@ -542,17 +550,22 @@ public class Controller implements ActionListener
   // TODO background task this
   private void gooFansBackup()
   {
-    String description = JOptionPane.showInputDialog(mainFrame, "Enter an optional description for this backup", "Description", JOptionPane.QUESTION_MESSAGE);
+    String description = JOptionPane.showInputDialog(mainFrame,
+            resourceBundle.getString("gooFansBackup.description.message"),
+            resourceBundle.getString("gooFansBackup.description.title"),
+            JOptionPane.QUESTION_MESSAGE);
     if (description == null) return;
 
     try {
       ProfileBackupRequest request = new ProfileBackupRequest();
       request.backupProfile(description);
-      showMessageDialog("Backup complete", "Your backup is now stored at GooFans.com and can be restored on this or any other computer later.");
+      showMessageDialog(resourceBundle.getString("gooFansBackup.succcess.title"),
+              resourceBundle.getString("gooFansBackup.succcess.message"));
     }
     catch (APIException e) {
       log.log(Level.WARNING, "Backup failed", e);
-      showErrorDialog("Backup failed", e.getLocalizedMessage());
+      showErrorDialog(resourceBundle.getString("gooFansBackup.error.title"),
+              resourceBundle.formatString("gooFansBackup.error.message", e.getLocalizedMessage()));
     }
   }
 
@@ -564,18 +577,25 @@ public class Controller implements ActionListener
 
       List<ProfileListRequest.BackupInstance> backups = listRequest.listBackups();
       if (backups.isEmpty()) {
-        showErrorDialog("No backups", "You have not yet created any backups.");
+        showErrorDialog(resourceBundle.getString("gooFansRestore.noBackups.title"),
+                resourceBundle.getString("gooFansRestore.noBackups.message"));
         return;
       }
 
       Object[] values = backups.toArray();
 
-      Object selected = JOptionPane.showInputDialog(mainFrame, "Select backup to restore", "Select backup", JOptionPane.QUESTION_MESSAGE, null, values, backups.get(backups.size() - 1));
+      Object selected = JOptionPane.showInputDialog(mainFrame,
+              resourceBundle.getString("gooFansRestore.select.message"),
+              resourceBundle.getString("gooFansRestore.select.title"),
+              JOptionPane.QUESTION_MESSAGE, null, values, backups.get(backups.size() - 1));
       if (selected == null) return;
 
       ProfileListRequest.BackupInstance instance = (ProfileListRequest.BackupInstance) selected;
 
-      if (JOptionPane.showConfirmDialog(mainFrame, "Your current profile will be DELETED and replaced with the following backup:\n" + instance.description + "\n\nAre you sure you wish to proceed?", "Confirm profile restore", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE) != JOptionPane.YES_OPTION)
+      if (JOptionPane.showConfirmDialog(mainFrame,
+              resourceBundle.formatString("gooFansRestore.confirm.message", instance.description),
+              resourceBundle.getString("gooFansRestore.confirm.title"),
+              JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE) != JOptionPane.YES_OPTION)
         return;
 
       ProfileRestoreRequest restoreRequest = new ProfileRestoreRequest();
@@ -584,11 +604,11 @@ public class Controller implements ActionListener
 
       mainFrame.profilePanel.loadProfiles();
 
-      showMessageDialog("Restore complete", "Restore complete.");
+      showMessageDialog(resourceBundle.getString("gooFansRestore.success.title"), resourceBundle.getString("gooFansRestore.success.message"));
     }
     catch (APIException e) {
       log.log(Level.WARNING, "Restore failed", e);
-      showErrorDialog("Restore failed", e.getLocalizedMessage());
+      showErrorDialog(resourceBundle.getString("gooFansRestore.error.title"), resourceBundle.formatString("gooFansRestore.error.message", e.getLocalizedMessage()));
     }
   }
 
@@ -597,23 +617,24 @@ public class Controller implements ActionListener
   {
     try {
       ProfilePublishRequest request = new ProfilePublishRequest();
-      final String profileUrl = request.publishProfile(mainFrame.profilePanel.getSelectedProfile());
+      String profileUrl = request.publishProfile(mainFrame.profilePanel.getSelectedProfile());
       StringBuilder sb = new StringBuilder();
       for (String msg : request.getMessages()) {
         sb.append(TextUtil.stripHtmlTags(msg)).append('\n');
       }
 
-      sb.append("\nWould you like to view your published profile now?");
+      sb.append(resourceBundle.getString("gooFansPublish.success.message"));
 
-      final int answer = showYesNoDialog("Profile published", sb.toString());
+      int answer = showYesNoDialog(resourceBundle.getString("gooFansPublish.success.title"), sb.toString());
 
       if (answer == JOptionPane.YES_OPTION) {
         DesktopUtil.browseAndWarn(profileUrl, mainFrame);
       }
     }
     catch (APIException e) {
-      log.log(Level.WARNING, "Backup failed", e);
-      showErrorDialog("Backup failed", e.getLocalizedMessage());
+      log.log(Level.WARNING, "Publish failed", e);
+      showErrorDialog(resourceBundle.getString("gooFansPublish.error.title"),
+              resourceBundle.formatString("gooFansPublish.error.message", e.getLocalizedMessage()));
     }
   }
 
@@ -689,9 +710,8 @@ public class Controller implements ActionListener
     updateModelFromView(editorConfig);
 
     if (!editorConfig.equals(liveConfig)) {
-      String msg = "You have unsaved changes. Are you sure you wish to quit?";
-      String title = "Unsaved changes";
-      int returnVal = showYesNoDialog(title, msg);
+      int returnVal = showYesNoDialog(resourceBundle.getString("exit.unsaved.title"),
+              resourceBundle.getString("exit.unsaved.message"));
       if (returnVal != JOptionPane.YES_OPTION) {
         log.fine("User cancelled exit");
         return;
@@ -723,7 +743,7 @@ public class Controller implements ActionListener
       return;
     }
 
-    final ConfigurationWriterTask configWriter = new ConfigurationWriterTask(editorConfig);
+    ConfigurationWriterTask configWriter = new ConfigurationWriterTask(editorConfig);
 
     boolean errored = false;
 
@@ -741,7 +761,7 @@ public class Controller implements ActionListener
     }
     catch (IOException e) {
       log.log(Level.SEVERE, "Error reading configuration", e);
-      showErrorDialog("Error re-reading configuration!", "We recommend you restart GooTool. " + e.getMessage());
+      showErrorDialog("Error re-reading configuration!", "We recommend you exit GooTool immediately. " + e.getMessage());
       errored = true;
     }
     editorConfig = new Configuration(liveConfig);
@@ -793,7 +813,7 @@ public class Controller implements ActionListener
   public void runDiagnostics()
   {
     JFileChooser chooser = new JFileChooser();
-    chooser.setDialogTitle("Save diagnostic report");
+    chooser.setDialogTitle(resourceBundle.getString("diagnostics.chooser.title"));
     chooser.setSelectedFile(new File(chooser.getCurrentDirectory(), "gootool_diagnostics.txt"));
     FileNameExtensionFilter filter = new FileNameExtensionFilter("Text file", "txt");
     chooser.setFileFilter(filter);
@@ -807,11 +827,12 @@ public class Controller implements ActionListener
     File outFile = chooser.getSelectedFile();
     try {
       Diagnostics diagnostics = new Diagnostics(outFile);
-      GUIUtil.runTask(mainFrame, "Running diagnostics", diagnostics);
+      GUIUtil.runTask(mainFrame, resourceBundle.getString("diagnostics.running.title"), diagnostics);
     }
     catch (Exception e) {
       log.log(Level.SEVERE, "Unable to run diagnostics", e);
-      showErrorDialog("Unable to run diagnostics", "Unable to run diagnostics: " + e.getLocalizedMessage());
+      showErrorDialog(resourceBundle.getString("diagnostics.error.title"),
+              resourceBundle.formatString("diagnostics.error.message", e.getLocalizedMessage()));
       return;
     }
 
@@ -909,7 +930,7 @@ public class Controller implements ActionListener
     catch (FileNotFoundException e) {
       log.info("World of Goo not found at " + selectedFile + " (" + selectedFile.getParentFile() + ")");
 
-      JOptionPane.showMessageDialog(null, e.getLocalizedMessage(), "File not found", JOptionPane.ERROR_MESSAGE);
+      showErrorDialog("File not found", "Couldn't find World of Goo: " + e.getLocalizedMessage());
       return -1;
     }
   }
