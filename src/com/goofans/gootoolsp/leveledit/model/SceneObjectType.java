@@ -393,10 +393,10 @@ public class SceneObjectType
   }
 
 
-  private String xmlElementName;
-  private SceneObjectTypeAttribute[] attributes;
-  private SceneObjectType superclass;
-  private boolean canHaveChildren;
+  private final String xmlElementName;
+  private final SceneObjectTypeAttribute[] attributes;
+  private final SceneObjectType superclass;
+  private final boolean canHaveChildren;
 
   private SceneObjectType(String xmlElementName, SceneObjectTypeAttribute[] attributes, SceneObjectType superclass, boolean canHaveChildren)
   {
@@ -426,6 +426,8 @@ public class SceneObjectType
     return canHaveChildren;
   }
 
+  @Override
+  @SuppressWarnings({"StringConcatenation"})
   public String toString()
   {
     return "SceneObjectType{" +

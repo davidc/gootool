@@ -15,7 +15,10 @@ public class APIRequestAuthenticated extends APIRequest
 {
   private static final Logger log = Logger.getLogger(APIRequestAuthenticated.class.getName());
 
-  public APIRequestAuthenticated(URL url) throws APIException
+  private static final String PARAM_USERNAME = "u";
+  private static final String PARAM_PASSWORD = "p";
+
+  protected APIRequestAuthenticated(URL url) throws APIException
   {
     super(url);
 
@@ -26,8 +29,8 @@ public class APIRequestAuthenticated extends APIRequest
       throw new APIException("No GooFans username or password set");
     }
 
-    addPostParameter("u", username);
-    addPostParameter("p", password);
+    addPostParameter(PARAM_USERNAME, username);
+    addPostParameter(PARAM_PASSWORD, password);
     log.finest("Instantiated authenticated APIRequest for user " + username + " to " + url);
   }
 }

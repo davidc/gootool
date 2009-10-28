@@ -2,7 +2,6 @@ package com.goofans.datamining.balls;
 
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
-import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -21,7 +20,8 @@ import org.w3c.dom.NodeList;
  */
 public class LevelBalls
 {
-  public static void main(String[] args) throws Exception, XPathExpressionException
+  @SuppressWarnings({"UseOfSystemOutOrSystemErr", "HardCodedStringLiteral", "HardcodedFileSeparator", "StringConcatenation", "DuplicateStringLiteralInspection"})
+  public static void main(String[] args) throws Exception
   {
     final WorldOfGoo wog = WorldOfGoo.getTheInstance();
     wog.init();

@@ -22,17 +22,17 @@ public class Profile
   public static final int FLAG_WHISTLE = 8;
   public static final int FLAG_TERMS = 16;
 
-  private String name;
-  private int flags;
-  private int playTime;
-  private int levels;
-  private String onlineId;
+  private final String name;
+  private final int flags;
+  private final int playTime;
+  private final int levels;
+  private final String onlineId;
 
-  private List<LevelAchievement> levelAchievements = new ArrayList<LevelAchievement>();
+  private final List<LevelAchievement> levelAchievements = new ArrayList<LevelAchievement>();
 
-  private Tower tower;
-  private int newBalls;
-  private String data;
+  private final Tower tower;
+  private final int newBalls;
+  private final String data;
 
   public Profile(String profileData) throws IOException
   {
@@ -130,6 +130,7 @@ public class Profile
     return data;
   }
 
+  @Override
   public String toString()
   {
 //    return "Profile{" +
@@ -145,7 +146,7 @@ public class Profile
     return name;
   }
 
-  @SuppressWarnings({"UseOfSystemOutOrSystemErr"})
+  @SuppressWarnings({"UseOfSystemOutOrSystemErr", "HardCodedStringLiteral"})
   public static void main(String[] args) throws IOException
   {
     DebugUtil.setAllLogging();

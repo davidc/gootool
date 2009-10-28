@@ -58,6 +58,7 @@ public class FilePreferencesFactory implements PreferencesFactory
     return preferencesFile;
   }
 
+  @SuppressWarnings({"UseOfSystemOutOrSystemErr", "HardCodedStringLiteral", "DuplicateStringLiteralInspection"})
   public static void main(String[] args) throws BackingStoreException
   {
     DebugUtil.setAllLogging();

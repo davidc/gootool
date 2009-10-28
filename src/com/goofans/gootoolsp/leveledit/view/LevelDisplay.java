@@ -36,8 +36,8 @@ public class LevelDisplay extends JPanel implements Scrollable, FocusListener
   private Scene scene;
   private Resources resources;
 
-  private static Map<LevelDisplayLayer, Renderer> renderers = new TreeMap<LevelDisplayLayer, Renderer>();
-  static Map<LevelDisplayLayer, Class[]> layerContents = new TreeMap<LevelDisplayLayer, Class[]>(); // TODO move out of this class, LevelEditor uses it too
+  private static final Map<LevelDisplayLayer, Renderer> renderers = new TreeMap<LevelDisplayLayer, Renderer>();
+  static final Map<LevelDisplayLayer, Class[]> layerContents = new TreeMap<LevelDisplayLayer, Class[]>(); // TODO move out of this class, LevelEditor uses it too
 
   static {
     renderers.put(LevelDisplayLayer.BALLS, new BallRenderer());
@@ -52,7 +52,7 @@ public class LevelDisplay extends JPanel implements Scrollable, FocusListener
   private Ball dragBall;
   private Point dragPoint;
 
-  private LevelEditor editor;
+  private final LevelEditor editor;
   private static final double GRID_PITCH_X = 50d; // TODO Config somewhere, persisted.
   private static final double GRID_PITCH_Y = 50d;
 

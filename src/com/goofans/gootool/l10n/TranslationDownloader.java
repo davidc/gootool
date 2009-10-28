@@ -12,6 +12,8 @@ import java.nio.charset.Charset;
  */
 public class TranslationDownloader
 {
+  protected static final String DEFAULT_WIKI_URL = "http://hell.student.utwente.nl/wog/mediawiki/";
+
   private TranslationDownloader()
   {
   }
@@ -30,7 +32,7 @@ public class TranslationDownloader
 
     String key = null;
     String english = null;
-    String translation = null;
+    String translation;
 
     Map<String, String> translations = new HashMap<String, String>();
 
@@ -41,7 +43,7 @@ public class TranslationDownloader
       line = line.trim();
       switch (state) {
         case 0:
-          if (line.equals("|-")) state = 1;
+          if ("|-".equals(line)) state = 1;
           break;
         case 1:
           if (line.startsWith("| ")) {
@@ -83,9 +85,10 @@ public class TranslationDownloader
     return translations;
   }
 
+  @SuppressWarnings({"UseOfSystemOutOrSystemErr", "HardCodedStringLiteral", "DuplicateStringLiteralInspection"})
   public static void main(String[] args) throws IOException
   {
-    Map<String, String> translations = getTranslations("http://hell.student.utwente.nl/wog/mediawiki/", "Russian_translation", true);
+    Map<String, String> translations = getTranslations(DEFAULT_WIKI_URL, "Russian_translation", true);
     for (Map.Entry<String, String> entry : translations.entrySet()) {
       System.out.println(entry.getKey() + " = " + entry.getValue());
     }

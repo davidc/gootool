@@ -15,7 +15,7 @@ public class BallTransferable implements Transferable
 {
   public static final DataFlavor FLAVOR = new DataFlavor(Ball.class, null);
 
-  private Ball ball;
+  private final Ball ball;
 
   public BallTransferable(Ball ball)
   {

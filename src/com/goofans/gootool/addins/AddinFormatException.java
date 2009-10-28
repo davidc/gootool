@@ -6,10 +6,6 @@ package com.goofans.gootool.addins;
  */
 public class AddinFormatException extends Exception
 {
-  public AddinFormatException()
-  {
-  }
-
   public AddinFormatException(String message)
   {
     super(message);
@@ -18,10 +14,5 @@ public class AddinFormatException extends Exception
   public AddinFormatException(String message, Throwable cause)
   {
     super(message, cause);
-  }
-
-  public AddinFormatException(Throwable cause)
-  {
-    super(cause);
   }
 }

@@ -10,11 +10,12 @@ import com.goofans.gootool.util.Utilities;
  */
 public class FinalNewlineRemovingReader extends Reader
 {
-  private PushbackReader reader;
+  private final PushbackReader reader;
+  private static final int BUFFER_BYTES = 20;
 
   public FinalNewlineRemovingReader(Reader reader)
   {
-    this.reader = new PushbackReader(reader, 20);
+    this.reader = new PushbackReader(reader, BUFFER_BYTES);
   }
 
   @Override
@@ -38,7 +39,7 @@ public class FinalNewlineRemovingReader extends Reader
 //    reader.unread(nextCh);
 //    return ch;
 
-    int[] consumedChars = new int[20];
+    int[] consumedChars = new int[BUFFER_BYTES];
     int numConsumed = 0;
     do {
       int nextCh = reader.read();
@@ -49,7 +50,7 @@ public class FinalNewlineRemovingReader extends Reader
         break;
       }
 //      numConsumed++;
-    } while (numConsumed < 20);
+    } while (numConsumed < BUFFER_BYTES);
 
     // push everything back
     while (numConsumed > 1) {

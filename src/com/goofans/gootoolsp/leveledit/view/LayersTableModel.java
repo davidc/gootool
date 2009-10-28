@@ -10,7 +10,7 @@ public class LayersTableModel extends AbstractTableModel
 {
   private static final String[] COLUMNS = new String[]{"Vis", "Name"};
   private static final Class[] COLUMN_CLASSES = new Class[]{Boolean.class, String.class};
-  private LevelDisplay levelDisplay;
+  private final LevelDisplay levelDisplay;
 
 //  public static final String[] LAYERS = new String[]{"Images", "Geometry", "Boundaries"};
 
@@ -36,16 +36,17 @@ public class LayersTableModel extends AbstractTableModel
     return COLUMNS.length;
   }
 
+  @Override
   public String getColumnName(int columnIndex)
   {
     return COLUMNS[columnIndex];
   }
 
+  @Override
   public Class<?> getColumnClass(int columnIndex)
   {
     return COLUMN_CLASSES[columnIndex];
   }
-
 
   public Object getValueAt(int rowIndex, int columnIndex)
   {
@@ -54,11 +55,13 @@ public class LayersTableModel extends AbstractTableModel
     return null;
   }
 
+  @Override
   public boolean isCellEditable(int rowIndex, int columnIndex)
   {
     return columnIndex == 0;
   }
 
+  @Override
   public void setValueAt(Object aValue, int rowIndex, int columnIndex)
   {
     if (columnIndex != 0) return;

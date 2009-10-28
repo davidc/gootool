@@ -9,7 +9,7 @@ import java.util.List;
  */
 public abstract class ProgressIndicatingTask
 {
-  private List<ProgressListener> listeners = new ArrayList<ProgressListener>();
+  private final List<ProgressListener> listeners = new ArrayList<ProgressListener>();
 
   public abstract void run() throws Exception;
 

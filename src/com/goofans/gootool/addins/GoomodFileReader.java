@@ -24,7 +24,7 @@ public class GoomodFileReader implements AddinReader
 
   }
 
-  public InputStream getInputStream(String fileName) throws FileNotFoundException, IOException
+  public InputStream getInputStream(String fileName) throws IOException
   {
     ZipEntry zipEntry = zipFile.getEntry(fileName);
     if (zipEntry == null) {

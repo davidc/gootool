@@ -28,6 +28,7 @@ public class WogExeFileFilter extends FileFilter
    * @param f the {@code File} to test
    * @return true if the file is to be accepted, false otherwise
    */
+  @Override
   public boolean accept(File f)
   {
     if (f != null) {
@@ -60,7 +61,6 @@ public class WogExeFileFilter extends FileFilter
             }
           }
           break;
-
       }
     }
     return false;
@@ -71,6 +71,7 @@ public class WogExeFileFilter extends FileFilter
    *
    * @return the description of this filter
    */
+  @Override
   public String getDescription()
   {
     switch (PlatformSupport.getPlatform()) {
@@ -93,6 +94,8 @@ public class WogExeFileFilter extends FileFilter
    *
    * @return a string representation of this {@code FileNameExtensionFilter}
    */
+  @Override
+  @SuppressWarnings({"StringConcatenation", "DuplicateStringLiteralInspection"})
   public String toString()
   {
     return super.toString() + "[description=" + getDescription() + "]";

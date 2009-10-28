@@ -43,7 +43,7 @@ public class ProfilePublishRequest extends APIRequestAuthenticated
     addPostParameter("profile", TextUtil.base64Encode(EncodingUtil.stringToBytesUtf8(profile.getData())));
 
     Document doc = doRequest();
-    if (!doc.getDocumentElement().getTagName().equalsIgnoreCase("profile-publish-success")) {
+    if (!"profile-publish-success".equalsIgnoreCase(doc.getDocumentElement().getTagName())) {
       throw new APIException("Profile backup failed");
     }
 

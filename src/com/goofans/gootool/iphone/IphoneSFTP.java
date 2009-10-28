@@ -13,6 +13,7 @@ import com.jcraft.jsch.*;
 public class IphoneSFTP
 {
 
+  @SuppressWarnings({"UseOfSystemOutOrSystemErr", "HardCodedStringLiteral", "HardcodedFileSeparator"})
   public static void main(String[] args) throws JSchException, SftpException
   {
     String host = "192.168.5.12";
@@ -59,7 +60,6 @@ public class IphoneSFTP
       }
       finally {
         c.disconnect();
-        c = null;
       }
     }
     finally {

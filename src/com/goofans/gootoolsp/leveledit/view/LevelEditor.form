@@ -380,4 +380,7 @@
       </grid>
     </children>
   </grid>
+  <inspectionSuppressions>
+    <suppress inspection="NoLabelFor" id="de070"/>
+  </inspectionSuppressions>
 </form>

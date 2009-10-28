@@ -38,21 +38,21 @@ import com.goofans.gootoolsp.leveledit.model.Resources;
  */
 public class BallPart
 {
-  private Resources resources;
+  private final Resources resources;
 
-  private String name;
-  private int layer;
-  private double x1, x2, y1, y2; // xrange, range
-  private List<String> imageRes;
-  private Image mainImage;
-  private boolean rotate;
-  private Set<String> states;
-  private double scale;
+  private final String name;
+  private final int layer;
+  private final double x1, x2, y1, y2; // xrange, range
+  private final List<String> imageRes;
+  private final Image mainImage;
+  private final boolean rotate;
+  private final Set<String> states;
+  private final double scale;
 
-  private boolean isEye;
-  private String pupilRes;
-  private Image pupilImage;
-  private int pupilInset;
+  private final boolean isEye;
+  private final String pupilRes;
+  private final Image pupilImage;
+  private final int pupilInset;
 
   // TODO stretch
 
@@ -91,6 +91,10 @@ public class BallPart
       pupilRes = XMLUtil.getAttributeStringRequired(partNode, "pupil");
       pupilInset = XMLUtil.getAttributeIntegerRequired(partNode, "pupilinset");
     }
+    else {
+      pupilRes = null;
+      pupilInset = 0;
+    }
 
     String statesStr = XMLUtil.getAttributeString(partNode, "state", null);
     if (statesStr != null) {
@@ -101,11 +105,17 @@ public class BallPart
         states.add(state);
       }
     }
+    else {
+      states = null;
+    }
 
     /* We need to preload all the images since we can't be throwing IOExceptions in our paint methods */
     mainImage = getResourceImage(imageRes.get(0));
     if (isEye) {
       pupilImage = getResourceImage(pupilRes);
+    }
+    else {
+      pupilImage = null;
     }
   }
 
@@ -187,9 +197,7 @@ public class BallPart
 
     BallPart ballPart = (BallPart) o;
 
-    if (!name.equals(ballPart.name)) return false;
-
-    return true;
+    return name.equals(ballPart.name);
   }
 
   @Override
@@ -198,6 +206,7 @@ public class BallPart
     return name.hashCode();
   }
 
+  @SuppressWarnings({"StringConcatenation"})
   @Override
   public String toString()
   {

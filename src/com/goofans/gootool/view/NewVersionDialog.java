@@ -24,7 +24,7 @@ public class NewVersionDialog extends JDialog
   private JLabel curVersionLabel;
   private JLabel latestVersionLabel;
 
-  private static TextProvider textProvider = GooTool.getTextProvider();
+  private static final TextProvider textProvider = GooTool.getTextProvider();
 
   public NewVersionDialog(final Frame parentWindow, final VersionSpec latestVersion, String messageText, final String downloadUrl)
   {

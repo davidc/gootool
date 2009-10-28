@@ -4,7 +4,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -39,11 +38,13 @@ public class WorldOfGooMacOSX extends WorldOfGoo
   {
   }
 
+  @Override
   public boolean isWogFound()
   {
     return wogFound;
   }
 
+  @Override
   public boolean isCustomDirSet()
   {
     return customDir != null;
@@ -52,6 +53,7 @@ public class WorldOfGooMacOSX extends WorldOfGoo
   /**
    * Attempts to locate WoG in various default locations.
    */
+  @Override
   public void init()
   {
     String userWogDir = ToolPreferences.getWogDir();
@@ -112,6 +114,7 @@ public class WorldOfGooMacOSX extends WorldOfGoo
    * @param path Path to exe, excluding exe itself
    * @throws java.io.FileNotFoundException if WorldOfGoo.exe wasn't found at this path
    */
+  @Override
   public void init(File path) throws FileNotFoundException
   {
     if (!locateWogAtPath(path)) {
@@ -120,6 +123,7 @@ public class WorldOfGooMacOSX extends WorldOfGoo
     log.info("Found World of Goo through user selection at: " + wogDir);
   }
 
+  @Override
   public void launch() throws IOException
   {
     log.log(Level.FINE, "Launching in " + customDir);
@@ -129,6 +133,7 @@ public class WorldOfGooMacOSX extends WorldOfGoo
     pb.start();
   }
 
+  @Override
   public File getWogDir() throws IOException
   {
     if (!wogFound) {
@@ -137,18 +142,13 @@ public class WorldOfGooMacOSX extends WorldOfGoo
     return wogDir;
   }
 
+  @Override
   public void setCustomDir(File customDir) throws IOException
   {
     if (customDir.exists() && !customDir.isDirectory()) throw new IOException(customDir + " isn't a directory");
     if (!customDir.exists() && !customDir.mkdir()) throw new IOException("Can't create " + customDir);
 
-    //test write
-    File testFile = new File(customDir, "writeTest");
-    FileOutputStream os = new FileOutputStream(testFile);
-    os.write(65);
-    os.close();
-
-    if (!testFile.delete()) throw new IOException("Can't delete test file " + testFile);
+    Utilities.testDirectoryWriteable(customDir);
 
     this.customDir = customDir;
 
@@ -160,6 +160,7 @@ public class WorldOfGooMacOSX extends WorldOfGoo
     updateInstalledAddins();
   }
 
+  @Override
   public File getCustomDir() throws IOException
   {
     if (customDir == null) {
@@ -168,6 +169,7 @@ public class WorldOfGooMacOSX extends WorldOfGoo
     return customDir;
   }
 
+  @Override
   public boolean isFirstCustomBuild() throws IOException
   {
     for (String exeFilename : EXE_FILENAMES) {
@@ -177,21 +179,25 @@ public class WorldOfGooMacOSX extends WorldOfGoo
     return true;
   }
 
+  @Override
   public File getGameFile(String pathname) throws IOException
   {
     return new File(getWogDir(), "Contents/Resources/game/" + pathname);
   }
 
+  @Override
   public File getCustomGameFile(String pathname) throws IOException
   {
     return new File(getCustomDir(), "Contents/Resources/game/" + pathname);
   }
 
+  @Override
   protected File getAddinInstalledFile(String addinId) throws IOException
   {
     return new File(getAddinInstalledDir(), addinId + GOOMOD_EXTENSION_WITH_DOT);
   }
 
+  @Override
   public File chooseCustomDir(Component mainFrame)
   {
     JFileChooser chooser = new JFileChooser();
@@ -214,6 +220,7 @@ public class WorldOfGooMacOSX extends WorldOfGoo
     return selectedFile;
   }
 
+  @Override
   protected File getAddinInstalledDir() throws IOException
   {
     if (addinsDir == null) {

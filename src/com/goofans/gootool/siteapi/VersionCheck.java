@@ -22,12 +22,13 @@ public class VersionCheck implements Runnable
 {
   private static final Logger log = Logger.getLogger(VersionCheck.class.getName());
 
+  private final Frame parentWindow;
+  private final boolean alwaysAlertUser;
+
   private boolean completed = false;
   private Exception failureReason = null;
   private boolean upToDate = false;
 
-  private boolean alwaysAlertUser;
-  private Frame parentWindow;
   private VersionSpec newVersion;
   private String newVersionMessage;
   private String newVersionDownloadUrl;

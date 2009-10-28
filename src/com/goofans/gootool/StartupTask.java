@@ -23,8 +23,8 @@ import java.util.logging.Logger;
 public class StartupTask extends ProgressIndicatingTask
 {
   private static final Logger log = Logger.getLogger(StartupTask.class.getName());
-  private Controller controller;
-  private TextProvider textProvider;
+  private final Controller controller;
+  private final TextProvider textProvider;
 
   public StartupTask(Controller controller)
   {
@@ -32,6 +32,7 @@ public class StartupTask extends ProgressIndicatingTask
     textProvider = GooTool.getTextProvider();
   }
 
+  @Override
   public void run() throws Exception
   {
     beginStep(textProvider.getText("launcher.locategoo"), false);

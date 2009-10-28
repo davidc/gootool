@@ -14,8 +14,8 @@ public enum LevelDisplayLayer
   HINGES("Hinges", true),
   VIEWPORT("Viewport", true);
 
-  private String displayName;
-  private boolean defaultVisible;
+  private final String displayName;
+  private final boolean defaultVisible;
 
   LevelDisplayLayer(String displayName, boolean defaultVisible)
   {
@@ -28,6 +28,7 @@ public enum LevelDisplayLayer
     return defaultVisible;
   }
 
+  @Override
   public String toString()
   {
     return displayName;

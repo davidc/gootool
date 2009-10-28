@@ -6,9 +6,9 @@ package com.goofans.gootoolsp.leveledit.model;
  */
 public class SceneObjectTypeAttribute
 {
-  private SceneObjectTypeAttributeType type;
-  private String xmlAttribute;
-  private boolean required;
+  private final SceneObjectTypeAttributeType type;
+  private final String xmlAttribute;
+  private final boolean required;
 
   public SceneObjectTypeAttribute(String xmlAttribute, SceneObjectTypeAttributeType type, boolean required)
   {

@@ -1,17 +1,19 @@
 package com.goofans.gootool.model;
 
 import java.util.List;
-import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Arrays;
 
 /**
+ * A language the game can be played in. Immutable after construction. Also contains static methods to look up languages.
+ *
  * @author David Croft (davidc@goofans.com)
  * @version $Id$
  */
 public class Language
 {
-  private String code;
-  private String displayName;
+  private final String code;
+  private final String displayName;
 
   public Language(String code, String displayName)
   {
@@ -29,28 +31,24 @@ public class Language
     return displayName;
   }
 
+  @Override
   public String toString()
   {
     return displayName;
   }
 
-
-  private static final List<Language> LANGUAGES;
   public static final Language DEFAULT_LANGUAGE;
 
-  static {
-    List<Language> languages = new ArrayList<Language>();
-
-    DEFAULT_LANGUAGE = new Language("en", "English");
-    languages.add(DEFAULT_LANGUAGE);
-    languages.add(new Language("es", "Spanish"));
-    languages.add(new Language("de", "German"));
-    languages.add(new Language("fr", "French"));
-    languages.add(new Language("it", "Italian"));
-    languages.add(new Language("nl", "Dutch"));
-    languages.add(new Language("ru", "Russian"));
-    LANGUAGES = Collections.unmodifiableList(languages);
-  }
+  @SuppressWarnings({"HardCodedStringLiteral"})
+  private static final List<Language> LANGUAGES = Collections.unmodifiableList(Arrays.asList(
+          DEFAULT_LANGUAGE = new Language("en", "English"),
+          new Language("es", "Spanish"),
+          new Language("de", "German"),
+          new Language("fr", "French"),
+          new Language("it", "Italian"),
+          new Language("nl", "Dutch"),
+          new Language("ru", "Russian")
+  ));
 
   public static List<Language> getSupportedLanguages()
   {

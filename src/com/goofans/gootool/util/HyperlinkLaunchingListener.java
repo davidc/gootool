@@ -14,7 +14,7 @@ import java.awt.*;
  */
 public class HyperlinkLaunchingListener implements HyperlinkListener, ActionListener
 {
-  private Component parentComponent; // for the parent of the error joptionpane
+  private final Component parentComponent; // for the parent of the error joptionpane
 
   public HyperlinkLaunchingListener(Component parentComponent)
   {

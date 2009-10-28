@@ -15,9 +15,9 @@ public class AddinDependency
 {
   private static final Logger log = Logger.getLogger(AddinDependency.class.getName());
 
-  private String ref;
-  private VersionSpec minVersion;
-  private VersionSpec maxVersion;
+  private final String ref;
+  private final VersionSpec minVersion;
+  private final VersionSpec maxVersion;
 
   public AddinDependency(String ref, VersionSpec minVersion, VersionSpec maxVersion)
   {
@@ -65,6 +65,8 @@ public class AddinDependency
   }
 
 
+  @Override
+  @SuppressWarnings({"StringConcatenation"})
   public String toString()
   {
     return "AddinDependency{" +

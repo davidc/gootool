@@ -273,4 +273,8 @@
       </grid>
     </children>
   </grid>
+  <inspectionSuppressions>
+    <suppress inspection="MissingMnemonic" id="b6037"/>
+    <suppress inspection="MissingMnemonic" id="141b0"/>
+  </inspectionSuppressions>
 </form>

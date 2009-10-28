@@ -17,8 +17,9 @@ import com.goofans.gootool.util.HyperlinkLaunchingListener;
  */
 public class MainMenu
 {
-  private JMenuBar menuBar;
+  private final JMenuBar menuBar;
   public JMenuItem translatorModeMenuItem;
+  //TODO move these into a config file
   private static final String URL_MANUAL = "http://goofans.com/gootool/about";
   private static final String URL_FAQ = "http://goofans.com/gootool/faq";
   private static final String URL_TROUBLESHOOTING = "http://goofans.com/gootool/troubleshooting";

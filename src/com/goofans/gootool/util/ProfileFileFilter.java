@@ -9,7 +9,6 @@ import java.io.File;
  */
 public class ProfileFileFilter extends FileFilter
 {
-
   public ProfileFileFilter()
   {
   }
@@ -23,14 +22,14 @@ public class ProfileFileFilter extends FileFilter
    * @param f the {@code File} to test
    * @return true if the file is to be accepted, false otherwise
    */
+  @Override
   public boolean accept(File f)
   {
     if (f != null) {
       if (f.isDirectory()) {
         return true;
       }
-      String fileName = f.getName();
-      if (fileName.equalsIgnoreCase("pers2.dat")) {
+      if ("pers2.dat".equalsIgnoreCase(f.getName())) {
         return true;
       }
     }
@@ -42,11 +41,11 @@ public class ProfileFileFilter extends FileFilter
    *
    * @return the description of this filter
    */
+  @Override
   public String getDescription()
   {
     return "World of Goo Profile (pers2.dat)";
   }
-
 
   /**
    * Returns a string representation of the {@code FileNameExtensionFilter}.
@@ -56,6 +55,8 @@ public class ProfileFileFilter extends FileFilter
    *
    * @return a string representation of this {@code FileNameExtensionFilter}
    */
+  @Override
+  @SuppressWarnings({"StringConcatenation", "DuplicateStringLiteralInspection"})
   public String toString()
   {
     return super.toString() + "[description=" + getDescription() + "]";

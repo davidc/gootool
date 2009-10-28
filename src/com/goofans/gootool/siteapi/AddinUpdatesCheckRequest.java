@@ -63,8 +63,7 @@ public class AddinUpdatesCheckRequest extends APIRequest
 
     Document doc = doRequest();
 
-
-    if (!doc.getDocumentElement().getTagName().equalsIgnoreCase("updates-check-results")) {
+    if (!"updates-check-results".equalsIgnoreCase(doc.getDocumentElement().getTagName())) {
       throw new APIException("Update check failed");
     }
 
@@ -136,6 +135,7 @@ public class AddinUpdatesCheckRequest extends APIRequest
     }
   }
 
+  @SuppressWarnings({"UseOfSystemOutOrSystemErr", "HardCodedStringLiteral", "DuplicateStringLiteralInspection"})
   public static void main(String[] args) throws APIException, IOException
   {
     DebugUtil.setAllLogging();

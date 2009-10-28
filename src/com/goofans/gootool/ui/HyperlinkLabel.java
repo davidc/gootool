@@ -26,6 +26,7 @@ public class HyperlinkLabel extends JLabel
 
     addMouseListener(new MouseAdapter()
     {
+      @Override
       public void mouseClicked(MouseEvent me)
       {
         HyperlinkEvent he = new HyperlinkEvent(me.getSource(), HyperlinkEvent.EventType.ACTIVATED, url);
@@ -75,8 +76,7 @@ public class HyperlinkLabel extends JLabel
    */
   public synchronized HyperlinkListener[] getHyperlinkListeners()
   {
-    return (HyperlinkListener[]) listenerList.getListeners(
-            HyperlinkListener.class);
+    return listenerList.getListeners(HyperlinkListener.class);
   }
 
   /**

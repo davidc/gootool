@@ -28,11 +28,12 @@ public class AESBinFormat
 {
   private static final Logger log = Logger.getLogger(AESBinFormat.class.getName());
 
+  @SuppressWarnings({"MagicNumber"})
   private static final byte[] KEY = {0x0D, 0x06, 0x07, 0x07, 0x0C, 0x01, 0x08, 0x05,
           0x06, 0x09, 0x09, 0x04, 0x06, 0x0D, 0x03, 0x0F,
           0x03, 0x06, 0x0E, 0x01, 0x0E, 0x02, 0x07, 0x0B};
 
-  private static final String CHARSET = "UTF-8";
+//  private static final String CHARSET = "UTF-8";
   private static final byte EOF_MARKER = (byte) 0xFD;
 
 
@@ -131,7 +132,7 @@ public class AESBinFormat
 //    byte[] inputBytes = input.getBytes(CHARSET);
 
     if (TESTMODE && inputBytes.length != TESTMODE_DECODING_STRING_SIZE) {
-      //noinspection UseOfSystemOutOrSystemErr
+      //noinspection UseOfSystemOutOrSystemErr,HardCodedStringLiteral,HardcodedFileSeparator
       System.err.println("ERROR! DECODING/ENCODING MISMATCH IN STRING SIZE (was " + TESTMODE_DECODING_STRING_SIZE + ", now " + inputBytes.length + ")");
       throw new RuntimeException();
     }
@@ -180,7 +181,7 @@ public class AESBinFormat
 
     if (TESTMODE) {
       if (outputBytes.length != TESTMODE_ORIGINAL.length) {
-        //noinspection UseOfSystemOutOrSystemErr
+        //noinspection UseOfSystemOutOrSystemErr,HardCodedStringLiteral,HardcodedFileSeparator
         System.err.println("ERROR! DECODING/ENCODING MISMATCH IN ENCRYPTED LENGTH");
         throw new RuntimeException();
       }
@@ -190,11 +191,11 @@ public class AESBinFormat
           if (outputBytes[i] != TESTMODE_ORIGINAL[i]) {
             if (outputBytes.length - i == 16) {
               // it's ok to have mismatch in the last block because sometimes they pad with other stuff after the 0xFD
-              //noinspection UseOfSystemOutOrSystemErr
+              //noinspection UseOfSystemOutOrSystemErr,HardCodedStringLiteral,HardcodedFileSeparator
               System.err.println("warning! mismatch in last block");
             }
             else {
-              //noinspection UseOfSystemOutOrSystemErr
+              //noinspection UseOfSystemOutOrSystemErr,HardCodedStringLiteral,HardcodedFileSeparator
               System.err.println("ERROR! DECODING/ENCODING MISMATCH IN ENCRYPTED BYTES AT INDEX " + i + " (" + (outputBytes.length - i) + " from end)");
               throw new RuntimeException();
             }
@@ -221,7 +222,7 @@ public class AESBinFormat
   }
 
 
-  @SuppressWarnings({"UseOfSystemOutOrSystemErr"})
+  @SuppressWarnings({"UseOfSystemOutOrSystemErr", "HardCodedStringLiteral", "HardcodedFileSeparator", "DuplicateStringLiteralInspection"})
   public static void main(String[] args) throws IOException, TransformerException
   {
     WorldOfGoo worldOfGoo = WorldOfGoo.getTheInstance();
@@ -246,6 +247,7 @@ public class AESBinFormat
 //    testFile("res\\anim\\ball_counter.anim.binltl");
   }
 
+  @SuppressWarnings({"HardCodedStringLiteral"})
   private static void testDir(File dir) throws IOException
   {
     for (File file : dir.listFiles()) {
@@ -263,6 +265,7 @@ public class AESBinFormat
     }
   }
 
+  @SuppressWarnings({"HardCodedStringLiteral", "StringConcatenation"})
   private static String byteToHex(byte b)
   {
     String s = Integer.toHexString(b).toUpperCase();
@@ -278,7 +281,7 @@ public class AESBinFormat
     return testFile(f);
   }
 
-  @SuppressWarnings({"UseOfSystemOutOrSystemErr"})
+  @SuppressWarnings({"UseOfSystemOutOrSystemErr", "HardCodedStringLiteral"})
   private static byte[] testFile(File f) throws IOException
   {
     System.err.println("Testing " + f);
@@ -293,18 +296,10 @@ public class AESBinFormat
     }
     catch (RuntimeException re) {
       // We know about the BOM problem in text.xml.bin
-      if (!f.getName().equals("text.xml.bin")) throw re;
+      if (!"text.xml.bin".equals(f.getName())) throw re;
     }
 //    System.out.println("enc = " + enc);
 
     return de;
-  }
-
-  public static byte[] copyOf(byte[] original, int newLength)
-  {
-    byte[] copy = new byte[newLength];
-    System.arraycopy(original, 0, copy, 0,
-            Math.min(original.length, newLength));
-    return copy;
   }
 }

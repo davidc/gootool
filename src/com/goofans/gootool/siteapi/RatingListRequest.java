@@ -26,7 +26,7 @@ public class RatingListRequest extends APIRequestAuthenticated
   {
     Document doc = doRequest();
 
-    if (!doc.getDocumentElement().getTagName().equalsIgnoreCase("rating-list-success")) {
+    if (!"rating-list-success".equalsIgnoreCase(doc.getDocumentElement().getTagName())) {
       throw new APIException("Get ratings failed");
     }
 
@@ -49,6 +49,7 @@ public class RatingListRequest extends APIRequestAuthenticated
     return ratings;
   }
 
+  @SuppressWarnings({"UseOfSystemOutOrSystemErr"})
   public static void main(String[] args) throws APIException, IOException
   {
     DebugUtil.setAllLogging();

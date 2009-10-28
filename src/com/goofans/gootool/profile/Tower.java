@@ -14,8 +14,11 @@ public class Tower
 {
   private static final Logger log = Logger.getLogger(Tower.class.getName());
 
-  private List<Ball> balls;
-  private List<Strand> strands;
+  private static final String TOWERELEMENT_BALL = "b";
+  private static final String TOWERELEMENT_STRAND = "s";
+
+  private final List<Ball> balls;
+  private final List<Strand> strands;
 
   private transient double height;
   private transient int usedStrandBalls;
@@ -39,7 +42,7 @@ public class Tower
     StringTokenizer tok = new StringTokenizer(towerStr, ":");
     while (tok.hasMoreTokens()) {
       String type = tok.nextToken();
-      if (type.equals("b")) {
+      if (type.equals(TOWERELEMENT_BALL)) {
         Ball ball = new Ball();
         tok.nextToken(); // ball.ballType = tok.nextToken(); // don't need this
         ball.xPos = Double.parseDouble(tok.nextToken());
@@ -49,7 +52,7 @@ public class Tower
         balls.add(ball);
         totalBalls++;
       }
-      else if (type.equals("s")) {
+      else if (type.equals(TOWERELEMENT_STRAND)) {
         Strand strand = new Strand();
         tok.nextToken(); // strand.strandType = tok.nextToken(); // don't need this
         strand.firstBall = balls.get(Integer.parseInt(tok.nextToken()));
@@ -57,7 +60,7 @@ public class Tower
         tok.nextToken(); // ignore connectionStrength
         tok.nextToken(); // ignore length
         String ballUsed = tok.nextToken(); // ignore ballUsed
-        if (ballUsed.equals("1")) {
+        if ("1".equals(ballUsed)) {
           usedStrandBalls++;
           totalBalls++;
         }
@@ -137,12 +140,14 @@ public class Tower
     return totalBalls;
   }
 
+  @Override
+  @SuppressWarnings({"StringConcatenation"})
   public String toString()
   {
     return "Tower with " + totalBalls + " balls and " + strands.size() + " strands, used " + usedNodeBalls + " node and " + usedStrandBalls + " strand balls to make height " + height;
   }
 
-  @SuppressWarnings({"UseOfSystemOutOrSystemErr"})
+  @SuppressWarnings({"UseOfSystemOutOrSystemErr", "HardCodedStringLiteral", "DuplicateStringLiteralInspection"})
   public static void main(String[] args) throws IOException
   {
     // 8.1 metres, 295 ish balls

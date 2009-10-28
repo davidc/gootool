@@ -7,6 +7,9 @@ import java.util.logging.Logger;
 import java.awt.*;
 
 /**
+ * A display resolution. Immutable after construction.
+ * Also has static methods to retrieve system supported resolutions.
+ *
  * @author David Croft (davidc@goofans.com)
  * @version $Id$
  */
@@ -55,13 +58,13 @@ public class Resolution implements Comparable
     return (width / gcd) + ":" + (height / gcd);
   }
 
-  private int GCD(int a, int b)
+  private static int GCD(int a, int b)
   {
     if (b == 0) return a;
     return GCD(b, a % b);
   }
 
-
+  @Override
   public String toString()
   {
     StringBuilder sb = new StringBuilder();
@@ -75,6 +78,7 @@ public class Resolution implements Comparable
     return sb.toString();
   }
 
+  @Override
   public boolean equals(Object o)
   {
     if (this == o) return true;
@@ -82,12 +86,10 @@ public class Resolution implements Comparable
 
     Resolution that = (Resolution) o;
 
-    if (height != that.height) return false;
-    if (width != that.width) return false;
-
-    return true;
+    return height == that.height && width == that.width;
   }
 
+  @Override
   public int hashCode()
   {
     int result;

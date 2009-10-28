@@ -17,9 +17,14 @@ public class GameFormat
   private static final Logger log = Logger.getLogger(GameFormat.class.getName());
   public static final String DEFAULT_CHARSET = "UTF-8";
 
+  private GameFormat()
+  {
+  }
+
   public static byte[] decodeBinFile(File file) throws IOException
   {
     log.finest("decode bin file: " + file);
+
     switch (PlatformSupport.getPlatform()) {
       case WINDOWS:
       case LINUX:
@@ -55,6 +60,7 @@ public class GameFormat
   public static byte[] decodeProfileFile(File file) throws IOException
   {
     log.finest("decode profile file: " + file);
+
     byte[] decoded = null;
     switch (PlatformSupport.getPlatform()) {
       case WINDOWS:
@@ -67,7 +73,6 @@ public class GameFormat
     }
     return decoded;
   }
-
 
   public static void encodeProfileFile(File file, byte[] input) throws IOException
   {
@@ -83,5 +88,4 @@ public class GameFormat
         break;
     }
   }
-
 }

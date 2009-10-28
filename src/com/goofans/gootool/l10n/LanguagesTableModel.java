@@ -14,8 +14,9 @@ public class LanguagesTableModel extends AbstractTableModel
   private static final String[] COLUMNS = new String[]{"Active", "Code", "Wiki Page"};
   private static final Class[] COLUMN_CLASSES = new Class[]{Boolean.class, String.class, String.class};
 
-  private List<L10nLanguage> languages = new ArrayList<L10nLanguage>();
+  private final List<L10nLanguage> languages = new ArrayList<L10nLanguage>();
 
+  @SuppressWarnings({"HardCodedStringLiteral"})
   public LanguagesTableModel()
   {
     languages.add(new L10nLanguage("nl", "Dutch_translation", true));
@@ -45,16 +46,17 @@ public class LanguagesTableModel extends AbstractTableModel
     return COLUMN_CLASSES.length;
   }
 
+  @Override
   public String getColumnName(int columnIndex)
   {
     return COLUMNS[columnIndex];
   }
 
+  @Override
   public Class<?> getColumnClass(int columnIndex)
   {
     return COLUMN_CLASSES[columnIndex];
   }
-
 
   public Object getValueAt(int rowIndex, int columnIndex)
   {
@@ -64,11 +66,13 @@ public class LanguagesTableModel extends AbstractTableModel
     return null;
   }
 
+  @Override
   public boolean isCellEditable(int rowIndex, int columnIndex)
   {
     return true;//columnIndex == 0;
   }
   
+  @Override
   public void setValueAt(Object aValue, int rowIndex, int columnIndex)
   {
     L10nLanguage language = languages.get(rowIndex);
@@ -84,10 +88,10 @@ public class LanguagesTableModel extends AbstractTableModel
 
   public void removeRow(int row)
   {
-    System.out.println("row = " + row);
     languages.remove(row);
     fireTableDataChanged();
   }
+
   public void addRow()
   {
     languages.add(new L10nLanguage("xx", "Foo_translation", false));

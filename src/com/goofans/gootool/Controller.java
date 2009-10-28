@@ -655,7 +655,6 @@ public class Controller implements ActionListener
 
     log.fine("Reordering " + fromId + " before " + toId);
 
-
     int fromEntry = -1;
     int toEntry = -1;
 
@@ -784,7 +783,7 @@ public class Controller implements ActionListener
           break;
         }
       }
-    } while (!foundThisAddin && config.getEnabledAddins().size() > 0);
+    } while (!foundThisAddin && !config.getEnabledAddins().isEmpty());
   }
 
 

@@ -16,6 +16,10 @@ public class GUIUtil
 {
   private static final Logger log = Logger.getLogger(GUIUtil.class.getName());
 
+  private GUIUtil()
+  {
+  }
+
   public static void setCloseOnEscape(final JDialog dialog)
   {
     dialog.getRootPane().registerKeyboardAction(new ActionListener()
@@ -31,6 +35,7 @@ public class GUIUtil
   {
     dialog.addWindowListener(new WindowAdapter()
     {
+      @Override
       public void windowOpened(WindowEvent e)
       {
         dialog.pack();
@@ -42,6 +47,7 @@ public class GUIUtil
   {
     dialog.addWindowListener(new WindowAdapter()
     {
+      @Override
       public void windowOpened(WindowEvent e)
       {
         component.requestFocusInWindow();

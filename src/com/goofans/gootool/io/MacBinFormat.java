@@ -13,13 +13,17 @@ import java.io.IOException;
  */
 public class MacBinFormat
 {
+  private MacBinFormat()
+  {
+  }
+
   public static byte[] decodeFile(File file) throws IOException
   {
     byte[] inputBytes = Utilities.readFile(file);
     return decode(inputBytes);
   }
 
-  private static byte[] decode(byte[] inputBytes) throws IOException
+  private static byte[] decode(byte[] inputBytes)
   {
     int length = inputBytes.length;
     byte[] outputBytes = new byte[length];
@@ -43,7 +47,7 @@ public class MacBinFormat
     Utilities.writeFile(file, bytes);
   }
 
-  private static byte[] encode(byte[] inputBytes) throws IOException
+  private static byte[] encode(byte[] inputBytes)
   {
 //    byte[] inputBytes = inputBytes.getBytes(CHARSET);
     int length = inputBytes.length;
@@ -62,7 +66,7 @@ public class MacBinFormat
     return outputBytes;
   }
 
-  @SuppressWarnings({"HardCodedStringLiteral", "UseOfSystemOutOrSystemErr"})
+  @SuppressWarnings({"HardCodedStringLiteral", "UseOfSystemOutOrSystemErr", "DuplicateStringLiteralInspection"})
   public static void main(String[] args) throws IOException
   {
     String s = new String(decodeFile(new File("IvyTower.level.bin")), GameFormat.DEFAULT_CHARSET);

@@ -25,7 +25,7 @@ public class BallPalette extends JComponent implements Scrollable
   private int thumbnailSize = 50;
   List<BallPaletteBall> paletteEntries = new ArrayList<BallPaletteBall>();
 
-  public BallPalette() throws IOException
+  public BallPalette()
   {
     final WrappingGridLayout layout = new WrappingGridLayout(5, 5);
     setLayout(layout);
@@ -45,7 +45,6 @@ public class BallPalette extends JComponent implements Scrollable
         }
       }
     });
-
   }
 
   public void addBalls() throws IOException
@@ -136,7 +135,7 @@ public class BallPalette extends JComponent implements Scrollable
   }
 
 
-  private List<SelectionListener> selectionListeners = new ArrayList<SelectionListener>();
+  private final List<SelectionListener> selectionListeners = new ArrayList<SelectionListener>();
 
   public void addSelectionListener(SelectionListener l)
   {

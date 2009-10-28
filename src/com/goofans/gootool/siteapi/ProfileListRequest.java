@@ -29,7 +29,7 @@ public class ProfileListRequest extends APIRequestAuthenticated
   public List<BackupInstance> listBackups() throws APIException
   {
     Document doc = doRequest();
-    if (!doc.getDocumentElement().getTagName().equalsIgnoreCase("profile-list-success")) {
+    if (!"profile-list-success".equalsIgnoreCase(doc.getDocumentElement().getTagName())) {
       throw new APIException("Listing backups failed");
     }
 
@@ -91,6 +91,7 @@ public class ProfileListRequest extends APIRequestAuthenticated
   }
 
 
+  @SuppressWarnings({"UseOfSystemOutOrSystemErr", "HardCodedStringLiteral"})
   public static void main(String[] args) throws APIException, IOException
   {
     DebugUtil.setAllLogging();

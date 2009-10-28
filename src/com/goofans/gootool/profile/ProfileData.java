@@ -21,9 +21,11 @@ public class ProfileData
 {
   private static final Logger log = Logger.getLogger(ProfileData.class.getName());
 
-  private Map<String, String> data;
+  private static final String KEY_PROFILE = "profile_";
+  private static final String KEY_MRPP = "mrpp";
 
-  private Profile[] profiles = new Profile[3];
+  private final Map<String, String> data = new TreeMap<String, String>();
+  private final Profile[] profiles = new Profile[3];
 
   public ProfileData(File f) throws IOException
   {
@@ -34,7 +36,7 @@ public class ProfileData
     log.finest("ProfileData is " + data);
 
     for (String key : data.keySet()) {
-      if (key.startsWith("profile_")) {
+      if (key.startsWith(KEY_PROFILE)) {
         int profileIndex = Integer.valueOf(key.substring(8));
         profiles[profileIndex] = new Profile(data.get(key));
       }
@@ -44,8 +46,6 @@ public class ProfileData
   private void readProfileData(byte[] profile) throws IOException
   {
     InputStream is = new ByteArrayInputStream(profile);
-
-    data = new TreeMap<String, String>();
 
     String key;
     do {
@@ -92,12 +92,13 @@ public class ProfileData
 
   public Profile getCurrentProfile()
   {
-    String mrpp = data.get("mrpp");
+    String mrpp = data.get(KEY_MRPP);
     if (mrpp != null) return profiles[Integer.parseInt(mrpp)];
     return profiles[0];
   }
 
-
+  @Override
+  @SuppressWarnings({"StringConcatenation"})
   public String toString()
   {
     return "ProfileData{" +

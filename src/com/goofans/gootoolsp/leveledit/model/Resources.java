@@ -20,8 +20,8 @@ import org.w3c.dom.NodeList;
  */
 public class Resources
 {
-  private Map<String, Image> images = new HashMap<String, Image>();
-  private Map<String, File> sounds = new HashMap<String, File>();
+  private final Map<String, Image> images = new HashMap<String, Image>();
+  private final Map<String, File> sounds = new HashMap<String, File>();
 
   public Resources(Document d) throws IOException
   {
@@ -40,17 +40,17 @@ public class Resources
         if (node instanceof Element) {
           Element el = (Element) node;
 
-          if (el.getNodeName().equals("SetDefaults")) {
+          if ("SetDefaults".equals(el.getNodeName())) {
             defaultPath = new File(rootDir, el.getAttribute("path"));
             defaultIdPrefix = el.getAttribute("idprefix");
           }
-          else if (el.getNodeName().equals("Image")) {
+          else if ("Image".equals(el.getNodeName())) {
             String id = defaultIdPrefix + el.getAttribute("id");
             File f = new File(defaultPath, el.getAttribute("path") + ".png");
 
             // HACK: fix Fish
-            if (id.equals("IMAGE_BALL_FISH_WINGLEFT")) id = "IMAGE_BALL_TIMEBUG_WINGLEFT";
-            if (id.equals("IMAGE_BALL_FISH_WINGRIGHT")) id = "IMAGE_BALL_TIMEBUG_WINGRIGHT";
+            if ("IMAGE_BALL_FISH_WINGLEFT".equals(id)) id = "IMAGE_BALL_TIMEBUG_WINGLEFT";
+            if ("IMAGE_BALL_FISH_WINGRIGHT".equals(id)) id = "IMAGE_BALL_TIMEBUG_WINGRIGHT";
 
             try {
               images.put(id, ImageIO.read(f));
@@ -59,7 +59,7 @@ public class Resources
               throw new IOException("Can't read " + f.getPath() + ": " + e.getMessage());
             }
           }
-          else if (el.getNodeName().equals("Sound")) {
+          else if ("Sound".equals(el.getNodeName())) {
             String id = defaultIdPrefix + el.getAttribute("id");
             File f = new File(defaultPath, el.getAttribute("path") + ".ogg");
 
@@ -85,7 +85,9 @@ public class Resources
   {
 //    return new
 //    return Toolkit.getDefaultToolkit().createImage(resources.get(id).getAbsolutePath());
-    return images.get(id);
+    Image image = images.get(id);
+    if (image == null) throw new IOException("Image " + id + " not found");
+    return image;
   }
 
 
@@ -102,7 +104,7 @@ public class Resources
     return globalResources;
   }
 
-  @SuppressWarnings({"UseOfSystemOutOrSystemErr"})
+  @SuppressWarnings({"UseOfSystemOutOrSystemErr", "HardCodedStringLiteral"})
   public static void main(String[] args) throws IOException
   {
     WorldOfGoo worldOfGoo = WorldOfGoo.getTheInstance();

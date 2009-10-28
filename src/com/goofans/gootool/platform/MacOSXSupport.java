@@ -31,6 +31,7 @@ public class MacOSXSupport extends PlatformSupport implements ApplicationListene
   {
   }
 
+  @Override
   protected boolean doPreStartup(List<String> args)
   {
     // Mac OS X handles single instance, and our ApplicationListener handles file opening,
@@ -38,6 +39,7 @@ public class MacOSXSupport extends PlatformSupport implements ApplicationListene
     return true;
   }
 
+  @Override
   protected void doStartup(Controller controller)
   {
     this.controller = controller;
@@ -92,6 +94,7 @@ public class MacOSXSupport extends PlatformSupport implements ApplicationListene
 //    event.setHandled(true);  this causes us to always quit even if they cancel
   }
 
+  @Override
   public String[] doGetProfileSearchPaths()
   {
     return PROFILE_SEARCH_PATHS;

@@ -23,7 +23,7 @@ public class Toolbar extends JToolBar implements ActionListener
 //  private int orientation;
 
   //  private Map<String, Tool> tools;
-  private Map<Tool, ToolbarButton> toolButtons;
+  private final Map<Tool, ToolbarButton> toolButtons;
 //  private List<Object> buttons;
 
   private Tool currentTool;
@@ -31,7 +31,7 @@ public class Toolbar extends JToolBar implements ActionListener
 //  private int maxIconWidth, maxIconHeight;
 //  private GridBagConstraints constraints;
 
-  private Icon buttonBackgroundSelected;
+  private final Icon buttonBackgroundSelected;
 
   /**
    * Constructor

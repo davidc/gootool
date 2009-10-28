@@ -42,11 +42,13 @@ public class WorldOfGooLinux extends WorldOfGoo
   {
   }
 
+  @Override
   public boolean isWogFound()
   {
     return wogFound;
   }
 
+  @Override
   public boolean isCustomDirSet()
   {
     return customDir != null;
@@ -55,6 +57,7 @@ public class WorldOfGooLinux extends WorldOfGoo
   /**
    * Attempts to locate WoG in various default locations.
    */
+  @Override
   public void init()
   {
     String userWogDir = ToolPreferences.getWogDir();
@@ -72,16 +75,21 @@ public class WorldOfGooLinux extends WorldOfGoo
     if (lastDirFile.exists()) {
       try {
         BufferedReader r = new BufferedReader(new FileReader(lastDirFile));
-        String line;
-        while ((line = r.readLine()) != null) {
-          String[] bits = line.split("=", 2);
-          log.finest("lastrun: " + bits[0] + " -> " + bits[1]);
-          if (bits[0].equalsIgnoreCase("gamedir")) {
-            if (locateWogAtPath(new File(bits[1]))) {
-              log.info("Found World of Goo through lastrun pointer at " + wogDir);
-              return;
+        try {
+          String line;
+          while ((line = r.readLine()) != null) {
+            String[] bits = line.split("=", 2);
+            log.finest("lastrun: " + bits[0] + " -> " + bits[1]);
+            if ("gamedir".equalsIgnoreCase(bits[0])) {
+              if (locateWogAtPath(new File(bits[1]))) {
+                log.info("Found World of Goo through lastrun pointer at " + wogDir);
+                return;
+              }
             }
           }
+        }
+        finally {
+          r.close();
         }
       }
       catch (IOException e) {
@@ -140,6 +148,7 @@ public class WorldOfGooLinux extends WorldOfGoo
    * @param path Path to exe, including exe itself
    * @throws java.io.FileNotFoundException if WorldOfGoo.exe wasn't found at this path
    */
+  @Override
   public void init(File path) throws FileNotFoundException
   {
     if (!locateWogAtPath(path.getParentFile())) {
@@ -148,6 +157,7 @@ public class WorldOfGooLinux extends WorldOfGoo
     log.info("Found World of Goo through user selection at: " + wogDir);
   }
 
+  @Override
   public void launch() throws IOException
   {
     File exe = new File(getCustomDir(), SCRIPT_FILENAME);
@@ -158,6 +168,7 @@ public class WorldOfGooLinux extends WorldOfGoo
     pb.start();
   }
 
+  @Override
   public File getWogDir() throws IOException
   {
     if (!wogFound) {
@@ -166,18 +177,13 @@ public class WorldOfGooLinux extends WorldOfGoo
     return wogDir;
   }
 
+  @Override
   public void setCustomDir(File customDir) throws IOException
   {
     if (customDir.exists() && !customDir.isDirectory()) throw new IOException(customDir + " isn't a directory");
     if (!customDir.exists() && !customDir.mkdir()) throw new IOException("Can't create " + customDir);
 
-    //test write
-    File testFile = new File(customDir, "writeTest");
-    FileOutputStream os = new FileOutputStream(testFile);
-    os.write(65);
-    os.close();
-
-    if (!testFile.delete()) throw new IOException("Can't delete test file " + testFile);
+    Utilities.testDirectoryWriteable(customDir);
 
     this.customDir = customDir;
 
@@ -189,6 +195,7 @@ public class WorldOfGooLinux extends WorldOfGoo
     updateInstalledAddins();
   }
 
+  @Override
   public File getCustomDir() throws IOException
   {
     if (customDir == null) {
@@ -197,6 +204,7 @@ public class WorldOfGooLinux extends WorldOfGoo
     return customDir;
   }
 
+  @Override
   public boolean isFirstCustomBuild() throws IOException
   {
     for (String exeFilename : EXE_FILENAMES) {
@@ -206,21 +214,25 @@ public class WorldOfGooLinux extends WorldOfGoo
     return true;
   }
 
+  @Override
   public File getGameFile(String pathname) throws IOException
   {
     return new File(getWogDir(), pathname);
   }
 
+  @Override
   public File getCustomGameFile(String pathname) throws IOException
   {
     return new File(getCustomDir(), pathname);
   }
 
+  @Override
   protected File getAddinInstalledFile(String addinId) throws IOException
   {
     return new File(getAddinInstalledDir(), addinId + GOOMOD_EXTENSION_WITH_DOT);
   }
 
+  @Override
   public File chooseCustomDir(Component mainFrame)
   {
     JFileChooser chooser = new JFileChooser();
@@ -231,11 +243,10 @@ public class WorldOfGooLinux extends WorldOfGoo
       return null;
     }
 
-    File selectedFile = chooser.getSelectedFile();
-
-    return selectedFile;
+    return chooser.getSelectedFile();
   }
 
+  @Override
   protected File getAddinInstalledDir() throws IOException
   {
     if (addinsDir == null) {

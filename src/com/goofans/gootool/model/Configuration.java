@@ -150,6 +150,7 @@ public class Configuration
     return enabledAddins;
   }
 
+  @Override
   public boolean equals(Object o)
   {
     if (this == o) return true;
@@ -169,6 +170,7 @@ public class Configuration
     return enabledAddins.equals(that.enabledAddins);
   }
 
+  @Override
   public int hashCode()
   {
     int result;

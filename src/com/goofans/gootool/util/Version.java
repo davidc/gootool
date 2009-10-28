@@ -76,6 +76,7 @@ public class Version
   {
   }
 
+  @SuppressWarnings({"UseOfSystemOutOrSystemErr", "HardCodedStringLiteral"})
   public static void main(String[] args)
   {
     System.out.println("RELEASE_REVISION = " + RELEASE_REVISION);
