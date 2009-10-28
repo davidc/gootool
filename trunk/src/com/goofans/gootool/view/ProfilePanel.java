@@ -5,7 +5,6 @@ import net.infotrek.util.TextUtil;
 import com.goofans.gootool.ToolPreferences;
 import com.goofans.gootool.Controller;
 import com.goofans.gootool.GooTool;
-import com.goofans.gootool.TextProvider;
 import com.goofans.gootool.model.Configuration;
 import com.goofans.gootool.util.FileNameExtensionFilter;
 import com.goofans.gootool.profile.*;
@@ -23,6 +22,7 @@ import java.io.File;
 import java.text.NumberFormat;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.ResourceBundle;
 import java.lang.reflect.Method;
 
 /**
@@ -67,7 +67,7 @@ public class ProfilePanel implements ActionListener, ViewComponent
   private TowerRenderer tr;
   private JPopupMenu saveTowerMenu;
 
-  private final TextProvider textProvider;
+  private final ResourceBundle resourceBundle;
 
   static {
     // TODO load from resources
@@ -127,7 +127,7 @@ public class ProfilePanel implements ActionListener, ViewComponent
     if (ProfileFactory.isProfileFound()) {
       loadProfiles();
     }
-    textProvider = GooTool.getTextProvider();
+    resourceBundle = GooTool.getTextProvider();
   }
 
   public void actionPerformed(ActionEvent event)
@@ -370,17 +370,17 @@ public class ProfilePanel implements ActionListener, ViewComponent
     profilePublishButton.setEnabled(enabled);
 
     if (enabled) {
-      profileBackupButton.setToolTipText(textProvider.getText("profile.goofans.backup.tooltip"));
-      profileRestoreButton.setToolTipText(textProvider.getText("profile.goofans.restore.tooltip"));
-      profilePublishButton.setToolTipText(textProvider.getText("profile.goofans.publish.tooltip"));
+      profileBackupButton.setToolTipText(resourceBundle.getString("profile.goofans.backup.tooltip"));
+      profileRestoreButton.setToolTipText(resourceBundle.getString("profile.goofans.restore.tooltip"));
+      profilePublishButton.setToolTipText(resourceBundle.getString("profile.goofans.publish.tooltip"));
     }
     else {
       String tooltip;
       if (!ProfileFactory.isProfileFound()) {
-        tooltip = textProvider.getText("profile.goofans.disabled.profile.tooltip");
+        tooltip = resourceBundle.getString("profile.goofans.disabled.profile.tooltip");
       }
       else {
-        tooltip = textProvider.getText("profile.goofans.disabled.tooltip");
+        tooltip = resourceBundle.getString("profile.goofans.disabled.tooltip");
 
       }
       profileBackupButton.setToolTipText(tooltip);

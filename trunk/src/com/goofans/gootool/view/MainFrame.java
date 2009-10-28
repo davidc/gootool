@@ -36,7 +36,7 @@ public class MainFrame extends JFrame implements ViewComponent
 
   public MainFrame(final Controller controller)
   {
-    super(GooTool.getTextProvider().getText("mainFrame.title"));
+    super(GooTool.getTextProvider().getString("mainFrame.title"));
     this.controller = controller;
 
     setLocationByPlatform(true);

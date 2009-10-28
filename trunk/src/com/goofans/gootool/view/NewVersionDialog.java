@@ -7,7 +7,7 @@ import java.awt.*;
 
 import com.goofans.gootool.GooTool;
 import com.goofans.gootool.ToolPreferences;
-import com.goofans.gootool.TextProvider;
+import com.goofans.gootool.GooToolResourceBundle;
 import com.goofans.gootool.util.GUIUtil;
 import net.infotrek.util.DesktopUtil;
 import com.goofans.gootool.util.Version;
@@ -24,11 +24,11 @@ public class NewVersionDialog extends JDialog
   private JLabel curVersionLabel;
   private JLabel latestVersionLabel;
 
-  private static final TextProvider textProvider = GooTool.getTextProvider();
+  private static final GooToolResourceBundle resourceBundle = GooTool.getTextProvider();
 
   public NewVersionDialog(final Frame parentWindow, final VersionSpec latestVersion, String messageText, final String downloadUrl)
   {
-    super(parentWindow, textProvider.getText("newVersion.title"));
+    super(parentWindow, resourceBundle.getString("newVersion.title"));
     setContentPane(contentPane);
     getRootPane().setDefaultButton(yesButton);
 
@@ -62,8 +62,8 @@ public class NewVersionDialog extends JDialog
       }
     });
 
-    curVersionLabel.setText(textProvider.getText("newVersion.curVersion", Version.RELEASE_MAJOR, Version.RELEASE_MINOR, Version.RELEASE_MICRO));
-    latestVersionLabel.setText(textProvider.getText("newVersion.latestVersion", latestVersion));
+    curVersionLabel.setText(resourceBundle.formatString("newVersion.curVersion", Version.RELEASE_MAJOR, Version.RELEASE_MINOR, Version.RELEASE_MICRO));
+    latestVersionLabel.setText(resourceBundle.formatString("newVersion.latestVersion", latestVersion));
     message.setText("<html>" + messageText + "</html>");
 
     pack();

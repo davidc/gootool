@@ -43,11 +43,11 @@ public abstract class AbstractEdit implements UndoableEdit
 
   public String getUndoPresentationName()
   {
-    return GooTool.getTextProvider().getText("leveledit.edit.undo", getPresentationName());
+    return GooTool.getTextProvider().formatString("leveledit.edit.undo", getPresentationName());
   }
 
   public String getRedoPresentationName()
   {
-    return GooTool.getTextProvider().getText("leveledit.edit.redo", getPresentationName());
+    return GooTool.getTextProvider().formatString("leveledit.edit.redo", getPresentationName());
   }
 }

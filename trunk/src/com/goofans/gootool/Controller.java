@@ -9,10 +9,7 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -82,14 +79,14 @@ public class Controller implements ActionListener
 
   // The configuration we're editing
   private Configuration editorConfig;
-  private final TextProvider textProvider;
+  private final ResourceBundle resourceBundle;
 
   // The codecs
   private final Map<String, GameFileCodecTool> codecs = new HashMap<String, GameFileCodecTool>(6);
 
   public Controller()
   {
-    textProvider = GooTool.getTextProvider();
+    resourceBundle = GooTool.getTextProvider();
 
     codecs.put(CMD_DECRYPT_BIN_PC, new GameFileCodecTool("bin", "Encrypted Bin File (Windows/Linux)", "xml", CodecType.AES_DECODE));
     codecs.put(CMD_DECRYPT_BIN_MAC, new GameFileCodecTool("bin", "Encrypted Bin File (Mac)", "xml", CodecType.XOR_DECODE));
@@ -277,7 +274,7 @@ public class Controller implements ActionListener
   {
     WorldOfGoo worldOfGoo = WorldOfGoo.getTheInstance();
     if (!worldOfGoo.isCustomDirSet()) {
-      showMessageDialog(textProvider.getText("customdir.select.title"), textProvider.getText("customdir.select.message"));
+      showMessageDialog(resourceBundle.getString("customdir.select.title"), resourceBundle.getString("customdir.select.message"));
       changeCustomDir();
       if (!worldOfGoo.isCustomDirSet()) {
         return false;
@@ -718,7 +715,7 @@ public class Controller implements ActionListener
     try {
       if (WorldOfGoo.getTheInstance().isFirstCustomBuild()) {
         // TODO better message for Mac
-        showMessageDialog(textProvider.getText("firstbuild.title"), textProvider.getText("firstbuild.message"));
+        showMessageDialog(resourceBundle.getString("firstbuild.title"), resourceBundle.getString("firstbuild.message"));
       }
     }
     catch (IOException e) {

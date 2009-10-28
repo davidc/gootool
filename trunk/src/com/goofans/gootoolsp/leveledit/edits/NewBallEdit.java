@@ -42,7 +42,7 @@ public class NewBallEdit extends AbstractEdit
 
   public String getPresentationName()
   {
-    return GooTool.getTextProvider().getText("leveledit.edit.createball", addedBall.type);
+    return GooTool.getTextProvider().formatString("leveledit.edit.createball", addedBall.type);
   }
 
 }

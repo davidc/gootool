@@ -219,6 +219,6 @@ public class OptionsPanel implements ViewComponent
 
   private void createUIComponents()
   {
-    windowsVolumeControlHyperlink = new HyperlinkLabel(GooTool.getTextProvider().getText("options.sound.readme"));
+    windowsVolumeControlHyperlink = new HyperlinkLabel(GooTool.getTextProvider().getString("options.sound.readme"));
   }
 }

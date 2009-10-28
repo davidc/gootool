@@ -2,9 +2,7 @@ package com.goofans.gootool;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedList;
+import java.util.*;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -12,6 +10,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.text.MessageFormat;
 
 import com.goofans.gootool.platform.PlatformSupport;
 import com.goofans.gootool.util.GUIUtil;
@@ -29,7 +28,7 @@ public class GooTool
   private static final Logger log = Logger.getLogger(GooTool.class.getName());
 
   private static ImageIcon icon;
-  public static TextProvider textProvider;
+  private static GooToolResourceBundle resourceBundle;
   private static Controller controller;
 
   private static ExecutorService threadPoolExecutor;
@@ -64,9 +63,9 @@ public class GooTool
 
       ProgressIndicatingTask startupTask = new StartupTask(controller);
 
-      GUIUtil.runTask((JFrame) null, textProvider.getText("launcher.title", Version.RELEASE_FRIENDLY), startupTask);
+      GUIUtil.runTask((JFrame) null, MessageFormat.format(resourceBundle.getString("launcher.title"), Version.RELEASE_FRIENDLY), startupTask);
       // In preparation for new splash screen:
-//      final ProgressDialog progressDialog = new ProgressDialog(null, textProvider.getText("launcher.title", Version.RELEASE_FRIENDLY));
+//      final ProgressDialog progressDialog = new ProgressDialog(null, resourceBundle.getText("launcher.title", Version.RELEASE_FRIENDLY));
 //      startupTask.addListener(progressDialog);
 //      GUIUtil.runTask(startupTask, progressDialog);
     }
@@ -153,15 +152,15 @@ public class GooTool
 
   private static synchronized void initTextProvider()
   {
-    if (textProvider == null) {
-      textProvider = new TextProvider("text");
+    if (resourceBundle == null) {
+      resourceBundle = new GooToolResourceBundle("text");
     }
   }
 
-  public static TextProvider getTextProvider()
+  public static GooToolResourceBundle getTextProvider()
   {
-    if (textProvider == null) initTextProvider();
-    return textProvider;
+    if (resourceBundle == null) initTextProvider();
+    return resourceBundle;
   }
 
   public static Controller getController()
