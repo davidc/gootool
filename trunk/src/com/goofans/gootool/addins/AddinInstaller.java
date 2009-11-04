@@ -238,9 +238,16 @@ public class AddinInstaller
       merger.setTransformParameter("level_id", addin.getLevelDir());
       merger.setTransformParameter("level_name_id", levelNameId);
       merger.setTransformParameter("level_text_id", levelTextId);
-      merger.setTransformParameter("level_ocd", addin.getLevelOcd());
+      if (addin.getLevelOcd() != null) {
+        merger.setTransformParameter("level_ocd", addin.getLevelOcd());
+      }
+      if (addin.getLevelCutscene() != null) {
+        merger.setTransformParameter("level_cutscene", addin.getLevelCutscene());
+      }
+      if (addin.isLevelSkipEolSequence()) {
+        merger.setTransformParameter("level_skipeolsequence", true);
+      }
       merger.merge();
-//      System.out.println("s = " + s);
       merger.writeEncoded(islandFile);
     }
     catch (TransformerException e) {

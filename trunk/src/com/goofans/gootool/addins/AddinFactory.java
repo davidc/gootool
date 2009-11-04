@@ -41,6 +41,8 @@ public class AddinFactory
   private static final XPathExpression XPATH_ADDIN_LEVEL_NAME;
   private static final XPathExpression XPATH_ADDIN_LEVEL_SUBTITLE;
   private static final XPathExpression XPATH_ADDIN_LEVEL_OCD;
+  private static final XPathExpression XPATH_ADDIN_LEVEL_CUTSCENE;
+  private static final XPathExpression XPATH_ADDIN_LEVEL_SKIPEOLSEQUENCE;
   private static final XPathExpression XPATH_ADDIN_THUMBNAIL;
 
   private static final Pattern PATTERN_ID = Pattern.compile("^[-\\p{Alnum}]+(\\.[-\\p{Alnum}]+)+$"); // require at least 1 domain component
@@ -73,6 +75,8 @@ public class AddinFactory
       XPATH_ADDIN_LEVEL_NAME = path.compile("/addin/level/name");
       XPATH_ADDIN_LEVEL_SUBTITLE = path.compile("/addin/level/subtitle");
       XPATH_ADDIN_LEVEL_OCD = path.compile("/addin/level/ocd");
+      XPATH_ADDIN_LEVEL_CUTSCENE = path.compile("/addin/level/cutscene");
+      XPATH_ADDIN_LEVEL_SKIPEOLSEQUENCE = path.compile("/addin/level/skipeolsequence");
       XPATH_ADDIN_THUMBNAIL = path.compile("/addin/thumbnail");
     }
     catch (XPathExpressionException e) {
@@ -227,6 +231,7 @@ public class AddinFactory
     if (levelNode != null) {
       levelDir = getStringRequired(document, XPATH_ADDIN_LEVEL_DIR, "level dir"); // TODO validate
       levelOcd = getString(document, XPATH_ADDIN_LEVEL_OCD); // TODO validate
+      if (levelOcd.length() == 0) levelOcd = null;
 
       Node nameNode = (Node) XPATH_ADDIN_LEVEL_NAME.evaluate(document, XPathConstants.NODE);
       if (nameNode == null) throw new AddinFormatException("Missing level name");
@@ -280,6 +285,23 @@ public class AddinFactory
     Addin addin = readManifestVersion1_0(document, manifestVersion, addinDiskFile);
 
     readThumbnail(document, addinReader, addin);
+
+    // Read level's cutscene and skipeolsequence
+    if (addin.getType() == Addin.TYPE_LEVEL) {
+      Object levelNode = XPATH_ADDIN_LEVEL.evaluate(document, XPathConstants.NODE);
+
+      if (levelNode != null) {
+        String levelCutscene = getString(document, XPATH_ADDIN_LEVEL_CUTSCENE);
+        if (levelCutscene.length() > 0) {
+          addin.setLevelCutscene(levelCutscene);
+        }
+        
+        Node skipEolSequenceNode = (Node) XPATH_ADDIN_LEVEL_SKIPEOLSEQUENCE.evaluate(document, XPathConstants.NODE);
+        if (skipEolSequenceNode != null) {
+          addin.setLevelSkipEolSequence(true);
+        }
+      }
+    }
 
     return addin;
   }

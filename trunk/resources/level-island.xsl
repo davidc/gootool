@@ -5,6 +5,8 @@
   <xsl:param name="level_name_id"/>
   <xsl:param name="level_text_id"/>
   <xsl:param name="level_ocd"/>
+  <xsl:param name="level_cutscene"/>
+  <xsl:param name="level_skipeolsequence"/>
 
   <!-- Copy everything not matched by another rule -->
   <xsl:template match="* | comment()">
@@ -34,10 +36,15 @@
             <xsl:value-of select="$level_ocd"/>
           </xsl:attribute>
         </xsl:if>
+        <xsl:if test="$level_cutscene">
+          <xsl:attribute name="cutscene">
+            <xsl:value-of select="$level_cutscene"/>
+          </xsl:attribute>
+        </xsl:if>
+        <xsl:if test="$level_skipeolsequence">
+          <xsl:attribute name="skipeolsequence">true</xsl:attribute>
+        </xsl:if>
       </xsl:element>
-      <!--cutscene="levelFadeOut,Chapter4End,gooTransition_out" -->
-
-      <!-- TODO: ability to have cutscenes, oncompletes, etc. Maybe just let them specify their own <level> element -->
     </xsl:copy>
 
   </xsl:template>
