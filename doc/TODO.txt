@@ -22,6 +22,7 @@ MILESTONE 1.0.0 (First public release)
 - Implementations: local (disk input, disk output), iphone (zip input, scp output)
 - Output should be cached and not flush until a final flush call
 - Reads from the output should read the cached version rather than the disk version (e.g. when modifying text.xml repeatedly on addin installation)
+- This will also allow for "abort build" which simply never flushes, and resets the Target
 
 sp level editor needs to loads balls (resources, etc) from a custom resource manager that ONLY includes:
 - main game files

@@ -39,6 +39,7 @@ public class LevelContents
     // TODo ballsrequired="15" letterboxed="false" visualdebug="false" autobounds="false" textcolor="255,255,255" texteffects="true" timebugprobability="0.333" strandgeom="true" allowskip="true" >
 
     /*
+    TODO some of these are coming from island's level... (e.g. cutscene, skipeolsequence)
      Node "level", attribute "allowskip" is optional, occurrences with/without attribute: 55/49
      Node "level", attribute "autobounds" is optional, occurrences with/without attribute: 57/47
      Node "level", attribute "ballsrequired" is optional, occurrences with/without attribute: 57/47

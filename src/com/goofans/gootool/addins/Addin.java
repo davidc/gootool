@@ -39,6 +39,8 @@ public class Addin
   private final Map<String, String> levelNames;
   private final Map<String, String> levelSubtitles;
   private final String levelOcd;
+  private String levelCutscene; // 1.1+
+  private boolean levelSkipEolSequence = false; // 1.1+
   private BufferedImage thumbnail; // 1.1+
 
   public Addin(File diskFile, String id, String name, int type, VersionSpec manifestVersion, VersionSpec version, String description, String author, List<AddinDependency> dependencies, String levelDir, Map<String, String> levelNames, Map<String, String> levelSubtitles, String levelOcd)
@@ -139,6 +141,26 @@ public class Addin
   public String getLevelOcd()
   {
     return levelOcd;
+  }
+
+  void setLevelCutscene(String levelCutscene)
+  {
+    this.levelCutscene = levelCutscene;
+  }
+
+  public String getLevelCutscene()
+  {
+    return levelCutscene;
+  }
+
+  void setLevelSkipEolSequence(boolean levelSkipEolSequence)
+  {
+    this.levelSkipEolSequence = levelSkipEolSequence;
+  }
+
+  public boolean isLevelSkipEolSequence()
+  {
+    return levelSkipEolSequence;
   }
 
   void setThumbnail(BufferedImage thumbnail)
