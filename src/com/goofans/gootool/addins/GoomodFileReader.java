@@ -34,6 +34,12 @@ public class GoomodFileReader implements AddinReader
     return zipFile.getInputStream(zipEntry);
   }
 
+  public boolean fileExists(String fileName)
+  {
+    ZipEntry zipEntry = zipFile.getEntry(fileName);
+    return zipEntry != null;
+  }
+
   public Iterator<String> getEntriesInDirectory(final String directory, final List<String> skip)
   {
     final Enumeration<? extends ZipEntry> zipEnumeration = zipFile.entries();

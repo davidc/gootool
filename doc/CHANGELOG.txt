@@ -4,6 +4,7 @@
 - Display the skipped levels in the profile tab.
 - Don't display tower data if the profile has no tower.
 - Don't allow publish if the profile has no online id (#0000236).
+- Goomod format 1.1: Add strings easily using text.xml in goomod (#0000188).
 
 1.0.0, 22-October-2009
 

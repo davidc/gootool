@@ -33,6 +33,12 @@ public class ExpandedAddinReader implements AddinReader
     return new FileInputStream(file);
   }
 
+  public boolean fileExists(String fileName)
+  {
+    File file = new File(rootDirectory, fileName);
+    return file.exists();
+  }
+
   public Iterator<String> getEntriesInDirectory(String directory, List<String> skip)
   {
     File dir = new File(rootDirectory, directory);
