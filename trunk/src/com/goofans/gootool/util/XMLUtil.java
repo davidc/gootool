@@ -253,4 +253,20 @@ public class XMLUtil
       throw new IOException("Invalid " + tagName + " integer value: " + list.item(0));
     }
   }
+
+  public static Element findElementByAttributeValue(Element root, String elementName, String attributeName, String attributeValue, boolean caseSensitive)
+  {
+    NodeList elements = root.getElementsByTagName(elementName);
+    for (int i = 0; i < elements.getLength(); ++i) {
+      Element element = (Element) elements.item(i);
+      Attr attribute = element.getAttributeNode(attributeName);
+      if (attribute != null &&
+              ((caseSensitive && attribute.getValue().equals(attributeValue)) ||
+                      (!caseSensitive && attribute.getValue().equalsIgnoreCase(attributeValue)))) {
+        return element;
+      }
+    }
+
+    return null;
+  }
 }

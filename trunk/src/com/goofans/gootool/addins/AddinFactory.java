@@ -50,8 +50,9 @@ public class AddinFactory
   private static final String ADDIN_DEPENDS_MIN_VERSION = "min-version";
   private static final String ADDIN_DEPENDS_MAX_VERSION = "max-version";
 
-  private static final VersionSpec SPEC_VERSION_1_0 = new VersionSpec("1.0");
-  private static final VersionSpec SPEC_VERSION_1_1 = new VersionSpec("1.1");
+  private static final VersionSpec SPEC_VERSION_1_0 = new VersionSpec(new int[]{1, 0});
+  public static final VersionSpec SPEC_VERSION_1_1 = new VersionSpec(new int[]{1, 1});
+  public static final boolean SPEC_VERSION_1_1_ENABLED = true;
 
   private static final String GOOMOD_MANIFEST = "addin.xml";
 
@@ -82,7 +83,6 @@ public class AddinFactory
   private AddinFactory()
   {
   }
-
 
   public static Addin loadAddin(File file) throws AddinFormatException, IOException
   {
@@ -156,7 +156,7 @@ public class AddinFactory
       else if (manifestVersion.equals(SPEC_VERSION_1_0)) {
         return readManifestVersion1_0(document, manifestVersion, addinDiskFile);
       }
-      else if (false && manifestVersion.equals(SPEC_VERSION_1_1)) {
+      else if (SPEC_VERSION_1_1_ENABLED && manifestVersion.equals(SPEC_VERSION_1_1)) {
         return readManifestVersion1_1(document, manifestVersion, addinDiskFile, addinReader);
       }
       else {
@@ -266,7 +266,6 @@ public class AddinFactory
    * - TODO maybe influence the position?
    * - TODO maybe required previous levels?
    * - TODO triggers on level end for movies
-   * - TODO text.xml automation
    *
    * @param document        the DOM document of the manifest file.
    * @param manifestVersion The spec-version of the manifest.

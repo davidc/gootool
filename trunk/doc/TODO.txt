@@ -1,4 +1,4 @@
-MILESTONE 0.10.x (Final beta series)
+Soon!
 
 - BUG FIX: Mac image conversion has slight colour shifts due to ColorModel
 - IMPROVEMENT: Don't SAVE if unmodified on LAUNCH
@@ -10,8 +10,6 @@ MILESTONE 0.10.x (Final beta series)
 
 - xanax: don't jump mods around when en/disabling
 
-- use swingworker for background stuff
-
 - test addin dependencies on: install from double click goomod, check/uncheck addins list
 
 - unsatisfied dependencies should show red?
@@ -20,7 +18,10 @@ MILESTONE 0.10.x (Final beta series)
 
 MILESTONE 1.0.0 (First public release)
 
-- All bugs from 0.10 series fixed, no new features
+- A new Source and Target abstraction for reading source game files and writing output.
+- Implementations: local (disk input, disk output), iphone (zip input, scp output)
+- Output should be cached and not flush until a final flush call
+- Reads from the output should read the cached version rather than the disk version (e.g. when modifying text.xml repeatedly on addin installation)
 
 sp level editor needs to loads balls (resources, etc) from a custom resource manager that ONLY includes:
 - main game files

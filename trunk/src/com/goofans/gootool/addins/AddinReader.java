@@ -26,11 +26,19 @@ public interface AddinReader
   public InputStream getInputStream(String fileName) throws IOException;
 
   /**
+   * Tests whether the specified file exists in the addin.
+   *
+   * @param fileName The filename to check.
+   * @return true if the file exists.
+   */
+  public boolean fileExists(String fileName);
+
+  /**
    * Gives an iterator for all the files that are descendants of the given directory name (including files in subdirectories).
    * Skips all files and directories on the skip list.
    *
    * @param directory The directory to search under, including trailing "/".
-   * @param skip A list of file/directory names to skip
+   * @param skip      A list of file/directory names to skip
    * @return An iterator of valid files.
    */
   public Iterator<String> getEntriesInDirectory(String directory, List<String> skip);
