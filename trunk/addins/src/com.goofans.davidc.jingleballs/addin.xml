@@ -106,7 +106,9 @@
    - made the gift box ball invisible to fix the weird-looking explosion
    - third public release!
   1.3 - unreleased
-   - added thumbnail image
+   - updated to goomod 1.1:
+    - added thumbnail image
+    - moved strings into text.xml  
   -->
 
 </addin>
