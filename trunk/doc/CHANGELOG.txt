@@ -4,9 +4,12 @@
 - Display the skipped levels in the profile tab.
 - Don't display tower data if the profile has no tower.
 - Don't allow publish if the profile has no online id (#0000236).
-- Goomod format 1.1: Add strings easily using text.xml in goomod (#0000188).
-- Goomod format 1.1: level/cutscene and level/skipeolsequence added (#0000188).
-- Goomod format 1.1: level/ocd is now officially optional.
+- Goomod version 1.1 is now available: (#0000188)
+  - Addins can now specify a thumbnail image.
+  - Add strings easily using text.xml in goomod.
+  - An addin can now provide more than one level, so level is moved to a child of levels.
+  - level/cutscene and level/skipeolsequence added.
+  - level/ocd is now officially optional.
 
 1.0.0, 22-October-2009
 
@@ -23,7 +26,6 @@
 - Rename PC/Linux to Windows/Linux (#0000221).
 - Make AddinInstaller use AddinReader, allowing installation of an addin from an extracted directory.
 - Initial work on iPhone version.
-- Goomod format 1.1: Authors can now specify a thumbnail image for addins.
 
 0.10.5, 28-June-2009
 

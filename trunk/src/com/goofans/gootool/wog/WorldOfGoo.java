@@ -127,10 +127,10 @@ public abstract class WorldOfGoo
           availableAddins.add(AddinFactory.loadAddin(file));
         }
         catch (AddinFormatException e) {
-          log.log(Level.SEVERE, "Ignoring invalid addin " + file + "in addins dir", e);
+          log.log(Level.WARNING, "Ignoring invalid addin " + file + "in addins dir", e);
         }
         catch (IOException e) {
-          log.log(Level.SEVERE, "Ignoring invalid addin " + file + "in addins dir", e);
+          log.log(Level.WARNING, "Ignoring invalid addin " + file + "in addins dir", e);
         }
       }
     }

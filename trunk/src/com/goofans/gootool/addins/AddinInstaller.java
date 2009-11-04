@@ -72,7 +72,9 @@ public class AddinInstaller
     }
 
     if (addin.getType() == Addin.TYPE_LEVEL) {
-      installLevel(addin);
+      for (AddinLevel level : addin.getLevels()) {
+        installLevel(level);
+      }
     }
 
     log.log(Level.FINE, "Addin " + addin.getId() + " installed");
@@ -209,18 +211,18 @@ public class AddinInstaller
     }
   }
 
-  private static void installLevel(Addin addin) throws IOException, AddinFormatException
+  private static void installLevel(AddinLevel level) throws IOException, AddinFormatException
   {
-    String levelNameId = "LEVEL_NAME_" + addin.getLevelDir().toUpperCase();
-    String levelTextId = "LEVEL_TEXT_" + addin.getLevelDir().toUpperCase();
+    String levelNameId = "LEVEL_NAME_" + level.getDir().toUpperCase();
+    String levelTextId = "LEVEL_TEXT_" + level.getDir().toUpperCase();
 
     /* First add our two level strings to text.xml */
 
     File textFile = WorldOfGoo.getTheInstance().getCustomGameFile("properties/text.xml.bin");
     try {
       Merger merger = new Merger(textFile, new InputStreamReader(AddinInstaller.class.getResourceAsStream("/level-text.xsl"), "UTF-8"));
-      merger.setTransformParameter("level_name_string", makeString(levelNameId, addin.getLevelNames()));
-      merger.setTransformParameter("level_text_string", makeString(levelTextId, addin.getLevelSubtitles()));
+      merger.setTransformParameter("level_name_string", makeString(levelNameId, level.getNames()));
+      merger.setTransformParameter("level_text_string", makeString(levelTextId, level.getSubtitles()));
       merger.merge();
 //      System.out.println("s = " + s);
       merger.writeEncoded(textFile);
@@ -235,16 +237,16 @@ public class AddinInstaller
     try {
       Merger merger = new Merger(islandFile, new InputStreamReader(AddinInstaller.class.getResourceAsStream("/level-island.xsl"), "UTF-8"));
 
-      merger.setTransformParameter("level_id", addin.getLevelDir());
+      merger.setTransformParameter("level_id", level.getDir());
       merger.setTransformParameter("level_name_id", levelNameId);
       merger.setTransformParameter("level_text_id", levelTextId);
-      if (addin.getLevelOcd() != null) {
-        merger.setTransformParameter("level_ocd", addin.getLevelOcd());
+      if (level.getOcd() != null) {
+        merger.setTransformParameter("level_ocd", level.getOcd());
       }
-      if (addin.getLevelCutscene() != null) {
-        merger.setTransformParameter("level_cutscene", addin.getLevelCutscene());
+      if (level.getCutscene() != null) {
+        merger.setTransformParameter("level_cutscene", level.getCutscene());
       }
-      if (addin.isLevelSkipEolSequence()) {
+      if (level.isSkipEolSequence()) {
         merger.setTransformParameter("level_skipeolsequence", true);
       }
       merger.merge();
@@ -259,7 +261,7 @@ public class AddinInstaller
     try {
       Merger merger = new Merger(islandSceneFile, new InputStreamReader(AddinInstaller.class.getResourceAsStream("/level-island-scene.xsl"), "UTF-8"));
 
-      merger.setTransformParameter("level_id", addin.getLevelDir());
+      merger.setTransformParameter("level_id", level.getDir());
       merger.setTransformParameter("level_name_id", levelNameId);
       merger.merge();
 //      System.out.println("s = " + s);
