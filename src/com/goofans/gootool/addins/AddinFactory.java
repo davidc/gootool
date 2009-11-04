@@ -225,7 +225,7 @@ public class AddinFactory
     }
     else {
       // Error if they didn't upgrade level->levels/level
-      throw new AddinFormatException("Goomod version 1.1 no longer has /addin/level. Use /addin/levels/level instead.");
+      if (levelElement != null) throw new AddinFormatException("Goomod version 1.1 no longer has /addin/level. Use /addin/levels/level instead.");
     }
 
     return addin;
@@ -236,8 +236,6 @@ public class AddinFactory
     * Version 1.1 is the same as 1.0, with the following additions:
    * - Thumbnails
    * - TODO .movie.xml and .anim.xml files from compile\ are compiled (by AddinInstaller)
-   * - TODO maybe choose the chapter?
-   * - TODO maybe influence the position?
    * - TODO maybe required previous levels?
    *
    * @param document        the DOM document of the manifest file.
