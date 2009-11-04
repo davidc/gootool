@@ -2,6 +2,7 @@ package com.goofans.gootool.view;
 
 import javax.swing.*;
 import java.util.ResourceBundle;
+import java.awt.event.ActionListener;
 
 import com.goofans.gootool.Controller;
 import com.goofans.gootool.GooTool;
@@ -14,6 +15,7 @@ import com.goofans.gootool.util.HyperlinkLaunchingListener;
  * @author David Croft (davidc@goofans.com)
  * @version $Id$
  */
+@SuppressWarnings({"HardCodedStringLiteral", "DuplicateStringLiteralInspection", "StringConcatenation"})
 public class MainMenu
 {
   private final JMenuBar menuBar;
@@ -38,19 +40,19 @@ public class MainMenu
 
     menu = createMenu("file");
 
-    menu.add(createMenuItem("file.save", Controller.CMD_SAVE));
-    menu.add(createMenuItem("file.saveAndLaunch", Controller.CMD_SAVE_AND_LAUNCH));
-    menu.add(createMenuItem("file.revert", Controller.CMD_REVERT));
+    menu.add(createMenuItem(JMenuItem.class, "file.save", Controller.CMD_SAVE));
+    menu.add(createMenuItem(JMenuItem.class, "file.saveAndLaunch", Controller.CMD_SAVE_AND_LAUNCH));
+    menu.add(createMenuItem(JMenuItem.class, "file.revert", Controller.CMD_REVERT));
 
     JMenu iphoneMenuItem = createMenu("file.iphone");
     iphoneMenuItem.setEnabled(false);
     menu.add(iphoneMenuItem);
 
-    iphoneMenuItem.add(createMenuItem("file.iphone.prepare", null));
-    iphoneMenuItem.add(createMenuItem("file.iphone.deploy", null));
+    iphoneMenuItem.add(createMenuItem(JMenuItem.class, "file.iphone.prepare", null));
+    iphoneMenuItem.add(createMenuItem(JMenuItem.class, "file.iphone.deploy", null));
 
     if (PlatformSupport.getPlatform() != PlatformSupport.Platform.MACOSX) {
-      menu.add(createMenuItem("file.exit", Controller.CMD_EXIT));
+      menu.add(createMenuItem(JMenuItem.class, "file.exit", Controller.CMD_EXIT));
     }
 
     menuBar.add(menu);
@@ -61,24 +63,20 @@ public class MainMenu
     JMenu decryptMenuItem = createMenu("advanced.decrypt");
     menu.add(decryptMenuItem);
 
-    decryptMenuItem.add(createMenuItem("advanced.decrypt.binpc", Controller.CMD_DECRYPT_BIN_PC));
-    decryptMenuItem.add(createMenuItem("advanced.decrypt.binmac", Controller.CMD_DECRYPT_BIN_MAC));
-    decryptMenuItem.add(createMenuItem("advanced.decrypt.binltlmac", Controller.CMD_DECRYPT_PNGBINLTL_MAC));
-    decryptMenuItem.add(createMenuItem("advanced.decrypt.anim", Controller.CMD_DECRYPT_ANIM));
-    decryptMenuItem.add(createMenuItem("advanced.decrypt.movie", Controller.CMD_DECRYPT_MOVIE));
+    decryptMenuItem.add(createMenuItem(JMenuItem.class, "advanced.decrypt.binpc", Controller.CMD_DECRYPT_BIN_PC));
+    decryptMenuItem.add(createMenuItem(JMenuItem.class, "advanced.decrypt.binmac", Controller.CMD_DECRYPT_BIN_MAC));
+    decryptMenuItem.add(createMenuItem(JMenuItem.class, "advanced.decrypt.binltlmac", Controller.CMD_DECRYPT_PNGBINLTL_MAC));
+    decryptMenuItem.add(createMenuItem(JMenuItem.class, "advanced.decrypt.anim", Controller.CMD_DECRYPT_ANIM));
+    decryptMenuItem.add(createMenuItem(JMenuItem.class, "advanced.decrypt.movie", Controller.CMD_DECRYPT_MOVIE));
 
     JMenu encryptMenuItem = createMenu("advanced.encrypt");
     menu.add(encryptMenuItem);
 
-    encryptMenuItem.add(createMenuItem("advanced.encrypt.binpc", Controller.CMD_ENCRYPT_BIN_PC));
-    encryptMenuItem.add(createMenuItem("advanced.encrypt.binmac", Controller.CMD_ENCRYPT_BIN_MAC));
-    encryptMenuItem.add(createMenuItem("advanced.encrypt.binltlmac", Controller.CMD_ENCRYPT_PNGBINLTL_MAC));
+    encryptMenuItem.add(createMenuItem(JMenuItem.class, "advanced.encrypt.binpc", Controller.CMD_ENCRYPT_BIN_PC));
+    encryptMenuItem.add(createMenuItem(JMenuItem.class, "advanced.encrypt.binmac", Controller.CMD_ENCRYPT_BIN_MAC));
+    encryptMenuItem.add(createMenuItem(JMenuItem.class, "advanced.encrypt.binltlmac", Controller.CMD_ENCRYPT_PNGBINLTL_MAC));
 
-    translatorModeMenuItem = new JCheckBoxMenuItem(getMenuText("advanced.translatorMode"));
-    translatorModeMenuItem.setMnemonic(getMnemonic("advanced.translatorMode"));
-    translatorModeMenuItem.setActionCommand(Controller.CMD_TRANSLATOR_MODE);
-    translatorModeMenuItem.addActionListener(controller);
-    menu.add(translatorModeMenuItem);
+    menu.add(translatorModeMenuItem = createMenuItem(JCheckBoxMenuItem.class, "advanced.translatorMode", Controller.CMD_TRANSLATOR_MODE));
 
     menu = createMenu("help");
 
@@ -89,11 +87,11 @@ public class MainMenu
 
     menu.add(new JSeparator());
 
-    menu.add(createMenuItem("help.gootoolUpdateCheck", Controller.CMD_GOOTOOL_UPDATE_CHECK));
-    menu.add(createMenuItem("help.diagnostics", Controller.CMD_DIAGNOSTICS));
+    menu.add(createMenuItem(JMenuItem.class, "help.gootoolUpdateCheck", Controller.CMD_GOOTOOL_UPDATE_CHECK));
+    menu.add(createMenuItem(JMenuItem.class, "help.diagnostics", Controller.CMD_DIAGNOSTICS));
 
     if (PlatformSupport.getPlatform() != PlatformSupport.Platform.MACOSX) {
-      menu.add(createMenuItem("help.about", Controller.CMD_ABOUT));
+      menu.add(createMenuItem(JMenuItem.class, "help.about", Controller.CMD_ABOUT));
     }
 
     menuBar.add(menu);
@@ -106,27 +104,35 @@ public class MainMenu
     return menu;
   }
 
-  private JMenuItem createMenuItem(String key, String command)
+  private JMenuItem createMenuItem(Class<? extends JMenuItem> itemClass, String key, String command)
   {
-    JMenuItem menuItem = new JMenuItem(getMenuText(key));
+    return createMenuItemInternal(itemClass, key, controller, command);
+  }
+
+  private JMenuItem createURLMenuItem(String key, String url)
+  {
+    return createMenuItemInternal(JMenuItem.class, key, hyperlinkListener, url);
+  }
+
+  private JMenuItem createMenuItemInternal(Class<? extends JMenuItem> itemClass, String key, ActionListener listener, String command)
+  {
+    JMenuItem menuItem;
+    try {
+      menuItem = itemClass.newInstance();
+    }
+    catch (Exception e) {
+      throw new RuntimeException("Unable to instantiate " + itemClass.getName());
+    }
+
+    menuItem.setText(getMenuText(key));
     menuItem.setMnemonic(getMnemonic(key));
     if (command == null) {
       menuItem.setEnabled(false);
     }
     else {
       menuItem.setActionCommand(command);
-      menuItem.addActionListener(controller);
+      menuItem.addActionListener(listener);
     }
-    return menuItem;
-  }
-
-  private JMenuItem createURLMenuItem(String key, String url)
-  {
-    JMenuItem menuItem;
-    menuItem = new JMenuItem(getMenuText(key));
-    menuItem.setMnemonic(getMnemonic(key));
-    menuItem.setActionCommand(url);
-    menuItem.addActionListener(hyperlinkListener);
     return menuItem;
   }
 
