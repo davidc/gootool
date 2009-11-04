@@ -29,7 +29,8 @@ public class Profile
   private final int flags;
   private final int playTime;
   private final int levels;
-  private final String onlineId;
+  private final List<String> skippedLevels = new ArrayList<String>();
+  private String onlineId;
 
   private final List<LevelAchievement> levelAchievements = new ArrayList<LevelAchievement>();
 
@@ -56,9 +57,10 @@ public class Profile
       // Test to see if it's an integer indicating end of levels.
       try {
         int num = Integer.parseInt(levelId);
-        // It's an integer, treat it as the number of fields to skip, and we've reached the end of level
+        // It's an integer, treat it as the number of skipped levels, and we've reached the end of levels
         while (num > 0) {
-          tok.nextToken();//eat token
+          String skippedLevel = tok.nextToken();
+          skippedLevels.add(skippedLevel);
           num--;
         }
         break;
@@ -74,12 +76,42 @@ public class Profile
       levelAchievements.add(levelAchievement);
     }
 
-    tower = new Tower(tok.nextToken());
-    onlineId = tok.nextToken();
+    tower = readTower(tok.nextToken());
+
+    onlineId = readOnlineId(tok.nextToken());
+
     newBalls = Integer.parseInt(tok.nextToken());
 
     while (tok.hasMoreTokens()) {
       log.warning("UNUSED TOKEN at end of profileData " + tok.nextToken());
+    }
+  }
+
+  private Tower readTower(String storedTower) throws IOException
+  {
+    if (!storedTower.startsWith("_")) {
+      throw new IOException("Invalid tower format");
+    }
+
+    if (storedTower.length() > 1) {
+      return new Tower(storedTower);
+    }
+    else {
+      return null;
+    }
+  }
+
+  private String readOnlineId(String storedOnlineId) throws IOException
+  {
+    if (!storedOnlineId.startsWith("_")) {
+      throw new IOException("Invalid online ID format");
+    }
+
+    if (storedOnlineId.length() > 1) {
+      return storedOnlineId.substring(1);
+    }
+    else {
+      return null;
     }
   }
 
@@ -113,6 +145,14 @@ public class Profile
     return onlineId;
   }
 
+  public void setOnlineId(String onlineId)
+  {
+    if (this.onlineId != null) {
+      throw new RuntimeException("Online ID is already set");
+    }
+    this.onlineId = onlineId;
+  }
+
   public List<LevelAchievement> getLevelAchievements()
   {
     return levelAchievements;
@@ -123,11 +163,17 @@ public class Profile
     return tower;
   }
 
+  public List<String> getSkippedLevels()
+  {
+    return skippedLevels;
+  }
+
   public boolean hasFlag(int flag)
   {
     return (flags & flag) != 0;
   }
 
+  // TODO use toData??
   public String getData()
   {
     return data;
@@ -147,6 +193,38 @@ public class Profile
 //            ", newBalls=" + newBalls +
 //            '}';
     return name;
+  }
+
+  public String toData()
+  {
+    StringBuilder data = new StringBuilder();
+    data.append(name).append(",");
+    data.append(flags).append(",");
+    data.append(playTime).append(",");
+    data.append(levels).append(",");
+
+    for (LevelAchievement achievement : levelAchievements) {
+      data.append(achievement.getLevelId()).append(",");
+      data.append(achievement.getMostBalls()).append(",");
+      data.append(achievement.getLeastMoves()).append(",");
+      data.append(achievement.getLeastTime()).append(",");
+    }
+    data.append(skippedLevels.size()).append(",");
+    for (String skippedLevel : skippedLevels) {
+      data.append(skippedLevel).append(",");
+    }
+    data.append("_");
+    if (tower != null) {
+      data.append(tower.toData());
+    }
+    data.append(",");
+    data.append("_");
+    if (onlineId != null) {
+      data.append(onlineId);
+    }
+    data.append(",");
+    data.append(newBalls);
+    return data.toString();
   }
 
   @SuppressWarnings({"UseOfSystemOutOrSystemErr", "HardCodedStringLiteral"})
@@ -181,5 +259,4 @@ public class Profile
     System.out.println("jonas.levelAchievements = " + jonas.levelAchievements);
     System.out.println("jonas.tower = " + jonas.tower);
   }
-
 }

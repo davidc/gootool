@@ -1,5 +1,10 @@
 1.0.1, unreleased
 
+- Added an option to the Advanced menu to generate an online ID (for users who are unable to connect in-game) (#0000235).
+- Display the skipped levels in the profile tab.
+- Don't display tower data if the profile has no tower.
+- Don't allow publish if the profile has no online id (#0000236).
+
 1.0.0, 22-October-2009
 
 - You can now rate addins from the Addins tab within GooTool (#0000175).

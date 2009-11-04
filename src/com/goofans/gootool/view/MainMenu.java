@@ -18,15 +18,17 @@ import com.goofans.gootool.util.HyperlinkLaunchingListener;
 @SuppressWarnings({"HardCodedStringLiteral", "DuplicateStringLiteralInspection", "StringConcatenation"})
 public class MainMenu
 {
-  private final JMenuBar menuBar;
-  public JMenuItem translatorModeMenuItem;
-
   //TODO move these into a config file
   private static final String URL_MANUAL = "http://goofans.com/gootool/about";
   private static final String URL_FAQ = "http://goofans.com/gootool/faq";
   private static final String URL_TROUBLESHOOTING = "http://goofans.com/gootool/troubleshooting";
   private static final String URL_FORUM = "http://goofans.com/forum";
   private static final ResourceBundle resourceBundle = GooTool.getTextProvider();
+
+  private final JMenuBar menuBar;
+  public final JMenuItem translatorModeMenuItem;
+  public final JMenuItem generateIdMenuItem;
+
   private final Controller controller;
   private final HyperlinkLaunchingListener hyperlinkListener;
 
@@ -59,6 +61,8 @@ public class MainMenu
 
     menu = createMenu("advanced");
     menuBar.add(menu);
+
+    menu.add(generateIdMenuItem = createMenuItem(JMenuItem.class, "advanced.generateOnlineId", Controller.CMD_GENERATE_ONLINE_ID));
 
     JMenu decryptMenuItem = createMenu("advanced.decrypt");
     menu.add(decryptMenuItem);

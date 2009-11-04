@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.logging.Logger;
 import java.io.IOException;
+import java.text.NumberFormat;
+import java.text.DecimalFormat;
 
 /**
  * @author David Croft (davidc@goofans.com)
@@ -24,6 +26,7 @@ public class Tower
   private transient int usedStrandBalls;
   private transient int usedNodeBalls;
   private transient int totalBalls;
+  private static final String TOWER_SEP = ":";
 
   public Tower(String towerStr) throws IOException
   {
@@ -39,28 +42,28 @@ public class Tower
     usedStrandBalls = 0;
     totalBalls = 0;
 
-    StringTokenizer tok = new StringTokenizer(towerStr, ":");
+    StringTokenizer tok = new StringTokenizer(towerStr, TOWER_SEP);
     while (tok.hasMoreTokens()) {
       String type = tok.nextToken();
       if (type.equals(TOWERELEMENT_BALL)) {
         Ball ball = new Ball();
-        tok.nextToken(); // ball.ballType = tok.nextToken(); // don't need this
+        ball.ballType = tok.nextToken();
         ball.xPos = Double.parseDouble(tok.nextToken());
         ball.yPos = Double.parseDouble(tok.nextToken());
-        tok.nextToken(); // ignore xMomentum
-        tok.nextToken(); // ignore yMomentum
+        ball.xMomentum = Double.parseDouble(tok.nextToken());
+        ball.yMomentum = Double.parseDouble(tok.nextToken());
         balls.add(ball);
         totalBalls++;
       }
       else if (type.equals(TOWERELEMENT_STRAND)) {
         Strand strand = new Strand();
-        tok.nextToken(); // strand.strandType = tok.nextToken(); // don't need this
+        strand.strandType = tok.nextToken();
         strand.firstBall = balls.get(Integer.parseInt(tok.nextToken()));
         strand.secondBall = balls.get(Integer.parseInt(tok.nextToken()));
-        tok.nextToken(); // ignore connectionStrength
-        tok.nextToken(); // ignore length
-        String ballUsed = tok.nextToken(); // ignore ballUsed
-        if ("1".equals(ballUsed)) {
+        strand.connectionStrength = Double.parseDouble(tok.nextToken());
+        strand.length = Double.parseDouble(tok.nextToken());
+        strand.ballUsed = "1".equals(tok.nextToken());
+        if (strand.ballUsed) {
           usedStrandBalls++;
           totalBalls++;
         }
@@ -84,29 +87,27 @@ public class Tower
       }
     }
 
-//    usedStrandBalls-=6;
-
     height /= 100;
   }
 
   public class Ball
   {
-    //    public String ballType;
+    public String ballType;
     public double xPos;
     public double yPos;
-    //    public double xMomentum;
-    //    public double yMomentum;
+    public double xMomentum;
+    public double yMomentum;
     public boolean inStructure;
   }
 
   public class Strand
   {
-    //    public String strandType;
+    public String strandType;
     public Ball firstBall;
     public Ball secondBall;
-//    public double connectionStrength;
-//    public double length;
-//    public boolean ballUsed;
+    public double connectionStrength;
+    public double length;
+    public boolean ballUsed;
   }
 
   public List<Ball> getBalls()
@@ -145,6 +146,37 @@ public class Tower
   public String toString()
   {
     return "Tower with " + totalBalls + " balls and " + strands.size() + " strands, used " + usedNodeBalls + " node and " + usedStrandBalls + " strand balls to make height " + height;
+  }
+
+  public String toData()
+  {
+    StringBuilder data = new StringBuilder();
+
+    NumberFormat nf2dp = new DecimalFormat("0.00");
+    NumberFormat nf4dp = new DecimalFormat("0.0000");
+
+    for (Ball ball : balls) {
+      if (data.length() > 0) data.append(TOWER_SEP);
+      data.append(TOWERELEMENT_BALL).append(TOWER_SEP);
+      data.append(ball.ballType).append(TOWER_SEP);
+      data.append(nf2dp.format(ball.xPos)).append(TOWER_SEP);
+      data.append(nf2dp.format(ball.yPos)).append(TOWER_SEP);
+      data.append(nf2dp.format(ball.xMomentum)).append(TOWER_SEP);
+      data.append(nf2dp.format(ball.yMomentum));
+    }
+
+    for (Strand strand : strands) {
+      if (data.length() > 0) data.append(TOWER_SEP);
+      data.append(TOWERELEMENT_STRAND).append(TOWER_SEP);
+      data.append(strand.strandType).append(TOWER_SEP);
+      data.append(balls.indexOf(strand.firstBall)).append(TOWER_SEP);
+      data.append(balls.indexOf(strand.secondBall)).append(TOWER_SEP);
+      data.append(nf4dp.format(strand.connectionStrength)).append(TOWER_SEP);
+      data.append(nf2dp.format(strand.length)).append(TOWER_SEP);
+      data.append(strand.ballUsed ? "1" : "0");
+    }
+
+    return data.toString();
   }
 
   @SuppressWarnings({"UseOfSystemOutOrSystemErr", "HardCodedStringLiteral", "DuplicateStringLiteralInspection"})

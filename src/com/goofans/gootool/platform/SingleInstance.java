@@ -40,7 +40,7 @@ public class SingleInstance
     testTempDir();
 
     // Now try opening the real lockfile, if we can't write, another process has it open.
-    final FileLock lock = tryLock();
+    FileLock lock = tryLock();
 
     if (lock != null) {
       primaryInstance(lock, args);
@@ -84,7 +84,7 @@ public class SingleInstance
   {
     log.finest("Attempting lock at " + lockFile);
 
-    final FileLock lock;
+    FileLock lock;
 
     try {
       lockFileRAF = new RandomAccessFile(lockFile, "rws");

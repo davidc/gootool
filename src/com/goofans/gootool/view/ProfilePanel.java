@@ -24,14 +24,21 @@ import java.text.NumberFormat;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.lang.reflect.Method;
+import java.beans.PropertyChangeSupport;
+import java.beans.PropertyChangeListener;
+
 
 /**
+ * TODO separate this into a ProfileController and ProfileView.
+ *
  * @author David Croft (davidc@goofans.com)
  * @version $Id$
  */
 public final class ProfilePanel implements ActionListener, ViewComponent
 {
   private static final Logger log = Logger.getLogger(ProfilePanel.class.getName());
+
+  private final PropertyChangeSupport propertyChangeSupport;
 
   private JComboBox profilesCombo;
   private JLabel playTime;
@@ -69,6 +76,7 @@ public final class ProfilePanel implements ActionListener, ViewComponent
 
   private static final GooToolResourceBundle resourceBundle = GooTool.getTextProvider();
   private static final String BR = "<br>";
+  private Boolean allProfilesAreOnline = null;
 
   static {
     COLUMN_NAMES = new String[]{
@@ -82,6 +90,8 @@ public final class ProfilePanel implements ActionListener, ViewComponent
 
   public ProfilePanel(Controller controller)
   {
+    propertyChangeSupport = new PropertyChangeSupport(this);
+
     refreshButton.setActionCommand(CMD_REFRESH);
     refreshButton.addActionListener(this);
 
@@ -149,88 +159,14 @@ public final class ProfilePanel implements ActionListener, ViewComponent
       loadProfiles();
     }
     else if (cmd.equals(CMD_PROFILE_CHANGED) && profilesCombo.getSelectedItem() != currentProfile) {
-      currentProfile = getSelectedProfile();
+      Profile newProfile = getSelectedProfile();
+      propertyChangeSupport.firePropertyChange("currentProfile", currentProfile, newProfile);
+
+      currentProfile = newProfile;
       log.fine("currentProfile = " + currentProfile);
 
       if (currentProfile != null) {
-        profileName.setText(currentProfile.getName());
-        playTime.setText(TextUtil.formatTime(currentProfile.getPlayTime()));
-        levelsPlayed.setText(String.valueOf(currentProfile.getLevels()));
-
-        Tower t = currentProfile.getTower();
-
-        towerHeight.setText(formatHeight(t.getHeight()));
-        towerTotalBalls.setText(resourceBundle.formatString("profile.tower.balls.value", t.getUsedStrandBalls() + t.getUsedNodeBalls(), t.getTotalBalls()));
-        towerNodeBalls.setText(String.valueOf(t.getUsedNodeBalls()));
-        towerStrandBalls.setText(String.valueOf(t.getUsedStrandBalls()));
-
-        StringBuilder flagInfo = new StringBuilder();
-        if (currentProfile.hasFlag(Profile.FLAG_ONLINE)) {
-          flagInfo.append(resourceBundle.getString("profile.info.flags.online")).append(BR);
-        }
-        if (currentProfile.hasFlag(Profile.FLAG_GOOCORP_UNLOCKED)) {
-          flagInfo.append(resourceBundle.getString("profile.info.flags.goocorpunlocked")).append(BR);
-        }
-        if (currentProfile.hasFlag(Profile.FLAG_GOOCORP_DESTROYED)) {
-          flagInfo.append(resourceBundle.getString("profile.info.flags.goocorpdestroyed")).append(BR);
-        }
-        if (currentProfile.hasFlag(Profile.FLAG_WHISTLE)) {
-          flagInfo.append(resourceBundle.getString("profile.info.flags.whistle")).append(BR);
-        }
-        if (currentProfile.hasFlag(Profile.FLAG_TERMS)) {
-          flagInfo.append(resourceBundle.getString("profile.info.flags.terms")).append(BR);
-        }
-        if (currentProfile.hasFlag(Profile.FLAG_32)) {
-          flagInfo.append(resourceBundle.getString("profile.info.flags.flag32")).append(BR);
-        }
-        if (currentProfile.hasFlag(Profile.FLAG_64)) {
-          flagInfo.append(resourceBundle.getString("profile.info.flags.flag64")).append(BR);
-        }
-        if (currentProfile.hasFlag(Profile.FLAG_128)) {
-          flagInfo.append(resourceBundle.getString("profile.info.flags.flag128")).append(BR);
-        }
-
-        if (flagInfo.length() == 0) {
-          flagInfo.append(resourceBundle.getString("profile.info.flags.none"));
-        }
-        flags.setText("<html>" + flagInfo + "</html>");
-
-        levelsModel.fireTableDataChanged();
-
-        towerPanel.removeAll();
-
-        try {
-          tr = new TowerRenderer(currentProfile.getTower());
-          tr.render();
-
-          BufferedImage thumbImg = tr.getThumbnail();
-          JLabel thumb = new JLabel(new ImageIcon(thumbImg));
-          thumb.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-//          thumb.setVerticalAlignment(SwingConstants.CENTER);
-//          thumb.setHorizontalAlignment(SwingConstants.CENTER);
-
-          Dimension thumbDim = new Dimension(thumbImg.getWidth(), thumbImg.getHeight());
-          thumb.setSize(thumbDim);
-          thumb.setMinimumSize(thumbDim);
-          thumb.addMouseListener(new MouseAdapter()
-          {
-            @Override
-            public void mouseClicked(MouseEvent e)
-            {
-              showTower();
-            }
-          });
-          towerPanel.add(thumb);
-//          viewTowerButton.setEnabled(true);
-          saveTowerButton.setEnabled(true);
-        }
-        catch (IOException e1) {
-          log.log(Level.SEVERE, "Unable to render tower", e1);
-          towerPanel.add(new JLabel(resourceBundle.getString("profile.tower.error")));
-//          viewTowerButton.setEnabled(false);
-          saveTowerButton.setEnabled(false);
-        }
-
+        profileChanged();
       }
     }
     else if (cmd.equals(CMD_VIEW_TOWER) && tr != null) {
@@ -253,6 +189,105 @@ public final class ProfilePanel implements ActionListener, ViewComponent
   public Profile getSelectedProfile()
   {
     return (Profile) profilesCombo.getSelectedItem();
+  }
+
+  public boolean areAllProfilesOnline()
+  {
+    return allProfilesAreOnline;
+  }
+
+  private void profileChanged()
+  {
+    profileName.setText(currentProfile.getName());
+    playTime.setText(TextUtil.formatTime(currentProfile.getPlayTime()));
+    levelsPlayed.setText(String.valueOf(currentProfile.getLevels()));
+
+    StringBuilder flagInfo = new StringBuilder();
+    if (currentProfile.hasFlag(Profile.FLAG_ONLINE)) {
+      flagInfo.append(resourceBundle.getString("profile.info.flags.online")).append(BR);
+    }
+    if (currentProfile.hasFlag(Profile.FLAG_GOOCORP_UNLOCKED)) {
+      flagInfo.append(resourceBundle.getString("profile.info.flags.goocorpunlocked")).append(BR);
+    }
+    if (currentProfile.hasFlag(Profile.FLAG_GOOCORP_DESTROYED)) {
+      flagInfo.append(resourceBundle.getString("profile.info.flags.goocorpdestroyed")).append(BR);
+    }
+    if (currentProfile.hasFlag(Profile.FLAG_WHISTLE)) {
+      flagInfo.append(resourceBundle.getString("profile.info.flags.whistle")).append(BR);
+    }
+    if (currentProfile.hasFlag(Profile.FLAG_TERMS)) {
+      flagInfo.append(resourceBundle.getString("profile.info.flags.terms")).append(BR);
+    }
+    if (currentProfile.hasFlag(Profile.FLAG_32)) {
+      flagInfo.append(resourceBundle.getString("profile.info.flags.flag32")).append(BR);
+    }
+    if (currentProfile.hasFlag(Profile.FLAG_64)) {
+      flagInfo.append(resourceBundle.getString("profile.info.flags.flag64")).append(BR);
+    }
+    if (currentProfile.hasFlag(Profile.FLAG_128)) {
+      flagInfo.append(resourceBundle.getString("profile.info.flags.flag128")).append(BR);
+    }
+
+    if (flagInfo.length() == 0) {
+      flagInfo.append(resourceBundle.getString("profile.info.flags.none"));
+    }
+    flags.setText("<html>" + flagInfo + "</html>");
+
+    levelsModel.fireTableDataChanged();
+
+    towerPanel.removeAll();
+
+    Tower tower = currentProfile.getTower();
+
+    if (tower == null || tower.getHeight() == 0) {
+      towerHeight.setText("-");
+      towerTotalBalls.setText("-");
+      towerNodeBalls.setText("-");
+      towerStrandBalls.setText("-");
+      towerPanel.add(new JLabel(resourceBundle.getString("profile.tower.none")));
+//          viewTowerButton.setEnabled(false);
+      saveTowerButton.setEnabled(false);
+    }
+    else {
+      towerHeight.setText(formatHeight(tower.getHeight()));
+      towerTotalBalls.setText(resourceBundle.formatString("profile.tower.balls.value", tower.getUsedStrandBalls() + tower.getUsedNodeBalls(), tower.getTotalBalls()));
+      towerNodeBalls.setText(String.valueOf(tower.getUsedNodeBalls()));
+      towerStrandBalls.setText(String.valueOf(tower.getUsedStrandBalls()));
+
+      try {
+        tr = new TowerRenderer(tower);
+        tr.render();
+
+        BufferedImage thumbImg = tr.getThumbnail();
+        JLabel thumb = new JLabel(new ImageIcon(thumbImg));
+        thumb.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+//          thumb.setVerticalAlignment(SwingConstants.CENTER);
+//          thumb.setHorizontalAlignment(SwingConstants.CENTER);
+
+        Dimension thumbDim = new Dimension(thumbImg.getWidth(), thumbImg.getHeight());
+        thumb.setSize(thumbDim);
+        thumb.setMinimumSize(thumbDim);
+        thumb.addMouseListener(new MouseAdapter()
+        {
+          @Override
+          public void mouseClicked(MouseEvent e)
+          {
+            showTower();
+          }
+        });
+        towerPanel.add(thumb);
+//          viewTowerButton.setEnabled(true);
+        saveTowerButton.setEnabled(true);
+      }
+      catch (IOException e1) {
+        log.log(Level.SEVERE, "Unable to render tower", e1);
+        towerPanel.add(new JLabel(resourceBundle.getString("profile.tower.error")));
+//          viewTowerButton.setEnabled(false);
+        saveTowerButton.setEnabled(false);
+      }
+    }
+
+    updateViewFromModel(null);
   }
 
   private void saveTower(BufferedImage image)
@@ -355,11 +390,20 @@ public final class ProfilePanel implements ActionListener, ViewComponent
       return;
     }
 
+    Boolean oldAllProfilesAreOnline = allProfilesAreOnline;
+    allProfilesAreOnline = true;
+
     for (Profile profile : profileData.getProfiles()) {
       if (profile != null) {
         profilesCombo.addItem(profile);
+        if (profile.getOnlineId() == null) {
+          allProfilesAreOnline = false;
+        }
       }
     }
+
+    propertyChangeSupport.firePropertyChange("allProfilesAreOnline", oldAllProfilesAreOnline, allProfilesAreOnline);
+
     profilesCombo.setSelectedItem(profileData.getCurrentProfile());
   }
 
@@ -375,12 +419,18 @@ public final class ProfilePanel implements ActionListener, ViewComponent
 
     profileBackupButton.setEnabled(enabled);
     profileRestoreButton.setEnabled(enabled);
-    profilePublishButton.setEnabled(enabled);
 
     if (enabled) {
       profileBackupButton.setToolTipText(resourceBundle.getString("profile.goofans.backup.tooltip"));
       profileRestoreButton.setToolTipText(resourceBundle.getString("profile.goofans.restore.tooltip"));
-      profilePublishButton.setToolTipText(resourceBundle.getString("profile.goofans.publish.tooltip"));
+      if (currentProfile.getOnlineId() != null) {
+        profilePublishButton.setToolTipText(resourceBundle.getString("profile.goofans.publish.tooltip"));
+        profilePublishButton.setEnabled(true);
+      }
+      else {
+        profilePublishButton.setToolTipText(resourceBundle.getString("profile.goofans.publish.tooltip.noid"));
+        profilePublishButton.setEnabled(false);
+      }
     }
     else {
       String tooltip;
@@ -389,13 +439,11 @@ public final class ProfilePanel implements ActionListener, ViewComponent
       }
       else {
         tooltip = resourceBundle.getString("profile.goofans.disabled.tooltip");
-
       }
       profileBackupButton.setToolTipText(tooltip);
       profileRestoreButton.setToolTipText(tooltip);
       profilePublishButton.setToolTipText(tooltip);
     }
-
   }
 
   public void updateModelFromView(Configuration c)
@@ -407,7 +455,7 @@ public final class ProfilePanel implements ActionListener, ViewComponent
   {
     public int getRowCount()
     {
-      return currentProfile != null ? currentProfile.getLevelAchievements().size() : 0;
+      return currentProfile != null ? currentProfile.getLevelAchievements().size() + currentProfile.getSkippedLevels().size() : 0;
     }
 
     public int getColumnCount()
@@ -417,12 +465,21 @@ public final class ProfilePanel implements ActionListener, ViewComponent
 
     public Object getValueAt(int rowIndex, int columnIndex)
     {
-      LevelAchievement levelAchievement = currentProfile.getLevelAchievements().get(rowIndex);
+      if (rowIndex < currentProfile.getLevelAchievements().size()) {
+        LevelAchievement levelAchievement = currentProfile.getLevelAchievements().get(rowIndex);
 
-      if (columnIndex == 0) return levelAchievement.getLevelId();
-      if (columnIndex == 1) return levelAchievement.getMostBalls();
-      if (columnIndex == 2) return levelAchievement.getLeastMoves();
-      if (columnIndex == 3) return levelAchievement.getLeastTime();
+        if (columnIndex == 0) return levelAchievement.getLevelId();
+        if (columnIndex == 1) return levelAchievement.getMostBalls();
+        if (columnIndex == 2) return levelAchievement.getLeastMoves();
+        if (columnIndex == 3) return levelAchievement.getLeastTime();
+      }
+      else {
+        rowIndex -= currentProfile.getLevelAchievements().size();
+        String skippedLevel = currentProfile.getSkippedLevels().get(rowIndex);
+
+        if (columnIndex == 0) return skippedLevel;
+        if (columnIndex == 1) return resourceBundle.getString("profile.level.skipped");
+      }
 
       return null;
     }
@@ -432,5 +489,16 @@ public final class ProfilePanel implements ActionListener, ViewComponent
     {
       return COLUMN_NAMES[column];
     }
+  }
+
+
+  public synchronized void addPropertyChangeListener(PropertyChangeListener listener)
+  {
+    propertyChangeSupport.addPropertyChangeListener(listener);
+  }
+
+  public synchronized void removePropertyChangeListener(PropertyChangeListener listener)
+  {
+    propertyChangeSupport.removePropertyChangeListener(listener);
   }
 }
