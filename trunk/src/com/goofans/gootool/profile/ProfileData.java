@@ -2,14 +2,12 @@ package com.goofans.gootool.profile;
 
 import net.infotrek.util.EncodingUtil;
 
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.util.Arrays;
 import java.util.Map;
-import java.util.TreeMap;
+import java.util.LinkedHashMap;
 import java.util.logging.Logger;
+import java.util.logging.Level;
 
 import com.goofans.gootool.io.GameFormat;
 
@@ -23,9 +21,10 @@ public class ProfileData
 
   private static final String KEY_PROFILE = "profile_";
   private static final String KEY_MRPP = "mrpp";
+  private static final int MAX_PROFILES = 3;
 
-  private final Map<String, String> data = new TreeMap<String, String>();
-  private final Profile[] profiles = new Profile[3];
+  private final Map<String, String> data = new LinkedHashMap<String, String>();
+  private final Profile[] profiles = new Profile[MAX_PROFILES];
 
   public ProfileData(File f) throws IOException
   {
@@ -105,5 +104,44 @@ public class ProfileData
             "data=" + data +
             ", profiles=" + (profiles == null ? null : Arrays.asList(profiles)) +
             '}';
+  }
+
+  public final byte[] toData()
+  {
+    ByteArrayOutputStream out = new ByteArrayOutputStream();
+
+    try {
+      for (String key : data.keySet()) {
+        if (!key.startsWith(KEY_PROFILE)) {
+          appendString(out, key);
+          appendString(out, data.get(key));
+        }
+      }
+
+      for (int i = 0; i < MAX_PROFILES; i++) {
+        if (profiles[i] != null) {
+          Profile profile = profiles[i];
+          appendString(out, KEY_PROFILE + i);
+          appendString(out, profile.toData());
+        }
+      }
+
+      out.write(EncodingUtil.stringToBytesUtf8(",0."));
+    }
+    catch (IOException e) {
+      //never happens
+      log.log(Level.SEVERE, "Impossible error occurred", e);
+    }
+
+    return out.toByteArray();
+  }
+
+  private void appendString(ByteArrayOutputStream out, String string) throws IOException
+  {
+    byte[] bytes = EncodingUtil.stringToBytesUtf8(string);
+
+    out.write(EncodingUtil.stringToBytesUtf8(String.valueOf(bytes.length)));
+    out.write(',');
+    out.write(bytes);
   }
 }

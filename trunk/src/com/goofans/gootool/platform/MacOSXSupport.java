@@ -11,7 +11,9 @@ import java.util.logging.Logger;
 import java.util.List;
 
 /**
- * See http://developer.apple.com/documentation/Java/Reference/1.5.0/appledoc/api/index.html
+ * Support routines for Mac OS X
+ *
+ * See http://developer.apple.com/documentation/Java/Reference/1.5.0/appledoc/api/index.html for the ApplicationListener API.
  *
  * @author David Croft (davidc@goofans.com)
  * @version $Id$

@@ -15,12 +15,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeEvent;
 
 import static com.goofans.gootool.GameFileCodecTool.CodecType;
 import com.goofans.gootool.addins.Addin;
 import com.goofans.gootool.addins.AddinFactory;
 import com.goofans.gootool.model.Configuration;
 import com.goofans.gootool.profile.ProfileFactory;
+import com.goofans.gootool.profile.GenerateOnlineIds;
 import com.goofans.gootool.siteapi.*;
 import com.goofans.gootool.util.*;
 import com.goofans.gootool.view.AboutDialog;
@@ -65,6 +68,7 @@ public class Controller implements ActionListener
   public static final String CMD_REVERT = "Revert";
 
   public static final String CMD_TRANSLATOR_MODE = "ToggleTranslator";
+  public static final String CMD_GENERATE_ONLINE_ID = "GenerateOnlineId";
 
   public static final String CMD_DECRYPT_BIN_PC = "Decrypt>BinPC";
   public static final String CMD_DECRYPT_BIN_MAC = "Decrypt>BinMac";
@@ -169,6 +173,9 @@ public class Controller implements ActionListener
       boolean enabled = mainFrame.mainMenu.translatorModeMenuItem.isSelected();
       updateImageLocalisationPanel(enabled);
       ToolPreferences.setL10nEnabled(enabled);
+    }
+    else if (cmd.equals(CMD_GENERATE_ONLINE_ID)) {
+      generateOnlineId();
     }
     else if (cmd.equals(CMD_GOOTOOL_UPDATE_CHECK)) {
       try {
@@ -324,8 +331,7 @@ public class Controller implements ActionListener
 
     String msg = resourceBundle.formatString("installAddin.confirm.message", addin.getName(), addin.getAuthor(), addin.getVersion());
 
-    int returnVal = showYesNoDialog(resourceBundle.getString("installAddin.confirm.title"), msg);
-    if (returnVal != JOptionPane.YES_OPTION) {
+    if (!showYesNoDialog(resourceBundle.getString("installAddin.confirm.title"), msg)) {
       log.info("User cancelled installation of " + addin);
       return;
     }
@@ -350,8 +356,7 @@ public class Controller implements ActionListener
             msg += resourceBundle.getString("installAddin.exists.message.sameVersion");
           }
 
-          returnVal = showYesNoDialog(resourceBundle.getString("installAddin.exists.title"), msg);
-          if (returnVal != JOptionPane.YES_OPTION) {
+          if (!showYesNoDialog(resourceBundle.getString("installAddin.exists.title"), msg)) {
             log.info("User cancelled overwriting installation of " + addin);
             return;
           }
@@ -481,14 +486,14 @@ public class Controller implements ActionListener
     // Check if it's not empty
 
     if (selectedFile.list().length > 0) {
-      if (showYesNoDialog(resourceBundle.getString("changeCustomDir.notEmpty.title"),
-              resourceBundle.formatString("changeCustomDir.notEmpty.message", selectedFile.getAbsolutePath())) != JOptionPane.YES_OPTION) {
+      if (!showYesNoDialog(resourceBundle.getString("changeCustomDir.notEmpty.title"),
+              resourceBundle.formatString("changeCustomDir.notEmpty.message", selectedFile.getAbsolutePath()))) {
         return;
       }
     }
     else {
-      if (showYesNoDialog(resourceBundle.getString("changeCustomDir.confirm.title"),
-              resourceBundle.formatString("changeCustomDir.confirm.message", selectedFile.getAbsolutePath())) != JOptionPane.YES_OPTION) {
+      if (!showYesNoDialog(resourceBundle.getString("changeCustomDir.confirm.title"),
+              resourceBundle.formatString("changeCustomDir.confirm.message", selectedFile.getAbsolutePath()))) {
         return;
       }
     }
@@ -604,6 +609,8 @@ public class Controller implements ActionListener
 
       mainFrame.profilePanel.loadProfiles();
 
+      refreshView();
+
       showMessageDialog(resourceBundle.getString("gooFansRestore.success.title"), resourceBundle.getString("gooFansRestore.success.message"));
     }
     catch (APIException e) {
@@ -625,9 +632,7 @@ public class Controller implements ActionListener
 
       sb.append(resourceBundle.getString("gooFansPublish.success.message"));
 
-      int answer = showYesNoDialog(resourceBundle.getString("gooFansPublish.success.title"), sb.toString());
-
-      if (answer == JOptionPane.YES_OPTION) {
+      if (showYesNoDialog(resourceBundle.getString("gooFansPublish.success.title"), sb.toString())) {
         DesktopUtil.browseAndWarn(profileUrl, mainFrame);
       }
     }
@@ -648,9 +653,16 @@ public class Controller implements ActionListener
     JOptionPane.showMessageDialog(mainFrame, msg, title, JOptionPane.ERROR_MESSAGE);
   }
 
-  private int showYesNoDialog(String title, String msg)
+  /**
+   * Show a "Yes or No" dialog, returning true only if the user selected "Yes".
+   *
+   * @param title Title bar
+   * @param msg   Message
+   * @return True only if the user said "yes", false if they said "No" or closed the window.
+   */
+  private boolean showYesNoDialog(String title, String msg)
   {
-    return JOptionPane.showConfirmDialog(mainFrame, msg, title, JOptionPane.YES_NO_OPTION);
+    return JOptionPane.showConfirmDialog(mainFrame, msg, title, JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION;
   }
 
 
@@ -710,9 +722,8 @@ public class Controller implements ActionListener
     updateModelFromView(editorConfig);
 
     if (!editorConfig.equals(liveConfig)) {
-      int returnVal = showYesNoDialog(resourceBundle.getString("exit.unsaved.title"),
-              resourceBundle.getString("exit.unsaved.message"));
-      if (returnVal != JOptionPane.YES_OPTION) {
+      if (!showYesNoDialog(resourceBundle.getString("exit.unsaved.title"),
+              resourceBundle.getString("exit.unsaved.message"))) {
         log.fine("User cancelled exit");
         return;
       }
@@ -843,11 +854,28 @@ public class Controller implements ActionListener
   public void setMainFrame(MainFrame mainFrame)
   {
     this.mainFrame = mainFrame;
+
+    mainFrame.profilePanel.addPropertyChangeListener(new PropertyChangeListener()
+    {
+      public void propertyChange(PropertyChangeEvent evt)
+      {
+        if (evt.getPropertyName().equals("allProfilesAreOnline")) {
+          updateGenerateOnlineIdMenu();
+        }
+      }
+    });
+
     updateViewFromModel(editorConfig);
 
     boolean enabled = ToolPreferences.isL10nEnabled();
     updateImageLocalisationPanel(enabled);
     mainFrame.mainMenu.translatorModeMenuItem.setSelected(enabled);
+    updateGenerateOnlineIdMenu();
+  }
+
+  private void updateGenerateOnlineIdMenu()
+  {
+    mainFrame.mainMenu.generateIdMenuItem.setEnabled(!mainFrame.profilePanel.areAllProfilesOnline());
   }
 
   public void setInitialConfiguration(Configuration c)
@@ -940,5 +968,26 @@ public class Controller implements ActionListener
     log.finest("Controller is requesting focus on MainFrame");
     mainFrame.toFront();
     mainFrame.requestFocus();
+  }
+
+  public void generateOnlineId()
+  {
+    if (!showYesNoDialog(resourceBundle.getString("generateOnlineId.confirm.title"),
+            resourceBundle.getString("generateOnlineId.confirm.message"))) {
+      return;
+    }
+
+    try {
+      GenerateOnlineIds.generateOnlineIds();
+    }
+    catch (IOException e) {
+      showErrorDialog(resourceBundle.getString("generateOnlineId.error.title"), resourceBundle.formatString("generateOnlineId.error.message", e.getLocalizedMessage()));
+      return;
+    }
+
+    mainFrame.profilePanel.loadProfiles();
+
+    refreshView();
+    showMessageDialog(resourceBundle.getString("generateOnlineId.success.title"), resourceBundle.getString("generateOnlineId.success.message"));
   }
 }

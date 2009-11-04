@@ -5,6 +5,8 @@ import java.util.List;
 import com.goofans.gootool.Controller;
 
 /**
+ * Support routines for Windows.
+ *
  * @author David Croft (davidc@goofans.com)
  * @version $Id$
  */
