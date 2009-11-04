@@ -4,7 +4,8 @@ import com.goofans.gootool.util.VersionSpec;
 
 import java.io.File;
 import java.util.List;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.logging.Logger;
 import java.awt.image.BufferedImage;
 
@@ -35,15 +36,10 @@ public class Addin
   private final String description;
   private final String author;
   private final List<AddinDependency> dependencies;
-  private final String levelDir;
-  private final Map<String, String> levelNames;
-  private final Map<String, String> levelSubtitles;
-  private final String levelOcd;
-  private String levelCutscene; // 1.1+
-  private boolean levelSkipEolSequence = false; // 1.1+
   private BufferedImage thumbnail; // 1.1+
+  private final List<AddinLevel> levels;
 
-  public Addin(File diskFile, String id, String name, int type, VersionSpec manifestVersion, VersionSpec version, String description, String author, List<AddinDependency> dependencies, String levelDir, Map<String, String> levelNames, Map<String, String> levelSubtitles, String levelOcd)
+  public Addin(File diskFile, String id, String name, int type, VersionSpec manifestVersion, VersionSpec version, String description, String author, List<AddinDependency> dependencies)
   {
     this.diskFile = diskFile;
     this.id = id;
@@ -54,10 +50,18 @@ public class Addin
     this.description = description;
     this.author = author;
     this.dependencies = dependencies;
-    this.levelDir = levelDir;
-    this.levelNames = levelNames;
-    this.levelSubtitles = levelSubtitles;
-    this.levelOcd = levelOcd;
+
+    levels = new ArrayList<AddinLevel>();
+  }
+
+  void addLevel(AddinLevel level)
+  {
+    levels.add(level);
+  }
+
+  public List<AddinLevel> getLevels()
+  {
+    return Collections.unmodifiableList(levels);
   }
 
   public File getDiskFile()
@@ -121,46 +125,6 @@ public class Addin
       }
     }
     return true;
-  }
-
-  public String getLevelDir()
-  {
-    return levelDir;
-  }
-
-  public Map<String, String> getLevelNames()
-  {
-    return levelNames;
-  }
-
-  public Map<String, String> getLevelSubtitles()
-  {
-    return levelSubtitles;
-  }
-
-  public String getLevelOcd()
-  {
-    return levelOcd;
-  }
-
-  void setLevelCutscene(String levelCutscene)
-  {
-    this.levelCutscene = levelCutscene;
-  }
-
-  public String getLevelCutscene()
-  {
-    return levelCutscene;
-  }
-
-  void setLevelSkipEolSequence(boolean levelSkipEolSequence)
-  {
-    this.levelSkipEolSequence = levelSkipEolSequence;
-  }
-
-  public boolean isLevelSkipEolSequence()
-  {
-    return levelSkipEolSequence;
   }
 
   void setThumbnail(BufferedImage thumbnail)

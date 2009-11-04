@@ -2,8 +2,8 @@
   <id>com.goofans.davidc.jingleballs</id>
   <name>Jingle Balls</name>
   <type>level</type>
-  <thumbnail type="image/jpeg" width="200" height="150">thumbnail.jpg</thumbnail>
   <version>1.3</version>
+  <thumbnail type="image/jpeg" width="200" height="150">thumbnail.jpg</thumbnail>
   <description><![CDATA[
   <html>
   <p>The night before Christmas. The Goo Balls are nestled all snug by the fire, but Ebenezer Sign Painter has other ideas...</p>
@@ -20,18 +20,22 @@
   ]]></description>
   <author>davidc/xanax/cosminmirza</author>
 
-  <level>
-    <dir>JingleBalls</dir>
-    <name text="Jingle Balls"
+  <levels>
+    <level>
+      <dir>JingleBalls</dir>
+      <name text="Jingle Balls"
             ru="Рождественские бубенцы"/>
-    <subtitle text="goo balls roasting on an open fire"
-            de="Die Goo-Bälle rösten über dem Feuer"
-            ru="шарики, поджаривающиеся на открытом огне"
-            es="las bolas de goo tocan a fuego"
-            nl="goo-ballen bij de open haard"
-            fr="boules de goo rôtissant sur un feu ouvert"/>
-    <ocd>balls,57</ocd>
-  </level>
+      <subtitle text="goo balls roasting on an open fire"
+                de="Die Goo-Bälle rösten über dem Feuer"
+                ru="шарики, поджаривающиеся на открытом огне"
+                es="las bolas de goo tocan a fuego"
+                nl="goo-ballen bij de open haard"
+                fr="boules de goo rôtissant sur un feu ouvert"/>
+      <ocd>balls,57</ocd>
+      <!--<cutscene>gooTransition_in,wogcunlock,gooTransition_out</cutscene>-->
+      <!--<skipeolsequence/>-->
+    </level>
+  </levels>
 
   <!-- Changelog:
 

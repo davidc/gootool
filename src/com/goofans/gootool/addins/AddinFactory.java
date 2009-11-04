@@ -15,10 +15,7 @@ import java.util.regex.Pattern;
 
 import com.goofans.gootool.util.VersionSpec;
 import com.goofans.gootool.util.XMLUtil;
-import org.w3c.dom.Document;
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
+import org.w3c.dom.*;
 
 /**
  * @author David Croft (davidc@goofans.com)
@@ -36,14 +33,15 @@ public class AddinFactory
   private static final XPathExpression XPATH_ADDIN_DESCRIPTION;
   private static final XPathExpression XPATH_ADDIN_AUTHOR;
   private static final XPathExpression XPATH_ADDIN_DEPENDENCIES;
-  private static final XPathExpression XPATH_ADDIN_LEVEL;
-  private static final XPathExpression XPATH_ADDIN_LEVEL_DIR;
-  private static final XPathExpression XPATH_ADDIN_LEVEL_NAME;
-  private static final XPathExpression XPATH_ADDIN_LEVEL_SUBTITLE;
-  private static final XPathExpression XPATH_ADDIN_LEVEL_OCD;
-  private static final XPathExpression XPATH_ADDIN_LEVEL_CUTSCENE;
-  private static final XPathExpression XPATH_ADDIN_LEVEL_SKIPEOLSEQUENCE;
   private static final XPathExpression XPATH_ADDIN_THUMBNAIL;
+  private static final XPathExpression XPATH_ADDIN_OLD_LEVEL;
+  private static final XPathExpression XPATH_ADDIN_LEVELS_LEVEL;
+  private static final String LEVEL_DIR = "dir";
+  private static final String LEVEL_NAME = "name";
+  private static final String LEVEL_SUBTITLE = "subtitle";
+  private static final String LEVEL_OCD = "ocd";
+  private static final String LEVEL_CUTSCENE = "cutscene";
+  private static final String LEVEL_SKIPEOLSEQUENCE = "skipeolsequence";
 
   private static final Pattern PATTERN_ID = Pattern.compile("^[-\\p{Alnum}]+(\\.[-\\p{Alnum}]+)+$"); // require at least 1 domain component
   private static final Pattern PATTERN_NAME = Pattern.compile("^\\p{Alnum}[\\p{Graph} ]+$");
@@ -70,14 +68,9 @@ public class AddinFactory
       XPATH_ADDIN_DESCRIPTION = path.compile("/addin/description");
       XPATH_ADDIN_AUTHOR = path.compile("/addin/author");
       XPATH_ADDIN_DEPENDENCIES = path.compile("/addin/dependencies/depends");
-      XPATH_ADDIN_LEVEL = path.compile("/addin/level");
-      XPATH_ADDIN_LEVEL_DIR = path.compile("/addin/level/dir");
-      XPATH_ADDIN_LEVEL_NAME = path.compile("/addin/level/name");
-      XPATH_ADDIN_LEVEL_SUBTITLE = path.compile("/addin/level/subtitle");
-      XPATH_ADDIN_LEVEL_OCD = path.compile("/addin/level/ocd");
-      XPATH_ADDIN_LEVEL_CUTSCENE = path.compile("/addin/level/cutscene");
-      XPATH_ADDIN_LEVEL_SKIPEOLSEQUENCE = path.compile("/addin/level/skipeolsequence");
       XPATH_ADDIN_THUMBNAIL = path.compile("/addin/thumbnail");
+      XPATH_ADDIN_OLD_LEVEL = path.compile("/addin/level");
+      XPATH_ADDIN_LEVELS_LEVEL = path.compile("/addin/levels/level");
     }
     catch (XPathExpressionException e) {
       throw new ExceptionInInitializerError(e);
@@ -183,7 +176,6 @@ public class AddinFactory
    * @throws javax.xml.xpath.XPathExpressionException
    *                              if the manifest was unparseable (really, should be AddinFormatException).
    */
-
   private static Addin readManifestVersion1_0(Document document, VersionSpec manifestVersion, File addinDiskFile) throws XPathExpressionException, AddinFormatException
   {
     String id = getStringRequiredValidated(document, XPATH_ADDIN_ID, PATTERN_ID, "id");
@@ -218,48 +210,25 @@ public class AddinFactory
       dependencies.add(new AddinDependency(ref, minVersion, maxVersion));
     }
 
-    Object levelNode = XPATH_ADDIN_LEVEL.evaluate(document, XPathConstants.NODE);
+    Addin addin = new Addin(addinDiskFile, id, name, type, manifestVersion, version, description, author, dependencies);
 
-    if (levelNode == null && type == Addin.TYPE_LEVEL) throw new AddinFormatException("Level addin doesn't have a level description in manifest");
-    if (levelNode != null && type != Addin.TYPE_LEVEL) throw new AddinFormatException("Non-level addin can't have a level description in manifest");
+    // Handle the <level> from goomod 1.0
+    Element levelElement = (Element) XPATH_ADDIN_OLD_LEVEL.evaluate(document, XPathConstants.NODE);
 
-    String levelDir = null;
-    String levelOcd = null;
-    Map<String, String> levelNames = null;
-    Map<String, String> levelSubtitles = null;
+    if (manifestVersion.equals(SPEC_VERSION_1_0)) {
+      if (levelElement == null && type == Addin.TYPE_LEVEL) throw new AddinFormatException("Level addin doesn't have a level description in manifest");
+      if (levelElement != null && type != Addin.TYPE_LEVEL) throw new AddinFormatException("Non-level addin can't have a level description in manifest");
 
-    if (levelNode != null) {
-      levelDir = getStringRequired(document, XPATH_ADDIN_LEVEL_DIR, "level dir"); // TODO validate
-      levelOcd = getString(document, XPATH_ADDIN_LEVEL_OCD); // TODO validate
-      if (levelOcd.length() == 0) levelOcd = null;
-
-      Node nameNode = (Node) XPATH_ADDIN_LEVEL_NAME.evaluate(document, XPathConstants.NODE);
-      if (nameNode == null) throw new AddinFormatException("Missing level name");
-
-      NamedNodeMap map = nameNode.getAttributes();
-      levelNames = new TreeMap<String, String>();
-
-      for (int i = 0; i < map.getLength(); i++) {
-        Node node = map.item(i);
-        levelNames.put(node.getNodeName(), node.getNodeValue());
+      if (levelElement != null) {
+        addin.addLevel(readLevelNode(levelElement, manifestVersion));
       }
-      if (levelNames.get("text") == null) throw new AddinFormatException("No text attribute on level name");
-
-      Node subtitleNode = (Node) XPATH_ADDIN_LEVEL_SUBTITLE.evaluate(document, XPathConstants.NODE);
-      if (subtitleNode == null) throw new AddinFormatException("Missing level subtitle");
-
-      levelSubtitles = new TreeMap<String, String>();
-      map = subtitleNode.getAttributes();
-      for (int i = 0; i < map.getLength(); i++) {
-        Node node = map.item(i);
-        levelSubtitles.put(node.getNodeName(), node.getNodeValue());
-//        System.out.println("node.getNodeName() = " + node.getNodeName());
-//        System.out.println("node.getNodeValue() = " + node.getNodeValue());
-      }
-      if (levelSubtitles.get("text") == null) throw new AddinFormatException("No text attribute on level subtitle");
+    }
+    else {
+      // Error if they didn't upgrade level->levels/level
+      throw new AddinFormatException("Goomod version 1.1 no longer has /addin/level. Use /addin/levels/level instead.");
     }
 
-    return new Addin(addinDiskFile, id, name, type, manifestVersion, version, description, author, dependencies, levelDir, levelNames, levelSubtitles, levelOcd);
+    return addin;
   }
 
   /*
@@ -270,7 +239,6 @@ public class AddinFactory
    * - TODO maybe choose the chapter?
    * - TODO maybe influence the position?
    * - TODO maybe required previous levels?
-   * - TODO triggers on level end for movies
    *
    * @param document        the DOM document of the manifest file.
    * @param manifestVersion The spec-version of the manifest.
@@ -286,24 +254,78 @@ public class AddinFactory
 
     readThumbnail(document, addinReader, addin);
 
-    // Read level's cutscene and skipeolsequence
+    // Read levels/level
+    NodeList levelNodes = (NodeList) XPATH_ADDIN_LEVELS_LEVEL.evaluate(document, XPathConstants.NODESET);
     if (addin.getType() == Addin.TYPE_LEVEL) {
-      Object levelNode = XPATH_ADDIN_LEVEL.evaluate(document, XPathConstants.NODE);
+      if (levelNodes.getLength() == 0) throw new AddinFormatException("No levels specified in a level addin!");
 
-      if (levelNode != null) {
-        String levelCutscene = getString(document, XPATH_ADDIN_LEVEL_CUTSCENE);
-        if (levelCutscene.length() > 0) {
-          addin.setLevelCutscene(levelCutscene);
-        }
-        
-        Node skipEolSequenceNode = (Node) XPATH_ADDIN_LEVEL_SKIPEOLSEQUENCE.evaluate(document, XPathConstants.NODE);
-        if (skipEolSequenceNode != null) {
-          addin.setLevelSkipEolSequence(true);
-        }
+      for (int i = 0; i < levelNodes.getLength(); ++i) {
+        Element levelElement = (Element) levelNodes.item(i);
+        addin.addLevel(readLevelNode(levelElement, manifestVersion));
       }
+    }
+    else {
+      if (levelNodes.getLength() != 0) throw new AddinFormatException("Only level addins may specify levels!");
     }
 
     return addin;
+  }
+
+  private static AddinLevel readLevelNode(Element levelElement, VersionSpec manifestVersion) throws AddinFormatException
+  {
+    String levelDir;
+    String levelOcd;
+    Map<String, String> levelNames = new TreeMap<String, String>();
+    Map<String, String> levelSubtitles = new TreeMap<String, String>();
+
+    // directory (required) TODO validate
+    levelDir = XMLUtil.getElementString(levelElement, LEVEL_DIR);
+    if (levelDir.length() == 0) throw new AddinFormatException("Missing level dir");
+
+    // name
+    Element nameElement = XMLUtil.getElement(levelElement, LEVEL_NAME);
+    if (nameElement == null) throw new AddinFormatException("Missing level name");
+
+    NamedNodeMap map = nameElement.getAttributes();
+    for (int i = 0; i < map.getLength(); i++) {
+      Node node = map.item(i);
+      levelNames.put(node.getNodeName(), node.getNodeValue());
+    }
+    if (levelNames.get("text") == null) throw new AddinFormatException("No text attribute on level name");
+
+    // subtitle
+    Element subtitleElement = XMLUtil.getElement(levelElement, LEVEL_SUBTITLE);
+    if (subtitleElement == null) throw new AddinFormatException("Missing level subtitle");
+
+    map = subtitleElement.getAttributes();
+    for (int i = 0; i < map.getLength(); i++) {
+      Node node = map.item(i);
+      levelSubtitles.put(node.getNodeName(), node.getNodeValue());
+    }
+    if (levelSubtitles.get("text") == null) throw new AddinFormatException("No text attribute on level subtitle");
+
+    // ocd (optional) TODO validate
+    levelOcd = XMLUtil.getElementString(levelElement, LEVEL_OCD);
+    if (levelOcd.length() == 0) levelOcd = null;
+
+    AddinLevel level = new AddinLevel(levelDir, levelNames, levelSubtitles, levelOcd);
+
+    // 1.1 additions
+    if (manifestVersion.compareTo(SPEC_VERSION_1_1) > 0) {
+      // cutscene (optional)
+      String levelCutscene = XMLUtil.getElementString(levelElement, LEVEL_CUTSCENE);
+      if (levelCutscene.length() > 0) {
+        level.setCutscene(levelCutscene);
+      }
+
+      // skipeolsequence (optional)
+      Node skipEolSequenceNode = XMLUtil.getElement(levelElement, LEVEL_SKIPEOLSEQUENCE);
+      if (skipEolSequenceNode != null) {
+        level.setSkipEolSequence(true);
+      }
+    }
+
+    return level;
   }
 
   private static void readThumbnail(Document document, AddinReader addinReader, Addin addin)
