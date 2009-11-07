@@ -42,12 +42,29 @@ public class Language
   @SuppressWarnings({"HardCodedStringLiteral"})
   private static final List<Language> LANGUAGES = Collections.unmodifiableList(Arrays.asList(
           DEFAULT_LANGUAGE = new Language("en", "English"),
-          new Language("es", "Spanish"),
-          new Language("de", "German"),
-          new Language("fr", "French"),
-          new Language("it", "Italian"),
+          new Language("zh", "Chinese"),
+          new Language("cs", "Czech"),
+          new Language("da", "Danish"),
           new Language("nl", "Dutch"),
-          new Language("ru", "Russian")
+          new Language("eo", "Esperanto"),
+          new Language("fi", "Finnish"),
+          new Language("fr", "French"),
+          new Language("ka", "Georgian"),
+          new Language("de", "German"),
+          new Language("he", "Hebrew"),
+          new Language("hu", "Hungarian"),
+          new Language("it", "Italian"),
+          new Language("ja", "Japanese"),
+          new Language("no", "Norwegian"),
+          new Language("pl", "Polish"),
+          new Language("pt", "Portugese"),
+          new Language("pt_BR", "Portuguese (Brazilian)"),
+          new Language("ru", "Russian"),
+          new Language("es", "Spanish"),
+          new Language("sv", "Swedish"),
+          new Language("tp", "Toki Pona"),
+          new Language("uk", "Ukrainian"),
+          new Language("vi", "Vietnamese")
   ));
 
   public static List<Language> getSupportedLanguages()
