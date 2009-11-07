@@ -10,6 +10,11 @@
   - An addin can now provide more than one level, so level is moved to a child of levels.
   - level/cutscene and level/skipeolsequence added.
   - level/ocd is now officially optional.
+- GooTool now lets you select new languages (for which you need to download translations and possibly fonts from http://hell.student.utwente.nl/wog/wiki/):
+ zh, cs, da, eo, fi, ka, he, hu, ja, no, pl, pt, pt_BR, sv, tp, uk, vi (#0000239).
+
+>>>>>>>> BEFORE RELEASE: REMOVE THE SPEC_VERSION_1_1_ENABLED FLAG <<<<<<<< 
+
 
 1.0.0, 22-October-2009
 
