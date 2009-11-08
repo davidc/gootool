@@ -136,7 +136,6 @@ public class StartupTask extends ProgressIndicatingTask
     MainFrame mainFrame = new MainFrame(controller);
     controller.setMainFrame(mainFrame);
 
-    mainFrame.pack();
     mainFrame.setVisible(true);
 
     return mainFrame;
