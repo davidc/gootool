@@ -145,6 +145,31 @@ public class XMLUtil
     return d;
   }
 
+  public static Float getAttributeFloat(Node node, String attributeName, Float defaultValue)
+  {
+    NamedNodeMap attributes = node.getAttributes();
+    if (attributes == null) return defaultValue;
+
+    Node attribute = attributes.getNamedItem(attributeName);
+    if (attribute == null) return defaultValue;
+
+    try {
+      Float f = Float.valueOf(attribute.getNodeValue().trim());
+      if (f.isNaN() || f.isInfinite()) return defaultValue;
+      return f;
+    }
+    catch (NumberFormatException e) {
+      return defaultValue;
+    }
+  }
+
+  public static float getAttributeFloatRequired(Node node, String attributeName) throws IOException
+  {
+    Float f = getAttributeFloat(node, attributeName, null);
+    if (f == null) throw new IOException("Mandatory attribute " + attributeName + " not specified on " + node.getNodeName());
+    return f;
+  }
+
   public static Integer getAttributeInteger(Node node, String attributeName, Integer defaultValue)
   {
     NamedNodeMap attributes = node.getAttributes();

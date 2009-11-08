@@ -8,10 +8,11 @@ import java.io.IOException;
 import java.util.*;
 
 import com.goofans.gootool.util.Utilities;
+import org.w3c.dom.Element;
 
 /**
  * TODO Do some basic validation on the file before trying to load it.
- * 
+ *
  * @author David Croft (davidc@goofans.com)
  * @version $Id$
  */
@@ -35,14 +36,19 @@ public class BinImageAnimation
 
   public BinImageAnimation(File file) throws IOException
   {
-    FileInputStream is = new FileInputStream(file);
+    byte[] contents;
 
-    int fileLength = (int) file.length();
-    byte[] contents = new byte[fileLength];
-    if (is.read(contents) != fileLength) {
-      throw new IOException("short read on anim " + file.getName());
+    FileInputStream is = new FileInputStream(file);
+    try {
+      int fileLength = (int) file.length();
+      contents = new byte[fileLength];
+      if (is.read(contents) != fileLength) {
+        throw new IOException("short read on anim " + file.getName());
+      }
     }
-    is.close();
+    finally {
+      is.close();
+    }
 
     init(contents, 0);
   }
@@ -54,6 +60,12 @@ public class BinImageAnimation
 
   private BinImageAnimation()
   {
+  }
+
+  public BinImageAnimation(Element elementRequired)
+  {
+    //To change body of created methods use File | Settings | File Templates.
+    throw new RuntimeException("Unfinished");
   }
 
   private void init(byte[] contents, int offset)

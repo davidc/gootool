@@ -5,9 +5,16 @@ import net.infotrek.util.XMLStringBuffer;
 import java.io.*;
 import java.util.Map;
 import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.ArrayList;
 
 import com.goofans.gootool.wog.WorldOfGoo;
 import com.goofans.gootool.util.Utilities;
+import com.goofans.gootool.util.XMLUtil;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
+import org.w3c.dom.Node;
 
 /**
  * TODO check number of actors is sensible, and other validation on the file when loading.
@@ -89,6 +96,38 @@ public class BinMovie
         soundAnim = anim.extractSoundAnim();
       }
     }
+  }
+
+  public BinMovie(Document doc) throws IOException
+  {
+    Element movieEl = doc.getDocumentElement();
+    if (!"movie".equals(movieEl.getTagName())) throw new IOException("Document element is not movie");
+
+    length = XMLUtil.getAttributeFloatRequired(movieEl, "length");
+
+        NodeList actorEls = movieEl.getElementsByTagName("actor");
+
+    List<BinActor> actorsList = new ArrayList<BinActor>(actorEls.getLength());
+    List<BinImageAnimation> animsList= new ArrayList<BinImageAnimation>(actorEls.getLength());
+
+    for (int i = 0; i < actorEls.getLength(); ++i) {
+      Element actorEl = (Element) actorEls.item(i);
+
+      BinActor actor = new BinActor(actorEl);
+      Element animEl = XMLUtil.getElement(actorEl, "animation");
+      if (animEl == null) animEl = XMLUtil.getElement(actorEl, "complex-animation");
+      if (animEl == null) throw new IOException("Actor " + i + " has no animation");
+      BinImageAnimation anim = new BinImageAnimation(animEl);
+
+      actorsList.add(actor);
+      animsList.add(anim);
+    }
+
+    actors = actorsList.toArray(new BinActor[0]);
+    anims = animsList.toArray(new BinImageAnimation[0]);
+
+    // TODO sounds
+
   }
 
   /**
