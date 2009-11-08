@@ -14,6 +14,7 @@
 - GooTool now lets you select new languages (for which you need to download translations and possibly fonts from http://hell.student.utwente.nl/wog/wiki/):
  zh, cs, da, eo, fi, ka, he, hu, ja, no, pl, pt, pt_BR, sv, tp, uk, vi (#0000239).
 - Fixed an issue preventing you ever saving again if you uninstall an addin and quit before saving (#0000240).
+- Remember GooTool's window position/size between runs (#0000234).
 
 1.0.0, 22-October-2009
 

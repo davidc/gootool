@@ -33,6 +33,7 @@ public class ToolPreferences
   private static final String PREF_L10N_MODE = "gootool_l10n_enabled";
   private static final String PREF_MRU_ADDIN_DIR = "gootool_mru_addin_dir";
   private static final String PREF_MRU_TOWER_DIR = "gootool_mru_tower_dir";
+  private static final String PREF_WINDOW_POSITION = "gootool_window_position";
 
   private static final String PREF_WOG_DIR = "wog_dir";
   private static final String PREF_CUSTOM_DIR = "custom_dir";
@@ -112,9 +113,9 @@ public class ToolPreferences
     return PREFS.get(PREF_MRU_ADDIN_DIR, null);
   }
 
-  public static void setMruTowerDir(String mruDir)
+  public static void setMruAddinDir(String mruDir)
   {
-    PREFS.put(PREF_MRU_TOWER_DIR, mruDir);
+    PREFS.put(PREF_MRU_ADDIN_DIR, mruDir);
   }
 
   public static String getMruTowerDir()
@@ -122,9 +123,19 @@ public class ToolPreferences
     return PREFS.get(PREF_MRU_TOWER_DIR, null);
   }
 
-  public static void setMruAddinDir(String mruDir)
+  public static void setMruTowerDir(String mruDir)
   {
-    PREFS.put(PREF_MRU_ADDIN_DIR, mruDir);
+    PREFS.put(PREF_MRU_TOWER_DIR, mruDir);
+  }
+
+  public static String getWindowPosition()
+  {
+    return PREFS.get(PREF_WINDOW_POSITION, null);
+  }
+
+  public static void setWindowPosition(String windowPosition)
+  {
+    PREFS.put(PREF_WINDOW_POSITION, windowPosition);
   }
 
   public static String getWogDir()
