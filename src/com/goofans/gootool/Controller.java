@@ -793,10 +793,10 @@ public class Controller implements ActionListener
   {
     // Remove any addins that are enabled but don't exist
     List<Addin> availableAddins = WorldOfGoo.getAvailableAddins();
-    boolean foundThisAddin;
+    boolean foundThisAddin = false;
     do {
-      foundThisAddin = false;
       for (String enabledAddinName : config.getEnabledAddins()) {
+        foundThisAddin = false;
         // see if this addin is available
         for (Addin availableAddin : availableAddins) {
           if (availableAddin.getId().equals(enabledAddinName)) {
@@ -805,12 +805,12 @@ public class Controller implements ActionListener
           }
         }
         if (!foundThisAddin) {
-          log.log(Level.WARNING, "Removed unavailable enabled addin " + enabledAddinName);
+          log.log(Level.WARNING, "Removed enabled addin " + enabledAddinName + " as it is not installed");
           config.disableAddin(enabledAddinName);
           break;
         }
       }
-    } while (!foundThisAddin && !config.getEnabledAddins().isEmpty());
+    } while (!config.getEnabledAddins().isEmpty() && !foundThisAddin);
   }
 
 
