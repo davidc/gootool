@@ -52,7 +52,6 @@ public class AddinFactory
 
   private static final VersionSpec SPEC_VERSION_1_0 = new VersionSpec(new int[]{1, 0});
   public static final VersionSpec SPEC_VERSION_1_1 = new VersionSpec(new int[]{1, 1});
-  public static final boolean SPEC_VERSION_1_1_ENABLED = true;
 
   private static final String GOOMOD_MANIFEST = "addin.xml";
 
@@ -153,7 +152,7 @@ public class AddinFactory
       else if (manifestVersion.equals(SPEC_VERSION_1_0)) {
         return readManifestVersion1_0(document, manifestVersion, addinDiskFile);
       }
-      else if (SPEC_VERSION_1_1_ENABLED && manifestVersion.equals(SPEC_VERSION_1_1)) {
+      else if (manifestVersion.equals(SPEC_VERSION_1_1)) {
         return readManifestVersion1_1(document, manifestVersion, addinDiskFile, addinReader);
       }
       else {
