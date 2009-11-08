@@ -1,0 +1,45 @@
+<level allowskip="true" autobounds="false" ballsrequired="8" letterboxed="false" strandgeom="false" textcolor="255,255,255" timebugprobability="0"
+       visualdebug="false">
+  <camera aspect="normal" endpos="0,327" endzoom="0.936">
+    <poi pause="0" pos="6,634.5" traveltime="0" zoom="1"/>
+    <poi pause="0" pos="1,313.5" traveltime="2" zoom="1"/>
+  </camera>
+  <camera aspect="widescreen" endpos="0,327" endzoom="1.273">
+    <poi pause="0" pos="0,624.5" traveltime="0" zoom="1.273"/>
+    <poi pause="0" pos="0,241.8" traveltime="2" zoom="1.273"/>
+  </camera>
+  <music id="SOUND_LEVEL_PISTON_TEMP_CARNIVALLOOP"/>
+  <pipe depth="0" id="0">
+    <Vertex x="0" y="514"/>
+    <Vertex x="0" y="614"/>
+    <Vertex x="100" y="614"/>
+    <Vertex x="100" y="879"/>
+    <Vertex x="0" y="879"/>
+    <Vertex x="0" y="1064"/>
+  </pipe>
+  <BallInstance angle="0" id="0" type="common" x="-88.5" y="98.5"/>
+  <BallInstance angle="0" id="1" type="common" x="49.5" y="101.5"/>
+  <BallInstance angle="0" id="2" type="common" x="39.5" y="205.5"/>
+  <BallInstance angle="0" id="3" type="common" x="-73.5" y="189.5"/>
+  <BallInstance angle="0" id="4" type="common" x="4.15434855461" y="1365.53704022"/>
+  <BallInstance angle="0" id="5" type="common" x="0.0462788019" y="1976.02161395"/>
+  <BallInstance angle="0" id="6" type="common" x="-0.5" y="1570.0"/>
+  <BallInstance angle="0" id="7" type="common" x="-1.0246648513" y="2544.16367302"/>
+  <BallInstance angle="0" id="8" type="common" x="0.3333619606" y="1503.23147989"/>
+  <BallInstance angle="0" id="9" type="common" x="-3.5833190197" y="2737.94753351"/>
+  <BallInstance angle="0" id="10" type="common" x="0.8364128613" y="2225.0"/>
+  <BallInstance angle="0" id="11" type="common" x="-5.1203592376" y="3371.58654168"/>
+  <BallInstance angle="0" id="12" type="common" x="0.9721983662" y="3080.51559803"/>
+  <BallInstance angle="0" id="13" type="common" x="-2.6481608714" y="2919.99076142"/>
+  <BallInstance angle="0" id="14" type="common" x="1.6666380394" y="1736.29632174"/>
+  <BallInstance angle="0" id="15" type="common" x="-0.68825198999" y="2042.96914747"/>
+  <BallInstance angle="0" id="16" type="common" x="0.33336196056" y="2148.48457373"/>
+  <BallInstance angle="0" id="17" type="common" x="2.3950670297" y="3627.00017176"/>
+  <Strand gb1="0" gb2="2"/>
+  <Strand gb1="3" gb2="2"/>
+  <Strand gb1="2" gb2="1"/>
+  <Strand gb1="1" gb2="0"/>
+  <Strand gb1="0" gb2="3"/>
+  <Strand gb1="3" gb2="1"/>
+  <levelexit filter="" id="theExit" pos="0,514" radius="75"/>
+</level>

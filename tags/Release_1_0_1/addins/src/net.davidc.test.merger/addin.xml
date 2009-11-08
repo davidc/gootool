@@ -1,0 +1,38 @@
+<addin spec-version="1.0">
+  <!-- The unique ID of this addin. Read the spec for uniqueness and format requirements. -->
+  <id>net.davidc.test.merger</id>
+
+  <!-- Short display name shown to user. -->
+  <name>Merger Test</name>
+
+  <!-- either "mod" or "level". For user display, and to determine whether to create a chapter 5 entry -->
+  <type>mod</type>
+
+  <!-- Version. Must be numerically comparable in each "."-delimited component. You could also do it without periods at all, e.g. 11281.-->
+  <version>1.0</version>
+
+  <!-- Description shown to user when mod is selected. Basic HTML is allowed if you put it in a CDATA and surround it with <html></html>. -->
+  <description><![CDATA[
+  <html>
+  <p>This addin is a test of the merger. It has the following functions:</p>
+
+  <ul>
+    <li><b>GoingUp</b> - Changes unattached balls to UglyProduct, and turns on visual debug.</li>
+    <li><b>SmallDivide</b> - Removes all black balls and adds a new structure of drip balls.</li>
+  </ul>
+
+   <p>N.B. This test addin modifies existing game levels. It is intended for test purposes only, so don't make
+    any changes that could allow leaderboard fudging (e.g. changing to ivy balls would allow them to save more
+    balls).</p>
+    </html>
+  ]]></description>
+
+  <!-- Author shown to user. -->
+  <author>davidc</author>
+
+  <!-- Other addins this one depends on. -->
+  <dependencies>
+    <!--<depends ref="net.davidc.test.mynewball" min-version="1.0" max-version="1.0"/>-->
+    <!--<depends ref="net.davidc.test.mynewball3" min-version="15"/>-->
+  </dependencies>
+</addin>
