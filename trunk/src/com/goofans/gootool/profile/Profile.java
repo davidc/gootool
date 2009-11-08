@@ -147,8 +147,11 @@ public class Profile
 
   public void setOnlineId(String onlineId)
   {
-    if (this.onlineId != null) {
+    if (this.onlineId != null && onlineId != null) {
       throw new RuntimeException("Online ID is already set");
+    }
+    else if (this.onlineId == null && onlineId == null) {
+      throw new RuntimeException("Online ID is already clear");
     }
     this.onlineId = onlineId;
   }

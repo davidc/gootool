@@ -77,6 +77,7 @@ public final class ProfilePanel implements ActionListener, ViewComponent
   private static final GooToolResourceBundle resourceBundle = GooTool.getTextProvider();
   private static final String BR = "<br>";
   private Boolean allProfilesAreOnline = null;
+  private Boolean anyProfilesHaveGeneratedId = null;
 
   static {
     COLUMN_NAMES = new String[]{
@@ -194,6 +195,11 @@ public final class ProfilePanel implements ActionListener, ViewComponent
   public boolean areAllProfilesOnline()
   {
     return allProfilesAreOnline;
+  }
+
+  public boolean areAnyProfilesGeneratedId()
+  {
+    return anyProfilesHaveGeneratedId;
   }
 
   private void profileChanged()
@@ -391,7 +397,9 @@ public final class ProfilePanel implements ActionListener, ViewComponent
     }
 
     Boolean oldAllProfilesAreOnline = allProfilesAreOnline;
+    Boolean oldAnyProfilesHaveGeneratedId = anyProfilesHaveGeneratedId;
     allProfilesAreOnline = true;
+    anyProfilesHaveGeneratedId = false;
 
     for (Profile profile : profileData.getProfiles()) {
       if (profile != null) {
@@ -399,10 +407,14 @@ public final class ProfilePanel implements ActionListener, ViewComponent
         if (profile.getOnlineId() == null) {
           allProfilesAreOnline = false;
         }
+        else if (GenerateOnlineIds.isGeneratedId(profile.getOnlineId())) {
+          anyProfilesHaveGeneratedId = true;
+        }
       }
     }
 
     propertyChangeSupport.firePropertyChange("allProfilesAreOnline", oldAllProfilesAreOnline, allProfilesAreOnline);
+    propertyChangeSupport.firePropertyChange("anyProfilesHaveGeneratedId", oldAnyProfilesHaveGeneratedId, anyProfilesHaveGeneratedId);
 
     profilesCombo.setSelectedItem(profileData.getCurrentProfile());
   }

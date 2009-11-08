@@ -28,6 +28,7 @@ public class MainMenu
   private final JMenuBar menuBar;
   public final JMenuItem translatorModeMenuItem;
   public final JMenuItem generateIdMenuItem;
+  public final JMenuItem removeIdMenuItem;
 
   private final Controller controller;
   private final HyperlinkLaunchingListener hyperlinkListener;
@@ -62,7 +63,11 @@ public class MainMenu
     menu = createMenu("advanced");
     menuBar.add(menu);
 
-    menu.add(generateIdMenuItem = createMenuItem(JMenuItem.class, "advanced.generateOnlineId", Controller.CMD_GENERATE_ONLINE_ID));
+    JMenu onlineIdMenuItem = createMenu("advanced.onlineId");
+    menu.add(onlineIdMenuItem);
+
+    onlineIdMenuItem.add(generateIdMenuItem = createMenuItem(JMenuItem.class, "advanced.onlineId.generate", Controller.CMD_GENERATE_ONLINE_ID));
+    onlineIdMenuItem.add(removeIdMenuItem = createMenuItem(JMenuItem.class, "advanced.onlineId.remove", Controller.CMD_REMOVE_ONLINE_ID));
 
     JMenu decryptMenuItem = createMenu("advanced.decrypt");
     menu.add(decryptMenuItem);

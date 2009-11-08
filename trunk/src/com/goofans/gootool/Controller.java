@@ -69,6 +69,7 @@ public class Controller implements ActionListener
 
   public static final String CMD_TRANSLATOR_MODE = "ToggleTranslator";
   public static final String CMD_GENERATE_ONLINE_ID = "GenerateOnlineId";
+  public static final String CMD_REMOVE_ONLINE_ID = "RemoveOnlineId";
 
   public static final String CMD_DECRYPT_BIN_PC = "Decrypt>BinPC";
   public static final String CMD_DECRYPT_BIN_MAC = "Decrypt>BinMac";
@@ -176,6 +177,9 @@ public class Controller implements ActionListener
     }
     else if (cmd.equals(CMD_GENERATE_ONLINE_ID)) {
       generateOnlineId();
+    }
+    else if (cmd.equals(CMD_REMOVE_ONLINE_ID)) {
+      removeOnlineId();
     }
     else if (cmd.equals(CMD_GOOTOOL_UPDATE_CHECK)) {
       try {
@@ -859,7 +863,7 @@ public class Controller implements ActionListener
     {
       public void propertyChange(PropertyChangeEvent evt)
       {
-        if (evt.getPropertyName().equals("allProfilesAreOnline")) {
+        if ("allProfilesAreOnline".equals(evt.getPropertyName()) || "anyProfilesHaveGeneratedId".equals(evt.getPropertyName())) {
           updateGenerateOnlineIdMenu();
         }
       }
@@ -876,6 +880,7 @@ public class Controller implements ActionListener
   private void updateGenerateOnlineIdMenu()
   {
     mainFrame.mainMenu.generateIdMenuItem.setEnabled(!mainFrame.profilePanel.areAllProfilesOnline());
+    mainFrame.mainMenu.removeIdMenuItem.setEnabled(mainFrame.profilePanel.areAnyProfilesGeneratedId());
   }
 
   public void setInitialConfiguration(Configuration c)
@@ -981,13 +986,38 @@ public class Controller implements ActionListener
       GenerateOnlineIds.generateOnlineIds();
     }
     catch (IOException e) {
-      showErrorDialog(resourceBundle.getString("generateOnlineId.error.title"), resourceBundle.formatString("generateOnlineId.error.message", e.getLocalizedMessage()));
+      showErrorDialog(resourceBundle.getString("generateOnlineId.error.title"),
+              resourceBundle.formatString("generateOnlineId.error.message", e.getLocalizedMessage()));
       return;
     }
 
     mainFrame.profilePanel.loadProfiles();
 
     refreshView();
-    showMessageDialog(resourceBundle.getString("generateOnlineId.success.title"), resourceBundle.getString("generateOnlineId.success.message"));
+    showMessageDialog(resourceBundle.getString("generateOnlineId.success.title"),
+            resourceBundle.getString("generateOnlineId.success.message"));
+  }
+
+  public void removeOnlineId()
+  {
+    if (!showYesNoDialog(resourceBundle.getString("removeOnlineId.confirm.title"),
+            resourceBundle.getString("removeOnlineId.confirm.message"))) {
+      return;
+    }
+
+    try {
+      GenerateOnlineIds.removeGeneratedOnlineIds();
+    }
+    catch (IOException e) {
+      showErrorDialog(resourceBundle.getString("removeOnlineId.error.title"),
+              resourceBundle.formatString("removeOnlineId.error.message", e.getLocalizedMessage()));
+      return;
+    }
+
+    mainFrame.profilePanel.loadProfiles();
+
+    refreshView();
+    showMessageDialog(resourceBundle.getString("removeOnlineId.success.title"),
+            resourceBundle.getString("removeOnlineId.success.message"));
   }
 }
