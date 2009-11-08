@@ -191,13 +191,15 @@ public class AddinInstaller
     log.log(Level.FINER, "Compile " + fileName);
     checkDirOk(fileName);
 
-    if (addin.getManifestVersion().compareTo(AddinFactory.SPEC_VERSION_1_1) >= 0
-            && fileName.endsWith(".anim.xml")) {
-      throw new RuntimeException("compiling animations not yet done"); // TODO
+    if (fileName.endsWith(".anim.xml")) {
+      //if addin.getManifestVersion().compareTo(AddinFactory.SPEC_VERSION_1_2) >= 0) {
+      //else
+      throw new AddinFormatException("Animations are not supported in this spec-version");
     }
-    else if (addin.getManifestVersion().compareTo(AddinFactory.SPEC_VERSION_1_1) >= 0
-            && fileName.endsWith(".movie.xml")) {
-      throw new RuntimeException("compiling movies not yet done"); // TODO
+    else if (fileName.endsWith(".movie.xml")) {
+      //if addin.getManifestVersion().compareTo(AddinFactory.SPEC_VERSION_1_2) >= 0) {
+      //else
+      throw new AddinFormatException("Movies are not supported in this spec-version");
     }
     else if (fileName.endsWith(EXTENSION_XML)) {
       File destFile = WorldOfGoo.getTheInstance().getCustomGameFile(fileName.substring(0, fileName.length() - 4) + EXTENSION_BIN);
