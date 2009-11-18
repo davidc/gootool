@@ -16,7 +16,7 @@ fi
 
 # Check they have Java 1.5 or 1.6
 
-JAVA_VERSION=`${JAVA} -version 2>&1 | awk '{ print substr($3, 2, 4); exit }'`
+JAVA_VERSION=`${JAVA} -version 2>&1 | grep "^java version \".*\"$" | cut -d '"' -f 2 | grep -Eo '^[0-9]+\.[0-9]+\.'`
 
 if [ "${JAVA_VERSION}" != "1.5." -a "${JAVA_VERSION}" != "1.6." ]; then
     echo "GooTool requires Java 1.5 or 1.6. You have Java ${JAVA_VERSION}" 1>&2
