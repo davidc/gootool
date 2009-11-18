@@ -9,7 +9,7 @@ import java.util.zip.ZipEntry;
 import java.util.*;
 
 /**
- * Reads an addin in the standard .goomod (zip) format).
+ * Reads an addin in the standard .goomod (zip) format.
  *
  * @author David Croft (davidc@goofans.com)
  * @version $Id$
