@@ -1,0 +1,73 @@
+#!/bin/bash
+
+# Locate Java
+
+if [ ! -z "${JAVA_HOME}" ]; then
+    JAVA=${JAVA_HOME}/bin/java
+else
+    JAVA=`which java`
+fi
+
+if [ ! -f "${JAVA}" ]; then
+    echo "Can't locate Java on your system" 1>&2
+    echo "See http://goofans.com/gootool/troubleshooting/linux-java" 1>&2
+    exit 1
+fi
+
+# Check they have Java 1.5 or 1.6
+
+JAVA_VERSION=`${JAVA} -version 2>&1 | grep "^java version \".*\"$" | cut -d '"' -f 2 | grep -Eo '^[0-9]+\.[0-9]+\.'`
+
+if [ "${JAVA_VERSION}" != "1.5." -a "${JAVA_VERSION}" != "1.6." ]; then
+    echo "GooTool requires Java 1.5 or 1.6. You have Java ${JAVA_VERSION}" 1>&2
+    echo "See http://goofans.com/gootool/troubleshooting/linux-java" 1>&2
+    exit 1
+fi
+
+function die()
+{
+    echo $1 1>&2
+    exit 1
+}
+
+# Find the target of gootool symlink then locate gootool lib/etc directories
+
+GOOTOOL_EXE=`readlink -f $0` || die "Can't canonicalise $0"
+GOOTOOL_EXE_DIR=`dirname ${GOOTOOL_EXE}` || die "Can't dirname $GOOTOOL_EXE"
+
+if [ "${GOOTOOL_EXE_DIR}" = "/usr/bin" ]; then
+    GOOTOOL_LIB_DIR="/usr/share/gootool"
+    GOOTOOL_ETC_DIR="/etc/gootool"
+else
+    GOOTOOL_LIB_DIR=`readlink -f ${GOOTOOL_EXE_DIR}/../lib` || die "Can't canonicalise ${GOOTOOL_EXE_DIR}/../lib"
+    GOOTOOL_ETC_DIR=`readlink -f ${GOOTOOL_EXE_DIR}/../etc` || die "Can't canonicalise ${GOOTOOL_EXE_DIR}/../etc"
+fi
+
+# Verify we have found the right directories
+
+[ -f "${GOOTOOL_LIB_DIR}/gootool.jar" ] || die "Can't find GooTool library directory"
+
+[ -f "${GOOTOOL_ETC_DIR}/logger_properties.txt" ] || die "Can't find GooTool etc directory" 
+
+# Set up the classpath with all jars in lib dir
+
+CLASSPATH=""
+
+for i in ${GOOTOOL_LIB_DIR}/*.jar; do
+    if [ ! -z "${CLASSPATH}" ]; then
+	CLASSPATH=${CLASSPATH}:
+    fi
+    CLASSPATH=${CLASSPATH}$i
+done
+
+# Allow override of platform detection with env variable GOOTOOL_PLATFORM
+
+JAVAARGS=""
+
+if [ ! -z "${GOOTOOL_PLATFORM}" ]; then
+    JAVAARGS="-Dgootool.platform=${GOOTOOL_PLATFORM}"
+fi
+
+# Launch in background
+
+$JAVA -cp ${CLASSPATH} -Djava.util.logging.config.file=$GOOTOOL_ETC_DIR/logger_properties.txt ${JAVAARGS} com.goofans.gootool.GooTool $@ &

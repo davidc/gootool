@@ -1,0 +1,13 @@
+<addin spec-version="1.0">
+  <id>net.davidc.test.dependency</id>
+  <name>Dependency test</name>
+  <type>mod</type>
+  <version>1.0</version>
+  <description>This addin depends on one valid and one missing addin.</description>
+  <author>davidc</author>
+
+  <dependencies>
+    <depends ref="com.goofans.davidc.jingleballs" min-version="1.0"/>
+    <depends ref="net.davidc.test.nonexistant" min-version="1.0"/>
+  </dependencies>
+</addin>
