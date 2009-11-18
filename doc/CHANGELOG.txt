@@ -1,5 +1,6 @@
 1.0.2, unreleased
 
+- Fixed NullPointerExceptions on startup introduced in 1.0.1 when profile is missing or empty (#0000245).
 - Fix detection of non-Sun JREs under Linux (#0000242).
 - Updated the installer to auto-install a more recent JRE if needed (#0000243).
 
