@@ -532,6 +532,7 @@ public class Controller implements ActionListener
       return;
     }
 
+    mainFrame.profilePanel.loadProfiles();
     refreshView();
   }
 
