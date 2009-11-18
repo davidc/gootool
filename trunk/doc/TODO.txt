@@ -1,5 +1,7 @@
 Soon!
 
+Windows 7 support.
+
 - BUG FIX: Mac image conversion has slight colour shifts due to ColorModel
 - IMPROVEMENT: Don't SAVE if unmodified on LAUNCH
 

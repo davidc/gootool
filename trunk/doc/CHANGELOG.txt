@@ -1,3 +1,7 @@
+1.0.2, unreleased
+
+- Fix detection of non-Sun JREs under Linux (#0000242)
+
 1.0.1, 08-November-2009
 
 - Added an option to the Advanced menu to generate an online ID (for users who are unable to connect in-game) (#0000235).
