@@ -1,3 +1,10 @@
+Source excludes:
+- doc (for todo.txt, licenses.txt)
+
+Remove files in dest dir that don't exist in source dir and aren't added by a mod
+
+
+
 Soon!
 
 Windows 7 support.

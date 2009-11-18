@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
+<!--$Id$-->
 <project name="gootool" default="recompile">
 
   <!--
@@ -11,12 +12,14 @@
 
   <property file="ant.properties"/>
 
-  <!--Libraries required only for building are in lib/build/-->
+  <!-- Libraries required only for building are in lib/build/ -->
+
   <path id="build.classpath">
     <fileset dir="lib/build" includes="*.jar"/>
   </path>
 
   <!-- Definitions of new tasks -->
+
   <taskdef name="javac2" classname="com.intellij.ant.Javac2" classpathref="build.classpath"/>
 
   <taskdef name="launch4j"
@@ -375,5 +378,26 @@
     <svn javahl="false">
       <commit file="${release.properties}" message="post-release bump version to ${release.major}_${release.minor}_${release.micro}-dev"/>
     </svn>
+  </target>
+
+  <target name="source" description="Build the source release" depends="clean">
+    <tar destfile="dist/gootool-${gootool.version.full}-source.tar.bz2" compression="bzip2">
+      <tarfileset dir=".">
+        <include name="dist_src/"/>
+        <include name="installer/"/>
+        <include name="launcher/"/>
+        <include name="lib/"/>
+        <include name="resources/"/>
+        <exclude name="resources/gootoolsp/"/>
+        <include name="src/"/>
+        <exclude name="src/com/goofans/datamining/"/>
+        <exclude name="src/com/goofans/gootoolsp/"/>
+        <exclude name="src/com/goofans/gootool/iphone/"/>
+        <include name="ant.properties"/>
+        <include name="build.xml"/>
+        <include name="gootool.*"/>
+        <include name="logger_dev.properties"/>
+      </tarfileset>
+    </tar>
   </target>
 </project>
