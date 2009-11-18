@@ -194,12 +194,12 @@ public final class ProfilePanel implements ActionListener, ViewComponent
 
   public boolean areAllProfilesOnline()
   {
-    return allProfilesAreOnline;
+    return allProfilesAreOnline != null ? allProfilesAreOnline : true;
   }
 
   public boolean areAnyProfilesGeneratedId()
   {
-    return anyProfilesHaveGeneratedId;
+    return anyProfilesHaveGeneratedId != null ? anyProfilesHaveGeneratedId : false;
   }
 
   private void profileChanged()
@@ -435,7 +435,7 @@ public final class ProfilePanel implements ActionListener, ViewComponent
     if (enabled) {
       profileBackupButton.setToolTipText(resourceBundle.getString("profile.goofans.backup.tooltip"));
       profileRestoreButton.setToolTipText(resourceBundle.getString("profile.goofans.restore.tooltip"));
-      if (currentProfile.getOnlineId() != null) {
+      if (currentProfile != null && currentProfile.getOnlineId() != null) {
         profilePublishButton.setToolTipText(resourceBundle.getString("profile.goofans.publish.tooltip"));
         profilePublishButton.setEnabled(true);
       }
@@ -455,6 +455,7 @@ public final class ProfilePanel implements ActionListener, ViewComponent
       profileBackupButton.setToolTipText(tooltip);
       profileRestoreButton.setToolTipText(tooltip);
       profilePublishButton.setToolTipText(tooltip);
+      profilePublishButton.setEnabled(false);
     }
   }
 
