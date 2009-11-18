@@ -126,6 +126,7 @@ public class AddinFactory
   }
 
   // for use by AddinInstaller, since it shouldn't need to know whether the addin is a file or disk. still not an ideal arrangement though.
+  // TODO possibly have a getReader() method on Addin
   static AddinReader getAddinReader(File diskFile) throws IOException
   {
     if (diskFile.isDirectory()) {
@@ -171,9 +172,8 @@ public class AddinFactory
    * @param manifestVersion The spec-version of the manifest.
    * @param addinDiskFile   The addin file or directory on disk.
    * @return The constructed addin.
-   * @throws AddinFormatException if the addin was somehow invalid.
-   * @throws javax.xml.xpath.XPathExpressionException
-   *                              if the manifest was unparseable (really, should be AddinFormatException).
+   * @throws AddinFormatException     if the addin was somehow invalid.
+   * @throws XPathExpressionException if the manifest was unparseable (really, should be AddinFormatException).
    */
   private static Addin readManifestVersion1_0(Document document, VersionSpec manifestVersion, File addinDiskFile) throws XPathExpressionException, AddinFormatException
   {
@@ -231,11 +231,12 @@ public class AddinFactory
   }
 
   /*
-   * Reads the manifest for spec-version 1.1, first supported in GooTool 1.0.0
-    * Version 1.1 is the same as 1.0, with the following additions:
+   * Reads the manifest for spec-version 1.1, first supported in GooTool 1.0.1
+   * Version 1.1 is the same as 1.0, with the following additions:
    * - Thumbnails
-   * - TODO .movie.xml and .anim.xml files from compile\ are compiled (by AddinInstaller)
-   * - TODO maybe required previous levels?
+   * - text.xml supported in addin root
+   * - level/cutscene and level/skipeolsequence added
+   * - level moved to levels/level, multiple level support
    *
    * @param document        the DOM document of the manifest file.
    * @param manifestVersion The spec-version of the manifest.

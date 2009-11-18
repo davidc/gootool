@@ -254,7 +254,7 @@ public class ToolPreferences
    * This method is useful for debugging.
    *
    * @param out an output stream.
-   * @throws java.util.prefs.BackingStoreException if the BackingStore cannot be reacehd
+   * @throws BackingStoreException if the BackingStore cannot be reacehd
    */
   public static void list(PrintStream out) throws BackingStoreException
   {

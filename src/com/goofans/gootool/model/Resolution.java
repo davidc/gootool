@@ -49,9 +49,11 @@ public class Resolution implements Comparable
     int heightFactor = height / gcd;
 
     if (widthFactor == 5 && heightFactor == 3) {
+      // Show 15:9 instead of 5:3
       gcd /= 3;
     }
     else if (widthFactor == 8 && heightFactor == 5) {
+      // Show 16:10 instead of 8:5
       gcd /= 2;
     }
 

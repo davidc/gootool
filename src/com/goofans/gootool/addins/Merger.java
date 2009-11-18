@@ -11,6 +11,8 @@ import javax.xml.transform.stream.StreamResult;
 import java.io.*;
 
 /**
+ * Handles a single XSL transformation.
+ *
  * @author David Croft (davidc@goofans.com)
  * @version $Id$
  */

@@ -5,7 +5,7 @@ import java.util.Enumeration;
 import java.text.MessageFormat;
 
 /**
- * GooTool's ResourceBundle with a couple of convenience methods.
+ * GooTool's ResourceBundle with a couple of convenience methods. Formerly "TextProvider".
  *
  * @author David Croft (davidc@goofans.com)
  * @version $Id$
