@@ -1,6 +1,7 @@
 1.0.2, unreleased
 
-- Fix detection of non-Sun JREs under Linux (#0000242)
+- Fix detection of non-Sun JREs under Linux (#0000242).
+- Updated the installer to auto-install a more recent JRE if needed (#0000243).
 
 1.0.1, 08-November-2009
 
