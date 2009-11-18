@@ -63,7 +63,7 @@ InstallDirRegKey HKLM "SOFTWARE\GooTool" "Install_Dir"
   VIAddVersionKey /LANG=${LANG_ENGLISH} "FileVersion" "${gootool.version}"
 
 !define JRE_VERSION "1.6"
-!define JRE_URL "http://javadl.sun.com/webapps/download/AutoDL?BundleId=26223&/jre-6u11-windows-i586-p.exe"
+!define JRE_URL "http://javadl.sun.com/webapps/download/AutoDL?BundleId=35989"
 
 
 ;--------------------------------
