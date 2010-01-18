@@ -1,4 +1,4 @@
-package com.goofans;
+package com.goofans.towerbuilder;
 
 import javax.swing.*;
 import java.awt.*;
