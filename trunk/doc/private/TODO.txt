@@ -1,9 +1,3 @@
-- gootoolcmd option to validate an addin
-
-- release procedure doc
-
-- source release to include mappings for that version
-
 
 Source excludes:
 - doc (for todo.txt, licenses.txt)
@@ -49,7 +43,6 @@ MILESTONE 1.1.0
 
 - NEW FEATURE: Option to check mods for updates on goofans.com from within GooTool
 - NEW FEATURE: Auto-download required dependencies from goofans.com
-- NEW FEATURE: command line interface to image l10n tool for the wiki site, no gui
 
 - NEW FEATURE: Integrated ball editor
 - NEW FEATURE: Finalise the level editor
@@ -71,13 +64,3 @@ NO MILESTONE SET
 can't access our formatter currently inside the jar/exe
 
 use JFormattedTextField for input field validation
-
-TODO - World of Goo
-
-- Better level load crash debugging
-
-
-TODO - GooFans
-
-- last two balls hanging ivy
-
