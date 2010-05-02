@@ -1,6 +1,7 @@
 1.0.3, unreleased
 
 - Added new command-line utility "gooinfo" to dump information about user's profile and tower under Windows and Linux. Run it on its own for syntax (#0000249).
+- Added "gooinfo -validateaddin" to do prelimiary addin sanity check (currently just validates the manifest) (#0000250).
 
 1.0.2, 18-November-2009
 

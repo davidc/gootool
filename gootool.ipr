@@ -577,6 +577,24 @@
       <ConfigurationWrapper RunnerId="Run" />
       <method />
     </configuration>
+    <configuration default="false" name="cmd -validateaddin" type="Application" factoryName="Application">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="emma" />
+      <extension name="snapshooter" />
+      <option name="MAIN_CLASS_NAME" value="com.goofans.gootool.GooInfo" />
+      <option name="VM_PARAMETERS" value="-Djava.util.logging.config.file=logger_dev.properties" />
+      <option name="PROGRAM_PARAMETERS" value="-validateaddin addins\dist\com.2dboy.talic.ironball_1.0.goomod -validateaddin addins\dist\net.davidc.test.badoverride_1.0.goomod -validateaddin &quot;addins\dist\net.davidc.test.invalid manifest_1.0.goomod&quot;" />
+      <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" value="C:/Program Files/Java/jdk1.6.0_11" />
+      <option name="ENABLE_SWING_INSPECTOR" value="false" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <module name="gootool" />
+      <envs />
+      <RunnerSettings RunnerId="Run" />
+      <ConfigurationWrapper RunnerId="Run" />
+      <method />
+    </configuration>
   </component>
   <component name="ResourceManagerContainer">
     <option name="myResourceBundles">
