@@ -96,7 +96,7 @@
   </component>
   <component name="CopyrightManager" default="">
     <copyright>
-      <option name="notice" value="Copyright (c) 2008, 2009, 2010 David C A Croft. All rights reserved. Your use of this computer software is subject to the license." />
+      <option name="notice" value="Copyright (c) 2008, 2009, 2010 David C A Croft. All rights reserved. Your use of this computer software&#10;is permitted only in accordance with the GooTool license agreement distributed with this file." />
       <option name="keyword" value="Copyright" />
       <option name="allowReplaceKeyword" value="" />
       <option name="myName" value="GooTool" />
@@ -184,7 +184,9 @@
           <option name="m_recognizeExampleMediaType" value="false" />
         </inspection_tool>
         <inspection_tool class="HardcodedLineSeparators" enabled="true" level="WARNING" enabled_by_default="true" />
-        <inspection_tool class="IOResource" enabled="true" level="WARNING" enabled_by_default="true" />
+        <inspection_tool class="IOResource" enabled="true" level="WARNING" enabled_by_default="true">
+          <option name="ignoredTypesString" value="java.io.ByteArrayOutputStream,java.io.ByteArrayInputStream,java.io.StringBufferInputStream,java.io.CharArrayWriter,java.io.CharArrayReader,java.io.StringWriter,java.io.StringReader" />
+        </inspection_tool>
         <inspection_tool class="IndexOfReplaceableByContains" enabled="true" level="WARNING" enabled_by_default="true" />
         <inspection_tool class="InstantiationOfUtilityClass" enabled="true" level="WARNING" enabled_by_default="true" />
         <inspection_tool class="IteratorNextDoesNotThrowNoSuchElementException" enabled="true" level="WARNING" enabled_by_default="true" />
@@ -435,6 +437,7 @@
   <component name="ProjectDictionaryState">
     <dictionary name="david">
       <words>
+        <w>gootoolcmd</w>
         <w>online</w>
       </words>
     </dictionary>
@@ -505,7 +508,7 @@
     <configuration default="false" name="cmd -listprofiles" type="Application" factoryName="Application">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="emma" />
       <extension name="snapshooter" />
-      <option name="MAIN_CLASS_NAME" value="com.goofans.gootool.GooToolCommand" />
+      <option name="MAIN_CLASS_NAME" value="com.goofans.gootool.GooInfo" />
       <option name="VM_PARAMETERS" value="-Djava.util.logging.config.file=logger_dev.properties" />
       <option name="PROGRAM_PARAMETERS" value="-listprofiles" />
       <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$" />
@@ -523,9 +526,45 @@
     <configuration default="false" name="cmd -profile 0 -dumpprofile" type="Application" factoryName="Application">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="emma" />
       <extension name="snapshooter" />
-      <option name="MAIN_CLASS_NAME" value="com.goofans.gootool.GooToolCommand" />
+      <option name="MAIN_CLASS_NAME" value="com.goofans.gootool.GooInfo" />
       <option name="VM_PARAMETERS" value="-Djava.util.logging.config.file=logger_dev.properties" />
       <option name="PROGRAM_PARAMETERS" value="-profile 0 -dumpprofile" />
+      <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" value="C:/Program Files/Java/jdk1.6.0_11" />
+      <option name="ENABLE_SWING_INSPECTOR" value="false" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <module name="gootool" />
+      <envs />
+      <RunnerSettings RunnerId="Run" />
+      <ConfigurationWrapper RunnerId="Run" />
+      <method />
+    </configuration>
+    <configuration default="false" name="cmd -profile 0 -drawtower" type="Application" factoryName="Application">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="emma" />
+      <extension name="snapshooter" />
+      <option name="MAIN_CLASS_NAME" value="com.goofans.gootool.GooInfo" />
+      <option name="VM_PARAMETERS" value="-Djava.util.logging.config.file=logger_dev.properties" />
+      <option name="PROGRAM_PARAMETERS" value="-profile 0 -drawtype full -drawTower c:\dev\gootool\test-full.png -drawtype transparent -drawTower c:\dev\gootool\test-transparent.png -drawtype thumbnail -drawTower c:\dev\gootool\test-thumbnail.png" />
+      <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" value="C:/Program Files/Java/jdk1.6.0_11" />
+      <option name="ENABLE_SWING_INSPECTOR" value="false" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <module name="gootool" />
+      <envs />
+      <RunnerSettings RunnerId="Run" />
+      <ConfigurationWrapper RunnerId="Run" />
+      <method />
+    </configuration>
+    <configuration default="false" name="cmd -version" type="Application" factoryName="Application">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="emma" />
+      <extension name="snapshooter" />
+      <option name="MAIN_CLASS_NAME" value="com.goofans.gootool.GooInfo" />
+      <option name="VM_PARAMETERS" value="-Djava.util.logging.config.file=logger_dev.properties" />
+      <option name="PROGRAM_PARAMETERS" value="-version" />
       <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
       <option name="ALTERNATIVE_JRE_PATH" value="C:/Program Files/Java/jdk1.6.0_11" />

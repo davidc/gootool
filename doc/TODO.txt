@@ -1,3 +1,10 @@
+- gootoolcmd option to validate an addin
+
+- release procedure doc
+
+- source release to include mappings for that version
+
+
 Source excludes:
 - doc (for todo.txt, licenses.txt)
 

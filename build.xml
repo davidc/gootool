@@ -188,7 +188,9 @@
 
       <keep name="com.goofans.gootool.GooTool">
         <method name="main"/>
-        <!--public static void main(java.lang.String[]);-->
+      </keep>
+      <keep name="com.goofans.gootool.GooInfo">
+        <method name="main"/>
       </keep>
       <keep name="net.infotrek.util.logging.jdk14.TerseFormatter"/>
       <keep name="net.infotrek.util.prefs.FilePreferencesFactory"/>
@@ -202,6 +204,15 @@
     <launch4j configFile="launcher/launch4j.xml"
               jar="${obfuscated.jar}"
               outfile="${dist.win32}/bin/gootool.exe"
+              fileversion="${gootool.version}"
+              txtfileversion="${gootool.version.full}"
+              productversion="${gootool.version}"
+              txtproductversion="${gootool.version.full}"
+            />
+    
+    <launch4j configFile="launcher/launch4j-info.xml"
+              jar="${obfuscated.jar}"
+              outfile="${dist.win32}/bin/gooinfo.exe"
               fileversion="${gootool.version}"
               txtfileversion="${gootool.version.full}"
               productversion="${gootool.version}"
