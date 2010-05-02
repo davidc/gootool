@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2008, 2009, 2010 David C A Croft. All rights reserved. Your use of this computer software
+ * is permitted only in accordance with the GooTool license agreement distributed with this file.
+ */
+
 package com.goofans.gootool.profile;
 
 import net.infotrek.util.EncodingUtil;
@@ -21,7 +26,7 @@ public class ProfileData
 
   private static final String KEY_PROFILE = "profile_";
   private static final String KEY_MRPP = "mrpp";
-  private static final int MAX_PROFILES = 3;
+  public static final int MAX_PROFILES = 3;
 
   private final Map<String, String> data = new LinkedHashMap<String, String>();
   private final Profile[] profiles = new Profile[MAX_PROFILES];
