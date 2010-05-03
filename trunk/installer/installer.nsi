@@ -58,7 +58,7 @@ InstallDirRegKey HKLM "SOFTWARE\GooTool" "Install_Dir"
 ;  VIAddVersionKey /LANG=${LANG_ENGLISH} "Comments" "A test comment"
 ;  VIAddVersionKey /LANG=${LANG_ENGLISH} "CompanyName" "Fake company"
 ;  VIAddVersionKey /LANG=${LANG_ENGLISH} "LegalTrademarks" "Test Application is a trademark of Fake company"
-  VIAddVersionKey /LANG=${LANG_ENGLISH} "LegalCopyright" "Copyright 2008, 2009 David Croft"
+  VIAddVersionKey /LANG=${LANG_ENGLISH} "LegalCopyright" "Copyright 2008, 2009, 2010 David Croft"
   VIAddVersionKey /LANG=${LANG_ENGLISH} "FileDescription" "GooTool Installer"
   VIAddVersionKey /LANG=${LANG_ENGLISH} "FileVersion" "${gootool.version}"
 
