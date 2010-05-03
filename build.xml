@@ -391,9 +391,10 @@
     </svn>
   </target>
 
-  <target name="source" description="Build the source release" depends="clean">
-    <tar destfile="dist/gootool-${gootool.version.full}-source.tar.bz2" compression="bzip2">
-      <tarfileset dir=".">
+  <target name="source" description="Build the source release">
+    <mkdir dir="${dist.dir}"/>
+    <tar destfile="dist/gootool-${gootool.version.full}-source.tar.bz2" compression="bzip2" longfile="fail">
+      <tarfileset dir="." prefix="gootool-${gootool.version.full}">
         <include name="dist_src/"/>
         <include name="installer/"/>
         <include name="launcher/"/>
@@ -403,11 +404,16 @@
         <include name="src/"/>
         <exclude name="src/com/goofans/datamining/"/>
         <exclude name="src/com/goofans/gootoolsp/"/>
+        <exclude name="src/com/goofans/towerbuilder/"/>
         <exclude name="src/com/goofans/gootool/iphone/"/>
         <include name="ant.properties"/>
         <include name="build.xml"/>
-        <include name="gootool.*"/>
+        <include name="gootool.iml"/>
+        <include name="gootool.ipr"/>
         <include name="logger_dev.properties"/>
+        <include name="mapping/${gootool.version.full}.mapping"/>
+        <include name="doc/"/>
+        <exclude name="doc/private/"/>
       </tarfileset>
     </tar>
   </target>
