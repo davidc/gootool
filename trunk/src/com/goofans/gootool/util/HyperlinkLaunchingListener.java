@@ -14,6 +14,10 @@ import java.awt.event.ActionListener;
 import java.awt.*;
 
 /**
+ * A listener that acts as both a HyperlinkListener (for our HyperlinkLabels), and an ActionListener
+ * (for other elements that specify the URL as their action command). Launches a browser to this URL
+ * when the action is performed.
+ *
  * @author David Croft (davidc@goofans.com)
  * @version $Id$
  */

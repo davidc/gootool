@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * Abstract superclass for tasks that can indicate their progress to listeners.
+ *
  * @author David Croft (davidc@goofans.com)
  * @version $Id$
  */
@@ -29,7 +31,7 @@ public abstract class ProgressIndicatingTask
   }
 
 
-  protected  void beginStep(String taskDescription, boolean progressAvailable)
+  protected void beginStep(String taskDescription, boolean progressAvailable)
   {
 //    log.log(Level.INFO, "Beginning step " + taskDescription);
     for (ProgressListener listener : listeners) {

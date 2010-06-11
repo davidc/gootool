@@ -12,7 +12,7 @@ import java.awt.image.BufferedImage;
 import java.awt.*;
 
 /**
- * Utilities for use only in test cases (psvm etc)
+ * Utilities for use only in test cases (psvm etc).
  *
  * @author David Croft (davidc@goofans.com)
  * @version $Id$
@@ -24,6 +24,9 @@ public class DebugUtil
   {
   }
 
+  /**
+   * Sets the debugging level of all project classes to the highest.
+   */
   public static void setAllLogging()
   {
 //    Logger.getLogger("").setLevel(Level.ALL);
@@ -32,6 +35,11 @@ public class DebugUtil
     Logger.getLogger("").getHandlers()[0].setLevel(Level.ALL);
   }
 
+  /**
+   * Opens up a dialog window to display the given image.
+   *
+   * @param image The image to display.
+   */
   public static void showImageWindow(BufferedImage image)
   {
     JDialog dlg = new JDialog((Frame) null, "Image Debug", true);
@@ -45,6 +53,11 @@ public class DebugUtil
     dlg.setVisible(true);
   }
 
+  /**
+   * Opens up a dialog window to display the given panel.
+   *
+   * @param panel The panel to display.
+   */
   public static void showPanelWindow(JPanel panel)
   {
     JDialog dlg = new JDialog((Frame) null, "Panel Debug", true);

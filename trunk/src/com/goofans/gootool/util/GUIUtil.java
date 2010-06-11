@@ -14,6 +14,8 @@ import com.goofans.gootool.GooTool;
 import com.goofans.gootool.view.ProgressDialog;
 
 /**
+ * GUI-related utility functions.
+ *
  * @author David Croft (davidc@goofans.com)
  * @version $Id$
  */
@@ -25,6 +27,11 @@ public class GUIUtil
   {
   }
 
+  /**
+   * Adds a keyboard listener to close the dialog when ESCAPE is pressed.
+   *
+   * @param dialog The dialog to act upon.
+   */
   public static void setCloseOnEscape(final JDialog dialog)
   {
     dialog.getRootPane().registerKeyboardAction(new ActionListener()
@@ -36,6 +43,11 @@ public class GUIUtil
     }, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_IN_FOCUSED_WINDOW);
   }
 
+  /**
+   * Sets a dialog to pack() when it is opened.
+   *
+   * @param dialog The dialog to act upon.
+   */
   public static void setPackOnOpen(final JDialog dialog)
   {
     dialog.addWindowListener(new WindowAdapter()
@@ -48,6 +60,12 @@ public class GUIUtil
     });
   }
 
+  /**
+   * Sets a dialog to request focus on a component when it is opened.
+   *
+   * @param dialog    The dialog to act upon.
+   * @param component The component in the dialog to focus.
+   */
   public static void setFocusOnOpen(final JDialog dialog, final JComponent component)
   {
     dialog.addWindowListener(new WindowAdapter()
@@ -60,6 +78,12 @@ public class GUIUtil
     });
   }
 
+  /**
+   * Sets a button to be the default button of a dialog, and to close the window when clicked.
+   *
+   * @param okButton The button to act upon.
+   * @param dialog   The dialog window containing this button.
+   */
   public static void setDefaultClosingOkButton(JButton okButton, final JDialog dialog)
   {
     dialog.getRootPane().setDefaultButton(okButton);
@@ -73,6 +97,9 @@ public class GUIUtil
     });
   }
 
+  /**
+   * Switch to the system's default Swing Look and Feel.
+   */
   public static void switchToSystemLookAndFeel()
   {
     String systemLaf = UIManager.getSystemLookAndFeelClassName();
@@ -85,6 +112,14 @@ public class GUIUtil
     }
   }
 
+  /**
+   * Run a progess-indicating task, opening up a new dialog to display its progress.
+   *
+   * @param owner       The owner frame for the modal dialog.
+   * @param windowTitle The title of the dialog.
+   * @param task        The task to run.
+   * @throws Exception any exception thrown by the task that ran.
+   */
   public static void runTask(JFrame owner, String windowTitle, final ProgressIndicatingTask task) throws Exception
   {
     final ProgressDialog progressDialog = new ProgressDialog(owner, windowTitle);
@@ -92,6 +127,14 @@ public class GUIUtil
     runTask(task, progressDialog);
   }
 
+  /**
+   * Run a progess-indicating task, opening up a new dialog to display its progress.
+   *
+   * @param owner       The owner dialog for the modal dialog.
+   * @param windowTitle The title of the dialog.
+   * @param task        The task to run.
+   * @throws Exception any exception thrown by the task that ran.
+   */
   public static void runTask(JDialog owner, String windowTitle, final ProgressIndicatingTask task) throws Exception
   {
     final ProgressDialog progressDialog = new ProgressDialog(owner, windowTitle);
@@ -99,6 +142,13 @@ public class GUIUtil
     runTask(task, progressDialog);
   }
 
+  /**
+   * Runs a task on the next available thread-pool thread, updating the given progress dialog with its progress.
+   *
+   * @param task           The task to run.
+   * @param progressDialog The progress dialog to update.
+   * @throws Exception any exception thrown by the task that ran.
+   */
   public static void runTask(final ProgressIndicatingTask task, final JDialog progressDialog) throws Exception
   {
     final Exception[] result = new Exception[]{null};
@@ -127,7 +177,7 @@ public class GUIUtil
       }
     });
 
-    progressDialog.setVisible(true); // blocks
+    progressDialog.setVisible(true); // blocks until dialog is closed by our thread.
 
     /* Now it has exited */
 

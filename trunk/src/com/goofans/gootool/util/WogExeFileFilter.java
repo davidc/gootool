@@ -14,6 +14,8 @@ import javax.swing.filechooser.FileFilter;
 import java.io.File;
 
 /**
+ * A file filter for JFileChoosers that only allows selection of valid World of Goo installations.
+ *
  * @author David Croft (davidc@goofans.com)
  * @version $Id$
  */

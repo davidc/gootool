@@ -11,7 +11,9 @@ import java.util.Locale;
 import java.text.SimpleDateFormat;
 
 /**
- * Static access to the build/release version information.
+ * Static access to the release/build version information. These are pulled from the release.properties
+ * and build.properties files that are generated on release tag and build respectively. 
+ *
  * FULL includes the full version and the type (-dev etc).
  * FRIENDLY is like FULL but without the final version component (SVN revision).
  *

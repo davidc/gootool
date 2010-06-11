@@ -24,8 +24,6 @@ public class LinuxSupport extends PlatformSupport
           "%HOME%/.WorldOfGoo"
   };
 
-  private final SingleInstance singleInstance = new SingleInstance();
-
   LinuxSupport()
   {
   }
@@ -33,7 +31,7 @@ public class LinuxSupport extends PlatformSupport
   @Override
   protected boolean doPreStartup(List<String> args)
   {
-    return singleInstance.singleInstance(args);
+    return SingleInstance.getInstance().singleInstance(args);
   }
 
   @Override

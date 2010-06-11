@@ -9,7 +9,7 @@ import java.util.StringTokenizer;
 import java.util.Arrays;
 
 /**
- * Specification of a version in n.n.n.n format. (up to 4 numbers)
+ * Specification of a version in n.n.n.n format (up to 4 numbers).
  * Immutable after construction.
  *
  * @author David Croft (davidc@goofans.com)
@@ -64,7 +64,7 @@ public class VersionSpec implements Comparable<VersionSpec>
 
   public int compareTo(VersionSpec that)
   {
-    // Compare all 0-3. Since unused fields default to 0, this allows correct comparison of 1.1 and 1.1.5.
+    // Compare all components 0-3. Since unused fields default to 0, this allows correct comparison of 1.1 and 1.1.5.
     for (int i = 0; i < MAX_FIELDS; ++i) {
       if (this.version[i] < that.version[i]) return -1;
       if (this.version[i] > that.version[i]) return +1;
