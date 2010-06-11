@@ -13,6 +13,7 @@ import org.w3c.dom.Document;
 
 /**
  * A simple authenticated request that does nothing, but does throw an APIException if the user login failed.
+ * Used when the user enters their username/password to check that it is correct. 
  *
  * @author David Croft (davidc@goofans.com)
  * @version $Id$

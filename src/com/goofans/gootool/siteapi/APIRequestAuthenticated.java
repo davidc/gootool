@@ -11,12 +11,12 @@ import java.util.logging.Logger;
 import com.goofans.gootool.ToolPreferences;
 
 /**
- * An API request that requires a user login.
+ * Superclass for requests against the goofans.com API that requires a user login.
  *
  * @author David Croft (davidc@goofans.com)
  * @version $Id$
  */
-public class APIRequestAuthenticated extends APIRequest
+public abstract class APIRequestAuthenticated extends APIRequest
 {
   private static final Logger log = Logger.getLogger(APIRequestAuthenticated.class.getName());
 

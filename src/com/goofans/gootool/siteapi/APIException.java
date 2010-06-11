@@ -6,7 +6,8 @@
 package com.goofans.gootool.siteapi;
 
 /**
- * For API exceptions.
+ * An exception returned by the REST API server. These exceptions are normally generated remotely not locally,
+ * except in cases where we can catch an input error early before even having to ask the server.
  *
  * @author David Croft (davidc@goofans.com)
  * @version $Id$

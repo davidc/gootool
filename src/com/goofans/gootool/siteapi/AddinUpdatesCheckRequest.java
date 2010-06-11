@@ -21,6 +21,9 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
 /**
+ * API request to check the latest versions of a given list of addins. The returned map contains the latest versions
+ * of each requested addin, even if we already have the latest.
+ *
  * @author David Croft (davidc@goofans.com)
  * @version $Id$
  */
@@ -33,6 +36,12 @@ public class AddinUpdatesCheckRequest extends APIRequest
     super(API_ADDIN_UPDATES_CHECK);
   }
 
+  /**
+   * Get a list of updates for all installed addins.
+   *
+   * @return A map of the addin ID to the latest available update version.
+   * @throws APIException if the API request failed.
+   */
   public Map<String, AvailableUpdate> checkUpdates() throws APIException
   {
 
@@ -40,6 +49,13 @@ public class AddinUpdatesCheckRequest extends APIRequest
     return checkUpdates(availableAddins);
   }
 
+  /**
+   * Get a list of updates for all addins in the given list.
+   *
+   * @param addins The list of addins to check.
+   * @return A map of the addin ID to the available update version.
+   * @throws APIException if the API request failed.
+   */
   public Map<String, AvailableUpdate> checkUpdates(List<Addin> addins) throws APIException
   {
     List<String> checkAddins = new ArrayList<String>(addins.size());
@@ -51,6 +67,13 @@ public class AddinUpdatesCheckRequest extends APIRequest
     return checkUpdatesById(checkAddins);
   }
 
+  /**
+   * Get a list of updates for all addins in the given ID list.
+   *
+   * @param addinIds The list of addin IDs to check.
+   * @return A map of the addin ID to the available update version.
+   * @throws APIException if the API request failed.
+   */
   public Map<String, AvailableUpdate> checkUpdatesById(List<String> addinIds) throws APIException
   {
     log.log(Level.FINE, "Addin update check started");
@@ -120,7 +143,9 @@ public class AddinUpdatesCheckRequest extends APIRequest
     return updates;
   }
 
-
+  /**
+   * A 4-tuple containing each available update found: the id, latest version, release date, and direct-download URL.
+   */
   public static class AvailableUpdate
   {
     public String id;

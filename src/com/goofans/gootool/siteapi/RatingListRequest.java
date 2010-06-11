@@ -17,6 +17,8 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
 /**
+ * A request to retrieve all of the current user's addin ratings.
+ *
  * @author David Croft (davidc@goofans.com)
  * @version $Id$
  */
