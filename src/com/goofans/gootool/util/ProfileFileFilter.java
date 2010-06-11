@@ -9,6 +9,8 @@ import javax.swing.filechooser.FileFilter;
 import java.io.File;
 
 /**
+ * A file filter for JFileChoosers that only allows selection of valid profile files (pers2.dat).
+ *
  * @author David Croft (davidc@goofans.com)
  * @version $Id$
  */

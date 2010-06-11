@@ -39,8 +39,6 @@ public class WindowsSupport extends PlatformSupport
           "%HOME%/.wine/drive_c/windows/profiles/All Users/Application Data/2DBoy/WorldOfGoo", //wine, old format
   };
 
-  private final SingleInstance singleInstance = new SingleInstance();
-
   WindowsSupport()
   {
   }
@@ -48,7 +46,7 @@ public class WindowsSupport extends PlatformSupport
   @Override
   protected boolean doPreStartup(List<String> args)
   {
-    return singleInstance.singleInstance(args);
+    return SingleInstance.getInstance().singleInstance(args);
   }
 
   @Override

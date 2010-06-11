@@ -19,6 +19,12 @@ import com.goofans.gootool.Controller;
 
 /**
  * Handles ensuring that only a single instance of the tool is running, for Windows and Linux platforms.
+ * Operating-system level file locking is used to ensure there are no race conditions and to ensure the lock
+ * is guaranteed to be released on JVM termination.
+ * <p/>
+ * The first copy of the tool that is run will listen to a socket on the loopback interface. Subsequent copies
+ * that attempt to start will find the lockfile is locked, and send their arguments to the primary instance over
+ * this socket instead (and then exit).
  *
  * @author David Croft (davidc@goofans.com)
  * @version $Id$
@@ -27,18 +33,52 @@ public class SingleInstance
 {
   private static final Logger log = Logger.getLogger(SingleInstance.class.getName());
 
+  /**
+   * The single file, in the user's temporary directory, that is locked to ensure only one copy is run.
+   */
   private static final String LOCK_FILE = "gootool.lock";
+
+  /**
+   * The file in which the primary instance writes the socket number it's listening to.
+   */
   private static final String SOCKET_FILE = "gootool.socket";
+
+  /**
+   * The prefix used by temporary test files to ensure that the temporary directory is writeable. The actual files
+   * will have a random integer appended to this.
+   */
   private static final String TEST_FILE = "gootool.test";
+
+  private static final SingleInstance theInstance = new SingleInstance();
 
   private final File lockFile;
   private RandomAccessFile lockFileRAF;
 
-  public SingleInstance()
+  private SingleInstance()
   {
     lockFile = getTempFile(LOCK_FILE);
   }
 
+  /**
+   * Singleton accessor method.
+   *
+   * @return the singleton instance of the SingleInstance object
+   */
+  public static SingleInstance getInstance()
+  {
+    return theInstance;
+  }
+
+  /**
+   * Ensures that only one copy of the tool is running. If this is the first copy, dispatch the arguments
+   * to the Controller, and set up a listening socket on the loopback interface to receive arguments from
+   * subsequent instances.
+   * <p/>
+   * If a copy is already running, pass the arguments to it, then return false indicating the caller should exit.
+   *
+   * @param args The command-line arguments to use or pass to the primary instance.
+   * @return true if this is the primary instance, otherwise false.
+   */
   public boolean singleInstance(List<String> args)
   {
     // First do a quick test to make sure we can write anything to the tmpdir
@@ -57,6 +97,11 @@ public class SingleInstance
     }
   }
 
+  /**
+   * Ensures that the temporary directory can be written to at all. This ensures the lockfile
+   * can later be written. A read-only temporary directory is an unusual and fatal condition that
+   * raises a RuntimeException.
+   */
   private void testTempDir()
   {
     File testFile = getTempFile(TEST_FILE + new Random().nextInt(Integer.MAX_VALUE));
@@ -72,9 +117,11 @@ public class SingleInstance
       }
 
       FileOutputStream fos = new FileOutputStream(randomAccessFile.getFD());
+      // Write a single character to the file to ensure it's really writable.
       fos.write('a');
 
-      // Must release it or stupid Linux version of Java thinks that our lock on the REAL lock file is this lock!
+      // Must release the lock as the Linux version of Java fails to release it on fos.close(), thereby causing the next fd
+      // opened (the real lock file) to be already locked - by us!
       lock.release();
       fos.close();
     }
@@ -85,6 +132,12 @@ public class SingleInstance
     testFile.delete();
   }
 
+  /**
+   * Try to lock the main lockfile. Returns the lock if successful, otherwise null if it's already locked.
+   * Failure to open the lockfile at all will result in a RuntimeException. This method is non-blocking.
+   *
+   * @return the FileLock if locked, otherwise null
+   */
   private FileLock tryLock()
   {
     log.finest("Attempting lock at " + lockFile);
@@ -103,6 +156,13 @@ public class SingleInstance
     return lock;
   }
 
+  /**
+   * Called when we are the primary instance. Setup a shutdown hook to release the lock, start up the
+   * listening socket, then pass the arguments to the Controller.
+   *
+   * @param lock The successful FileLock on the lockfile.
+   * @param args The command-line arguments.
+   */
   private void primaryInstance(final FileLock lock, List<String> args)
   {
     log.finer("We're the primary instance");
@@ -134,6 +194,12 @@ public class SingleInstance
     handleCommandLineArgs(args);
   }
 
+  /**
+   * Called when we are not the primary instance. Locate the primary instance's socket and send the
+   * command-line arguments to it.
+   *
+   * @param args The command-line arguments.
+   */
   private void secondaryInstance(List<String> args)
   {
     // Sleep just a moment in case the primary is still starting up
@@ -178,7 +244,13 @@ public class SingleInstance
     log.finer("Sent arguments, exiting");
   }
 
-  private File getTempFile(String fileName)
+  /**
+   * Gets the File of the given name in the user's temporary directory.
+   *
+   * @param fileName File name in the temp directory.
+   * @return The File object representing this file.
+   */
+  private static File getTempFile(String fileName)
   {
     String tmpDir = System.getProperty("java.io.tmpdir");
     return new File(tmpDir, fileName);
@@ -188,7 +260,7 @@ public class SingleInstance
    * Handles the command line arguments, both if we're the primary instance, and if these args were passed
    * over the socket.
    *
-   * @param args the command-line arguments.
+   * @param args The command-line arguments.
    */
   private void handleCommandLineArgs(final List<String> args)
   {
@@ -197,6 +269,7 @@ public class SingleInstance
       log.finer("args[" + i + "] = " + args.get(i));
     }
 
+    // Queue for the event-dispatch thread to pass to the Controller once startup is fully completed.
     GooTool.queueTask(new Runnable()
     {
       public void run()
@@ -212,11 +285,30 @@ public class SingleInstance
     });
   }
 
-  private InetAddress getLoopbackAddress() throws UnknownHostException
+  /**
+   * Gets the address of the loopback interface.
+   * <p/>
+   * Required due to a Vista update in April 2009 adding "::1 localhost" to the user's hosts file.
+   * Java InetAddress.getLocalHost() then returns IPv6 ::1, even when IPv6 is disabled.
+   * See http://goofans.com/node/292
+   *
+   * @return The IPv4 loopback address
+   */
+  private InetAddress getLoopbackAddress()
   {
-    return InetAddress.getByAddress(new byte[]{127, 0, 0, 1});
+    try {
+      return InetAddress.getByAddress(new byte[]{127, 0, 0, 1});
+    }
+    catch (UnknownHostException e) {
+      // This can never occur because the IP address we pass to InetAddress.getByAddress is always of the correct length
+      throw new RuntimeException(e);
+    }
   }
 
+  /**
+   * A thread run on the primary instance that listens in the background for command-line arguments from
+   * secondary instances, deserialising them and dispatching them to the Controller.
+   */
   private class PrimaryInstanceSocket extends Thread
   {
     private final ServerSocketChannel serverSocketChannel;
@@ -244,6 +336,15 @@ public class SingleInstance
     private static final int MIN_PORT = 20000;
     private static final int MAX_PORT = 60000;
 
+    /**
+     * Setup a listening socket on a random port. Chooses a random port between MIN_PORT and MAX_PORT
+     * to listen to. This is required as nio doesn't allow us to specify a random port with a fixed address,
+     * only when using "any available local address". This often results in the user's first Ethernet card
+     * address, but for security we want to specify only a loopback address.
+     *
+     * @return The socket channel listened to.
+     * @throws IOException If no available ports could be found or the socket could not be opened.
+     */
     private ServerSocketChannel openSocket() throws IOException
     {
       ServerSocketChannel ssc = ServerSocketChannel.open();
@@ -270,6 +371,9 @@ public class SingleInstance
       return ssc;
     }
 
+    /**
+     * Main loop that blocks waiting for args from clients, then dispatchse them.
+     */
     @Override
     public void run()
     {

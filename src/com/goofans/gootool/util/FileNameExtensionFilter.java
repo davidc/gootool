@@ -10,6 +10,9 @@ import java.io.File;
 import java.util.Locale;
 
 /**
+ * This is a backport of Java 1.6's FileNameExtensionFilter, since GooTool must run on 1.5.
+ * In addition, it can now accept extensions composed with a period in them (e.g. png.binltl).
+ *
  * An implementation of {@code FileFilter} that filters using a
  * specified set of extensions. The extension for a file is the
  * portion of the file name after the last ".". Files whose name does

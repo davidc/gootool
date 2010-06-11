@@ -22,6 +22,8 @@ import com.goofans.gootool.io.UnicodeReader;
 import com.goofans.gootool.io.GameFormat;
 
 /**
+ * XML manipulation utilities.
+ *
  * @author David Croft (davidc@goofans.com)
  * @version $Id$
  */
@@ -33,6 +35,13 @@ public class XMLUtil
   {
   }
 
+  /**
+   * Create a document from the contents of a file.
+   *
+   * @param file The file to read.
+   * @return the Document read.
+   * @throws IOException if the file cannot be read, or contains malformed XML.
+   */
   public static Document loadDocumentFromFile(File file) throws IOException
   {
     try {
@@ -44,6 +53,13 @@ public class XMLUtil
     }
   }
 
+  /**
+   * Create a document from the contents of a stream.
+   *
+   * @param is The stream to read.
+   * @return the Document read.
+   * @throws IOException if the stream cannot be read, or contains malformed XML.
+   */
   public static Document loadDocumentFromInputStream(InputStream is) throws IOException
   {
     try {
@@ -73,6 +89,13 @@ public class XMLUtil
     return builder.parse(new InputSource(r));
   }
 
+  /**
+   * Writes a document to a file.
+   *
+   * @param d    The document to write.
+   * @param file The file to write to.
+   * @throws TransformerException if an identity transformer instance doesn't exist or cannot be created, or if it fails to transform the XML.
+   */
   public static void writeDocumentToFile(Document d, File file) throws TransformerException
   {
     // Prepare the DOM document for writing
@@ -86,6 +109,13 @@ public class XMLUtil
     xformer.transform(source, result);
   }
 
+  /**
+   * Writes a document to a string.
+   *
+   * @param d The document to write.
+   * @return A String containing the document as XML.
+   * @throws TransformerException if an identity transformer instance doesn't exist or cannot be created, or if it fails to transform the XML.
+   */
   public static String writeDocumentToString(Document d) throws TransformerException
   {
     // Prepare the DOM document for writing
@@ -102,6 +132,12 @@ public class XMLUtil
     return writer.toString();
   }
 
+  /**
+   * Creates a new, blank document for use.
+   *
+   * @return A blank document.
+   * @throws ParserConfigurationException if a suitable document builder cannot be found.
+   */
   public static Document newDocument() throws ParserConfigurationException
   {
     return DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
@@ -210,6 +246,7 @@ public class XMLUtil
   }
 
   // TODO something better than IOException
+
   public static boolean getAttributeBooleanRequired(Node node, String attributeName) throws IOException
   {
     Boolean b = getAttributeBoolean(node, attributeName, null);

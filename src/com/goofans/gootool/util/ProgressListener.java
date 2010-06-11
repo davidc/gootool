@@ -6,7 +6,7 @@
 package com.goofans.gootool.util;
 
 /**
- * Implemented by classes (i.e. a gui progress bar) that wish to be notified of the state of a progressing task
+ * Implemented by classes (i.e. a gui progress bar) that wish to be notified of the state of a progress-indicating task.
  *
  * @author David Croft (davidc@goofans.com)
  * @version $Id$

@@ -12,7 +12,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * Miscellaneous utilities.
+ * Miscellaneous utilities, mostly IO-related.
  *
  * @author David Croft (davidc@goofans.com)
  * @version $Id$
@@ -26,10 +26,12 @@ public class Utilities
   }
 
   /**
-   * Expands the string with any %envvars% expanded.
+   * Expands the string with any environment variables (of the form %envvars%) substituted with their values.
+   * <p/>
+   * If a variable expands into something with another %envvar% inside it, this is expanded recursively.
    *
-   * @param s the string to expand, with env vars enclosed within % signs
-   * @return The expanded string, or null of any env var wasn't found
+   * @param s the string to expand, with env vars enclosed within % signs.
+   * @return The expanded string, or null of any of the env vars wasn't found.
    */
   public static String expandEnvVars(String s)
   {
@@ -51,6 +53,13 @@ public class Utilities
     return s;
   }
 
+  /**
+   * Reads the file into a byte array.
+   *
+   * @param file The file to read from.
+   * @return Byte array of the file's contents.
+   * @throws IOException if the file cannot be opened, or cannot be fully read.
+   */
   public static byte[] readFile(File file) throws IOException
   {
     int fileSize = (int) file.length();
@@ -78,6 +87,13 @@ public class Utilities
     }
   }
 
+  /**
+   * Write the byte array to the given file.
+   *
+   * @param file  The file to write to.
+   * @param bytes The byte array to write.
+   * @throws IOException if the file cannot be opened, or cannot be fully written to.
+   */
   public static void writeFile(File file, byte[] bytes) throws IOException
   {
     OutputStream os = new FileOutputStream(file);
@@ -119,7 +135,7 @@ public class Utilities
   }
 
   /**
-   * Moves the file. May not be atomic if renameTo isn't atomic or isn't supported (e.g. separate file systems).
+   * Moves the file. May not be atomic if renameTo isn't atomic on the OS or isn't supported (e.g. separate file systems).
    *
    * @param from Source file.
    * @param to   Destination file.
@@ -145,7 +161,7 @@ public class Utilities
    * Delete the given file if it exists, otherwise do nothing. Throws an exception if deletion failed.
    *
    * @param file The file to delete.
-   * @throws IOException if the deletion failed.
+   * @throws IOException if file exists and the deletion failed.
    */
   public static void deleteFileIfExists(File file) throws IOException
   {
@@ -157,6 +173,7 @@ public class Utilities
   }
 
   // Removes a directory by removing all files in it first. TODO doesn't yet recurse(not sure if I want this)
+
   public static void rmdirAll(File dir) throws IOException
   {
     for (File file : dir.listFiles()) {
@@ -171,6 +188,13 @@ public class Utilities
 
   private static final int BUFSIZ = 4096;
 
+  /**
+   * Buffered copy from one stream to another.
+   *
+   * @param is The input stream.
+   * @param os The output stream.
+   * @throws IOException if the copy failed.
+   */
   public static void copyStreams(InputStream is, OutputStream os) throws IOException
   {
     byte[] buf = new byte[BUFSIZ];
@@ -181,6 +205,13 @@ public class Utilities
     }
   }
 
+  /**
+   * Reads the remainder of the stream into a String, assuming UTF-8 encoding.
+   *
+   * @param is The stream to read from.
+   * @return The String read from the stream.
+   * @throws IOException if the stream couldn't be read.
+   */
   public static String readStreamIntoString(InputStream is) throws IOException
   {
     StringBuilder sb = new StringBuilder();
@@ -196,6 +227,13 @@ public class Utilities
     return sb.toString();
   }
 
+  /**
+   * Reads the remainder of the reader into a String.
+   *
+   * @param r The reader to read from.
+   * @return The String read from the reader.
+   * @throws IOException if the reader couldn't be read.
+   */
   public static String readReaderIntoString(Reader r) throws IOException
   {
     StringBuilder sb = new StringBuilder();
@@ -214,8 +252,8 @@ public class Utilities
    * Makes the given directory (and any necessary parents) and throws an exception if this failed.
    * Does not do anything if the directory already exists.
    *
-   * @param dir The directory (with parents) to create
-   * @throws IOException if the directory (or any parents) could not be created
+   * @param dir The directory (with parents) to create.
+   * @throws IOException if the directory (or any parents) doesn't exist and could not be created.
    */
   public static void mkdirsOrException(File dir) throws IOException
   {
@@ -230,8 +268,8 @@ public class Utilities
    * being on separate file systems).
    *
    * @param url        the URL to download.
-   * @param outputFile the File to save the download into
-   * @throws IOException if the download failed or the file was not writeable.
+   * @param outputFile the File to save the download into.
+   * @throws IOException if the download failed or the file was not writable.
    */
   public static void downloadFile(URL url, File outputFile) throws IOException
   {
