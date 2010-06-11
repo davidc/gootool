@@ -23,6 +23,8 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
 /**
+ * A request to publish a given profile publically on goofans.com
+ *
  * @author David Croft (davidc@goofans.com)
  * @version $Id$
  */

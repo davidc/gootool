@@ -12,7 +12,8 @@ import java.util.logging.Logger;
 import com.goofans.gootool.ToolPreferences;
 
 /**
- * Background task to download the user's latest ratings from the site and update the registry.
+ * Task to download the user's latest ratings from the site and update the registry cache.
+ * Scheduled shortly after startup and occasionally thereafter by the StartupTask.
  *
  * @author David Croft (davidc@goofans.com)
  * @version $Id$

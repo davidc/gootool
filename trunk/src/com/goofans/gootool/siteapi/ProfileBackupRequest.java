@@ -17,6 +17,8 @@ import com.goofans.gootool.util.DebugUtil;
 import org.w3c.dom.Document;
 
 /**
+ * A request to backup the profile file to the server.
+ *
  * @author David Croft (davidc@goofans.com)
  * @version $Id$
  */

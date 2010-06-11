@@ -12,6 +12,8 @@ import com.goofans.gootool.util.DebugUtil;
 import org.w3c.dom.Document;
 
 /**
+ * A request to submit a new addin rating for this user.
+ *
  * @author David Croft (davidc@goofans.com)
  * @version $Id$
  */

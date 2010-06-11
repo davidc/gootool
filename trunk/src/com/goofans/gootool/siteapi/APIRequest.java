@@ -28,6 +28,10 @@ import com.goofans.gootool.util.XMLUtil;
 import org.w3c.dom.Document;
 
 /**
+ * Executes a request against the goofans.com REST API. This is the superclass for all concrete API requests.
+ * <p/>
+ * TODO VersionCheck should use a new VersionRequest class, rather than instantiating APIRequest directly, then APIRequest should be made abstract.
+ *
  * @author David Croft (davidc@goofans.com)
  * @version $Id$
  */
@@ -102,6 +106,12 @@ public class APIRequest
     postParameters.put(name, value);
   }
 
+  /**
+   * Execute the API request and convert &lt;error&gt; return values into APIExceptions.
+   *
+   * @return the Document returned in case of success.
+   * @throws APIException The exception returned by the remote API server.
+   */
   protected Document doRequest() throws APIException
   {
     log.log(Level.FINE, "Doing " + toString());
@@ -123,7 +133,13 @@ public class APIRequest
     }
   }
 
-  protected InputStream doRequestInt() throws IOException
+  /**
+   * Execute the API request and return an input stream for the results.
+   *
+   * @return The input stream containing the results.
+   * @throws IOException If the request could not be passed.
+   */
+  private InputStream doRequestInt() throws IOException
   {
     if (executed)
       throw new RuntimeException("Request has already been executed");

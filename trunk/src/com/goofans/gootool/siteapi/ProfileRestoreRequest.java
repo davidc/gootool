@@ -19,6 +19,8 @@ import com.goofans.gootool.io.GameFormat;
 import org.w3c.dom.Document;
 
 /**
+ * A request to restore the profile file from the given backup ID on the server.
+ *
  * @author David Croft (davidc@goofans.com)
  * @version $Id$
  */

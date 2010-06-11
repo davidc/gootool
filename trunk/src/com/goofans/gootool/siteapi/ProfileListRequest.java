@@ -19,6 +19,8 @@ import org.w3c.dom.NodeList;
 import org.w3c.dom.Element;
 
 /**
+ * A request to list the user's stored profile backups.
+ * 
  * @author David Croft (davidc@goofans.com)
  * @version $Id$
  */
