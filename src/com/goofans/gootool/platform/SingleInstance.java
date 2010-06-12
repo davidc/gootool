@@ -79,7 +79,7 @@ public class SingleInstance
    * @param args The command-line arguments to use or pass to the primary instance.
    * @return true if this is the primary instance, otherwise false.
    */
-  public boolean singleInstance(List<String> args)
+  public synchronized boolean singleInstance(List<String> args)
   {
     // First do a quick test to make sure we can write anything to the tmpdir
     testTempDir();
