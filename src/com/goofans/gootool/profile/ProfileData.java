@@ -17,6 +17,8 @@ import java.util.logging.Level;
 import com.goofans.gootool.io.GameFormat;
 
 /**
+ * Contains all profiles (up to 3) in the user's profile file.
+ *
  * @author David Croft (davidc@goofans.com)
  * @version $Id$
  */

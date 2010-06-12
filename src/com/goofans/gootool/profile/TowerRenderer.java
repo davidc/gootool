@@ -19,6 +19,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
+ * Renders a World of Goo Corporation tower to various image formats.
+ *
  * @author David Croft (davidc@goofans.com)
  * @version $Id$
  */
