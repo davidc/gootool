@@ -13,7 +13,7 @@ import java.util.List;
  * <p/>
  * There's an "active" instance (what is currently configured on disk) and a "pending" instance (what will be applied).
  * <p/>
- * Needs to support equals() in order to determine whether we must prompt before exit.
+ * Support equals() in order to determine whether we must prompt before exit.
  *
  * @author David Croft (davidc@goofans.com)
  * @version $Id$
