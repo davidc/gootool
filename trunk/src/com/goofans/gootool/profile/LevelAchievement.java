@@ -6,6 +6,8 @@
 package com.goofans.gootool.profile;
 
 /**
+ * An achievement stored on the user's profile for a given level. 
+ *
  * @author David Croft (davidc@goofans.com)
  * @version $Id$
  */

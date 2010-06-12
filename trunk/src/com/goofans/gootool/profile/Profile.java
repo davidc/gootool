@@ -14,6 +14,8 @@ import java.io.IOException;
 import com.goofans.gootool.util.DebugUtil;
 
 /**
+ * A single profile in the profile file.
+ *
  * @author David Croft (davidc@goofans.com)
  * @version $Id$
  */

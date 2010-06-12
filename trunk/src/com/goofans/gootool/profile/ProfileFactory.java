@@ -16,6 +16,8 @@ import java.util.logging.Logger;
 import java.util.prefs.Preferences;
 
 /**
+ * Profile location and loading.
+ * 
  * @author David Croft (davidc@goofans.com)
  * @version $Id$
  */

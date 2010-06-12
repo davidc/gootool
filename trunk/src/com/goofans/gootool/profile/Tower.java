@@ -14,6 +14,8 @@ import java.text.NumberFormat;
 import java.text.DecimalFormat;
 
 /**
+ * A user's World of Goo Corporation tower.
+ * 
  * @author David Croft (davidc@goofans.com)
  * @version $Id$
  */
