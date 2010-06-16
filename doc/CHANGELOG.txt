@@ -3,6 +3,7 @@
 - Added new command-line utility "gooinfo" to dump information about user's profile and tower under Windows and Linux. Run it on its own for syntax (#0000249).
 - Added "gooinfo -validateaddin" to do prelimiary addin sanity check (currently just validates the manifest) (#0000250).
 - .bin files are now strictly prohibited in the override directory.
+- Consume World of Goo's stdout, possible fix for long hangs on "Save and Launch" (#0000261).
 
 1.0.2, 18-November-2009
 
