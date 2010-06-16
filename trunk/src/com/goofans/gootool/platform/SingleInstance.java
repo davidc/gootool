@@ -315,6 +315,8 @@ public class SingleInstance
 
     public PrimaryInstanceSocket() throws IOException
     {
+      super("Primary instance socket");
+
       // Open a listening socket
       serverSocketChannel = openSocket();
 
