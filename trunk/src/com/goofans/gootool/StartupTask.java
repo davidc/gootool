@@ -9,18 +9,22 @@ import com.goofans.gootool.model.Configuration;
 import com.goofans.gootool.profile.ProfileFactory;
 import com.goofans.gootool.util.ProgressIndicatingTask;
 import com.goofans.gootool.platform.PlatformSupport;
+import com.goofans.gootool.util.Utilities;
 import com.goofans.gootool.view.MainFrame;
 import com.goofans.gootool.wog.WorldOfGoo;
 import com.goofans.gootool.siteapi.VersionCheck;
 import com.goofans.gootool.siteapi.RatingUpdateTask;
 
 import javax.swing.*;
+import java.io.File;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
  * Sequentially performs GooTool's initialisation tasks before revealing the main UI.
+ * <p/>
+ * This isn't run on the event dispatch thread so any UI interaction must use invokeAndWait().
  *
  * @author David Croft (davidc@goofans.com)
  * @version $Id$
@@ -43,6 +47,9 @@ public class StartupTask extends ProgressIndicatingTask
     beginStep(resourceBundle.getString("launcher.locategoo"), false);
     initWog();
 
+    beginStep(resourceBundle.getString("launcher.loadaddins"), false);
+    initAddins();
+
     beginStep(resourceBundle.getString("launcher.profile"), false);
     initProfile();
 
@@ -59,7 +66,7 @@ public class StartupTask extends ProgressIndicatingTask
     BillboardUpdater.maybeUpdateBillboards();
 
     // Launch thread to retrieve user ratings. Initially in 0.5 seconds, thereafter every 15 minutes.
-    GooTool.scheduleTaskWithFixedDelay(new RatingUpdateTask(), 500, 15*60*1000);
+    GooTool.scheduleTaskWithFixedDelay(new RatingUpdateTask(), 500, 15 * 60 * 1000);
 
     GooTool.startupIsComplete();
   }
@@ -111,7 +118,66 @@ public class StartupTask extends ProgressIndicatingTask
     catch (IOException e) {
       // do nothing
     }
-    JOptionPane.showMessageDialog(null, resourceBundle.getString("launcher.demo.message"), resourceBundle.getString("launcher.demo.title"), JOptionPane.WARNING_MESSAGE);
+    showMessageDialog(resourceBundle.getString("launcher.demo.title"), resourceBundle.getString("launcher.demo.message"), JOptionPane.WARNING_MESSAGE);
+  }
+
+  private void initAddins()
+  {
+    WorldOfGoo wog = WorldOfGoo.getTheInstance();
+
+    File addinsDir = null;
+    try {
+      addinsDir = wog.getAddinsDir();
+    }
+    catch (IOException e) {
+      log.log(Level.SEVERE, "Unable to create addins directory " + addinsDir, e);
+      showMessageDialog(resourceBundle.getString("launcher.initaddins.cantcreate.title"),
+              resourceBundle.formatString("launcher.loadaddins.cantcreate.message", addinsDir, e.getLocalizedMessage()),
+              JOptionPane.ERROR_MESSAGE);
+    }
+
+    // Possibly migrate from old addins directory
+
+    File oldAddinsDir = wog.getOldAddinsDir();
+
+    if (oldAddinsDir != null) {
+      showMessageDialog(resourceBundle.getString("launcher.migrateaddins.title"),
+              resourceBundle.formatString("launcher.migrateaddins.message", oldAddinsDir, addinsDir),
+              JOptionPane.INFORMATION_MESSAGE);
+
+      for (File file : oldAddinsDir.listFiles()) {
+        File destFile = new File(addinsDir, file.getName());
+        try {
+          Utilities.moveFile(file, destFile);
+        }
+        catch (IOException e) {
+          log.log(Level.WARNING, "Unable to move " + file + " to " + destFile, e);
+          showMessageDialog(resourceBundle.getString("launcher.migrateaddins.failure.title"),
+                  resourceBundle.formatString("launcher.migrateaddins.failure.message", file, destFile),
+                  JOptionPane.ERROR_MESSAGE);
+        }
+      }
+
+      oldAddinsDir.delete();
+    }
+
+    wog.updateInstalledAddins();
+  }
+
+  private void showMessageDialog(final String title, final String message, final int messageType)
+  {
+    try {
+      SwingUtilities.invokeAndWait(new Runnable()
+      {
+        public void run()
+        {
+          JOptionPane.showMessageDialog(null, message, title, messageType);
+        }
+      });
+    }
+    catch (Exception e) {
+      throw new RuntimeException("Unable to display message", e);
+    }
   }
 
   private void initProfile()
@@ -127,7 +193,9 @@ public class StartupTask extends ProgressIndicatingTask
     }
     catch (IOException e) {
       log.log(Level.SEVERE, "Error reading configuration", e);
-      JOptionPane.showMessageDialog(null, resourceBundle.formatString("launcher.loadconfig.error.message", e.getLocalizedMessage()), resourceBundle.getString("launcher.loadconfig.error.title"), JOptionPane.ERROR_MESSAGE);
+      showMessageDialog(resourceBundle.getString("launcher.loadconfig.error.title"),
+              resourceBundle.formatString("launcher.loadconfig.error.message", e.getLocalizedMessage()),
+              JOptionPane.ERROR_MESSAGE);
       System.exit(2);
       return null;
     }
