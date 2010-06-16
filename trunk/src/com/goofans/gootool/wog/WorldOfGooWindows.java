@@ -10,9 +10,11 @@ import java.awt.*;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import com.goofans.gootool.GooTool;
 import com.goofans.gootool.ToolPreferences;
 import com.goofans.gootool.util.Utilities;
 
@@ -138,10 +140,29 @@ public class WorldOfGooWindows extends WorldOfGoo
     File exe = new File(getCustomDir(), EXE_FILENAME);
     log.log(Level.FINE, "Launching " + exe + " in " + customDir);
 
-    // TODO why does this take forever when launching under IDEA?
     ProcessBuilder pb = new ProcessBuilder(exe.getAbsolutePath());
     pb.directory(customDir);
-    pb.start();
+    pb.redirectErrorStream(true);
+    final Process process = pb.start();
+
+    // Close the process's stdin
+    process.getOutputStream().close();
+    // Launch a thread to consume its stdout and redirected stderr
+    GooTool.executeTaskInThreadPool(new Runnable()
+    {
+      public void run()
+      {
+        InputStream is = process.getInputStream();
+        try {
+          while (is.read() != -1) {
+            // do nothing
+          }
+        }
+        catch (IOException e) {
+          // do nothing
+        }
+      }
+    });
   }
 
   @Override
