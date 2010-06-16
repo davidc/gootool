@@ -15,6 +15,7 @@ import java.util.logging.Logger;
 import java.util.logging.Level;
 
 import com.goofans.gootool.io.GameFormat;
+import com.goofans.gootool.util.Utilities;
 
 /**
  * Contains all profiles (up to 3) in the user's profile file.
@@ -47,6 +48,13 @@ public class ProfileData
         profiles[profileIndex] = new Profile(data.get(key));
       }
     }
+  }
+
+  private ProfileData(Profile p)
+  {
+    data.put("countrycode", "EU");
+    data.put("mrpp", "0");
+    profiles[0] = p;
   }
 
   private void readProfileData(byte[] profile) throws IOException
@@ -136,14 +144,14 @@ public class ProfileData
       out.write(EncodingUtil.stringToBytesUtf8(",0."));
     }
     catch (IOException e) {
-      //never happens
-      log.log(Level.SEVERE, "Impossible error occurred", e);
+      //should never happen
+      log.log(Level.SEVERE, "Error converting profile to data", e);
     }
 
     return out.toByteArray();
   }
 
-  private void appendString(ByteArrayOutputStream out, String string) throws IOException
+  private void appendString(OutputStream out, String string) throws IOException
   {
     byte[] bytes = EncodingUtil.stringToBytesUtf8(string);
 
@@ -156,7 +164,15 @@ public class ProfileData
   public static void main(String[] args) throws IOException
   {
     // Test a profile can be loaded ok
-    ProfileData pd = new ProfileData(new File("testcases/maks-linux-pers2/pers2.dat"));
+//    ProfileData pd = new ProfileData(new File("testcases/maks-linux-pers2/pers2.dat"));
+//    System.out.println(pd.getCurrentProfile().getTower());
+
+    // Restore a profile from goofans published profile
+    Profile p = new Profile(EncodingUtil.bytesToStringUtf8(Utilities.readFile(new File("profile.txt"))));
+    ProfileData pd = new ProfileData(p);
+    System.out.println(pd);
     System.out.println(pd.getCurrentProfile().getTower());
+
+    GameFormat.encodeBinFile(new File("pers2.dat"), pd.toData());
   }
 }
