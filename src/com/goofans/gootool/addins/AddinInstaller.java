@@ -142,7 +142,10 @@ public class AddinInstaller
     log.log(Level.FINER, "Override " + fileName);
     checkDirOk(fileName);
 
-    if (fileName.endsWith(EXTENSION_PNG) && PlatformSupport.getPlatform() == PlatformSupport.Platform.MACOSX) {
+    if (fileName.endsWith(EXTENSION_BIN)) {
+      throw new AddinFormatException("Bin files are not allowed in the override directory");
+    }
+    else if (fileName.endsWith(EXTENSION_PNG) && PlatformSupport.getPlatform() == PlatformSupport.Platform.MACOSX) {
       // Mac PNG files need to be "compiled"
       File destFile = WorldOfGoo.getTheInstance().getCustomGameFile(fileName + ".binltl");
       Utilities.mkdirsOrException(destFile.getParentFile());
