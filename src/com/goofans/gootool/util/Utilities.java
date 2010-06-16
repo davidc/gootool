@@ -8,6 +8,7 @@ package com.goofans.gootool.util;
 import java.io.*;
 import java.net.URL;
 import java.nio.channels.FileChannel;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -335,6 +336,13 @@ public class Utilities
 
     if (!testFile.delete()) {
       throw new IOException("Can't delete test file " + testFile);
+    }
+  }
+
+  public static void main(String[] args)
+  {
+    for (Map.Entry<Object, Object> entry : new TreeMap<Object, Object>(System.getProperties()).entrySet()) {
+      System.out.println(entry.getKey() + " = " + entry.getValue());
     }
   }
 }
