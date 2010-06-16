@@ -151,4 +151,12 @@ public class ProfileData
     out.write(',');
     out.write(bytes);
   }
+
+  @SuppressWarnings({"HardCodedStringLiteral", "HardcodedFileSeparator", "UseOfSystemOutOrSystemErr"})
+  public static void main(String[] args) throws IOException
+  {
+    // Test a profile can be loaded ok
+    ProfileData pd = new ProfileData(new File("testcases/maks-linux-pers2/pers2.dat"));
+    System.out.println(pd.getCurrentProfile().getTower());
+  }
 }
