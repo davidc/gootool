@@ -5,9 +5,11 @@
 
 package com.goofans.gootool.platform;
 
+import java.io.File;
 import java.util.List;
 
 import com.goofans.gootool.Controller;
+import com.goofans.gootool.util.Utilities;
 
 /**
  * Support routines for Linux.
@@ -23,6 +25,9 @@ public class LinuxSupport extends PlatformSupport
   private static final String[] PROFILE_SEARCH_PATHS = {
           "%HOME%/.WorldOfGoo"
   };
+
+  @SuppressWarnings({"HardcodedFileSeparator"})
+  private static final String TOOL_STORAGE_DIRECTORY = "%HOME%/.gootool/";
 
   LinuxSupport()
   {
@@ -43,5 +48,11 @@ public class LinuxSupport extends PlatformSupport
   public String[] doGetProfileSearchPaths()
   {
     return PROFILE_SEARCH_PATHS;
+  }
+
+  @Override
+  public File doGetToolStorageDirectory()
+  {
+    return new File(Utilities.expandEnvVars(TOOL_STORAGE_DIRECTORY));
   }
 }

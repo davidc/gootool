@@ -5,9 +5,11 @@
 
 package com.goofans.gootool.platform;
 
+import java.io.File;
 import java.util.List;
 
 import com.goofans.gootool.Controller;
+import com.goofans.gootool.util.Utilities;
 
 /**
  * Support routines for Windows.
@@ -39,6 +41,9 @@ public class WindowsSupport extends PlatformSupport
           "%HOME%/.wine/drive_c/windows/profiles/All Users/Application Data/2DBoy/WorldOfGoo", //wine, old format
   };
 
+  @SuppressWarnings({"HardcodedFileSeparator"})
+  private static final String TOOL_STORAGE_DIRECTORY = "%APPDATA%\\GooTool\\";
+
   WindowsSupport()
   {
   }
@@ -58,5 +63,11 @@ public class WindowsSupport extends PlatformSupport
   public String[] doGetProfileSearchPaths()
   {
     return PROFILE_SEARCH_PATHS;
+  }
+
+  @Override
+  public File doGetToolStorageDirectory()
+  {
+    return new File(Utilities.expandEnvVars(TOOL_STORAGE_DIRECTORY));
   }
 }

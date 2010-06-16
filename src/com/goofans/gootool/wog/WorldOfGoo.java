@@ -82,6 +82,7 @@ public abstract class WorldOfGoo
   static final String PREF_ADDINS = "addins";
   static final String PREF_WINDOWS_VOLUME_CONTROL = "windows_volume_control";
 
+  private static final String STORAGE_DIR_ADDINS = "addins";
 
   protected WorldOfGoo()
   {
@@ -109,7 +110,25 @@ public abstract class WorldOfGoo
 
   public abstract File getCustomGameFile(String pathname) throws IOException;
 
-  protected abstract File getAddinInstalledDir() throws IOException;
+  /**
+   * This returns the directory that GooTool stored installed addins in prior to version 1.1.
+   *
+   * @return The addin directory, or null if it doesn't exist.
+   */
+  public abstract File getOldAddinsDir();
+
+  /**
+   * Returns the new directory that GooTool stores installed addins from version 1.1 onward.
+   *
+   * @return The addin directory.
+   * @throws IOException if the addin directory couldn't be determined or created.
+   */
+  public File getAddinsDir() throws IOException
+  {
+    File addinsDir = new File(PlatformSupport.getToolStorageDirectory(), STORAGE_DIR_ADDINS);
+    Utilities.mkdirsOrException(addinsDir);
+    return addinsDir;
+  }
 
   public void updateInstalledAddins()
   {
@@ -117,11 +136,11 @@ public abstract class WorldOfGoo
 
     File addinsDir;
     try {
-      addinsDir = getAddinInstalledDir();
+      addinsDir = getAddinsDir();
     }
     catch (IOException e) {
-      log.log(Level.WARNING, "No addinInstalledDir", e);
-      return;
+      log.log(Level.SEVERE, "No addinsDir", e);
+      throw new RuntimeException(e);
     }
 
     File[] files = addinsDir.listFiles();
@@ -211,14 +230,15 @@ public abstract class WorldOfGoo
     }
   }
 
-
   // ONLY FOR USE BY TEST CASES !!!!!
+
   public static void DEBUGaddAvailableAddin(Addin a)
   {
     availableAddins.add(a);
   }
 
   // ONLY FOR USE BY TEST CASES !!!!!
+
   public static void DEBUGremoveAddinById(String id)
   {
     for (Addin availableAddin : availableAddins) {
@@ -234,7 +254,10 @@ public abstract class WorldOfGoo
     return Collections.unmodifiableList(availableAddins);
   }
 
-  protected abstract File getAddinInstalledFile(String addinId) throws IOException;
+  private File getAddinInstalledFile(String addinId) throws IOException
+  {
+    return new File(getAddinsDir(), addinId + GOOMOD_EXTENSION_WITH_DOT);
+  }
 
 
   public void installAddin(File addinFile, String addinId, boolean skipUpdate) throws IOException

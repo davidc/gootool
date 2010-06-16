@@ -10,6 +10,7 @@ import com.apple.eawt.ApplicationEvent;
 import com.apple.eawt.ApplicationListener;
 import com.goofans.gootool.Controller;
 import com.goofans.gootool.GooTool;
+import com.goofans.gootool.util.Utilities;
 
 import java.io.File;
 import java.util.logging.Logger;
@@ -31,6 +32,9 @@ public class MacOSXSupport extends PlatformSupport implements ApplicationListene
   private static final String[] PROFILE_SEARCH_PATHS = {
           "%HOME%/Library/Application Support/WorldOfGoo/"
   };
+
+  @SuppressWarnings({"HardcodedFileSeparator"})
+  private static final String TOOL_STORAGE_DIRECTORY = "%HOME%/Library/Application Support/GooTool/";
 
   private Controller controller;
 
@@ -105,5 +109,11 @@ public class MacOSXSupport extends PlatformSupport implements ApplicationListene
   public String[] doGetProfileSearchPaths()
   {
     return PROFILE_SEARCH_PATHS;
+  }
+
+  @Override
+  public File doGetToolStorageDirectory()
+  {
+    return new File(Utilities.expandEnvVars(TOOL_STORAGE_DIRECTORY));
   }
 }

@@ -8,7 +8,10 @@ package com.goofans.gootool.platform;
 import net.infotrek.util.prefs.FilePreferencesFactory;
 
 import com.goofans.gootool.Controller;
+import com.goofans.gootool.util.Utilities;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.logging.Logger;
 import java.util.prefs.Preferences;
 import java.util.List;
@@ -147,4 +150,13 @@ public abstract class PlatformSupport
   }
 
   protected abstract String[] doGetProfileSearchPaths();
+
+  public static File getToolStorageDirectory() throws IOException
+  {
+    File dir = support.doGetToolStorageDirectory();
+    Utilities.mkdirsOrException(dir);
+    return dir;
+  }
+
+  protected abstract File doGetToolStorageDirectory() throws IOException;
 }

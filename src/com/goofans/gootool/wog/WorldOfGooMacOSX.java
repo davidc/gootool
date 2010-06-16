@@ -31,13 +31,12 @@ public class WorldOfGooMacOSX extends WorldOfGoo
   };
   public static final String[] EXE_FILENAMES = {"Contents/MacOS/World of Goo",
           "Contents/MacOS/BigMacWrapper", "Contents/MacOS/BigMacWrapper_ppc", "Contents/MacOS/BigMacWrapper_x86"};
-  private static final String ADDIN_DIR = "Contents/Resources/addins";
+
+  private static final String OLD_ADDIN_DIR = "Contents/Resources/addins";
 
   private boolean wogFound;
   private File wogDir;
-  private File addinsDir;
   private File customDir;
-
 
   WorldOfGooMacOSX()
   {
@@ -94,6 +93,7 @@ public class WorldOfGooMacOSX extends WorldOfGoo
   }
 
   /* We've found WoG at the given path. Read in some bits */
+
   private void foundWog(File searchPath)
   {
     wogFound = true;
@@ -158,11 +158,6 @@ public class WorldOfGooMacOSX extends WorldOfGoo
     this.customDir = customDir;
 
     ToolPreferences.setCustomDir(customDir.getAbsolutePath());
-
-    addinsDir = new File(customDir, ADDIN_DIR);
-    Utilities.mkdirsOrException(addinsDir);
-
-    updateInstalledAddins();
   }
 
   @Override
@@ -197,12 +192,6 @@ public class WorldOfGooMacOSX extends WorldOfGoo
   }
 
   @Override
-  protected File getAddinInstalledFile(String addinId) throws IOException
-  {
-    return new File(getAddinInstalledDir(), addinId + GOOMOD_EXTENSION_WITH_DOT);
-  }
-
-  @Override
   public File chooseCustomDir(Component mainFrame)
   {
     JFileChooser chooser = new JFileChooser();
@@ -226,11 +215,12 @@ public class WorldOfGooMacOSX extends WorldOfGoo
   }
 
   @Override
-  protected File getAddinInstalledDir() throws IOException
+  public File getOldAddinsDir()
   {
-    if (addinsDir == null) {
-      throw new IOException("Addins directory isn't selected yet");
-    }
-    return addinsDir;
+    if (customDir == null) return null;
+
+    File oldAddinsDir = new File(customDir, OLD_ADDIN_DIR);
+    if (!oldAddinsDir.exists()) oldAddinsDir = null;
+    return oldAddinsDir;
   }
 }
