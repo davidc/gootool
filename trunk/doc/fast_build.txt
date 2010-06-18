@@ -1,0 +1,26 @@
+Target loops through all files and compares them with the source contents:
+
+- If missing in source, mark REMOVE
+- If different in source, mark RESTORE
+
+Then loop through source to find any remaining files that are in source and not target.
+
+- Mark any missing files as RESTORE
+
+Process all the addins to get a list of all the files they affect.
+Update the list of files with a list of all addins (with ID and version) that should affect it. Order is important.
+
+Load the "last saved" state.txt from the target directory.
+This stores the filenames along with the list of affecting addins for each (same as above).
+
+For each file in the list:
+
+If the list of affecting addins in the target directory equals the list of affecting addins we are
+about to apply anyway, remove the file from the list of files to process.
+
+Any files remaining, do the following:
+
+- If marked REMOVE, remove the file
+- If marked RESTORE, restore the file
+
+Then, for each addin that affects this file, run its merge, compile or override rule.
