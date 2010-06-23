@@ -5,6 +5,7 @@
 
 package com.goofans.gootool.profile;
 
+import com.goofans.gootool.io.GameFormat;
 import com.goofans.gootool.wog.WorldOfGoo;
 
 import javax.imageio.ImageIO;
@@ -65,14 +66,14 @@ public class TowerRenderer implements ImageObserver
 
     // Pick up the images out of the wog folder
     File ballFile = worldOfGoo.getGameFile("res/balls/Drained/body.png");
-    ballImage = ImageIO.read(ballFile);
+    ballImage = GameFormat.decodeImage(ballFile);
 
     // Balls need to be nudged so they are centered on the given position.
     ballNudgeX = -(ballImage.getWidth() / 2);
     ballNudgeY = -(ballImage.getHeight() / 2);
 
     File strandFile = worldOfGoo.getGameFile("res/balls/Drained/spring_goo.png");
-    strandImage = ImageIO.read(strandFile);
+    strandImage = GameFormat.decodeImage(strandFile);
 
     // Strands need to be drawn with origin on their start point, and stretched
     strandHeight = strandImage.getHeight();
@@ -80,10 +81,10 @@ public class TowerRenderer implements ImageObserver
 
 
     File groundFile = worldOfGoo.getGameFile("res/levels/wogcd/groundTile.png");
-    groundImage = ImageIO.read(groundFile);
+    groundImage = GameFormat.decodeImage(groundFile);
 
     File skyFile = worldOfGoo.getGameFile("res/levels/wogcd/skytile.png");
-    skyImage = ImageIO.read(skyFile);
+    skyImage = GameFormat.decodeImage(skyFile);
 
   }
 

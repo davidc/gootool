@@ -8,12 +8,17 @@ package com.goofans.gootool.io;
 import com.goofans.gootool.platform.PlatformSupport;
 import com.goofans.gootool.util.XMLUtil;
 
+import java.awt.image.BufferedImage;
 import java.io.*;
 import java.util.logging.Logger;
 
 import org.w3c.dom.Document;
 
+import javax.imageio.ImageIO;
+
 /**
+ *  TODO should use source/target platform, not host
+ *
  * @author David Croft (davidc@goofans.com)
  * @version $Id$
  */
@@ -93,4 +98,18 @@ public class GameFormat
         break;
     }
   }
+
+  // pass File WITHOUT binltl suffix
+  public static BufferedImage decodeImage(File file) throws IOException
+  {
+    switch (PlatformSupport.getPlatform()) {
+      case WINDOWS:
+      case LINUX:
+        return ImageIO.read(file);
+      case MACOSX:
+        return MacGraphicFormat.decodeImage(new File(file.getParent(), file.getName() + ".binltl"));
+    }
+    return null;
+  }
 }
+
