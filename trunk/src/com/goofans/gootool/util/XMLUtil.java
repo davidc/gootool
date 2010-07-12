@@ -336,4 +336,13 @@ public class XMLUtil
 
     return null;
   }
+
+  public static String escapeEntities(String input)
+  {
+    return input.replaceAll("&", "&amp;")
+            .replaceAll("<", "&lt;")
+            .replaceAll(">", "&gt;")
+            .replaceAll("\"", "&quot;")
+            .replaceAll("'", "&apos;");
+  }
 }
