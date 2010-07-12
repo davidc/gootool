@@ -1,0 +1,15 @@
+<addin spec-version="1.0">
+  <id>net.davidc.test.entities</id>
+  <name>Entity &quot;test</name>
+  <type>level</type>
+  <version>1.0</version>
+  <description>This addin contains &quot;XML entities&quot; in a bunch of &lt;different fields&gt;.</description>
+  <author>davidc</author>
+
+  <level>
+    <dir>Test123</dir>
+    <name text="Test &quot;123&quot;"/>
+    <subtitle text="&quot;old goo &lt;dogs&gt;, &apos;new &amp; goo tricks&quot;"/>
+    <ocd>time,40</ocd>
+  </level>
+</addin>

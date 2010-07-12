@@ -289,7 +289,7 @@ public class AddinInstaller
 
     sb.append(levelSubtitleId).append("\"");
     for (String nameKey : translations.keySet()) {
-      sb.append(" ").append(nameKey).append("=\"").append(translations.get(nameKey)).append("\"");
+      sb.append(" ").append(nameKey).append("=\"").append(XMLUtil.escapeEntities(translations.get(nameKey))).append("\"");
     }
     sb.append(" />");
     return sb.toString();
