@@ -151,7 +151,8 @@ public class GUIUtil
    */
   public static void runTask(final ProgressIndicatingTask task, final JDialog progressDialog) throws Exception
   {
-    final Exception[] result = new Exception[]{null};
+    final Object[] result = new Object[]{null};
+    final Object success = new Object();
 
     GooTool.executeTaskInThreadPool(new Runnable()
     {
@@ -159,7 +160,7 @@ public class GUIUtil
       {
         try {
           task.run();
-          result[0] = null;
+          result[0] = success;
         }
         catch (Exception e) {
           log.log(Level.SEVERE, "runTask " + task.getClass().getName() + " threw exception", e);
@@ -181,8 +182,12 @@ public class GUIUtil
 
     /* Now it has exited */
 
-    if (result[0] != null) {
-      throw result[0];
+    if (result[0] instanceof Exception) {
+      throw (Exception) result[0];
+    }
+    else if (result[0] != success) {
+      log.log(Level.SEVERE, "Task " + task + " failed to execute");
+      throw new Exception("The task failed to complete due to a fatal error - check the log.");
     }
   }
 }
