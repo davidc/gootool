@@ -6,6 +6,7 @@
 - Consume World of Goo's stdout, possible fix for long hangs on "Save and Launch" (#0000261).
 - Available addins are now stored in your home directory and not your custom directory. They will be moved automatically upon upgrade to this version (#0000263).
 - Fixed installation of addins with XML special characters (quotation marks etc) in level name/subtitle (#0000266).
+- If a background task fails due to a fatal error (e.g. out of memory), don't assume the task has succeded (#0000268).
 
 1.0.2, 18-November-2009
 
