@@ -24,3 +24,5 @@ Any files remaining, do the following:
 - If marked RESTORE, restore the file
 
 Then, for each addin that affects this file, run its merge, compile or override rule.
+
+If build fails for any reason, state.txt should not exist, so subsequent rebuilds are consistent. So it should be deleted before any build starts.
