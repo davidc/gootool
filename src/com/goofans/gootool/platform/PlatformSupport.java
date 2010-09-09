@@ -55,8 +55,9 @@ public abstract class PlatformSupport
         platform = Platform.LINUX;
       }
       else {
-        log.warning("Unknown gootool.platform " + forcePlatform + ", valid values are: WINDOWS, LINUX, MACOSX");
+        log.severe("Unknown gootool.platform " + forcePlatform);
         platform = null;
+        throw new ExceptionInInitializerError("Invalid gootool.platform " + forcePlatform + ", valid values are: WINDOWS, LINUX, MACOSX");
       }
     }
 
