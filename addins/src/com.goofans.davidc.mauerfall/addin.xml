@@ -1,0 +1,36 @@
+<addin spec-version="1.1">
+  <id>com.goofans.davidc.mauerfall</id>
+  <name>Mauerfall</name>
+  <type>level</type>
+  <version>0.3</version>
+  <!--<thumbnail type="image/jpeg" width="200" height="150">thumbnail.jpg</thumbnail>-->
+  <description><![CDATA[
+  <html>
+  <p>November 9th, 1989. The Berlin Wall falls as the DDR relents to the growing protests sweeping the East, allowing free passage to the West and
+  paving the way to to a unified Germany the following year. Standing for almost 30 years, the wall  
+  </p>
+  <p>November 9th, 2009. At 20.05 almost 1,000 dominos, each individually decorated by Berlin students, will fall through the city centre,
+  in celebration of the 20 year anniversary of this momentous occasion. This level brings this commemoration to the World of Goo.</p>
+  </html>
+  ]]></description>
+  <author>davidc</author>
+
+  <levels>
+    <level>
+      <dir>Mauerfall</dir>
+      <name text="Mauerfall"/>
+      <subtitle text="zwanzig jahre"/>
+      <ocd>balls,57</ocd>
+    </level>
+  </levels>
+
+  <!-- Changelog:
+
+  0.1
+   - initial proof of concept for dominos
+  0.2
+   - release some balloons at the end
+  0.3
+  -->
+
+</addin>
