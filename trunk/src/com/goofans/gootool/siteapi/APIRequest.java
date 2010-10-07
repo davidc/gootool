@@ -15,16 +15,15 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
-import java.util.TimeZone;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.goofans.gootool.ToolPreferences;
+import com.goofans.gootool.model.Configuration;
 import com.goofans.gootool.util.Version;
 import com.goofans.gootool.util.XMLUtil;
+import com.goofans.gootool.wog.WorldOfGoo;
 import org.w3c.dom.Document;
 
 /**
@@ -164,6 +163,10 @@ public class APIRequest
             .append(System.getProperty("os.arch").replaceAll(";", "_"));
 
     urlConn.setRequestProperty("User-Agent", platformStr.toString());
+
+    Configuration config = WorldOfGoo.getTheInstance().readConfiguration();
+    urlConn.setRequestProperty("WoG-Resolution", config.getResolution().getWidth() + "x" + config.getResolution().getHeight() + ";" + config.getRefreshRate());
+    urlConn.setRequestProperty("WoG-Language", config.getLanguage().getCode());
 
     if (!postParameters.isEmpty()) {
       urlConn.setRequestMethod("POST");
