@@ -1,0 +1,63 @@
+<scene backgroundcolor="0,0,0" maxx="6000" maxy="1000" minx="-800" miny="0">
+  <linearforcefield antigrav="true" dampeningfactor="0" force="0,-10" geomonly="false" type="gravity"/>
+  <line anchor="6000,300" id="right" material="rock" normal="-1,0" static="true" tag="detaching"/>
+  <line anchor="-800,300" id="left" material="rock" normal="1,0" static="true" tag="detaching"/>
+  <line anchor="0,0" id="ground" material="grass" normal="0,1" static="true"/>
+  <rectangle height="370" id="block1" image="IMAGE_SCENE_MAUERFALL_BLOCK" imagerot="0.0" imagescale="1,1" mass="500" material="throat" rotation="0.0"
+             static="false" width="86" x="-400" y="185"/>
+  <rectangle height="370" id="block2" image="IMAGE_SCENE_MAUERFALL_BLOCK" imagerot="0.0" imagescale="1,1" mass="500" material="throat" rotation="0.0"
+             static="false" width="86" x="-150" y="185"/>
+  <rectangle height="370" id="block3" image="IMAGE_SCENE_MAUERFALL_BLOCK" imagerot="0.0" imagescale="1,1" mass="500" material="throat" rotation="0.0"
+             static="false" width="86" x="100" y="185"/>
+  <rectangle height="370" id="block4" image="IMAGE_SCENE_MAUERFALL_BLOCK" imagerot="0.0" imagescale="1,1" mass="500" material="throat" rotation="0.0"
+             static="false" width="86" x="350" y="185"/>
+  <rectangle height="370" id="block5" image="IMAGE_SCENE_MAUERFALL_BLOCK" imagerot="0.0" imagescale="1,1" mass="500" material="throat" rotation="0.0"
+             static="false" width="86" x="600" y="185"/>
+  <rectangle height="370" id="block6" image="IMAGE_SCENE_MAUERFALL_BLOCK" imagerot="0.0" imagescale="1,1" mass="500" material="throat" rotation="0.0"
+             static="false" width="86" x="850" y="185"/>
+  <rectangle height="370" id="block7" image="IMAGE_SCENE_MAUERFALL_BLOCK" imagerot="0.0" imagescale="1,1" mass="500" material="throat" rotation="0.0"
+             static="false" width="86" x="1100" y="185"/>
+  <rectangle height="370" id="block8" image="IMAGE_SCENE_MAUERFALL_BLOCK" imagerot="0.0" imagescale="1,1" mass="500" material="throat" rotation="0.0"
+             static="false" width="86" x="1350" y="185"/>
+  <rectangle height="370" id="block9" image="IMAGE_SCENE_MAUERFALL_BLOCK" imagerot="0.0" imagescale="1,1" mass="500" material="throat" rotation="0.0"
+             static="false" width="86" x="1600" y="185"/>
+  <rectangle height="370" id="block10" image="IMAGE_SCENE_MAUERFALL_BLOCK" imagerot="0.0" imagescale="1,1" mass="500" material="throat" rotation="0.0"
+             static="false" width="86" x="1850" y="185"/>
+  <rectangle height="370" id="block11" image="IMAGE_SCENE_MAUERFALL_BLOCK" imagerot="0.0" imagescale="1,1" mass="500" material="throat" rotation="0.0"
+             static="false" width="86" x="2100" y="185"/>
+  <rectangle height="370" id="block12" image="IMAGE_SCENE_MAUERFALL_BLOCK" imagerot="0.0" imagescale="1,1" mass="500" material="throat" rotation="0.0"
+             static="false" width="86" x="2350" y="185"/>
+  <rectangle height="370" id="block13" image="IMAGE_SCENE_MAUERFALL_BLOCK" imagerot="0.0" imagescale="1,1" mass="500" material="throat" rotation="0.0"
+             static="false" width="86" x="2600" y="185"/>
+  <rectangle height="370" id="block14" image="IMAGE_SCENE_MAUERFALL_BLOCK" imagerot="0.0" imagescale="1,1" mass="500" material="throat" rotation="0.0"
+             static="false" width="86" x="2850" y="185"/>
+  <rectangle height="370" id="block15" image="IMAGE_SCENE_MAUERFALL_BLOCK" imagerot="0.0" imagescale="1,1" mass="500" material="throat" rotation="0.0"
+             static="false" width="86" x="3100" y="185"/>
+  <rectangle height="370" id="block16" image="IMAGE_SCENE_MAUERFALL_BLOCK" imagerot="0.0" imagescale="1,1" mass="500" material="throat" rotation="0.0"
+             static="false" width="86" x="3350" y="185"/>
+  <rectangle height="370" id="block17" image="IMAGE_SCENE_MAUERFALL_BLOCK" imagerot="0.0" imagescale="1,1" mass="500" material="throat" rotation="0.0"
+             static="false" width="86" x="3600" y="185"/>
+  <rectangle height="370" id="block18" image="IMAGE_SCENE_MAUERFALL_BLOCK" imagerot="0.0" imagescale="1,1" mass="500" material="throat" rotation="0.0"
+             static="false" width="86" x="3850" y="185"/>
+  <rectangle height="370" id="block19" image="IMAGE_SCENE_MAUERFALL_BLOCK" imagerot="0.0" imagescale="1,1" mass="500" material="throat" rotation="0.0"
+             static="false" width="86" x="4100" y="185"/>
+  <compositegeom id="block20" image="IMAGE_SCENE_MAUERFALL_BLOCK" imagerot="0.0" imagescale="1,1" material="throat" rotation="0.0" static="false" x="4350" y="185">
+    <rectangle height="370" id="block20block" imagerot="0.0" imagescale="1,1" mass="500" material="throat" rotation="0.0" static="false" width="86" x="0"
+               y="0"/>
+    <circle id="block20circle" radius="75" x="53.32" y="89.28"/>
+  </compositegeom>
+  <rectangle height="500" id="geometry1" rotation="0.705776111402" static="true" width="500" x="-836.4544" y="33.8272"/>
+  <rectangle height="500" id="geometry2" rotation="40.5395468781" static="true" width="500" x="-811.8528" y="6.1504"/>
+  <rectangle height="20" id="geometry3" mass="10" material="rock" rotation="0.0" static="false" width="300" x="4660" y="270"/>
+  <rectangle height="20" id="geometry4" material="rock" nogeomcollisions="false" rotation="0.0" static="true" width="400" x="4820" y="250"/>
+  <rectangle height="20" id="geometry5" material="machine" nogeomcollisions="false" rotation="0.0" static="true" width="400" x="4820" y="290"/>
+  <rectangle height="1000" id="geometry6" nogeomcollisions="false" rotation="0.0" static="true" width="100" x="5136.64368925" y="-156.875968946"/>
+  <rectangle height="1000" id="geometry7" material="machine" nogeomcollisions="false" rotation="0.0" static="true" width="100" x="5363.35180898" y="-240"/>
+  <linearforcefield antigrav="false" center="5245.70014157,-123.088603095" dampeningfactor="0" force="-2,30" height="1000" type="gravity" width="100"/>
+  <linearforcefield antigrav="false" center="5198.35756065,374.42715297" dampeningfactor="0" force="-30,2" height="100" type="gravity" width="200"/>
+  <rectangle height="100" id="geometry8" rotation="0.0" static="true" width="500" x="5154.73497973" y="472.577960059"/>
+  <rectangle height="20" id="geometry9" mass="10" material="machine" nogeomcollisions="false" rotation="0.0" static="false" width="400" x="5390" y="270"/>
+  <hinge anchor="5189.04,277.76" body1="geometry3" body2="geometry9"/>
+  <rectangle height="200" id="geometry10" material="machine" rotation="0.0" static="true" width="100" x="5363.0" y="380"/>
+
+</scene>
