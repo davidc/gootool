@@ -7,6 +7,8 @@
 - Available addins are now stored in your home directory and not your custom directory. They will be moved automatically upon upgrade to this version (#0000263).
 - Fixed installation of addins with XML special characters (quotation marks etc) in level name/subtitle (#0000266).
 - If a background task fails due to a fatal error (e.g. out of memory), don't assume the task has succeded (#0000268).
+- Fix profile tower rendering under Mac OS X (#0000265).
+- Fix location of Steam install. Automatically locate World of Goo 32-bit install on 64-bit Windows.
 
 1.0.2, 18-November-2009
 

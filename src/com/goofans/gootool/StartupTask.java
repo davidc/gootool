@@ -148,6 +148,7 @@ public class StartupTask extends ProgressIndicatingTask
       for (File file : oldAddinsDir.listFiles()) {
         File destFile = new File(addinsDir, file.getName());
         try {
+          Utilities.deleteFileIfExists(destFile);
           Utilities.moveFile(file, destFile);
         }
         catch (IOException e) {
