@@ -28,12 +28,18 @@ public class WorldOfGooWindows extends WorldOfGoo
   private static final Logger log = Logger.getLogger(WorldOfGooWindows.class.getName());
 
   private static final String[] SEARCH_PATHS = {
-          "%ProgramFiles%\\WorldOfGoo", "%ProgramFiles%\\World Of Goo",
-          "%SystemDrive%\\Program Files\\WorldOfGoo", "%SystemDrive%\\Program Files\\World Of Goo",
-          "%SystemDrive%\\Games\\WorldOfGoo", "%SystemDrive%\\Games\\World Of Goo",
+          "%ProgramFiles%\\WorldOfGoo",
+          "%ProgramFiles(x86)%\\WorldOfGoo", // 32-bit dir on 64-bit windows
+          "%ProgramFiles%\\World Of Goo",
+          "%ProgramFiles(x86)%\\World Of Goo", // 32-bit dir on 64-bit windows
+          "%SystemDrive%\\Program Files\\WorldOfGoo",
+          "%SystemDrive%\\Program Files\\World Of Goo",
+          "%SystemDrive%\\Games\\WorldOfGoo",
+          "%SystemDrive%\\Games\\World Of Goo",
           "%HOME%/.PlayOnLinux/wineprefix/WorldOfGoo/drive_c/Program Files/WorldOfGoo", // PlayOnLinux
           "%HOME%/.wine/drive_c/Program Files/WorldOfGoo", // wine
-          "%ProgramFiles\\Steam\\steamapps\\common\\world of goo" // steam
+          "%ProgramFiles%\\Steam\\steamapps\\common\\world of goo", // steam
+          "%ProgramFiles(x86)%\\Steam\\steamapps\\common\\world of goo" // steam 32-bit on 64-bit windows
   };
   public static final String EXE_FILENAME = "WorldOfGoo.exe";
 
