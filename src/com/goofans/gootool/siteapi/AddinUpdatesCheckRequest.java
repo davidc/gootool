@@ -44,8 +44,10 @@ public class AddinUpdatesCheckRequest extends APIRequest
    */
   public Map<String, AvailableUpdate> checkUpdates() throws APIException
   {
-
-    final List<Addin> availableAddins = WorldOfGoo.getAvailableAddins();
+    List<Addin> availableAddins = WorldOfGoo.getAvailableAddins();
+    if (availableAddins.isEmpty()) {
+      return new TreeMap<String, AvailableUpdate>();
+    }
     return checkUpdates(availableAddins);
   }
 

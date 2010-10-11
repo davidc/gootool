@@ -9,6 +9,7 @@
 - If a background task fails due to a fatal error (e.g. out of memory), don't assume the task has succeded (#0000268).
 - Fix profile tower rendering under Mac OS X (#0000265).
 - Fix location of Steam install. Automatically locate World of Goo 32-bit install on 64-bit Windows.
+- Don't throw an exception in addin update check if no addins are installed (#0000271).
 
 1.0.2, 18-November-2009
 
