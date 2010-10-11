@@ -58,29 +58,23 @@ public class Profile
     playTime = Integer.parseInt(tok.nextToken());
     levels = Integer.parseInt(tok.nextToken());
 
-    while (tok.hasMoreTokens()) {
+    // levels is the number of four-tuples of level data
+    for (int i = 0; i < levels; ++i) {
       String levelId = tok.nextToken();
-
-      // Test to see if it's an integer indicating end of levels.
-      try {
-        int num = Integer.parseInt(levelId);
-        // It's an integer, treat it as the number of skipped levels, and we've reached the end of levels
-        while (num > 0) {
-          String skippedLevel = tok.nextToken();
-          skippedLevels.add(skippedLevel);
-          num--;
-        }
-        break;
-      }
-      catch (NumberFormatException e) {
-        // Do nothing. This is a normal level, not an integer.
-      }
 
       int mostBalls = Integer.parseInt(tok.nextToken());
       int leastMoves = Integer.parseInt(tok.nextToken());
       int leastTime = Integer.parseInt(tok.nextToken());
       LevelAchievement levelAchievement = new LevelAchievement(levelId, mostBalls, leastMoves, leastTime);
       levelAchievements.add(levelAchievement);
+    }
+
+    // End of level data. Number of skipped levels, then their IDs.
+    int numSkipped = Integer.parseInt(tok.nextToken());
+    while (numSkipped > 0) {
+      String skippedLevel = tok.nextToken();
+      skippedLevels.add(skippedLevel);
+      numSkipped--;
     }
 
     tower = readTower(tok.nextToken());
