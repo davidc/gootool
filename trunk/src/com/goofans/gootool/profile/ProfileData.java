@@ -15,6 +15,7 @@ import java.util.logging.Logger;
 import java.util.logging.Level;
 
 import com.goofans.gootool.io.GameFormat;
+import com.goofans.gootool.util.DebugUtil;
 import com.goofans.gootool.util.Utilities;
 
 /**
@@ -163,16 +164,17 @@ public class ProfileData
   @SuppressWarnings({"HardCodedStringLiteral", "HardcodedFileSeparator", "UseOfSystemOutOrSystemErr"})
   public static void main(String[] args) throws IOException
   {
+    DebugUtil.setAllLogging();
     // Test a profile can be loaded ok
-//    ProfileData pd = new ProfileData(new File("testcases/maks-linux-pers2/pers2.dat"));
-//    System.out.println(pd.getCurrentProfile().getTower());
-
-    // Restore a profile from goofans published profile
-    Profile p = new Profile(EncodingUtil.bytesToStringUtf8(Utilities.readFile(new File("profile.txt"))));
-    ProfileData pd = new ProfileData(p);
-    System.out.println(pd);
+    ProfileData pd = new ProfileData(new File("testcases/qwsx-pers2.dat"));
     System.out.println(pd.getCurrentProfile().getTower());
 
-    GameFormat.encodeBinFile(new File("pers2.dat"), pd.toData());
+    // Restore a profile from goofans published profile
+//    Profile p = new Profile(EncodingUtil.bytesToStringUtf8(Utilities.readFile(new File("profile.txt"))));
+//    ProfileData pd = new ProfileData(p);
+//    System.out.println(pd);
+//    System.out.println(pd.getCurrentProfile().getTower());
+
+//    GameFormat.encodeBinFile(new File("pers2.dat"), pd.toData());
   }
 }
