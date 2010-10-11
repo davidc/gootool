@@ -1,0 +1,5 @@
+<scene backgroundcolor="0,0,0" maxx="1000" maxy="1000" minx="-1000" miny="-1000">
+  <radialforcefield antigrav="false" center="0,0" dampeningfactor="0" forceatcenter="-10" forceatedge="-10" id="gravity" radius="1000" type="gravity"/>
+  <circle id="planet" image="IMG_PLANET" imagepos="0,0" imagerot="0.0" imagescale="2,2" mass="2000" material="rock" radius="150" rotspeed="0.01" static="false"
+          tag="walkable" x="0.00001" y="0.00001"/>
+</scene>

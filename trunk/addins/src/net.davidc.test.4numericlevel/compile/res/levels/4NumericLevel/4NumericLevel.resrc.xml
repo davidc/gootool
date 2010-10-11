@@ -1,0 +1,6 @@
+<ResourceManifest>
+  <Resources id="scene_4NumericLevel">
+    <SetDefaults idprefix="" path="./"/>
+    <Image id="IMG_PLANET" path="res/levels/4NumericLevel/planet"/>
+  </Resources>
+</ResourceManifest>

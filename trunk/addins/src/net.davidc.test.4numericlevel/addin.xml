@@ -1,0 +1,15 @@
+<addin spec-version="1.0">
+  <id>net.davidc.test.4numericlevel</id>
+  <name>4 Numeric Level</name>
+  <type>level</type>
+  <version>1.0</version>
+  <description>A copy of Rotating Planet, but with a level name with a number at the start.</description>
+  <author>davidc</author>
+
+  <level>
+    <dir>4NumericLevel</dir>
+    <name text="4 Numeric Level"/>
+    <subtitle text="a mad scientist experiment"/>
+    <ocd>time,20</ocd>
+  </level>
+</addin>
