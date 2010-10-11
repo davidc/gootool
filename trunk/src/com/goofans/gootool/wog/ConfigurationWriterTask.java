@@ -66,6 +66,11 @@ public class ConfigurationWriterTask extends ProgressIndicatingTask
     WorldOfGoo worldOfGoo = WorldOfGoo.getTheInstance();
     File wogDir = worldOfGoo.getWogDir();
     File customDir = worldOfGoo.getCustomDir();
+
+    if (wogDir.getCanonicalPath().equals(customDir.getCanonicalPath())) {
+      throw new IOException("Custom directory cannot be the same as the source directory!");
+    }
+
     log.info("Copying game files from " + wogDir + " to " + customDir);
 
     customDir.mkdir();
