@@ -111,6 +111,22 @@ public class AddinInstaller
   private static void doPassOnFile(Addin addin, int pass, String fileName, InputStream is) throws IOException, AddinFormatException
   {
 //    System.out.println("Doing pass " + pass + " on file " + fileName);
+
+    // Validate that the file extension(s) are lower case (#0000275).
+
+    int lastSlash = fileName.lastIndexOf('/');
+    int baseStarts = (lastSlash == -1 ? 0 : lastSlash + 1); // Offset of first character of base filename
+//    System.out.println("baseName = " + fileName.substring(baseStarts));
+
+    int firstDot = fileName.indexOf('.', baseStarts); // Offset of first period of base filename
+    if (firstDot != -1) {
+      String extension = fileName.substring(firstDot + 1);
+      if (!extension.toLowerCase().equals(extension)) {
+        throw new AddinFormatException("Upper case file extension found in '" + fileName + "'");
+      }
+    }
+
+
     if (pass == PASS_OVERRIDE) {
       processOverride(fileName, is);
     }

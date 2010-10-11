@@ -11,6 +11,7 @@
 - Fix location of Steam install. Automatically locate World of Goo 32-bit install on 64-bit Windows.
 - Don't throw an exception in addin update check if no addins are installed (#0000271).
 - Abort the build if the target custom directory is the same as the source directory (#0000272).
+- Refuse to install goomods with upper-case characters in their file extension, to avoid cross-platform incompatibility (#0000275). 
 
 1.0.2, 18-November-2009
 
