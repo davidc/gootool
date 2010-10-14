@@ -88,7 +88,7 @@ public class AddinPropertiesDialog extends JDialog
         if (dependency.getMaxVersion() != null) {
           if (opened) sb.append(", ");
           else sb.append("(");
-          sb.append("Max version ").append(dependency.getMinVersion());
+          sb.append("Max version ").append(dependency.getMaxVersion());
         }
         if (opened) sb.append(")");
 
