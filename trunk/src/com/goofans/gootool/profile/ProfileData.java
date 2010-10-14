@@ -97,7 +97,37 @@ public class ProfileData
     int read = is.read(buf, 0, length);
     if (read != length) throw new IOException("Short read, expected " + length + " but got " + read);
 
+    fixWonkyUtf8(buf);
+
     return EncodingUtil.bytesToStringUtf8(buf);
+  }
+
+  /**
+   * Fixes up the wonky UTF-8 stored in profiles < 1.40 (#0000270).
+   *
+   * @param buf The buffer to fixup
+   */
+  private void fixWonkyUtf8(byte[] buf)
+  {
+    // Go through and restore high-order bits for UTF-8 sequences
+
+    int nskip = 0;
+
+    for (int i = 0; i < buf.length; ++i) {
+      if (nskip > 0) {
+        buf[i] |= 0x80; // set top bit
+        nskip--;
+      }
+      else if ((buf[i] & 0xE0) == 0xC0) { // 110yyyyy: U+0080 to U+07FF
+        nskip = 1;
+      }
+      else if ((buf[i] & 0xF0) == 0xE0) { // 1110zzzz: U+0800 to U+FFFF
+        nskip = 2;
+      }
+      else if ((buf[i] & 0xF8) == 0xF0) { // 11110www: U+010000 to U+10FFFF
+        nskip = 3;
+      }
+    }
   }
 
   public Profile[] getProfiles()
