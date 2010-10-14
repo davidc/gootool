@@ -17,6 +17,7 @@
 - Addins with unsatisfied dependencies now show red in the addins tab (#0000178).
 - Decode broken UTF-8 in World of Goo profile names prior to version 1.40 (#0000270).
 - Fix skipeolsequence/cutscene not being respected for levels using addin manifest version 1.1 (#0000252).
+- Fix dependency max-version not being shown correctly on addin properties dialog.
 
 1.0.2, 18-November-2009
 

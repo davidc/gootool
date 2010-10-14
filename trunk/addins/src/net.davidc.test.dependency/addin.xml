@@ -8,6 +8,6 @@
 
   <dependencies>
     <depends ref="com.goofans.davidc.jingleballs" min-version="1.0"/>
-    <depends ref="net.davidc.test.nonexistant" min-version="1.0"/>
+    <depends ref="net.davidc.test.nonexistant" min-version="1.0" max-version="1.5"/>
   </dependencies>
 </addin>
