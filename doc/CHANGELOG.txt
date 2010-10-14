@@ -13,6 +13,7 @@
 - Abort the build if the target custom directory is the same as the source directory (#0000272).
 - Refuse to install goomods with upper-case characters in their file extension, to avoid cross-platform incompatibility (#0000275).
 - Correctly load the level history from a user's profile, handles levels with names like 4444 (#0000269).
+- Addins with unsatisfied dependencies now show red in the addins tab (#0000178).
 
 1.0.2, 18-November-2009
 
