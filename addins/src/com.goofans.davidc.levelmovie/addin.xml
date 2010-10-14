@@ -1,0 +1,30 @@
+<addin spec-version="1.1">
+  <id>com.goofans.davidc.levelmovie</id>
+  <name>LevelMovie</name>
+  <type>level</type>
+  <version>1.0</version>
+  <!--<thumbnail type="image/jpeg" width="200" height="150">thumbnail.jpg</thumbnail>-->
+  <description>A level with a cutscene and skipeolsequence.</description>
+  <author>davidc</author>
+
+  <levels>
+    <level>
+      <dir>LevelMovie</dir>
+      <name text="Level Movie"/>
+      <subtitle text="A movie with a cutscene"/>
+      <ocd>balls,57</ocd>
+      <skipeolsequence/>
+      <cutscene>gooTransition_in,wogcunlock,gooTransition_out</cutscene>
+    </level>
+  </levels>
+
+  <!-- Changelog:
+
+  0.1
+   - initial proof of concept for dominos
+  0.2
+   - release some balloons at the end
+  0.3
+  -->
+
+</addin>

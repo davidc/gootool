@@ -1,0 +1,22 @@
+<level allowskip="true" autobounds="false" ballsrequired="1" letterboxed="false" strandgeom="false" textcolor="255,255,255" timebugprobability="0"
+       visualdebug="true">
+  <camera aspect="normal" endpos="0,0" endzoom="1">
+    <poi pause="0" pos="0,0" traveltime="0" zoom="0.5"/>
+  </camera>
+  <camera aspect="widescreen" endpos="0,0" endzoom="1.273">
+    <poi pause="0" pos="0,0" traveltime="0" zoom="1.273"/>
+  </camera>
+  <levelexit filter="" id="theExit" pos="0,1000" radius="75"/>
+  <BallInstance angle="0" id="beauty" type="Beauty" x="-612.5664" y="665.8288"/>
+  <BallInstance angle="0" id="anchor1" type="Anchor" x="-748.8112" y="653.48"/>
+  <BallInstance angle="0" id="anchor2" type="Anchor" x="-447.4416" y="655.0176"/>
+  <BallInstance angle="0" id="blocker1" type="Ivy" x="-655.0176" y="565.8368"/>
+  <BallInstance angle="0" id="blocker2" type="Ivy" x="-533.5472" y="571.9872"/>
+  <Strand gb1="anchor1" gb2="blocker1"/>
+  <Strand gb1="blocker1" gb2="blocker2"/>
+  <Strand gb1="blocker2" gb2="anchor2"/>
+  <BallInstance angle="0" id="balloon1" type="balloon" x="5209.26320588" y="185.395968946"/>
+  <BallInstance angle="0" id="goo1" type="balloon" x="5260.15621696" y="145.408603095"/>
+  <BallInstance angle="0" id="goo2" type="balloon" x="5216.53363603" y="39.9873658511"/>
+  <BallInstance angle="0" id="goo3" type="balloon" x="5249.25057173" y="94.5155920116"/>
+</level>
