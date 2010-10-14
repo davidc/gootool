@@ -1,0 +1,6 @@
+<ResourceManifest>
+  <Resources id="scene_LevelMovie">
+    <SetDefaults idprefix="" path="./"/>
+    <Image id="IMAGE_SCENE_LEVELMOVIE_BLOCK" path="res/levels/LevelMovie/block"/>
+  </Resources>
+</ResourceManifest>
