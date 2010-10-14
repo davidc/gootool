@@ -8,6 +8,9 @@ package com.goofans.gootool.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.goofans.gootool.addins.Addin;
+import com.goofans.gootool.wog.WorldOfGoo;
+
 /**
  * Represents the current World of Goo configuration.
  * <p/>
@@ -153,6 +156,21 @@ public class Configuration
   public List<String> getEnabledAddins()
   {
     return enabledAddins;
+  }
+
+  public List<Addin> getEnabledAddinsAsAddins()
+  {
+    List<Addin> availableAddins = WorldOfGoo.getAvailableAddins();
+    List<Addin> addins = new ArrayList<Addin>(enabledAddins.size());
+
+    for (String enabledAddinId : enabledAddins) {
+      for (Addin availableAddin : availableAddins) {
+        if (availableAddin.getId().equals(enabledAddinId)) {
+          addins.add(availableAddin);
+        }
+      }
+    }
+    return addins;
   }
 
   @Override

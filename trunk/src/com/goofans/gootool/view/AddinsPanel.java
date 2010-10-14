@@ -9,7 +9,9 @@ import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.AbstractTableModel;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableColumnModel;
+import java.awt.*;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
@@ -56,7 +58,7 @@ public class AddinsPanel implements ViewComponent, PropertyChangeListener
   private HyperlinkLabel findMoreHyperlink;
   private StarBar ratingBar;
   private JButton updateCheckButton;
-  private final MyTableModel addinsModel;
+  private final AddinsTableModel addinsModel;
 
   private final Controller controller;
 
@@ -79,12 +81,13 @@ public class AddinsPanel implements ViewComponent, PropertyChangeListener
   public AddinsPanel(Controller controller)
   {
     this.controller = controller;
-    addinsModel = new MyTableModel();
+    addinsModel = new AddinsTableModel();
 
     addinTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     addinTable.setModel(addinsModel);
 
     TableColumnModel columnModel = addinTable.getColumnModel();
+    addinTable.setDefaultRenderer(String.class, new AddinsTableCellStringRenderer());
 
     log.finer("Columns in table = " + columnModel.getColumnCount());
     columnModel.getColumn(0).setPreferredWidth(150);
@@ -235,7 +238,7 @@ public class AddinsPanel implements ViewComponent, PropertyChangeListener
     }
   }
 
-  private class MyTableModel extends AbstractTableModel
+  private class AddinsTableModel extends AbstractTableModel
   {
     public int getRowCount()
     {
@@ -422,6 +425,22 @@ public class AddinsPanel implements ViewComponent, PropertyChangeListener
       else {
         throw new UnsupportedFlavorException(flavor);
       }
+    }
+  }
+
+  private class AddinsTableCellStringRenderer extends DefaultTableCellRenderer
+  {
+    @Override
+    public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column)
+    {
+      Component rendererComponent = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+      if (column == 0 && !controller.getDisplayAddins().get(row).areDependenciesSatisfiedBy(controller.getEditorConfig().getEnabledAddinsAsAddins())) {
+        rendererComponent.setForeground(Color.RED);
+      }
+      else {
+        rendererComponent.setForeground(null);
+      }
+      return rendererComponent;
     }
   }
 }
