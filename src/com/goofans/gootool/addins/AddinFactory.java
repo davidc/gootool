@@ -314,7 +314,7 @@ public class AddinFactory
     AddinLevel level = new AddinLevel(levelDir, levelNames, levelSubtitles, levelOcd);
 
     // 1.1 additions
-    if (manifestVersion.compareTo(SPEC_VERSION_1_1) > 0) {
+    if (manifestVersion.compareTo(SPEC_VERSION_1_1) >= 0) {
       // cutscene (optional)
       String levelCutscene = XMLUtil.getElementString(levelElement, LEVEL_CUTSCENE);
       if (levelCutscene.length() > 0) {

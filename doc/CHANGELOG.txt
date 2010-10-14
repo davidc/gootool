@@ -1,10 +1,11 @@
 1.0.3, unreleased
 
+- This is the first full release with the full source code simultaneously released (#0000244).
+- Available addins are now stored in your home directory and not your custom directory. They will be moved automatically upon upgrade to this version (#0000263).
+- Consume World of Goo's stdout, possible fix for long hangs on "Save and Launch" (#0000261).
 - Added new command-line utility "gooinfo" to dump information about user's profile and tower under Windows and Linux. Run it on its own for syntax (#0000249).
 - Added "gooinfo -validateaddin" to do preliminary addin sanity check (currently just validates the manifest) (#0000250).
 - .bin files are now strictly prohibited in the override directory.
-- Consume World of Goo's stdout, possible fix for long hangs on "Save and Launch" (#0000261).
-- Available addins are now stored in your home directory and not your custom directory. They will be moved automatically upon upgrade to this version (#0000263).
 - Fixed installation of addins with XML special characters (quotation marks etc) in level name/subtitle (#0000266).
 - If a background task fails due to a fatal error (e.g. out of memory), don't assume the task has succeeded (#0000268).
 - Fix profile tower rendering under Mac OS X (#0000265).
@@ -15,6 +16,7 @@
 - Correctly load the level history from a user's profile, handles levels with names like 4444 (#0000269).
 - Addins with unsatisfied dependencies now show red in the addins tab (#0000178).
 - Decode broken UTF-8 in World of Goo profile names prior to version 1.40 (#0000270).
+- Fix skipeolsequence/cutscene not being respected for levels using addin manifest version 1.1 (#0000252).
 
 1.0.2, 18-November-2009
 
