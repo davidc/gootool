@@ -4,6 +4,8 @@ Source excludes:
 
 Remove files in dest dir that don't exist in source dir and aren't added by a mod
 
+If A depends on B, B must be installed first. (bubble sort the addins list)
+
 
 
 Soon!
