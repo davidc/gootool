@@ -1,6 +1,6 @@
-1.0.3, unreleased
+1.0.3, 15-October-2010
 
-- This is the first full release with the full source code simultaneously released (#0000244).
+- This is the first release with the full source code released simultaneously (#0000244).
 - Available addins are now stored in your home directory and not your custom directory. They will be moved automatically upon upgrade to this version (#0000263).
 - Consume World of Goo's stdout, possible fix for long hangs on "Save and Launch" (#0000261).
 - Added new command-line utility "gooinfo" to dump information about user's profile and tower under Windows and Linux. Run it on its own for syntax (#0000249).
@@ -17,7 +17,7 @@
 - Addins with unsatisfied dependencies now show red in the addins tab (#0000178).
 - Decode broken UTF-8 in World of Goo profile names prior to version 1.40 (#0000270).
 - Fix skipeolsequence/cutscene not being respected for levels using addin manifest version 1.1 (#0000252).
-- Fix dependency max-version not being shown correctly on addin properties dialog.
+- Fix dependency max-version not being shown correctly on the addin properties dialog.
 
 1.0.2, 18-November-2009
 
