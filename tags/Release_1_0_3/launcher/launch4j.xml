@@ -1,0 +1,39 @@
+<launch4jConfig>
+  <dontWrapJar>false</dontWrapJar>
+  <headerType>gui</headerType>
+  <jar>..\build\gootool-ob.jar</jar>
+  <outfile>OVERRIDE.exe</outfile>
+  <errTitle>GooTool</errTitle>
+  <cmdLine></cmdLine>
+  <chdir>..</chdir>
+  <priority>normal</priority>
+  <downloadUrl>http://java.com/download</downloadUrl>
+  <supportUrl></supportUrl>
+  <customProcName>true</customProcName>
+  <stayAlive>false</stayAlive>
+  <manifest></manifest>
+  <icon>gootool.ico</icon>
+  <classPath>
+    <mainClass>com.goofans.gootool.GooTool</mainClass>
+    <cp>lib/*</cp>
+  </classPath>
+  <jre>
+    <path></path>
+    <minVersion>1.5.0</minVersion>
+    <maxVersion></maxVersion>
+    <jdkPreference>preferJre</jdkPreference>
+    <opt>-Djava.util.logging.config.file=etc/logger_properties.txt</opt>
+  </jre>
+  <versionInfo>
+    <fileVersion>0.0.0.0</fileVersion>
+    <txtFileVersion>OVERRIDE</txtFileVersion>
+    <fileDescription>GooTool</fileDescription>
+    <copyright>Copyright 2008, 2009, 2010 David Croft</copyright>
+    <productVersion>0.0.0.0</productVersion>
+    <txtProductVersion>OVERRIDE</txtProductVersion>
+    <productName>World of Goo Tool</productName>
+    <companyName></companyName>
+    <internalName>gootool</internalName>
+    <originalFilename>gootool.exe</originalFilename>
+  </versionInfo>
+</launch4jConfig>

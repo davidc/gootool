@@ -1,0 +1,9 @@
+[Desktop Entry]
+Version=1.0
+Name=GooTool
+Type=Application
+Icon=/usr/share/gootool/48x48.png
+Categories=Game;Simulation
+Exec=/usr/bin/gootool
+Terminal=false
+MimeType=application/x-world-of-goo-addin

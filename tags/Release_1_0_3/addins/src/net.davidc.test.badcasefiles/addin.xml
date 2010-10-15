@@ -1,0 +1,19 @@
+<addin spec-version="1.0">
+  <!-- The unique ID of this addin. Read the spec for uniqueness and format requirements. -->
+  <id>net.davidc.test.badcasefiles</id>
+
+  <!-- Short display name shown to user. -->
+  <name>Bad case files test</name>
+
+  <!-- either "mod" or "level". For user display, and to determine whether to create a chapter 5 entry -->
+  <type>mod</type>
+
+  <!-- Version. Must be numerically comparable in each "."-delimited component. You could also do it without periods at all, e.g. 11281.-->
+  <version>1.0</version>
+
+  <!-- Description shown to user when mod is selected. Basic HTML is allowed if you put it in a CDATA and surround it with <html></html>. -->
+  <description>Should be rejected by GooTool due to files with bad cased suffixes.</description>
+
+  <!-- Author shown to user. -->
+  <author>davidc</author>
+</addin>

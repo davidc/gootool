@@ -1,0 +1,369 @@
+<?xml version="1.0"?>
+<i18n>
+
+  <process-image>
+    <source>images_continue.png</source>
+    <dest>res/images/continue_up</dest>
+
+    <draw>
+      <fixed-position x="82" x-justify="center" y="23" y-justify="bottom"/>
+
+      <text>
+        <font name="TCCEB.TTF" size="30" stretch="1.2" outline="6"/>
+        <string>IMG_RESULTS_CONTINUE</string>
+        <color>#000000,0.39</color>
+        <rotation>180</rotation>
+      </text>
+
+      <text>
+        <font name="TCCEB.TTF" size="30" stretch="1.2"/>
+        <string>IMG_RESULTS_CONTINUE</string>
+        <color>#999999</color>
+        <rotation>180</rotation>
+      </text>
+    </draw>
+  </process-image>
+
+  <process-image>
+    <source>images_continue.png</source>
+    <dest>res/images/continue_over</dest>
+
+    <draw>
+      <fixed-position x="82" y="23" y-justify="bottom"/>
+      <text>
+        <string>IMG_RESULTS_CONTINUE</string>
+        <font name="TCCEB.TTF" size="30" stretch="1.2" outline="4"/>
+        <color>#000000,0.39</color>
+        <rotation>180</rotation>
+      </text>
+    </draw>
+
+    <layer>
+      <draw>
+        <fixed-position x="82" y="23" y-justify="bottom"/>
+        <text>
+          <string>IMG_RESULTS_CONTINUE</string>
+          <font name="TCCEB.TTF" size="30" stretch="1.2" outline="8"/>
+          <color>#FFFFFF,0.35</color>
+          <rotation>180</rotation>
+        </text>
+      </draw>
+
+      <gaussian-blur radius="8.0"/>
+    </layer>
+
+    <draw>
+      <fixed-position x="82" x-justify="center" y="23" y-justify="bottom"/>
+      <text>
+        <string>IMG_RESULTS_CONTINUE</string>
+        <font name="TCCEB.TTF" size="30" stretch="1.2"/>
+        <color>#AFAFAF</color>
+        <rotation>180</rotation>
+      </text>
+    </draw>
+  </process-image>
+
+  <process-image>
+    <source>levels_wogc_buttonConnect_over.png</source>
+    <dest>res/levels/wogc/buttonConnect_over</dest>
+
+    <draw>
+      <fit-to-box x="8" y="43" width="90" height="24" allow-grow="false"/>
+      <text>
+        <string>IMG_WOGC_SIGN1_CONNECT</string>
+        <font name="TCCEB.TTF" size="25"/>
+        <color>#000000</color>
+        <rotation>-2</rotation>
+      </text>
+    </draw>
+  </process-image>
+
+  <process-image>
+    <source>levels_wogc_buttonConnect_up.png</source>
+    <dest>res/levels/wogc/buttonConnect_up</dest>
+
+    <draw>
+      <fit-to-box x="8" y="43" width="90" height="24" allow-grow="false"/>
+      <text>
+        <string>IMG_WOGC_SIGN1_CONNECT</string>
+        <font name="TCCEB.TTF" size="25"/>
+        <color>#000000</color>
+        <rotation>-2</rotation>
+      </text>
+    </draw>
+  </process-image>
+
+  <!-- SassyFrassy.ttf from http://1000wordsphotography.typepad.com/allie/s.html -->
+  <process-image>
+    <source>tutorialPost.png</source>
+    <dest>res/levels/GoingUp/tutorialPost</dest>
+
+    <draw>
+      <fit-to-box x="16" y="52" width="220" height="40" x-justify="left" allow-grow="false"/>
+      <text>
+        <string>IMG_GOINGUP_HINT[1]</string>
+        <font name="SassyFrassy.ttf" size="30"/>
+        <color>#000000</color>
+        <rotation>-20</rotation>
+      </text>
+    </draw>
+
+    <draw>
+      <fit-to-box x="45" y="85" width="190" height="40" x-justify="left" allow-grow="false"/>
+      <text>
+        <string>IMG_GOINGUP_HINT[2]</string>
+        <font name="SassyFrassy.ttf" size="30"/>
+        <color>#000000</color>
+        <rotation>-20</rotation>
+      </text>
+    </draw>
+
+    <draw>
+      <fit-to-box x="102" y="85" width="150" height="40" x-justify="center" allow-grow="false"/>
+      <text>
+        <string>IMG_GOINGUP_HINT[3]</string>
+        <font name="SassyFrassy.ttf" size="30"/>
+        <color>#000000</color>
+        <rotation>-20</rotation>
+      </text>
+    </draw>
+
+    <draw>
+      <fit-to-box x="139" y="100" width="100" height="40" x-justify="right" allow-grow="false"/>
+      <text>
+        <string>IMG_GOINGUP_HINT[4]</string>
+        <font name="SassyFrassy.ttf" size="30"/>
+        <color>#000000</color>
+        <rotation>-20</rotation>
+      </text>
+    </draw>
+
+    <draw>
+      <fit-to-box x="136" y="134" width="100" height="40" x-justify="right" allow-grow="false"/>
+      <text>
+        <string>IMG_GOINGUP_HINT[5]</string>
+        <font name="SassyFrassy.ttf" size="30"/>
+        <color>#000000</color>
+        <rotation>-20</rotation>
+      </text>
+    </draw>
+  </process-image>
+
+  <process-image>
+    <source>levels_island1_title.png</source>
+    <dest>res/levels/island1/title</dest>
+
+    <draw>
+      <fixed-position x="90" y="62"/>
+      <text>
+        <string>CHAPTER1_NAME</string>
+        <font name="EARTMB2.TTF" size="60"/>
+        <color>#000000</color>
+        <rotation>-18</rotation>
+      </text>
+    </draw>
+
+    <draw>
+      <fit-to-box x="10" y="120" width="1004" height="130"/>
+
+      <text>
+        <string>CHAPTER1_DESCRIPTION</string>
+        <font name="EARTMB2.TTF" size="170" stretch="0.8"/>
+        <color>#000000</color>
+        <arch height="-90" angle="25"/>
+      </text>
+    </draw>
+
+  </process-image>
+
+
+  <!-- EVERYTHING BELOW THIS POINT IS FOR TESTING ONLY -->
+  <!-- EVERYTHING BELOW THIS POINT IS FOR TESTING ONLY -->
+  <!-- EVERYTHING BELOW THIS POINT IS FOR TESTING ONLY -->
+  <!-- EVERYTHING BELOW THIS POINT IS FOR TESTING ONLY -->
+  <!-- EVERYTHING BELOW THIS POINT IS FOR TESTING ONLY -->
+  <!-- EVERYTHING BELOW THIS POINT IS FOR TESTING ONLY -->
+  <!-- EVERYTHING BELOW THIS POINT IS FOR TESTING ONLY -->
+  <!-- EVERYTHING BELOW THIS POINT IS FOR TESTING ONLY -->
+  <!-- EVERYTHING BELOW THIS POINT IS FOR TESTING ONLY -->
+  <!-- EVERYTHING BELOW THIS POINT IS FOR TESTING ONLY -->
+
+  <!-- fixed-position justification testing -->
+
+  <process-image>
+    <source>levels_island1_title.png</source>
+    <dest>debug_justify_fixed</dest>
+
+    <draw>
+      <fixed-position x="150" y="62" x-justify="left"/>
+      <text>
+        <string>CHAPTER1_NAME</string>
+        <font name="EARTMB2.TTF" size="60"/>
+        <color>#000000</color>
+      </text>
+    </draw>
+    <draw>
+      <fixed-position x="150" y="112" x-justify="center"/>
+      <text>
+        <string>CHAPTER1_NAME</string>
+        <font name="EARTMB2.TTF" size="60"/>
+        <color>#000000</color>
+      </text>
+    </draw>
+    <draw>
+      <fixed-position x="150" y="162" x-justify="right"/>
+      <text>
+        <string>CHAPTER1_NAME</string>
+        <font name="EARTMB2.TTF" size="60"/>
+        <color>#000000</color>
+      </text>
+    </draw>
+
+    <draw>
+      <fixed-position x="400" y="112" y-justify="top"/>
+      <text>
+        <string>CHAPTER1_NAME</string>
+        <font name="EARTMB2.TTF" size="60"/>
+        <color>#000000</color>
+      </text>
+    </draw>
+    <draw>
+      <fixed-position x="600" y="112" y-justify="middle"/>
+      <text>
+        <string>CHAPTER1_NAME</string>
+        <font name="EARTMB2.TTF" size="60"/>
+        <color>#000000</color>
+      </text>
+    </draw>
+    <draw>
+      <fixed-position x="800" y="112" y-justify="bottom"/>
+      <text>
+        <string>CHAPTER1_NAME</string>
+        <font name="EARTMB2.TTF" size="60"/>
+        <color>#000000</color>
+      </text>
+    </draw>
+
+    <!-- top-left justify -->
+    <draw>
+      <fixed-position x="850" y="182" x-justify="left" y-justify="top"/>
+      <text>
+        <string>CHAPTER1_NAME</string>
+        <font name="EARTMB2.TTF" size="60"/>
+        <color>#000000</color>
+      </text>
+    </draw>
+
+    <!-- top-left justify and rotate around that point-->
+    <draw>
+      <fixed-position x="850" y="182" x-justify="left" y-justify="top"/>
+      <text>
+        <string>CHAPTER1_NAME</string>
+        <font name="EARTMB2.TTF" size="60"/>
+        <color>#ff0000</color>
+        <rotation>-45</rotation>
+      </text>
+    </draw>
+
+  </process-image>
+
+  <!-- fit-to-box justification testing -->
+
+  <process-image>
+    <source>levels_island1_title.png</source>
+    <dest>debug_justify_box</dest>
+
+    <draw>
+      <fit-to-box x="5" y="5" width="100" height="100" x-justify="left" allow-grow="false"/>
+      <text>
+        <string>CHAPTER1_NAME</string>
+        <font name="EARTMB2.TTF" size="20"/>
+        <color>#000000</color>
+      </text>
+    </draw>
+    <draw>
+      <fit-to-box x="105" y="5" width="100" height="100" x-justify="center" allow-grow="false"/>
+      <text>
+        <string>CHAPTER1_NAME</string>
+        <font name="EARTMB2.TTF" size="20"/>
+        <color>#000000</color>
+      </text>
+    </draw>
+    <draw>
+      <fit-to-box x="205" y="5" width="100" height="100" x-justify="right" allow-grow="false"/>
+      <text>
+        <string>CHAPTER1_NAME</string>
+        <font name="EARTMB2.TTF" size="20"/>
+        <color>#000000</color>
+      </text>
+    </draw>
+
+    <draw>
+      <fit-to-box x="5" y="120" width="100" height="100" y-justify="top" allow-grow="false"/>
+      <text>
+        <string>CHAPTER1_NAME</string>
+        <font name="EARTMB2.TTF" size="20"/>
+        <color>#000000</color>
+      </text>
+    </draw>
+    <draw>
+      <fit-to-box x="105" y="120" width="100" height="100" y-justify="middle" allow-grow="false"/>
+      <text>
+        <string>CHAPTER1_NAME</string>
+        <font name="EARTMB2.TTF" size="20"/>
+        <color>#000000</color>
+      </text>
+    </draw>
+    <draw>
+      <fit-to-box x="205" y="120" width="100" height="100" y-justify="bottom" allow-grow="false"/>
+      <text>
+        <string>CHAPTER1_NAME</string>
+        <font name="EARTMB2.TTF" size="20"/>
+        <color>#000000</color>
+      </text>
+    </draw>
+
+    <!-- top-left justify -->
+    <draw>
+      <fit-to-box x="400" y="5" width="100" height="100" x-justify="left" y-justify="top" allow-grow="false"/>
+      <text>
+        <string>CHAPTER1_NAME</string>
+        <font name="EARTMB2.TTF" size="20"/>
+        <color>#000000</color>
+      </text>
+    </draw>
+
+    <!-- top-left justify and rotate around that point-->
+    <draw>
+      <fit-to-box x="400" y="120" width="100" height="100" x-justify="left" y-justify="top" allow-grow="false"/>
+      <text>
+        <string>CHAPTER1_NAME</string>
+        <font name="EARTMB2.TTF" size="20"/>
+        <color>#ff0000</color>
+        <rotation>-45</rotation>
+      </text>
+    </draw>
+
+    <!-- bottom-left justify -->
+    <draw>
+      <fit-to-box x="600" y="5" width="100" height="100" x-justify="left" y-justify="bottom" allow-grow="false"/>
+      <text>
+        <string>CHAPTER1_NAME</string>
+        <font name="EARTMB2.TTF" size="20"/>
+        <color>#000000</color>
+      </text>
+    </draw>
+
+    <!-- bottom-left justify and rotate around that point-->
+    <draw>
+      <fit-to-box x="600" y="120" width="100" height="100" x-justify="left" y-justify="bottom" allow-grow="false"/>
+      <text>
+        <string>CHAPTER1_NAME</string>
+        <font name="EARTMB2.TTF" size="20"/>
+        <color>#ff0000</color>
+        <rotation>-45</rotation>
+      </text>
+    </draw>
+
+  </process-image>
+</i18n>

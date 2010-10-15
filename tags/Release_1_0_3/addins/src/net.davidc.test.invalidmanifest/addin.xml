@@ -1,0 +1,8 @@
+<addin spec-version="1.0">
+  <id>net.davidc.test.invalid manifest</id>
+  <name>Invalid Manifest</name>
+  <type>mod</type>
+  <version>1.0</version>
+  <description>This addin has a broken manifest file (bad ID).</description>
+  <author>davidc</author>
+</addin>

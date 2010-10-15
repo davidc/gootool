@@ -1,0 +1,67 @@
+
+set svn:eol-style native on all java, xml and text files
+
+Remove files in dest dir that don't exist in source dir and aren't added by a mod
+
+If A depends on B, B must be installed first. (bubble sort the addins list)
+
+
+
+Soon!
+
+Windows 7 support.
+
+- BUG FIX: Mac image conversion has slight colour shifts due to ColorModel
+- IMPROVEMENT: Don't SAVE if unmodified on LAUNCH
+
+- NEW FEATURE: Addin author tool: create addin from directory/create addin from wogeditor, create addin from assets
+
+- IMPROVEMENT: Move up/down buttons to reorder addins, to replace lost drag-and-drop functionality
+- BUG FIX: Dragging addins below last enabled addin should move it to bottom
+
+- xanax: don't jump mods around when en/disabling
+
+- test addin dependencies on: install from double click goomod, check/uncheck addins list
+
+- unsatisfied dependencies should show red?
+
+- Diagnostics: show IP address as reported by server
+
+MILESTONE 1.0.0 (First public release)
+
+- A new Source and Target abstraction for reading source game files and writing output.
+- Implementations: local (disk input, disk output), iphone (zip input, scp output)
+- Output should be cached and not flush until a final flush call
+- Reads from the output should read the cached version rather than the disk version (e.g. when modifying text.xml repeatedly on addin installation)
+- This will also allow for "abort build" which simply never flushes, and resets the Target
+
+sp level editor needs to loads balls (resources, etc) from a custom resource manager that ONLY includes:
+- main game files
+- additional and modified files from dependent addins
+- files within this mod itself
+
+MILESTONE 1.1.0
+
+- NEW FEATURE: Option to check mods for updates on goofans.com from within GooTool
+- NEW FEATURE: Auto-download required dependencies from goofans.com
+
+- NEW FEATURE: Integrated ball editor
+- NEW FEATURE: Finalise the level editor
+- NEW FEATURE: Changing refreshrate in config.txt - NEW IN 1.10? 1.20?
+
+NO MILESTONE SET
+
+- IMPROVEMENT: dev releases should have the actual svn version in their build filename/about version - may need to separate svn revision into an svn:ignored file
+- NEW FEATURE: Check for new WorldOfGoo releases
+- NEW FEATURE: fullscreen preference? Involves editing pers2.dat so maybe not
+- NEW FEATURE: Perhaps stop overrides of Drained files, to prevent cheating in goocorp?
+- NEW FEATURE: Addin XML: conflicts <addin>
+- NEW FEATURE: Addin XML: provides <x> (to include mods in a packaged download)
+- BUGFIX: Addins build.xml ANT task doesn't work under Linux.
+- NEW FEATURE: mute music/mute all sound
+
+- NEW FEATURE: automatically self-update
+
+can't access our formatter currently inside the jar/exe
+
+use JFormattedTextField for input field validation

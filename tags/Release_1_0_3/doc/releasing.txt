@@ -1,0 +1,10 @@
+Release must be done on Linux presently due to lack of SVN support in ANT under IDEA.
+
+svn update
+ant tag-release
+svn switch file:///svn/gootool/tags/Release-x_y_z
+ant dist
+ant source
+svn switch file:///svn/gootool/trunk
+svn add mapping/x.y.z.mapping
+svn commit mapping/

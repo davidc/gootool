@@ -1,0 +1,13 @@
+<?xml version="1.0" ?>
+<ResourceManifest>
+
+  <Resources id="ball_GenIvy">
+
+    <!-- Unique Images -->
+    <SetDefaults path="res/balls/GenIvy/" idprefix="IMAGE_BALL_GENIVY_" />
+
+    <Image id="BODY"	  path="body"/>
+
+  </Resources>
+
+</ResourceManifest>
