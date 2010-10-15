@@ -1,0 +1,1527 @@
+com.goofans.gootool.BillboardUpdater -> com.goofans.gootool.a:
+    java.util.logging.Logger log -> a
+    java.lang.Object sync -> a
+    45:107:void run() -> run
+    112:141:void maybeUpdateBillboards() -> a
+com.goofans.gootool.Controller -> com.goofans.gootool.b:
+    java.util.logging.Logger log -> a
+    com.goofans.gootool.GooToolResourceBundle resourceBundle -> a
+    com.goofans.gootool.view.MainFrame mainFrame -> a
+    com.goofans.gootool.model.Configuration liveConfig -> a
+    com.goofans.gootool.model.Configuration editorConfig -> b
+    java.util.Map codecs -> a
+    118:218:void actionPerformed(java.awt.event.ActionEvent) -> actionPerformed
+    222:228:void updateImageLocalisationPanel(boolean) -> a
+    233:234:com.goofans.gootool.addins.Addin getSelectedAddin() -> a
+    294:302:boolean ensureCustomDirIsSet() -> a
+    312:396:void installAddin(java.io.File) -> a
+    462:522:void changeCustomDir() -> d
+    636:654:void gooFansPublish() -> e
+    658:659:void showMessageDialog(java.lang.String,java.lang.String) -> a
+    663:664:void showErrorDialog(java.lang.String,java.lang.String) -> b
+    675:675:boolean showYesNoDialog(java.lang.String,java.lang.String) -> a
+    730:744:void maybeExit() -> a
+    748:800:void save(boolean) -> b
+    829:832:void openAboutDialog() -> b
+    866:884:void setMainFrame(com.goofans.gootool.view.MainFrame) -> a
+    888:890:void updateGenerateOnlineIdMenu() -> f
+    894:898:void setInitialConfiguration(com.goofans.gootool.model.Configuration) -> a
+    902:902:com.goofans.gootool.model.Configuration getEditorConfig() -> a
+    908:910:void refreshView() -> g
+    914:915:void updateViewFromModel(com.goofans.gootool.model.Configuration) -> b
+    919:920:void updateModelFromView(com.goofans.gootool.model.Configuration) -> c
+    924:945:java.util.List getDisplayAddins() -> a
+    953:973:int askToLocateWog() -> a
+    979:982:void bringToForeground() -> c
+    45:45:com.goofans.gootool.view.MainFrame access$000(com.goofans.gootool.Controller) -> a
+    45:45:com.goofans.gootool.GooToolResourceBundle access$100() -> a
+    45:45:void access$200(com.goofans.gootool.Controller) -> a
+com.goofans.gootool.Controller$1 -> com.goofans.gootool.c:
+    com.goofans.gootool.Controller this$0 -> a
+    196:198:void run() -> a
+com.goofans.gootool.Controller$2 -> com.goofans.gootool.d:
+    java.util.Map[] val$updates -> a
+    247:251:void run() -> a
+com.goofans.gootool.Controller$3 -> com.goofans.gootool.e:
+    com.goofans.gootool.Controller this$0 -> a
+    872:875:void propertyChange(java.beans.PropertyChangeEvent) -> propertyChange
+com.goofans.gootool.Diagnostics -> com.goofans.gootool.f:
+    java.io.PrintStream out -> a
+    46:64:void run() -> a
+    104:112:void dumpOSEnvironment() -> b
+    154:185:void dumpLogfiles() -> c
+    223:225:void listDir(java.io.PrintStream,java.io.File) -> a
+    230:249:void listDir(java.io.PrintStream,java.io.File,java.lang.String) -> a
+com.goofans.gootool.GameFileCodecTool -> com.goofans.gootool.g:
+    java.lang.String inputExtension -> a
+    java.lang.String inputDescription -> b
+    java.lang.String outputExtension -> c
+    com.goofans.gootool.GameFileCodecTool$CodecType codecType -> a
+    java.io.File currentInputDir -> a
+    java.io.File currentOutputDir -> b
+    78:186:void runTool(javax.swing.JFrame) -> a
+    190:199:void doDirectory(java.io.File,java.io.File) -> a
+    205:239:void doConversion(java.io.File,java.io.File) -> b
+    244:253:java.lang.String generateOutputName(java.lang.String) -> a
+    31:31:void access$000(com.goofans.gootool.GameFileCodecTool,java.io.File,java.io.File) -> a
+    31:31:void access$100(com.goofans.gootool.GameFileCodecTool,java.io.File,java.io.File) -> b
+    27:28:byte[] decodeFile(java.io.File) -> a
+    51:53:void encodeFile(java.io.File,byte[]) -> a
+com.goofans.gootool.GameFileCodecTool$1 -> com.goofans.gootool.h:
+    java.io.File[] val$inputFiles -> a
+    java.io.File val$outputFile -> a
+    com.goofans.gootool.GameFileCodecTool this$0 -> a
+    161:184:void run() -> a
+com.goofans.gootool.GameFileCodecTool$2 -> com.goofans.gootool.i:
+    int[] $SwitchMap$com$goofans$gootool$GameFileCodecTool$CodecType -> a
+com.goofans.gootool.GameFileCodecTool$CodecType -> com.goofans.gootool.j:
+    com.goofans.gootool.GameFileCodecTool$CodecType AES_DECODE -> a
+    com.goofans.gootool.GameFileCodecTool$CodecType AES_ENCODE -> b
+    com.goofans.gootool.GameFileCodecTool$CodecType XOR_DECODE -> c
+    com.goofans.gootool.GameFileCodecTool$CodecType XOR_ENCODE -> d
+    com.goofans.gootool.GameFileCodecTool$CodecType PNGBINLTL_DECODE -> e
+    com.goofans.gootool.GameFileCodecTool$CodecType PNGBINLTL_ENCODE -> f
+    com.goofans.gootool.GameFileCodecTool$CodecType ANIM_DECODE -> g
+    com.goofans.gootool.GameFileCodecTool$CodecType MOVIE_DECODE -> h
+    boolean encode -> a
+    com.goofans.gootool.GameFileCodecTool$CodecType[] $VALUES -> a
+    33:33:com.goofans.gootool.GameFileCodecTool$CodecType[] values() -> a
+    55:55:boolean isEncode() -> a
+com.goofans.gootool.GooInfo -> com.goofans.gootool.GooInfo:
+    java.util.logging.Logger log -> a
+    com.goofans.gootool.profile.ProfileData profileData -> a
+    com.goofans.gootool.profile.Profile selectedProfile -> a
+    com.goofans.gootool.GooInfo$DrawType drawType -> a
+    java.util.ArrayList arglist -> a
+    int currentArg -> a
+    com.goofans.gootool.wog.WorldOfGoo worldOfGoo -> a
+    56:115:void main(java.lang.String[]) -> main
+    119:135:void dieSyntax() -> a
+    139:141:void initProfileData() -> b
+    145:154:void initWorldOfGoo() -> c
+    166:174:void commandListProfiles() -> d
+    200:221:void commandDumpProfile() -> e
+com.goofans.gootool.GooInfo$1 -> com.goofans.gootool.k:
+    int[] $SwitchMap$com$goofans$gootool$GooInfo$DrawType -> a
+com.goofans.gootool.GooInfo$DrawType -> com.goofans.gootool.l:
+    com.goofans.gootool.GooInfo$DrawType FULL -> a
+    com.goofans.gootool.GooInfo$DrawType THUMB -> b
+    com.goofans.gootool.GooInfo$DrawType TRANS -> c
+    com.goofans.gootool.GooInfo$DrawType[] $VALUES -> a
+    45:45:com.goofans.gootool.GooInfo$DrawType[] values() -> a
+com.goofans.gootool.GooTool -> com.goofans.gootool.GooTool:
+    java.util.logging.Logger log -> a
+    javax.swing.ImageIcon icon -> a
+    com.goofans.gootool.GooToolResourceBundle resourceBundle -> a
+    com.goofans.gootool.Controller controller -> a
+    java.util.concurrent.ExecutorService threadPoolExecutor -> a
+    java.util.concurrent.ScheduledExecutorService scheduledExecutor -> a
+    java.util.List queuedTasks -> a
+    boolean startupIsComplete -> a
+    47:81:void main(java.lang.String[]) -> main
+    111:119:void queueTask(java.lang.Runnable) -> a
+    123:136:void startupIsComplete() -> a
+    140:142:void initIcon() -> b
+    146:149:javax.swing.ImageIcon getMainIcon() -> a
+    154:154:java.awt.Image getMainIconImage() -> a
+    159:162:void initTextProvider() -> c
+    166:167:com.goofans.gootool.GooToolResourceBundle getTextProvider() -> a
+    172:172:com.goofans.gootool.Controller getController() -> a
+    177:179:void executeTaskInThreadPool(java.lang.Runnable) -> b
+    183:185:void scheduleTask$574944f(java.lang.Runnable) -> c
+    189:191:void scheduleTaskWithFixedDelay$56e28133(java.lang.Runnable) -> d
+    30:30:java.util.List access$000() -> a
+    30:30:java.util.logging.Logger access$100() -> a
+com.goofans.gootool.GooTool$1 -> com.goofans.gootool.m:
+    129:134:void run() -> run
+com.goofans.gootool.GooToolResourceBundle -> com.goofans.gootool.n:
+    java.util.ResourceBundle resources -> a
+    29:29:java.lang.String formatString(java.lang.String,java.lang.Object[]) -> a
+    35:35:java.lang.Object handleGetObject(java.lang.String) -> handleGetObject
+    41:41:java.util.Enumeration getKeys() -> getKeys
+com.goofans.gootool.StartupTask -> com.goofans.gootool.o:
+    java.util.logging.Logger log -> a
+    com.goofans.gootool.Controller controller -> a
+    com.goofans.gootool.GooToolResourceBundle resourceBundle -> a
+    47:72:void run() -> a
+    126:166:void initAddins() -> b
+    171:180:void showMessageDialog(java.lang.String,java.lang.String,int) -> a
+    193:203:com.goofans.gootool.model.Configuration initModel() -> a
+    32:32:com.goofans.gootool.GooToolResourceBundle access$000(com.goofans.gootool.StartupTask) -> a
+    32:32:java.util.logging.Logger access$100() -> a
+    32:32:com.goofans.gootool.Controller access$200(com.goofans.gootool.StartupTask) -> a
+com.goofans.gootool.StartupTask$1 -> com.goofans.gootool.p:
+    com.goofans.gootool.wog.WorldOfGoo val$worldOfGoo -> a
+    com.goofans.gootool.StartupTask this$0 -> a
+    88:100:void run() -> run
+com.goofans.gootool.StartupTask$2 -> com.goofans.gootool.q:
+    java.lang.String val$message -> a
+    java.lang.String val$title -> b
+    int val$messageType -> a
+    175:176:void run() -> run
+com.goofans.gootool.ToolPreferences -> com.goofans.gootool.r:
+    java.util.logging.Logger log -> a
+    java.util.prefs.Preferences PREFS -> a
+    63:76:java.lang.String getGooToolId() -> a
+    87:92:boolean isIgnoreUpdate(com.goofans.gootool.util.VersionSpec) -> a
+    102:104:void setIgnoreUpdate(com.goofans.gootool.util.VersionSpec) -> a
+    108:108:boolean isL10nEnabled() -> a
+    113:114:void setL10nEnabled(boolean) -> a
+    118:118:java.lang.String getMruAddinDir() -> b
+    123:124:void setMruAddinDir(java.lang.String) -> a
+    128:128:java.lang.String getMruTowerDir() -> c
+    133:134:void setMruTowerDir(java.lang.String) -> b
+    138:138:java.lang.String getWindowPosition() -> d
+    143:144:void setWindowPosition(java.lang.String) -> c
+    148:148:java.lang.String getWogDir() -> e
+    153:154:void setWogDir(java.lang.String) -> d
+    158:158:java.lang.String getCustomDir() -> f
+    163:164:void setCustomDir(java.lang.String) -> e
+    168:168:java.lang.String getGooFansUsername() -> g
+    173:174:void setGooFansUsername(java.lang.String) -> f
+    178:186:java.lang.String getGooFansPassword() -> h
+    192:193:void setGooFansPassword(java.lang.String) -> g
+    197:197:boolean isGooFansLoginOk() -> b
+    202:203:void setGooFansLoginOk(boolean) -> b
+    207:207:boolean isBillboardDisable() -> c
+    212:213:void setBillboardDisable(boolean) -> c
+    217:217:long getBillboardLastCheck() -> a
+    222:223:void setBillboardLastCheck(long) -> a
+    227:233:void setRatings(java.util.Map) -> a
+    237:254:java.util.Map getRatings() -> a
+    266:276:void list(java.io.PrintStream) -> a
+com.goofans.gootool.addins.Addin -> com.goofans.gootool.s:
+    java.util.logging.Logger log -> a
+    java.io.File diskFile -> a
+    java.lang.String id -> a
+    java.lang.String name -> b
+    int type -> a
+    com.goofans.gootool.util.VersionSpec manifestVersion -> a
+    com.goofans.gootool.util.VersionSpec version -> b
+    java.lang.String description -> c
+    java.lang.String author -> d
+    java.util.List dependencies -> a
+    java.awt.image.BufferedImage thumbnail -> a
+    java.util.List levels -> b
+    64:65:void addLevel(com.goofans.gootool.addins.AddinLevel) -> a
+    69:69:java.util.List getLevels() -> a
+    74:74:java.io.File getDiskFile() -> a
+    79:79:java.lang.String getId() -> a
+    84:84:java.lang.String getName() -> b
+    89:89:int getType() -> a
+    94:96:java.lang.String getTypeText() -> c
+    101:101:com.goofans.gootool.util.VersionSpec getManifestVersion() -> a
+    106:106:com.goofans.gootool.util.VersionSpec getVersion() -> b
+    111:111:java.lang.String getDescription() -> d
+    116:116:java.lang.String getAuthor() -> e
+    121:121:java.util.List getDependencies() -> b
+    126:132:boolean areDependenciesSatisfiedBy(java.util.List) -> a
+    137:138:void setThumbnail(java.awt.image.BufferedImage) -> a
+    142:142:java.awt.image.BufferedImage getThumbnail() -> a
+    149:149:java.lang.String toString() -> toString
+    162:169:int typeFromString(java.lang.String) -> a
+com.goofans.gootool.addins.AddinDependency -> com.goofans.gootool.t:
+    java.util.logging.Logger log -> a
+    java.lang.String ref -> a
+    com.goofans.gootool.util.VersionSpec minVersion -> a
+    com.goofans.gootool.util.VersionSpec maxVersion -> b
+    36:36:java.lang.String getRef() -> a
+    41:41:com.goofans.gootool.util.VersionSpec getMinVersion() -> a
+    46:46:com.goofans.gootool.util.VersionSpec getMaxVersion() -> b
+    51:69:boolean isSatisfiedBy(java.util.List) -> a
+    77:77:java.lang.String toString() -> toString
+com.goofans.gootool.addins.AddinFactory -> com.goofans.gootool.u:
+    java.util.logging.Logger log -> a
+    javax.xml.xpath.XPathExpression XPATH_ADDIN_SPECVERSION -> a
+    javax.xml.xpath.XPathExpression XPATH_ADDIN_ID -> b
+    javax.xml.xpath.XPathExpression XPATH_ADDIN_NAME -> c
+    javax.xml.xpath.XPathExpression XPATH_ADDIN_TYPE -> d
+    javax.xml.xpath.XPathExpression XPATH_ADDIN_VERSION -> e
+    javax.xml.xpath.XPathExpression XPATH_ADDIN_DESCRIPTION -> f
+    javax.xml.xpath.XPathExpression XPATH_ADDIN_AUTHOR -> g
+    javax.xml.xpath.XPathExpression XPATH_ADDIN_DEPENDENCIES -> h
+    javax.xml.xpath.XPathExpression XPATH_ADDIN_THUMBNAIL -> i
+    javax.xml.xpath.XPathExpression XPATH_ADDIN_OLD_LEVEL -> j
+    javax.xml.xpath.XPathExpression XPATH_ADDIN_LEVELS_LEVEL -> k
+    java.util.regex.Pattern PATTERN_ID -> a
+    java.util.regex.Pattern PATTERN_NAME -> b
+    com.goofans.gootool.util.VersionSpec SPEC_VERSION_1_0 -> b
+    com.goofans.gootool.util.VersionSpec SPEC_VERSION_1_1 -> a
+    90:97:com.goofans.gootool.addins.Addin loadAddin(java.io.File) -> a
+    119:129:com.goofans.gootool.addins.Addin loadAddinFromReader(com.goofans.gootool.addins.AddinReader,java.io.File) -> a
+    137:141:com.goofans.gootool.addins.AddinReader getAddinReader(java.io.File) -> a
+    148:169:com.goofans.gootool.addins.Addin readManifest(java.io.InputStream,java.io.File,com.goofans.gootool.addins.AddinReader) -> a
+    185:235:com.goofans.gootool.addins.Addin readManifestVersion1_0(org.w3c.dom.Document,com.goofans.gootool.util.VersionSpec,java.io.File) -> a
+    256:274:com.goofans.gootool.addins.Addin readManifestVersion1_1(org.w3c.dom.Document,com.goofans.gootool.util.VersionSpec,java.io.File,com.goofans.gootool.addins.AddinReader) -> a
+    281:331:com.goofans.gootool.addins.AddinLevel readLevelNode(org.w3c.dom.Element,com.goofans.gootool.util.VersionSpec) -> a
+    383:388:com.goofans.gootool.util.VersionSpec decodeVersion(java.lang.String,java.lang.String) -> a
+    394:397:java.lang.String getStringRequiredValidated(org.w3c.dom.Document,javax.xml.xpath.XPathExpression,java.util.regex.Pattern,java.lang.String) -> a
+    403:405:java.lang.String getStringRequired(org.w3c.dom.Document,javax.xml.xpath.XPathExpression,java.lang.String) -> a
+    427:430:java.lang.String getString(org.w3c.dom.Document,javax.xml.xpath.XPathExpression) -> a
+com.goofans.gootool.addins.AddinFormatException -> com.goofans.gootool.v:
+com.goofans.gootool.addins.AddinInstaller -> com.goofans.gootool.w:
+    java.util.logging.Logger log -> a
+    java.lang.String[] ALLOWED_ROOT_DIRS -> a
+    java.lang.String[] PASSES -> b
+    java.util.List SKIP_FILES -> a
+    62:86:void installAddin(com.goofans.gootool.addins.Addin) -> a
+    90:109:void doPasses$1a0757fc(com.goofans.gootool.addins.AddinReader) -> a
+    143:154:void checkDirOk(java.lang.String) -> a
+    304:311:java.lang.String makeString(java.lang.String,java.util.Map) -> a
+    326:373:void doStringsFile(com.goofans.gootool.addins.Addin,java.io.InputStream) -> a
+com.goofans.gootool.addins.AddinLevel -> com.goofans.gootool.x:
+    java.lang.String dir -> a
+    java.util.Map names -> a
+    java.util.Map subtitles -> b
+    java.lang.String ocd -> b
+    java.lang.String cutscene -> c
+    boolean skipEolSequence -> a
+    32:74:java.awt.image.BufferedImage decodeImage(java.io.File) -> a
+    79:80:java.awt.image.PixelInterleavedSampleModel getSampleModel(int,int,int) -> a
+    85:139:void encodeImage(java.io.File,java.awt.Image) -> a
+    143:145:java.awt.image.ComponentColorModel getColorModel() -> a
+    150:153:int readUnsignedShort(java.io.InputStream) -> a
+    158:160:void writeUnsignedShort(java.io.OutputStream,int) -> a
+    164:167:int readUnsignedInt(java.io.InputStream) -> b
+    172:176:void writeUnsignedInt(java.io.OutputStream,int) -> b
+com.goofans.gootool.addins.AddinReader -> com.goofans.gootool.y:
+    java.io.InputStream getInputStream(java.lang.String) -> a
+    boolean fileExists(java.lang.String) -> a
+    java.util.Iterator getEntriesInDirectory(java.lang.String,java.util.List) -> a
+    void close() -> a
+com.goofans.gootool.addins.ExpandedAddinReader -> com.goofans.gootool.z:
+    java.io.File rootDirectory -> a
+    31:38:java.io.InputStream getInputStream(java.lang.String) -> a
+    43:44:boolean fileExists(java.lang.String) -> a
+    49:56:java.util.Iterator getEntriesInDirectory(java.lang.String,java.util.List) -> a
+    61:74:void getEntries(java.io.File,java.lang.String,java.util.List,java.util.List) -> a
+    78:78:void close() -> a
+    28:90:java.util.Map getTranslations$27b12b20(java.lang.String,java.lang.String) -> a
+com.goofans.gootool.addins.GoomodFileReader -> com.goofans.gootool.A:
+    java.util.zip.ZipFile zipFile -> a
+    34:39:java.io.InputStream getInputStream(java.lang.String) -> a
+    44:45:boolean fileExists(java.lang.String) -> a
+    50:52:java.util.Iterator getEntriesInDirectory(java.lang.String,java.util.List) -> a
+    114:115:void close() -> a
+    20:24:float getFloat(byte[],int) -> a
+    30:34:int getInt(byte[],int) -> a
+    39:44:java.lang.String getString(byte[],int) -> a
+com.goofans.gootool.addins.GoomodFileReader$1 -> com.goofans.gootool.B:
+    java.util.zip.ZipEntry nextEntry -> a
+    java.util.Enumeration val$zipEnumeration -> a
+    java.lang.String val$directory -> a
+    java.util.List val$skip -> a
+    58:65:boolean hasNext() -> hasNext
+    107:107:void remove() -> remove
+    105:105:java.lang.Object next() -> next
+com.goofans.gootool.addins.Merger -> com.goofans.gootool.C:
+    java.io.Reader input -> a
+    java.lang.String result -> a
+    javax.xml.transform.Transformer transformer -> a
+    57:58:void setTransformParameter(java.lang.String,java.lang.Object) -> a
+    69:76:java.lang.String merge() -> a
+    81:83:void writeEncoded(java.io.File) -> a
+    29:32:java.lang.String urlEncode(java.lang.String) -> a
+    76:79:byte[] stringToBytesUtf8(java.lang.String) -> a
+    86:89:java.lang.String bytesToStringUtf8(byte[]) -> a
+com.goofans.gootool.image.AbstractBufferedImageOp -> com.goofans.gootool.D:
+    17:19:java.awt.image.BufferedImage createCompatibleDestImage(java.awt.image.BufferedImage,java.awt.image.ColorModel) -> createCompatibleDestImage
+    23:23:java.awt.geom.Rectangle2D getBounds2D(java.awt.image.BufferedImage) -> getBounds2D
+    27:30:java.awt.geom.Point2D getPoint2D(java.awt.geom.Point2D,java.awt.geom.Point2D) -> getPoint2D
+    34:34:java.awt.RenderingHints getRenderingHints() -> getRenderingHints
+com.goofans.gootool.image.ConvolveFilter -> com.goofans.gootool.E:
+    int CLAMP_EDGES -> a
+    int WRAP_EDGES -> b
+    java.awt.image.Kernel kernel -> a
+    boolean alpha -> a
+    int edgeAction -> c
+    77:90:java.awt.image.BufferedImage filter(java.awt.image.BufferedImage,java.awt.image.BufferedImage) -> filter
+    94:96:java.awt.image.BufferedImage createCompatibleDestImage(java.awt.image.BufferedImage,java.awt.image.ColorModel) -> createCompatibleDestImage
+    100:100:java.awt.geom.Rectangle2D getBounds2D(java.awt.image.BufferedImage) -> getBounds2D
+    104:107:java.awt.geom.Point2D getPoint2D(java.awt.geom.Point2D,java.awt.geom.Point2D) -> getPoint2D
+    111:111:java.awt.RenderingHints getRenderingHints() -> getRenderingHints
+    283:283:java.lang.String toString() -> toString
+com.goofans.gootool.image.GaussianFilter -> com.goofans.gootool.F:
+    java.awt.image.Kernel kernel -> a
+    54:68:java.awt.image.BufferedImage filter(java.awt.image.BufferedImage,java.awt.image.BufferedImage) -> filter
+    72:113:void convolveAndTranspose(java.awt.image.Kernel,int[],int[],int,int,boolean,int) -> a
+    145:145:java.lang.String toString() -> toString
+com.goofans.gootool.image.PixelUtils -> com.goofans.gootool.G:
+    56:60:int clamp(int) -> a
+com.goofans.gootool.io.AESBinFormat -> com.goofans.gootool.H:
+    java.util.logging.Logger log -> a
+    byte[] KEY -> a
+    57:58:byte[] decodeFile(java.io.File) -> a
+    76:125:byte[] decode(byte[]) -> a
+    131:133:void encodeFile(java.io.File,byte[]) -> a
+    139:216:byte[] encode(byte[]) -> b
+    222:226:org.bouncycastle.crypto.BufferedBlockCipher getCipher(boolean) -> a
+com.goofans.gootool.io.FinalNewlineRemovingReader -> com.goofans.gootool.I:
+    java.io.PushbackReader reader -> a
+    66:87:int read() -> read
+    108:117:int read(char[],int,int) -> read
+    123:123:boolean ready() -> ready
+    129:130:void close() -> close
+com.goofans.gootool.io.GameFormat -> com.goofans.gootool.J:
+    java.util.logging.Logger log -> a
+    36:45:byte[] decodeBinFile(java.io.File) -> a
+    50:61:void encodeBinFile(java.io.File,byte[]) -> a
+    72:84:byte[] decodeProfileFile(java.io.File) -> b
+    89:100:void encodeProfileFile(java.io.File,byte[]) -> b
+    105:112:java.awt.image.BufferedImage decodeImage(java.io.File) -> a
+com.goofans.gootool.io.GameFormat$1 -> com.goofans.gootool.K:
+    int[] $SwitchMap$com$goofans$gootool$platform$PlatformSupport$Platform -> a
+com.goofans.gootool.io.UnicodeReader -> com.goofans.gootool.L:
+    java.io.PushbackInputStream internalIn -> a
+    java.io.InputStreamReader internalIn2 -> a
+    java.lang.String defaultEnc -> a
+    88:137:void init() -> a
+    142:144:void close() -> close
+    149:150:int read(char[],int,int) -> read
+com.goofans.gootool.l10n.FontManager -> com.goofans.gootool.M:
+    java.util.Map fontCache -> a
+    java.io.File baseDir -> a
+    30:36:java.awt.Font getFont(java.lang.String) -> a
+com.goofans.gootool.l10n.ImageGenerator -> com.goofans.gootool.N:
+    java.util.logging.Logger log -> a
+    java.util.regex.Pattern COLOR_PATTERN -> a
+    java.awt.image.BufferedImage finalImage -> a
+    java.awt.image.BufferedImage srcImage -> b
+    int srcWidth -> a
+    int srcHeight -> b
+    int workWidth -> c
+    int workHeight -> d
+    com.goofans.gootool.l10n.FontManager fontManager -> a
+    java.util.Map language -> a
+    org.w3c.dom.Element el -> a
+    boolean debug -> a
+    114:218:void drawText(java.awt.Graphics2D,java.lang.String,java.awt.Font,float,double,float,java.awt.Color,com.goofans.gootool.l10n.ImageGenerator$Position,double,double,double) -> a
+    222:222:double deg2Rad(double) -> a
+    232:232:java.awt.image.BufferedImage getFinalImage() -> a
+    237:239:void writeImage(java.io.File) -> a
+    252:280:void process(java.util.Map) -> a
+    284:284:java.awt.image.BufferedImage makeLayerImage() -> b
+    289:327:java.awt.image.BufferedImage processLayer(org.w3c.dom.Element) -> a
+    379:382:int decodeXJustify(java.lang.String) -> a
+    387:390:int decodeYJustify(java.lang.String) -> b
+    34:34:void access$000$649e8b02(java.awt.Graphics2D,int,int,java.awt.Color) -> a
+com.goofans.gootool.l10n.ImageGenerator$FitToBoxPosition -> com.goofans.gootool.O:
+    double x -> a
+    double y -> b
+    double width -> c
+    double height -> d
+    boolean allowGrow -> a
+    580:583:void debugDrawBounds(java.awt.Graphics2D,java.awt.Color) -> a
+    587:595:double getRotationCenterX$56e577f2() -> a
+    601:609:double getRotationCenterY$56e577f2() -> b
+    615:624:double getBottomLeftX(java.awt.geom.Rectangle2D) -> a
+    630:638:double getBottomLeftY(java.awt.geom.Rectangle2D) -> b
+    649:656:double getScale(java.awt.geom.Rectangle2D) -> c
+com.goofans.gootool.l10n.ImageGenerator$FixedPosition -> com.goofans.gootool.P:
+    double x -> a
+    double y -> b
+    507:508:void debugDrawBounds(java.awt.Graphics2D,java.awt.Color) -> a
+    512:512:double getRotationCenterX$56e577f2() -> a
+    517:517:double getRotationCenterY$56e577f2() -> b
+    522:531:double getBottomLeftX(java.awt.geom.Rectangle2D) -> a
+    537:549:double getBottomLeftY(java.awt.geom.Rectangle2D) -> b
+    555:555:double getScale(java.awt.geom.Rectangle2D) -> c
+com.goofans.gootool.l10n.ImageGenerator$Position -> com.goofans.gootool.Q:
+    int xJustify -> a
+    int yJustify -> b
+    void debugDrawBounds(java.awt.Graphics2D,java.awt.Color) -> a
+    double getRotationCenterX$56e577f2() -> a
+    double getRotationCenterY$56e577f2() -> b
+    double getBottomLeftX(java.awt.geom.Rectangle2D) -> a
+    double getBottomLeftY(java.awt.geom.Rectangle2D) -> b
+    double getScale(java.awt.geom.Rectangle2D) -> c
+com.goofans.gootool.l10n.ImageL10nPanel -> com.goofans.gootool.R:
+    javax.swing.JTextField inputDirectoryTextField -> a
+    javax.swing.JButton inputDirectoryChangeButton -> a
+    javax.swing.JTextField wikiBaseURLTextField -> b
+    javax.swing.JTable languagesTable -> a
+    javax.swing.JButton colorChooser -> b
+    javax.swing.JButton buildAndViewButton -> c
+    javax.swing.JTextField outputDirectoryTextField -> c
+    javax.swing.JButton outputDirectoryChangeButton -> d
+    javax.swing.JButton buildAndSaveButton -> e
+    javax.swing.JPanel rootPanel -> a
+    javax.swing.JButton languageAddButton -> f
+    javax.swing.JButton languageRemoveButton -> g
+    javax.swing.JCheckBox debugModeCheckBox -> a
+    com.goofans.gootool.l10n.LanguagesTableModel languagesDataModel -> a
+    92:119:void actionPerformed(java.awt.event.ActionEvent) -> actionPerformed
+    208:225:java.util.Map downloadTranslations() -> a
+com.goofans.gootool.l10n.ImageL10nPanel$1 -> com.goofans.gootool.S:
+    179:179:boolean accept(java.io.File) -> accept
+    185:185:java.lang.String getDescription() -> getDescription
+com.goofans.gootool.l10n.ImageL10nPanel$2 -> com.goofans.gootool.T:
+    java.lang.String val$wikiBase -> a
+    java.util.Map val$languages -> a
+    com.goofans.gootool.l10n.ImageL10nPanel this$0 -> a
+    216:223:void run() -> a
+com.goofans.gootool.l10n.ImageTool -> com.goofans.gootool.U:
+    javax.swing.border.Border TABLE_BORDER -> a
+    javax.swing.JPanel contentPanel -> a
+    javax.swing.JPanel rootPanel -> b
+    boolean debug -> a
+    java.util.Map languages -> a
+    java.io.File sourceDir -> a
+    java.io.File outputDir -> b
+    68:127:void run() -> a
+    131:142:void showWindow() -> b
+    146:149:javax.swing.JLabel makeLabel(java.awt.image.BufferedImage) -> a
+com.goofans.gootool.l10n.LanguagesTableModel -> com.goofans.gootool.V:
+    java.lang.String[] COLUMNS -> a
+    java.lang.Class[] COLUMN_CLASSES -> a
+    java.util.List languages -> a
+    46:46:int getRowCount() -> getRowCount
+    51:51:int getColumnCount() -> getColumnCount
+    57:57:java.lang.String getColumnName(int) -> getColumnName
+    63:63:java.lang.Class getColumnClass(int) -> getColumnClass
+    68:71:java.lang.Object getValueAt(int,int) -> getValueAt
+    77:77:boolean isCellEditable(int,int) -> isCellEditable
+    83:92:void setValueAt(java.lang.Object,int,int) -> setValueAt
+    96:98:void removeRow(int) -> a
+    102:104:void addRow() -> a
+    108:108:java.util.List getLanguages() -> a
+com.goofans.gootool.l10n.LanguagesTableModel$L10nLanguage -> com.goofans.gootool.W:
+    boolean enabled -> a
+    java.lang.String code -> a
+    java.lang.String wikiPage -> b
+com.goofans.gootool.model.Configuration -> com.goofans.gootool.X:
+    com.goofans.gootool.model.Language language -> a
+    com.goofans.gootool.model.Resolution resolution -> a
+    java.lang.Integer refreshRate -> a
+    boolean allowWidescreen -> a
+    int uiInset -> a
+    boolean skipOpeningMovie -> b
+    java.lang.String watermark -> a
+    boolean windowsVolumeControl -> c
+    java.util.List enabledAddins -> a
+    68:69:com.goofans.gootool.model.Resolution getResolution() -> a
+    104:106:void setWatermark(java.lang.String) -> a
+    140:140:boolean isEnabledAdddin(java.lang.String) -> a
+    145:149:void enableAddin(java.lang.String) -> b
+    153:154:void disableAddin(java.lang.String) -> c
+    179:193:boolean equals(java.lang.Object) -> equals
+    200:209:int hashCode() -> hashCode
+com.goofans.gootool.model.Language -> com.goofans.gootool.Y:
+    java.lang.String code -> a
+    java.lang.String displayName -> b
+    com.goofans.gootool.model.Language DEFAULT_LANGUAGE -> a
+    java.util.List LANGUAGES -> a
+    31:31:java.lang.String getCode() -> a
+    42:42:java.lang.String toString() -> toString
+    77:77:java.util.List getSupportedLanguages() -> a
+    82:86:com.goofans.gootool.model.Language getLanguageByCode(java.lang.String) -> a
+com.goofans.gootool.model.Resolution -> com.goofans.gootool.Z:
+    java.util.logging.Logger log -> a
+    int width -> a
+    int height -> b
+    java.util.Set RESOLUTIONS -> a
+    java.util.Set REFRESH_RATES -> b
+    com.goofans.gootool.model.Resolution DEFAULT_RESOLUTION -> a
+    36:36:int getWidth() -> a
+    41:41:int getHeight() -> b
+    46:46:boolean isWidescreen() -> a
+    70:71:int GCD(int,int) -> a
+    77:85:java.lang.String toString() -> toString
+    91:96:boolean equals(java.lang.Object) -> equals
+    103:105:int hashCode() -> hashCode
+    110:120:int compareTo(java.lang.Object) -> compareTo
+    154:154:java.util.Set getSystemResolutions() -> a
+    159:164:com.goofans.gootool.model.Resolution getResolutionByDimensions(int,int) -> a
+    169:169:java.util.Set getSystemRefreshRates() -> b
+com.goofans.gootool.movie.BinActor -> com.goofans.gootool.aa:
+    int actorType -> a
+    java.lang.String imageStr -> a
+    java.lang.String labelStr -> b
+    java.lang.String fontStr -> c
+    float labelMaxWidth -> a
+    float labelWrapWidth -> b
+    int labelJustification -> b
+    float depth -> c
+    boolean $assertionsDisabled -> a
+    134:160:void toXML(net.infotrek.util.XMLStringBuffer,com.goofans.gootool.movie.BinImageAnimation) -> a
+    165:167:java.lang.String toString() -> toString
+com.goofans.gootool.movie.BinImageAnimation -> com.goofans.gootool.ab:
+    boolean hasColor -> b
+    boolean hasAlpha -> c
+    boolean hasSound -> a
+    boolean hasTransform -> d
+    int numTransforms -> a
+    int numFrames -> b
+    com.goofans.gootool.movie.TransformType[] transformTypes -> a
+    float[] frameTimes -> a
+    com.goofans.gootool.movie.KeyFrameTransform[][] transformFrames -> a
+    com.goofans.gootool.movie.KeyFrameAlpha[] alphaFrames -> a
+    com.goofans.gootool.movie.KeyFrameColor[] colorFrames -> a
+    com.goofans.gootool.movie.KeyFrameSound[] soundFrames -> a
+    78:118:void init(byte[],int) -> a
+    311:331:void validateFrameList(com.goofans.gootool.movie.KeyFrame[]) -> a
+    356:457:void toXML(net.infotrek.util.XMLStringBuffer) -> a
+    461:474:void toXMLSounds(net.infotrek.util.XMLStringBuffer) -> b
+    484:508:boolean isSimple() -> a
+    513:524:void toXMLFrameList(net.infotrek.util.XMLStringBuffer,java.lang.String,com.goofans.gootool.movie.KeyFrame[]) -> a
+    528:542:void validateContiguousFrames() -> a
+    552:584:com.goofans.gootool.movie.BinImageAnimation extractSoundAnim() -> a
+    592:669:void consolidateFrames() -> b
+com.goofans.gootool.movie.BinImageAnimation$1 -> com.goofans.gootool.ac:
+    int[] $SwitchMap$com$goofans$gootool$movie$TransformType -> a
+com.goofans.gootool.movie.BinMovie -> com.goofans.gootool.ad:
+    float length -> a
+    com.goofans.gootool.movie.BinActor[] actors -> a
+    com.goofans.gootool.movie.BinImageAnimation[] anims -> a
+    com.goofans.gootool.movie.BinImageAnimation soundAnim -> a
+    161:181:void toXML(net.infotrek.util.XMLStringBuffer) -> a
+com.goofans.gootool.movie.KeyFrame -> com.goofans.gootool.ae:
+    float x -> a
+    float y -> b
+    float angle -> c
+    int alpha -> a
+    int color -> b
+    int nextFrameIndex -> c
+    int soundStrIndex -> d
+    int interpolationType -> e
+    java.lang.String soundStr -> a
+    49:58:void toXML(net.infotrek.util.XMLStringBuffer,int) -> a
+    void setFrameXMLAttributes(java.util.Map) -> a
+    65:67:java.lang.String toString() -> toString
+com.goofans.gootool.movie.KeyFrameAlpha -> com.goofans.gootool.af:
+    25:26:void setFrameXMLAttributes(java.util.Map) -> a
+com.goofans.gootool.movie.KeyFrameColor -> com.goofans.gootool.ag:
+    25:26:void setFrameXMLAttributes(java.util.Map) -> a
+com.goofans.gootool.movie.KeyFrameSound -> com.goofans.gootool.ah:
+    25:26:void setFrameXMLAttributes(java.util.Map) -> a
+com.goofans.gootool.movie.KeyFrameTransform -> com.goofans.gootool.ai:
+    com.goofans.gootool.movie.TransformType transformType -> a
+    28:35:void setFrameXMLAttributes(java.util.Map) -> a
+com.goofans.gootool.movie.TransformType -> com.goofans.gootool.aj:
+    com.goofans.gootool.movie.TransformType SCALE -> a
+    com.goofans.gootool.movie.TransformType ROTATE -> b
+    com.goofans.gootool.movie.TransformType TRANSLATE -> c
+    int value -> a
+    com.goofans.gootool.movie.TransformType[] $VALUES -> a
+    12:12:com.goofans.gootool.movie.TransformType[] values() -> a
+    27:30:com.goofans.gootool.movie.TransformType getByValue(int) -> a
+com.goofans.gootool.platform.LinuxSupport -> com.goofans.gootool.ak:
+    java.lang.String[] PROFILE_SEARCH_PATHS -> a
+    39:39:boolean doPreStartup(java.util.List) -> a
+    45:45:void doStartup(com.goofans.gootool.Controller) -> a
+    50:50:java.lang.String[] doGetProfileSearchPaths() -> a
+    56:56:java.io.File doGetToolStorageDirectory() -> a
+com.goofans.gootool.platform.MacOSXSupport -> com.goofans.gootool.al:
+    java.util.logging.Logger log -> a
+    java.lang.String[] PROFILE_SEARCH_PATHS -> a
+    com.goofans.gootool.Controller controller -> a
+    50:50:boolean doPreStartup(java.util.List) -> a
+    56:62:void doStartup(com.goofans.gootool.Controller) -> a
+    66:69:void handleAbout(com.apple.eawt.ApplicationEvent) -> handleAbout
+    73:73:void handleOpenApplication(com.apple.eawt.ApplicationEvent) -> handleOpenApplication
+    77:77:void handleReOpenApplication(com.apple.eawt.ApplicationEvent) -> handleReOpenApplication
+    81:91:void handleOpenFile(com.apple.eawt.ApplicationEvent) -> handleOpenFile
+    95:95:void handlePreferences(com.apple.eawt.ApplicationEvent) -> handlePreferences
+    99:99:void handlePrintFile(com.apple.eawt.ApplicationEvent) -> handlePrintFile
+    103:106:void handleQuit(com.apple.eawt.ApplicationEvent) -> handleQuit
+    111:111:java.lang.String[] doGetProfileSearchPaths() -> a
+    117:117:java.io.File doGetToolStorageDirectory() -> a
+    27:27:com.goofans.gootool.Controller access$000(com.goofans.gootool.platform.MacOSXSupport) -> a
+com.goofans.gootool.platform.MacOSXSupport$1 -> com.goofans.gootool.am:
+    java.io.File val$addinFile -> a
+    com.goofans.gootool.platform.MacOSXSupport this$0 -> a
+    87:88:void run() -> run
+com.goofans.gootool.platform.PlatformSupport -> com.goofans.gootool.an:
+    java.util.logging.Logger log -> a
+    com.goofans.gootool.platform.PlatformSupport$Platform platform -> a
+    com.goofans.gootool.platform.PlatformSupport support -> a
+    104:105:com.goofans.gootool.platform.PlatformSupport$Platform getPlatform() -> a
+    110:136:boolean preStartup(java.util.List) -> b
+    boolean doPreStartup(java.util.List) -> a
+    143:144:void startup(com.goofans.gootool.Controller) -> b
+    void doStartup(com.goofans.gootool.Controller) -> a
+    150:150:java.lang.String[] getProfileSearchPaths() -> b
+    java.lang.String[] doGetProfileSearchPaths() -> a
+    157:159:java.io.File getToolStorageDirectory() -> b
+    java.io.File doGetToolStorageDirectory() -> a
+com.goofans.gootool.platform.PlatformSupport$1 -> com.goofans.gootool.ao:
+    int[] $SwitchMap$com$goofans$gootool$platform$PlatformSupport$Platform -> a
+com.goofans.gootool.platform.PlatformSupport$Platform -> com.goofans.gootool.ap:
+    com.goofans.gootool.platform.PlatformSupport$Platform WINDOWS -> a
+    com.goofans.gootool.platform.PlatformSupport$Platform MACOSX -> b
+    com.goofans.gootool.platform.PlatformSupport$Platform LINUX -> c
+    com.goofans.gootool.platform.PlatformSupport$Platform[] $VALUES -> a
+    31:31:com.goofans.gootool.platform.PlatformSupport$Platform[] values() -> a
+com.goofans.gootool.platform.SingleInstance -> com.goofans.gootool.aq:
+    java.util.logging.Logger log -> a
+    com.goofans.gootool.platform.SingleInstance theInstance -> a
+    java.io.File lockFile -> a
+    java.io.RandomAccessFile lockFileRAF -> a
+    69:69:com.goofans.gootool.platform.SingleInstance getInstance() -> a
+    85:96:boolean singleInstance(java.util.List) -> a
+    143:156:java.nio.channels.FileLock tryLock() -> a
+    255:256:java.io.File getTempFile(java.lang.String) -> b
+    267:286:void handleCommandLineArgs(java.util.List) -> a
+    300:304:java.net.InetAddress getLoopbackAddress() -> b
+    32:32:java.io.RandomAccessFile access$000(com.goofans.gootool.platform.SingleInstance) -> a
+    32:32:java.util.logging.Logger access$100() -> a
+    32:32:java.io.File access$200(com.goofans.gootool.platform.SingleInstance) -> a
+    32:32:java.io.File access$300(java.lang.String) -> a
+    32:32:java.net.InetAddress access$400$10316d6b() -> a
+    32:32:void access$500(com.goofans.gootool.platform.SingleInstance,java.util.List) -> a
+com.goofans.gootool.platform.SingleInstance$1 -> com.goofans.gootool.ar:
+    java.nio.channels.FileLock val$lock -> a
+    com.goofans.gootool.platform.SingleInstance this$0 -> a
+    176:184:void run() -> run
+com.goofans.gootool.platform.SingleInstance$2 -> com.goofans.gootool.as:
+    java.util.List val$args -> a
+    277:284:void run() -> run
+com.goofans.gootool.platform.SingleInstance$PrimaryInstanceSocket -> com.goofans.gootool.at:
+    java.nio.channels.ServerSocketChannel serverSocketChannel -> a
+    com.goofans.gootool.platform.SingleInstance this$0 -> a
+    352:373:java.nio.channels.ServerSocketChannel openSocket() -> a
+    383:409:void run() -> run
+com.goofans.gootool.platform.WindowsSupport -> com.goofans.gootool.au:
+    java.lang.String[] PROFILE_SEARCH_PATHS -> a
+    54:54:boolean doPreStartup(java.util.List) -> a
+    60:60:void doStartup(com.goofans.gootool.Controller) -> a
+    65:65:java.lang.String[] doGetProfileSearchPaths() -> a
+    71:71:java.io.File doGetToolStorageDirectory() -> a
+com.goofans.gootool.profile.GenerateOnlineIds -> com.goofans.gootool.av:
+    java.util.Random RANDOM -> a
+    char[] HEX_DIGITS -> a
+    34:43:void generateOnlineIds() -> a
+    67:78:void removeGeneratedOnlineIds() -> b
+    82:82:boolean isGeneratedId(java.lang.String) -> a
+com.goofans.gootool.profile.LevelAchievement -> com.goofans.gootool.aw:
+    java.lang.String levelId -> a
+    int mostBalls -> a
+    int leastMoves -> b
+    int leastTime -> c
+    53:53:java.lang.String toString() -> toString
+com.goofans.gootool.profile.Profile -> com.goofans.gootool.ax:
+    java.util.logging.Logger log -> a
+    java.lang.String name -> a
+    int flags -> a
+    int playTime -> b
+    int levels -> c
+    java.util.List skippedLevels -> a
+    java.lang.String onlineId -> b
+    java.util.List levelAchievements -> b
+    com.goofans.gootool.profile.Tower tower -> a
+    int newBalls -> d
+    java.lang.String data -> c
+    121:121:int getNewBalls() -> a
+    126:126:java.lang.String getName() -> a
+    131:131:int getFlags() -> b
+    136:136:int getPlayTime() -> c
+    141:141:int getLevels() -> d
+    146:146:java.lang.String getOnlineId() -> b
+    151:158:void setOnlineId(java.lang.String) -> a
+    162:162:java.util.List getLevelAchievements() -> a
+    167:167:com.goofans.gootool.profile.Tower getTower() -> a
+    172:172:java.util.List getSkippedLevels() -> b
+    177:177:boolean hasFlag(int) -> a
+    183:183:java.lang.String getData() -> c
+    199:199:java.lang.String toString() -> toString
+    204:231:java.lang.String toData() -> d
+com.goofans.gootool.profile.ProfileData -> com.goofans.gootool.ay:
+    java.util.logging.Logger log -> a
+    java.util.Map data -> a
+    com.goofans.gootool.profile.Profile[] profiles -> a
+    63:74:void readProfileData(byte[]) -> a
+    78:102:java.lang.String readNextElement(java.io.InputStream) -> a
+    114:131:void fixWonkyUtf8(byte[]) -> b
+    135:135:com.goofans.gootool.profile.Profile[] getProfiles() -> a
+    140:142:com.goofans.gootool.profile.Profile getCurrentProfile() -> a
+    149:149:java.lang.String toString() -> toString
+    157:182:byte[] toData() -> a
+    187:192:void appendString(java.io.OutputStream,java.lang.String) -> a
+com.goofans.gootool.profile.ProfileFactory -> com.goofans.gootool.az:
+    java.util.logging.Logger log -> a
+    java.io.File profileFile -> a
+    39:64:void init() -> a
+    68:85:boolean locateProfileAtFile(java.io.File) -> a
+    91:91:boolean isProfileFound() -> a
+    96:97:com.goofans.gootool.profile.ProfileData getProfileData() -> a
+    102:102:java.io.File getProfileFile() -> a
+com.goofans.gootool.profile.Tower -> com.goofans.gootool.aA:
+    java.util.logging.Logger log -> a
+    java.util.List balls -> a
+    java.util.List strands -> b
+    double height -> a
+    int usedStrandBalls -> a
+    int usedNodeBalls -> b
+    int totalBalls -> c
+    122:122:java.util.List getBalls() -> a
+    127:127:java.util.List getStrands() -> b
+    132:132:double getHeight() -> a
+    137:137:int getUsedStrandBalls() -> a
+    142:142:int getUsedNodeBalls() -> b
+    148:148:int getTotalBalls() -> c
+    155:155:java.lang.String toString() -> toString
+    160:186:java.lang.String toData() -> a
+com.goofans.gootool.profile.Tower$Ball -> com.goofans.gootool.aB:
+    java.lang.String ballType -> a
+    double xPos -> a
+    double yPos -> b
+    double xMomentum -> c
+    double yMomentum -> d
+    boolean inStructure -> a
+com.goofans.gootool.profile.Tower$Strand -> com.goofans.gootool.aC:
+    java.lang.String strandType -> a
+    com.goofans.gootool.profile.Tower$Ball firstBall -> a
+    com.goofans.gootool.profile.Tower$Ball secondBall -> b
+    double connectionStrength -> a
+    double length -> b
+    boolean ballUsed -> a
+com.goofans.gootool.profile.TowerRenderer -> com.goofans.gootool.aD:
+    java.util.logging.Logger log -> a
+    java.awt.Dimension THUMBNAIL_MAXSIZE -> a
+    com.goofans.gootool.profile.Tower t -> a
+    java.awt.Dimension fullSizeDimension -> b
+    java.awt.image.BufferedImage fullSize -> a
+    java.awt.image.BufferedImage pretty -> b
+    java.awt.image.BufferedImage thumbnail -> c
+    java.awt.image.BufferedImage ballImage -> d
+    java.awt.image.BufferedImage strandImage -> e
+    java.awt.image.BufferedImage groundImage -> f
+    java.awt.image.BufferedImage skyImage -> g
+    int xOffset -> a
+    int yOffset -> b
+    int ballNudgeX -> c
+    int ballNudgeY -> d
+    int strandHeight -> e
+    int strandXOffset -> f
+    94:146:void render() -> a
+    151:158:void drawStrands(java.awt.Graphics2D) -> a
+    163:171:void drawBalls(java.awt.Graphics2D) -> b
+    176:178:java.awt.Point getPixelCoords(double,double) -> a
+    221:248:void createPretty() -> b
+    278:278:java.awt.image.BufferedImage getFullSize() -> a
+    288:288:java.awt.image.BufferedImage getThumbnail() -> b
+    293:293:java.awt.image.BufferedImage getPretty() -> c
+    298:298:boolean imageUpdate(java.awt.Image,int,int,int,int,int) -> imageUpdate
+com.goofans.gootool.siteapi.APIException -> com.goofans.gootool.aE:
+com.goofans.gootool.siteapi.APIRequest -> com.goofans.gootool.aF:
+    java.util.logging.Logger log -> a
+    java.text.DateFormat API_DATEFORMAT -> a
+    java.net.URL API_CHECKVERSION -> a
+    java.net.URL API_LOGIN_TEST -> b
+    java.net.URL API_PROFILE_BACKUP -> c
+    java.net.URL API_PROFILE_RESTORE -> d
+    java.net.URL API_PROFILE_LIST -> e
+    java.net.URL API_PROFILE_PUBLISH -> f
+    java.net.URL API_ADDIN_UPDATES_CHECK -> g
+    java.net.URL API_RATING_LIST -> h
+    java.net.URL API_RATING_SUBMIT -> i
+    java.net.URL url -> j
+    java.util.Map postParameters -> a
+    boolean executed -> a
+    84:99:void addGetParameter(java.lang.String,java.lang.String) -> a
+    105:106:void addPostParameter(java.lang.String,java.lang.String) -> b
+    116:131:org.w3c.dom.Document doRequest() -> a
+    143:191:java.io.InputStream doRequestInt() -> a
+    199:199:java.lang.String toString() -> toString
+com.goofans.gootool.siteapi.APIRequestAuthenticated -> com.goofans.gootool.aG:
+    java.util.logging.Logger log -> a
+com.goofans.gootool.siteapi.AddinUpdatesCheckRequest -> com.goofans.gootool.aH:
+    java.util.logging.Logger log -> a
+    47:51:java.util.Map checkUpdates() -> a
+    63:69:java.util.Map checkUpdates(java.util.List) -> b
+    81:145:java.util.Map checkUpdatesById(java.util.List) -> a
+com.goofans.gootool.siteapi.AddinUpdatesCheckRequest$AvailableUpdate -> com.goofans.gootool.aI:
+    java.lang.String id -> a
+    com.goofans.gootool.util.VersionSpec version -> a
+    java.util.Date releaseDate -> a
+    java.lang.String downloadUrl -> b
+    161:161:java.lang.String toString() -> toString
+com.goofans.gootool.siteapi.LoginTestRequest -> com.goofans.gootool.aJ:
+    30:35:void loginTest() -> a
+com.goofans.gootool.siteapi.ProfileBackupRequest -> com.goofans.gootool.aK:
+    java.util.logging.Logger log -> a
+    36:59:void backupProfile(java.lang.String) -> a
+com.goofans.gootool.siteapi.ProfileListRequest -> com.goofans.gootool.aL:
+    38:85:java.util.List listBackups() -> a
+com.goofans.gootool.siteapi.ProfileListRequest$BackupInstance -> com.goofans.gootool.aM:
+    int id -> a
+    java.lang.String description -> a
+    96:96:java.lang.String toString() -> toString
+com.goofans.gootool.siteapi.ProfilePublishRequest -> com.goofans.gootool.aN:
+    java.util.logging.Logger log -> a
+    java.util.List messages -> a
+    44:69:java.lang.String publishProfile(com.goofans.gootool.profile.Profile) -> a
+    74:75:java.util.List getMessages() -> a
+com.goofans.gootool.siteapi.ProfileRestoreRequest -> com.goofans.gootool.aO:
+    38:61:void restoreProfile(int) -> a
+com.goofans.gootool.siteapi.RatingListRequest -> com.goofans.gootool.aP:
+    34:56:java.util.Map getRatings() -> a
+com.goofans.gootool.siteapi.RatingSubmitRequest -> com.goofans.gootool.aQ:
+    36:43:void submitRating(java.lang.String,int) -> a
+com.goofans.gootool.siteapi.RatingUpdateTask -> com.goofans.gootool.aR:
+    java.util.logging.Logger log -> a
+    27:41:void run() -> run
+com.goofans.gootool.siteapi.VersionCheck -> com.goofans.gootool.aS:
+    java.util.logging.Logger log -> a
+    java.awt.Frame parentWindow -> a
+    boolean alwaysAlertUser -> a
+    boolean completed -> b
+    java.lang.Exception failureReason -> a
+    boolean upToDate -> c
+    com.goofans.gootool.util.VersionSpec newVersion -> a
+    java.lang.String newVersionMessage -> a
+    java.lang.String newVersionDownloadUrl -> b
+    50:71:void run() -> run
+    75:85:void runUpdateCheck() -> a
+    130:134:boolean isUpToDate() -> a
+    26:26:java.awt.Frame access$000(com.goofans.gootool.siteapi.VersionCheck) -> a
+    26:26:com.goofans.gootool.util.VersionSpec access$100(com.goofans.gootool.siteapi.VersionCheck) -> a
+    26:26:java.lang.String access$200(com.goofans.gootool.siteapi.VersionCheck) -> a
+    26:26:java.lang.String access$300(com.goofans.gootool.siteapi.VersionCheck) -> b
+com.goofans.gootool.siteapi.VersionCheck$1 -> com.goofans.gootool.aT:
+    com.goofans.gootool.siteapi.VersionCheck this$0 -> a
+    57:58:void run() -> run
+com.goofans.gootool.siteapi.VersionCheck$2 -> com.goofans.gootool.aU:
+    com.goofans.gootool.siteapi.VersionCheck this$0 -> a
+    100:101:void run() -> run
+com.goofans.gootool.ui.HyperlinkLabel -> com.goofans.gootool.aV:
+    java.net.URL url -> a
+    61:62:void addHyperlinkListener(javax.swing.event.HyperlinkListener) -> a
+    101:109:void fireHyperlinkUpdate(javax.swing.event.HyperlinkEvent) -> a
+com.goofans.gootool.ui.HyperlinkLabel$1 -> com.goofans.gootool.aW:
+    com.goofans.gootool.ui.HyperlinkLabel this$0 -> a
+    37:39:void mouseClicked(java.awt.event.MouseEvent) -> mouseClicked
+com.goofans.gootool.ui.StarBar -> com.goofans.gootool.aX:
+    javax.swing.ImageIcon imgOff -> a
+    javax.swing.ImageIcon imgOn -> b
+    javax.swing.ImageIcon imgOver -> c
+    java.lang.String[] TOOLTIPS -> a
+    javax.swing.JLabel label -> a
+    javax.swing.JLabel info -> b
+    javax.swing.JLabel[] stars -> a
+    int rating -> a
+    int overStar -> b
+    70:76:void mouseClicked(java.awt.event.MouseEvent) -> mouseClicked
+    80:80:void mousePressed(java.awt.event.MouseEvent) -> mousePressed
+    84:84:void mouseReleased(java.awt.event.MouseEvent) -> mouseReleased
+    88:95:void mouseEntered(java.awt.event.MouseEvent) -> mouseEntered
+    99:108:int getStar(java.awt.event.MouseEvent) -> a
+    113:117:void mouseExited(java.awt.event.MouseEvent) -> mouseExited
+    123:149:void updateDisplay() -> a
+    165:171:void setRatingQuietly(int) -> a
+    176:188:void setEnabled(boolean) -> setEnabled
+    192:238:void setupUI() -> b
+com.goofans.gootool.util.FileNameExtensionFilter -> com.goofans.gootool.aY:
+    java.lang.String description -> a
+    java.lang.String[] extensions -> a
+    java.lang.String[] lowerCaseExtensions -> b
+    88:116:boolean accept(java.io.File) -> accept
+    125:125:java.lang.String getDescription() -> getDescription
+    148:148:java.lang.String toString() -> toString
+com.goofans.gootool.util.GUIUtil -> com.goofans.gootool.aZ:
+    java.util.logging.Logger log -> a
+    37:44:void setCloseOnEscape(javax.swing.JDialog) -> a
+    71:79:void setFocusOnOpen(javax.swing.JDialog,javax.swing.JComponent) -> a
+    89:98:void setDefaultClosingOkButton(javax.swing.JButton,javax.swing.JDialog) -> a
+    105:113:void switchToSystemLookAndFeel() -> a
+    125:128:void runTask(javax.swing.JFrame,java.lang.String,com.goofans.gootool.util.ProgressIndicatingTask) -> a
+    140:143:void runTask(javax.swing.JDialog,java.lang.String,com.goofans.gootool.util.ProgressIndicatingTask) -> a
+    154:192:void runTask(com.goofans.gootool.util.ProgressIndicatingTask,javax.swing.JDialog) -> a
+    22:22:java.util.logging.Logger access$000() -> a
+com.goofans.gootool.util.GUIUtil$1 -> com.goofans.gootool.ba:
+    javax.swing.JDialog val$dialog -> a
+    41:42:void actionPerformed(java.awt.event.ActionEvent) -> actionPerformed
+com.goofans.gootool.util.GUIUtil$3 -> com.goofans.gootool.bb:
+    javax.swing.JComponent val$component -> a
+    76:77:void windowOpened(java.awt.event.WindowEvent) -> windowOpened
+com.goofans.gootool.util.GUIUtil$4 -> com.goofans.gootool.bc:
+    javax.swing.JDialog val$dialog -> a
+    95:96:void actionPerformed(java.awt.event.ActionEvent) -> actionPerformed
+com.goofans.gootool.util.GUIUtil$5 -> com.goofans.gootool.bd:
+    com.goofans.gootool.util.ProgressIndicatingTask val$task -> a
+    java.lang.Object[] val$result -> a
+    java.lang.Object val$success -> a
+    javax.swing.JDialog val$progressDialog -> a
+    162:170:void run() -> run
+com.goofans.gootool.util.GUIUtil$5$1 -> com.goofans.gootool.be:
+    com.goofans.gootool.util.GUIUtil$5 this$0 -> a
+    174:175:void run() -> run
+com.goofans.gootool.util.HyperlinkLaunchingListener -> com.goofans.gootool.bf:
+    java.awt.Component parentComponent -> a
+    35:38:void hyperlinkUpdate(javax.swing.event.HyperlinkEvent) -> hyperlinkUpdate
+    42:43:void actionPerformed(java.awt.event.ActionEvent) -> actionPerformed
+com.goofans.gootool.util.ProfileFileFilter -> com.goofans.gootool.bg:
+    35:43:boolean accept(java.io.File) -> accept
+    54:54:java.lang.String getDescription() -> getDescription
+    69:69:java.lang.String toString() -> toString
+com.goofans.gootool.util.ProgressIndicatingTask -> com.goofans.gootool.bh:
+    java.util.List listeners -> a
+    void run() -> a
+    25:26:void addListener(com.goofans.gootool.util.ProgressListener) -> a
+    37:40:void beginStep(java.lang.String,boolean) -> a
+    44:47:void progressStep(float) -> a
+com.goofans.gootool.util.ProgressListener -> com.goofans.gootool.bi:
+    void beginStep(java.lang.String,boolean) -> a
+    void progressStep(float) -> a
+com.goofans.gootool.util.Utilities -> com.goofans.gootool.bj:
+    java.util.logging.Logger log -> a
+    41:54:java.lang.String expandEnvVars(java.lang.String) -> a
+    66:87:byte[] readFile(java.io.File) -> a
+    100:105:void writeFile(java.io.File,byte[]) -> a
+    118:136:void copyFile(java.io.File,java.io.File) -> a
+    147:159:void moveFile(java.io.File,java.io.File) -> b
+    169:174:void deleteFileIfExists(java.io.File) -> a
+    180:188:void rmdirAll(java.io.File) -> b
+    201:207:void copyStreams(java.io.InputStream,java.io.OutputStream) -> a
+    218:228:java.lang.String readStreamIntoString(java.io.InputStream) -> a
+    261:264:void mkdirsOrException(java.io.File) -> c
+    277:282:void downloadFile(java.net.URL,java.io.File) -> a
+    294:312:java.io.File downloadFileToTemp(java.net.URL) -> a
+    323:340:void testDirectoryWriteable(java.io.File) -> d
+com.goofans.gootool.util.Version -> com.goofans.gootool.bk:
+    int RELEASE_MAJOR -> a
+    int RELEASE_MINOR -> b
+    int RELEASE_MICRO -> c
+    int RELEASE_REVISION -> d
+    java.lang.String RELEASE_TYPE -> f
+    java.util.Date RELEASE_DATE -> a
+    com.goofans.gootool.util.VersionSpec RELEASE -> a
+    java.lang.String RELEASE_FULL -> a
+    java.lang.String RELEASE_FRIENDLY -> b
+    java.lang.String BUILD_USER -> c
+    java.util.Date BUILD_DATE -> b
+    java.lang.String BUILD_JAVA -> d
+    java.lang.String BUILD_OS -> e
+com.goofans.gootool.util.VersionSpec -> com.goofans.gootool.bl:
+    int[] version -> a
+    int numDisplayFields -> a
+    57:62:java.lang.String toString() -> toString
+    68:73:int compareTo(com.goofans.gootool.util.VersionSpec) -> a
+    79:84:boolean equals(java.lang.Object) -> equals
+    90:90:int hashCode() -> hashCode
+    18:18:int compareTo(java.lang.Object) -> compareTo
+com.goofans.gootool.util.WogExeFileFilter -> com.goofans.gootool.bm:
+    41:73:boolean accept(java.io.File) -> accept
+    84:92:java.lang.String getDescription() -> getDescription
+    108:108:java.lang.String toString() -> toString
+com.goofans.gootool.util.WogExeFileFilter$1 -> com.goofans.gootool.bn:
+    int[] $SwitchMap$com$goofans$gootool$platform$PlatformSupport$Platform -> a
+com.goofans.gootool.util.XMLUtil -> com.goofans.gootool.bo:
+    java.util.logging.Logger log -> a
+    48:52:org.w3c.dom.Document loadDocumentFromFile(java.io.File) -> a
+    66:70:org.w3c.dom.Document loadDocumentFromInputStream(java.io.InputStream) -> a
+    78:89:org.w3c.dom.Document loadDocumentInternal(java.io.InputStream) -> b
+    102:110:void writeDocumentToFile(org.w3c.dom.Document,java.io.File) -> a
+    122:132:java.lang.String writeDocumentToString(org.w3c.dom.Document) -> a
+    148:154:java.lang.String getAttributeString(org.w3c.dom.Node,java.lang.String,java.lang.String) -> a
+    159:161:java.lang.String getAttributeStringRequired(org.w3c.dom.Node,java.lang.String) -> a
+    166:178:java.lang.Double getAttributeDouble(org.w3c.dom.Node,java.lang.String,java.lang.Double) -> a
+    184:186:double getAttributeDoubleRequired(org.w3c.dom.Node,java.lang.String) -> a
+    216:226:java.lang.Integer getAttributeInteger$7eddf412(org.w3c.dom.Node,java.lang.String) -> a
+    232:234:int getAttributeIntegerRequired(org.w3c.dom.Node,java.lang.String) -> a
+    239:245:java.lang.Boolean getAttributeBoolean(org.w3c.dom.Node,java.lang.String,java.lang.Boolean) -> a
+    259:261:org.w3c.dom.Element getElement(org.w3c.dom.Element,java.lang.String) -> a
+    266:268:org.w3c.dom.Element getElementRequired(org.w3c.dom.Element,java.lang.String) -> b
+    273:275:java.lang.String getElementString(org.w3c.dom.Element,java.lang.String) -> a
+    280:280:java.lang.String getElementStringRequired(org.w3c.dom.Element,java.lang.String) -> b
+    285:294:double getElementDouble$182178ae(org.w3c.dom.Element,java.lang.String) -> a
+    313:320:int getElementIntegerRequired(org.w3c.dom.Element,java.lang.String) -> a
+    326:337:org.w3c.dom.Element findElementByAttributeValue$30ce1f05(org.w3c.dom.Element,java.lang.String,java.lang.String,java.lang.String) -> a
+    342:342:java.lang.String escapeEntities(java.lang.String) -> a
+com.goofans.gootool.view.AboutDialog -> com.goofans.gootool.bp:
+    javax.swing.JPanel rootPanel -> a
+    javax.swing.JLabel versionField -> a
+    javax.swing.JButton okButton -> a
+    javax.swing.JLabel buildField -> b
+    javax.swing.JLabel javaVersion -> c
+    javax.swing.JLabel javaVendor -> d
+    javax.swing.JLabel javaHome -> e
+    javax.swing.JLabel vmType -> f
+    javax.swing.JLabel vmMemory -> g
+    com.goofans.gootool.GooToolResourceBundle resourceBundle -> a
+    void $$$loadLabelText$$$(javax.swing.JLabel,java.lang.String) -> a
+com.goofans.gootool.view.AddinPropertiesDialog -> com.goofans.gootool.bq:
+    javax.swing.JTextPane description -> a
+    javax.swing.JButton okButton -> a
+    javax.swing.JLabel name -> a
+    javax.swing.JLabel version -> b
+    javax.swing.JLabel author -> c
+    javax.swing.JLabel id -> d
+    javax.swing.JLabel depends -> e
+    javax.swing.JPanel rootPanel -> a
+    javax.swing.JPanel thumbnailPanel -> b
+    javax.swing.JLabel thumbnail -> f
+    void $$$loadLabelText$$$(javax.swing.JLabel,java.lang.String) -> a
+    void $$$loadButtonText$$$(javax.swing.AbstractButton,java.lang.String) -> a
+com.goofans.gootool.view.AddinUpdatesChooser -> com.goofans.gootool.br:
+    java.util.logging.Logger log -> a
+    javax.swing.JPanel contentPane -> a
+    javax.swing.JButton installUpdatesButton -> a
+    javax.swing.JButton cancelButton -> b
+    javax.swing.JTable updatesTable -> a
+    java.util.List updateRows -> a
+    java.lang.String[] COLUMN_NAMES -> a
+    java.lang.Class[] COLUMN_CLASSES -> a
+    com.goofans.gootool.GooToolResourceBundle resourceBundle -> a
+    34:34:void access$000(com.goofans.gootool.view.AddinUpdatesChooser) -> a
+    34:34:java.util.List access$300(com.goofans.gootool.view.AddinUpdatesChooser) -> a
+    34:34:java.util.logging.Logger access$400() -> a
+    34:34:com.goofans.gootool.GooToolResourceBundle access$500() -> a
+    34:34:java.lang.String[] access$600() -> a
+    34:34:java.lang.Class[] access$700() -> a
+    34:34:javax.swing.JButton access$800(com.goofans.gootool.view.AddinUpdatesChooser) -> a
+    void $$$loadLabelText$$$(javax.swing.JLabel,java.lang.String) -> a
+    void $$$loadButtonText$$$(javax.swing.AbstractButton,java.lang.String) -> a
+com.goofans.gootool.view.AddinUpdatesChooser$1 -> com.goofans.gootool.bs:
+    com.goofans.gootool.view.AddinUpdatesChooser this$0 -> a
+    71:72:void actionPerformed(java.awt.event.ActionEvent) -> actionPerformed
+com.goofans.gootool.view.AddinUpdatesChooser$2 -> com.goofans.gootool.bt:
+    com.goofans.gootool.view.AddinUpdatesChooser this$0 -> a
+    79:80:void actionPerformed(java.awt.event.ActionEvent) -> actionPerformed
+com.goofans.gootool.view.AddinUpdatesChooser$3 -> com.goofans.gootool.bu:
+    int[] val$numSuccess -> a
+    com.goofans.gootool.view.AddinUpdatesChooser this$0 -> a
+    141:169:void run() -> a
+com.goofans.gootool.view.AddinUpdatesChooser$AddinUpdatesTableModel -> com.goofans.gootool.bv:
+    com.goofans.gootool.view.AddinUpdatesChooser this$0 -> a
+    190:190:int getRowCount() -> getRowCount
+    195:195:int getColumnCount() -> getColumnCount
+    200:211:java.lang.Object getValueAt(int,int) -> getValueAt
+    217:217:java.lang.String getColumnName(int) -> getColumnName
+    223:223:java.lang.Class getColumnClass(int) -> getColumnClass
+    229:229:boolean isCellEditable(int,int) -> isCellEditable
+    235:259:void setValueAt(java.lang.Object,int,int) -> setValueAt
+com.goofans.gootool.view.AddinUpdatesChooser$UpdateRow -> com.goofans.gootool.bw:
+    com.goofans.gootool.addins.Addin addin -> a
+    com.goofans.gootool.siteapi.AddinUpdatesCheckRequest$AvailableUpdate update -> a
+    boolean install -> a
+com.goofans.gootool.view.AddinsPanel -> com.goofans.gootool.bx:
+    java.util.logging.Logger log -> a
+    javax.swing.JTable addinTable -> a
+    javax.swing.JPanel rootPanel -> a
+    javax.swing.JButton installButton -> a
+    javax.swing.JButton uninstallButton -> b
+    javax.swing.JButton enableButton -> c
+    javax.swing.JButton disableButton -> d
+    javax.swing.JButton propertiesButton -> e
+    javax.swing.JTextPane description -> a
+    com.goofans.gootool.ui.HyperlinkLabel findMoreHyperlink -> a
+    com.goofans.gootool.ui.StarBar ratingBar -> a
+    javax.swing.JButton updateCheckButton -> f
+    com.goofans.gootool.view.AddinsPanel$AddinsTableModel addinsModel -> a
+    com.goofans.gootool.Controller controller -> a
+    java.lang.String[] COLUMN_NAMES -> a
+    java.lang.Class[] COLUMN_CLASSES -> a
+    com.goofans.gootool.GooToolResourceBundle resourceBundle -> a
+    java.awt.datatransfer.DataFlavor FLAVOR -> a
+    142:190:void updateButtonStates() -> b
+    195:199:void updateViewFromModel$4183c082() -> a
+    212:239:void propertyChange(java.beans.PropertyChangeEvent) -> propertyChange
+    43:43:void access$200(com.goofans.gootool.view.AddinsPanel) -> a
+    43:43:java.util.logging.Logger access$300() -> a
+    43:43:com.goofans.gootool.Controller access$400(com.goofans.gootool.view.AddinsPanel) -> a
+    43:43:java.lang.String[] access$500() -> a
+    43:43:java.lang.Class[] access$600() -> a
+    43:43:java.awt.datatransfer.DataFlavor access$700() -> a
+    void $$$loadLabelText$$$(javax.swing.JLabel,java.lang.String) -> a
+    void $$$loadButtonText$$$(javax.swing.AbstractButton,java.lang.String) -> a
+com.goofans.gootool.view.AddinsPanel$1 -> com.goofans.gootool.by:
+    com.goofans.gootool.view.AddinsPanel this$0 -> a
+    112:113:void valueChanged(javax.swing.event.ListSelectionEvent) -> valueChanged
+com.goofans.gootool.view.AddinsPanel$2 -> com.goofans.gootool.bz:
+    com.goofans.gootool.addins.Addin val$addin -> a
+    int val$rating -> a
+    230:235:void run() -> run
+com.goofans.gootool.view.AddinsPanel$AddinsTableCellStringRenderer -> com.goofans.gootool.bA:
+    com.goofans.gootool.view.AddinsPanel this$0 -> a
+    436:443:java.awt.Component getTableCellRendererComponent(javax.swing.JTable,java.lang.Object,boolean,boolean,int,int) -> getTableCellRendererComponent
+com.goofans.gootool.view.AddinsPanel$AddinsTableModel -> com.goofans.gootool.bB:
+    com.goofans.gootool.view.AddinsPanel this$0 -> a
+    245:245:int getRowCount() -> getRowCount
+    250:250:int getColumnCount() -> getColumnCount
+    255:263:java.lang.Object getValueAt(int,int) -> getValueAt
+    269:269:java.lang.String getColumnName(int) -> getColumnName
+    275:275:java.lang.Class getColumnClass(int) -> getColumnClass
+    281:281:boolean isCellEditable(int,int) -> isCellEditable
+    287:298:void setValueAt(java.lang.Object,int,int) -> setValueAt
+com.goofans.gootool.view.AddinsPanel$MyTransferHandler -> com.goofans.gootool.bC:
+    com.goofans.gootool.Controller controller -> a
+    315:315:int getSourceActions(javax.swing.JComponent) -> getSourceActions
+    321:330:java.awt.datatransfer.Transferable createTransferable(javax.swing.JComponent) -> createTransferable
+    336:341:boolean canImport(javax.swing.JComponent,java.awt.datatransfer.DataFlavor[]) -> canImport
+    361:361:boolean importData(javax.swing.JComponent,java.awt.datatransfer.Transferable) -> importData
+com.goofans.gootool.view.AddinsPanel$MyTransferable -> com.goofans.gootool.bD:
+    int row -> a
+    412:412:java.awt.datatransfer.DataFlavor[] getTransferDataFlavors() -> getTransferDataFlavors
+    417:417:boolean isDataFlavorSupported(java.awt.datatransfer.DataFlavor) -> isDataFlavorSupported
+    422:426:java.lang.Object getTransferData(java.awt.datatransfer.DataFlavor) -> getTransferData
+com.goofans.gootool.view.MainFrame -> com.goofans.gootool.bE:
+    java.util.logging.Logger log -> a
+    javax.swing.JPanel rootPanel -> a
+    javax.swing.JButton saveButton -> a
+    javax.swing.JButton saveAndLaunchButton -> b
+    javax.swing.JPanel optionsPanelPanel -> b
+    javax.swing.JPanel addinsPanelPanel -> c
+    javax.swing.JPanel profilePanelPanel -> d
+    javax.swing.JTabbedPane tabbedPane -> a
+    com.goofans.gootool.Controller controller -> a
+    com.goofans.gootool.view.AddinsPanel addinsPanel -> a
+    com.goofans.gootool.view.OptionsPanel optionsPanel -> a
+    com.goofans.gootool.l10n.ImageL10nPanel imageLocalisationPanel -> a
+    com.goofans.gootool.view.MainMenu mainMenu -> a
+    com.goofans.gootool.view.ProfilePanel profilePanel -> a
+    144:147:void updateViewFromModel(com.goofans.gootool.model.Configuration) -> a
+    151:152:void updateModelFromView(com.goofans.gootool.model.Configuration) -> b
+    29:29:void access$000(com.goofans.gootool.view.MainFrame) -> a
+    void $$$loadButtonText$$$(javax.swing.AbstractButton,java.lang.String) -> a
+com.goofans.gootool.view.MainFrame$1 -> com.goofans.gootool.bF:
+    com.goofans.gootool.Controller val$controller -> a
+    67:68:void windowClosing(java.awt.event.WindowEvent) -> windowClosing
+com.goofans.gootool.view.MainFrame$2 -> com.goofans.gootool.bG:
+    com.goofans.gootool.view.MainFrame this$0 -> a
+    76:77:void componentResized(java.awt.event.ComponentEvent) -> componentResized
+    82:83:void componentMoved(java.awt.event.ComponentEvent) -> componentMoved
+com.goofans.gootool.view.MainMenu -> com.goofans.gootool.bH:
+    java.util.ResourceBundle resourceBundle -> a
+    javax.swing.JMenuBar menuBar -> a
+    javax.swing.JMenuItem translatorModeMenuItem -> a
+    javax.swing.JMenuItem generateIdMenuItem -> b
+    javax.swing.JMenuItem removeIdMenuItem -> c
+    com.goofans.gootool.Controller controller -> a
+    com.goofans.gootool.util.HyperlinkLaunchingListener hyperlinkListener -> a
+    116:118:javax.swing.JMenu createMenu(java.lang.String) -> a
+    123:123:javax.swing.JMenuItem createMenuItem(java.lang.Class,java.lang.String,java.lang.String) -> a
+    128:128:javax.swing.JMenuItem createURLMenuItem(java.lang.String,java.lang.String) -> a
+    135:150:javax.swing.JMenuItem createMenuItemInternal(java.lang.Class,java.lang.String,java.awt.event.ActionListener,java.lang.String) -> a
+    155:155:javax.swing.JMenuBar getJMenuBar() -> a
+    160:160:java.lang.String getMenuText(java.lang.String) -> a
+    165:168:int getMnemonic(java.lang.String) -> a
+com.goofans.gootool.view.NewVersionDialog -> com.goofans.gootool.bI:
+    javax.swing.JPanel contentPane -> a
+    javax.swing.JButton yesButton -> a
+    javax.swing.JButton noButton -> b
+    javax.swing.JLabel icon -> a
+    javax.swing.JCheckBox ignoreThisVersionCheckBox -> a
+    javax.swing.JLabel message -> b
+    javax.swing.JLabel curVersionLabel -> c
+    javax.swing.JLabel latestVersionLabel -> d
+    com.goofans.gootool.GooToolResourceBundle resourceBundle -> a
+    27:27:javax.swing.JCheckBox access$000(com.goofans.gootool.view.NewVersionDialog) -> a
+    void $$$loadLabelText$$$(javax.swing.JLabel,java.lang.String) -> a
+    void $$$loadButtonText$$$(javax.swing.AbstractButton,java.lang.String) -> a
+com.goofans.gootool.view.NewVersionDialog$1 -> com.goofans.gootool.bJ:
+    com.goofans.gootool.util.VersionSpec val$latestVersion -> a
+    com.goofans.gootool.view.NewVersionDialog this$0 -> a
+    58:62:void actionPerformed(java.awt.event.ActionEvent) -> actionPerformed
+com.goofans.gootool.view.NewVersionDialog$2 -> com.goofans.gootool.bK:
+    java.lang.String val$downloadUrl -> a
+    java.awt.Frame val$parentWindow -> a
+    com.goofans.gootool.view.NewVersionDialog this$0 -> a
+    69:71:void actionPerformed(java.awt.event.ActionEvent) -> actionPerformed
+com.goofans.gootool.view.OptionsPanel -> com.goofans.gootool.bL:
+    java.util.logging.Logger log -> a
+    javax.swing.JComboBox languageCombo -> a
+    javax.swing.JComboBox resolutionCombo -> b
+    javax.swing.JCheckBox allowWidescreen -> a
+    javax.swing.JPanel rootPanel -> a
+    javax.swing.JTextField uiInset -> a
+    javax.swing.JCheckBox skipOpeningMovieCheckBox -> b
+    javax.swing.JTextField watermark -> b
+    javax.swing.JTextField installDirText -> c
+    javax.swing.JButton changeInstallDirButton -> a
+    javax.swing.JTextField customDirText -> d
+    javax.swing.JButton changeCustomDirButton -> b
+    javax.swing.JTextField profileFileText -> e
+    javax.swing.JButton changeProfileFileButton -> c
+    javax.swing.JTextField goofansUsername -> f
+    javax.swing.JPasswordField goofansPassword -> a
+    javax.swing.JButton gooFansLoginButton -> d
+    javax.swing.JCheckBox windowsVolumeControlCheckBox -> c
+    javax.swing.JPanel soundPanel -> b
+    com.goofans.gootool.ui.HyperlinkLabel windowsVolumeControlHyperlink -> a
+    javax.swing.JCheckBox disableBillboardsCheckBox -> d
+    javax.swing.JComboBox refreshRateCombo -> c
+    131:148:void updateResolutions() -> a
+    152:200:void updateViewFromModel(com.goofans.gootool.model.Configuration) -> a
+    204:223:void updateModelFromView(com.goofans.gootool.model.Configuration) -> b
+    35:35:void access$000(com.goofans.gootool.view.OptionsPanel) -> a
+    void $$$loadLabelText$$$(javax.swing.JLabel,java.lang.String) -> a
+    void $$$loadButtonText$$$(javax.swing.AbstractButton,java.lang.String) -> a
+com.goofans.gootool.view.OptionsPanel$1 -> com.goofans.gootool.bM:
+    com.goofans.gootool.view.OptionsPanel this$0 -> a
+    71:72:void itemStateChanged(java.awt.event.ItemEvent) -> itemStateChanged
+com.goofans.gootool.view.OptionsPanel$2 -> com.goofans.gootool.bN:
+    java.io.File val$f -> a
+    com.goofans.gootool.view.OptionsPanel this$0 -> a
+    94:95:void hyperlinkUpdate(javax.swing.event.HyperlinkEvent) -> hyperlinkUpdate
+com.goofans.gootool.view.OptionsPanel$RefreshRate -> com.goofans.gootool.bO:
+    int refreshRate -> a
+    125:125:java.lang.String toString() -> toString
+com.goofans.gootool.view.ProfilePanel -> com.goofans.gootool.bP:
+    java.util.logging.Logger log -> a
+    java.beans.PropertyChangeSupport propertyChangeSupport -> a
+    javax.swing.JComboBox profilesCombo -> a
+    javax.swing.JLabel playTime -> a
+    javax.swing.JLabel levelsPlayed -> b
+    javax.swing.JPanel rootPanel -> a
+    javax.swing.JButton refreshButton -> a
+    javax.swing.JLabel profileName -> c
+    javax.swing.JLabel flags -> d
+    javax.swing.JTable levelsTable -> a
+    javax.swing.JPanel towerPanel -> b
+    javax.swing.JLabel towerTotalBalls -> e
+    javax.swing.JLabel towerNodeBalls -> f
+    javax.swing.JLabel towerStrandBalls -> g
+    javax.swing.JLabel towerHeight -> h
+    javax.swing.JButton saveTowerButton -> b
+    javax.swing.JButton profileBackupButton -> c
+    javax.swing.JButton profileRestoreButton -> d
+    javax.swing.JButton profilePublishButton -> e
+    com.goofans.gootool.profile.Profile currentProfile -> a
+    java.lang.String[] COLUMN_NAMES -> a
+    com.goofans.gootool.view.ProfilePanel$LevelsTableModel levelsModel -> a
+    com.goofans.gootool.profile.TowerRenderer tr -> a
+    javax.swing.JPopupMenu saveTowerMenu -> a
+    com.goofans.gootool.GooToolResourceBundle resourceBundle -> a
+    java.lang.Boolean allProfilesAreOnline -> a
+    java.lang.Boolean anyProfilesHaveGeneratedId -> b
+    155:193:void actionPerformed(java.awt.event.ActionEvent) -> actionPerformed
+    197:197:com.goofans.gootool.profile.Profile getSelectedProfile() -> a
+    202:202:boolean areAllProfilesOnline() -> a
+    207:207:boolean areAnyProfilesGeneratedId() -> b
+    306:340:void saveTower(java.awt.image.BufferedImage) -> a
+    364:388:void showTower() -> c
+    392:425:void loadProfiles() -> a
+    435:465:void updateViewFromModel$4183c082() -> b
+    515:516:void addPropertyChangeListener(java.beans.PropertyChangeListener) -> a
+    42:42:void access$100(com.goofans.gootool.view.ProfilePanel) -> a
+    42:42:com.goofans.gootool.profile.Profile access$200(com.goofans.gootool.view.ProfilePanel) -> a
+    42:42:com.goofans.gootool.GooToolResourceBundle access$300() -> a
+    42:42:java.lang.String[] access$400() -> a
+    void $$$loadLabelText$$$(javax.swing.JLabel,java.lang.String) -> a
+    void $$$loadButtonText$$$(javax.swing.AbstractButton,java.lang.String) -> a
+com.goofans.gootool.view.ProfilePanel$1 -> com.goofans.gootool.bQ:
+    com.goofans.gootool.view.ProfilePanel this$0 -> a
+    286:287:void mouseClicked(java.awt.event.MouseEvent) -> mouseClicked
+com.goofans.gootool.view.ProfilePanel$2 -> com.goofans.gootool.bR:
+    javax.swing.JDialog val$d -> a
+    381:384:void keyPressed(java.awt.event.KeyEvent) -> keyPressed
+com.goofans.gootool.view.ProfilePanel$LevelsTableModel -> com.goofans.gootool.bS:
+    com.goofans.gootool.view.ProfilePanel this$0 -> a
+    476:476:int getRowCount() -> getRowCount
+    481:481:int getColumnCount() -> getColumnCount
+    486:502:java.lang.Object getValueAt(int,int) -> getValueAt
+    508:508:java.lang.String getColumnName(int) -> getColumnName
+com.goofans.gootool.view.ProgressDialog -> com.goofans.gootool.bT:
+    javax.swing.JLabel task -> a
+    javax.swing.JProgressBar progressBar -> a
+    javax.swing.JPanel rootPanel -> a
+    javax.swing.JLabel iconLabel -> b
+    40:62:void init(java.awt.Component) -> a
+    66:76:void beginStep(java.lang.String,boolean) -> a
+    80:87:void progressStep(float) -> a
+    void $$$setupUI$$$() -> a
+com.goofans.gootool.view.ProgressDialog$1 -> com.goofans.gootool.bU:
+    java.lang.String val$taskDescription -> a
+    boolean val$progressAvailable -> a
+    com.goofans.gootool.view.ProgressDialog this$0 -> a
+    70:74:void run() -> run
+com.goofans.gootool.view.ProgressDialog$2 -> com.goofans.gootool.bV:
+    float val$percent -> a
+    com.goofans.gootool.view.ProgressDialog this$0 -> a
+    84:85:void run() -> run
+com.goofans.gootool.wog.ConfigurationWriterTask -> com.goofans.gootool.bW:
+    java.util.logging.Logger log -> a
+    java.lang.String[] resourceDirs -> a
+    java.util.List skippedFiles -> a
+    com.goofans.gootool.model.Configuration configuration -> a
+    52:61:void run() -> a
+    66:193:void copyGameFiles() -> b
+    198:208:void getFilesInFolder(java.io.File,java.util.List,java.lang.String) -> a
+    298:339:void installAddins(com.goofans.gootool.model.Configuration) -> a
+com.goofans.gootool.wog.GamePreferences -> com.goofans.gootool.bX:
+    java.util.logging.Logger log -> a
+    javax.xml.xpath.XPathExpression USER_CONFIG_XPATH_LANGUAGE -> a
+    javax.xml.xpath.XPathExpression USER_CONFIG_XPATH_SCREENWIDTH -> b
+    javax.xml.xpath.XPathExpression USER_CONFIG_XPATH_SCREENHEIGHT -> c
+    javax.xml.xpath.XPathExpression USER_CONFIG_XPATH_REFRESHRATE -> d
+    javax.xml.xpath.XPathExpression USER_CONFIG_XPATH_UIINSET -> e
+    60:93:void readGamePreferences(com.goofans.gootool.model.Configuration,java.io.File) -> a
+    100:139:void writeGamePreferences(com.goofans.gootool.model.Configuration,java.io.File) -> b
+com.goofans.gootool.wog.WorldOfGoo -> com.goofans.gootool.bY:
+    java.util.logging.Logger log -> a
+    com.goofans.gootool.wog.WorldOfGoo theInstance -> a
+    java.util.List availableAddins -> a
+    93:93:com.goofans.gootool.wog.WorldOfGoo getTheInstance() -> a
+    void init() -> a
+    void init(java.io.File) -> a
+    boolean isWogFound() -> a
+    boolean isCustomDirSet() -> b
+    106:106:java.util.prefs.Preferences getPreferences() -> a
+    java.io.File getGameFile(java.lang.String) -> a
+    java.io.File getCustomGameFile(java.lang.String) -> b
+    java.io.File getOldAddinsDir() -> a
+    128:130:java.io.File getAddinsDir() -> b
+    135:161:void updateInstalledAddins() -> b
+    165:168:com.goofans.gootool.model.Configuration readConfiguration() -> a
+    178:179:void writeGamePreferences(com.goofans.gootool.model.Configuration) -> a
+    void launch() -> c
+    java.io.File getWogDir() -> c
+    void setCustomDir(java.io.File) -> b
+    java.io.File getCustomDir() -> d
+    boolean isFirstCustomBuild() -> c
+    254:254:java.util.List getAvailableAddins() -> a
+    266:283:void installAddin(java.io.File,java.lang.String,boolean) -> a
+    287:296:void uninstallAddin(com.goofans.gootool.addins.Addin,boolean) -> a
+    java.io.File chooseCustomDir(java.awt.Component) -> a
+com.goofans.gootool.wog.WorldOfGoo$1 -> com.goofans.gootool.bZ:
+    int[] $SwitchMap$com$goofans$gootool$platform$PlatformSupport$Platform -> a
+com.goofans.gootool.wog.WorldOfGooLinux -> com.goofans.gootool.ca:
+    java.util.logging.Logger log -> a
+    java.lang.String[] SEARCH_PATHS -> b
+    java.lang.String[] EXE_FILENAMES -> a
+    boolean wogFound -> a
+    java.io.File wogDir -> a
+    java.io.File customDir -> b
+    50:50:boolean isWogFound() -> a
+    56:56:boolean isCustomDirSet() -> b
+    65:110:void init() -> a
+    114:124:boolean locateWogAtPath(java.io.File) -> a
+    157:161:void init(java.io.File) -> a
+    166:172:void launch() -> c
+    177:180:java.io.File getWogDir() -> c
+    186:194:void setCustomDir(java.io.File) -> b
+    199:202:java.io.File getCustomDir() -> d
+    208:212:boolean isFirstCustomBuild() -> c
+    218:218:java.io.File getGameFile(java.lang.String) -> a
+    224:224:java.io.File getCustomGameFile(java.lang.String) -> b
+    230:238:java.io.File chooseCustomDir(java.awt.Component) -> a
+    244:248:java.io.File getOldAddinsDir() -> a
+com.goofans.gootool.wog.WorldOfGooMacOSX -> com.goofans.gootool.cb:
+    java.util.logging.Logger log -> a
+    java.lang.String[] SEARCH_PATHS -> b
+    java.lang.String[] EXE_FILENAMES -> a
+    boolean wogFound -> a
+    java.io.File wogDir -> a
+    java.io.File customDir -> b
+    48:48:boolean isWogFound() -> a
+    54:54:boolean isCustomDirSet() -> b
+    63:80:void init() -> a
+    84:92:boolean locateWogAtPath(java.io.File) -> a
+    125:129:void init(java.io.File) -> a
+    134:139:void launch() -> c
+    144:147:java.io.File getWogDir() -> c
+    153:161:void setCustomDir(java.io.File) -> b
+    166:169:java.io.File getCustomDir() -> d
+    175:179:boolean isFirstCustomBuild() -> c
+    185:185:java.io.File getGameFile(java.lang.String) -> a
+    191:191:java.io.File getCustomGameFile(java.lang.String) -> b
+    197:214:java.io.File chooseCustomDir(java.awt.Component) -> a
+    220:224:java.io.File getOldAddinsDir() -> a
+com.goofans.gootool.wog.WorldOfGooWindows -> com.goofans.gootool.cc:
+    java.util.logging.Logger log -> a
+    java.lang.String[] SEARCH_PATHS -> a
+    boolean wogFound -> a
+    java.io.File wogDir -> a
+    java.io.File customDir -> b
+    60:60:boolean isWogFound() -> a
+    66:66:boolean isCustomDirSet() -> b
+    75:92:void init() -> a
+    96:103:boolean locateWogAtPath(java.io.File) -> a
+    136:140:void init(java.io.File) -> a
+    145:171:void launch() -> c
+    176:179:java.io.File getWogDir() -> c
+    185:193:void setCustomDir(java.io.File) -> b
+    198:201:java.io.File getCustomDir() -> d
+    207:207:boolean isFirstCustomBuild() -> c
+    213:213:java.io.File getGameFile(java.lang.String) -> a
+    219:219:java.io.File getCustomGameFile(java.lang.String) -> b
+    225:233:java.io.File chooseCustomDir(java.awt.Component) -> a
+    239:243:java.io.File getOldAddinsDir() -> a
+com.goofans.gootool.wog.WorldOfGooWindows$1 -> com.goofans.gootool.cd:
+    java.lang.Process val$process -> a
+    160:169:void run() -> run
+net.infotrek.util.DesktopUtil -> com.goofans.gootool.ce:
+    java.util.logging.Logger log -> a
+    java.lang.String[] UNIX_BROWSE_CMDS -> a
+    java.lang.String[] UNIX_OPEN_CMDS -> b
+    74:89:void browse(java.net.URL) -> a
+    100:113:void browseAndWarn(java.net.URL,java.awt.Component) -> a
+    125:138:void browseAndWarn(java.lang.String,java.awt.Component) -> a
+    175:188:void openAndWarn(java.io.File,java.awt.Component) -> a
+    200:224:boolean browseDesktop(java.net.URL) -> a
+    248:256:void browseUnix(java.net.URL) -> b
+    268:276:void browseMac(java.net.URL) -> c
+    291:318:boolean openDesktop(java.io.File) -> a
+    355:363:void openUnix(java.io.File) -> a
+    374:380:java.lang.Class getDesktopClass() -> a
+    394:408:java.lang.Object getDesktopInstance(java.lang.Class) -> a
+    436:449:boolean unixCommandExists(java.lang.String) -> a
+net.infotrek.util.DesktopUtil$1 -> com.goofans.gootool.cf:
+    java.awt.Component val$parentComponent -> a
+    java.io.IOException val$e -> a
+    108:110:void run() -> run
+net.infotrek.util.DesktopUtil$2 -> com.goofans.gootool.cg:
+    java.awt.Component val$parentComponent -> a
+    java.io.IOException val$e -> a
+    133:135:void run() -> run
+net.infotrek.util.DesktopUtil$3 -> com.goofans.gootool.ch:
+    java.awt.Component val$parentComponent -> a
+    java.io.File val$file -> a
+    java.io.IOException val$e -> a
+    183:185:void run() -> run
+net.infotrek.util.TextUtil -> com.goofans.gootool.ci:
+    byte[] BASE64_ALPHABET -> a
+    byte[] BASE64_DECODABET -> b
+    66:88:java.lang.String base64Encode(byte[]) -> a
+    105:132:byte[] encode3to4(byte[],int,int,byte[],int) -> a
+    142:181:byte[] base64Decode(java.lang.String) -> a
+    242:252:java.lang.String binaryNumToString(long) -> a
+    257:257:java.lang.String stripHtmlTags(java.lang.String) -> a
+    276:305:java.lang.String formatTime(int) -> a
+net.infotrek.util.XMLStringBuffer -> com.goofans.gootool.cj:
+    java.lang.StringBuffer buffer -> a
+    java.util.Stack stack -> a
+    java.lang.String currentIndent -> a
+    53:55:void init(java.lang.StringBuffer,java.lang.String) -> a
+    79:82:void push(java.lang.String,java.util.Map) -> a
+    102:103:void push(java.lang.String) -> a
+    122:130:void pop(java.lang.String) -> b
+    152:153:void addRequired(java.lang.String,java.lang.String,java.util.Map) -> a
+    241:244:void addComment(java.lang.String) -> c
+    259:262:java.lang.String toXML() -> a
+    299:311:void xmlOpen(java.lang.StringBuffer,java.lang.String,java.lang.String,java.util.Map,boolean,boolean) -> a
+    316:317:void xmlClose(java.lang.StringBuffer,java.lang.String,java.lang.String) -> a
+    333:353:java.lang.String encodeXml(java.lang.String) -> a
+net.infotrek.util.XMLStringBuffer$Tag -> com.goofans.gootool.ck:
+    java.lang.String tagName -> a
+net.infotrek.util.logging.jdk14.TerseFormatter -> net.infotrek.util.logging.jdk14.TerseFormatter:
+    java.lang.String[] spacesFactory -> a
+    java.lang.String lineSeparator -> a
+    java.lang.String bodyLineSeparator -> b
+    long startMillis -> a
+    java.lang.StringBuffer buffer -> a
+    66:93:java.lang.String format(java.util.logging.LogRecord) -> format
+    108:135:java.lang.String spaces(int) -> a
+net.infotrek.util.prefs.FilePreferences -> com.goofans.gootool.cl:
+    java.util.logging.Logger log -> a
+    java.util.Map root -> a
+    java.util.Map children -> b
+    boolean isRemoved -> a
+    47:54:void putSpi(java.lang.String,java.lang.String) -> putSpi
+    59:59:java.lang.String getSpi(java.lang.String) -> getSpi
+    65:72:void removeSpi(java.lang.String) -> removeSpi
+    77:79:void removeNodeSpi() -> removeNodeSpi
+    84:84:java.lang.String[] keysSpi() -> keysSpi
+    90:90:java.lang.String[] childrenNamesSpi() -> childrenNamesSpi
+    107:142:void syncSpi() -> syncSpi
+    147:152:void getPath(java.lang.StringBuilder) -> a
+    157:215:void flushSpi() -> flushSpi
+    19:19:java.util.prefs.AbstractPreferences childSpi(java.lang.String) -> childSpi
+net.infotrek.util.prefs.FilePreferencesFactory -> net.infotrek.util.prefs.FilePreferencesFactory:
+    java.util.logging.Logger log -> a
+    java.util.prefs.Preferences rootPreferences -> a
+    java.io.File preferencesFile -> a
+    33:33:java.util.prefs.Preferences systemRoot() -> systemRoot
+    38:43:java.util.prefs.Preferences userRoot() -> userRoot
+    50:58:java.io.File getPreferencesFile() -> a
