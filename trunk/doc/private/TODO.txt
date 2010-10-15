@@ -3,8 +3,6 @@ set svn:eol-style native on all java, xml and text files
 
 Remove files in dest dir that don't exist in source dir and aren't added by a mod
 
-source build - copy source license to top-level directory
-
 If A depends on B, B must be installed first. (bubble sort the addins list)
 
 
