@@ -209,7 +209,7 @@
               productversion="${gootool.version}"
               txtproductversion="${gootool.version.full}"
             />
-    
+
     <launch4j configFile="launcher/launch4j-info.xml"
               jar="${obfuscated.jar}"
               outfile="${dist.win32}/bin/gooinfo.exe"
@@ -394,6 +394,9 @@
   <target name="source" description="Build the source release">
     <mkdir dir="${dist.dir}"/>
     <tar destfile="dist/gootool-${gootool.version.full}-source.tar.bz2" compression="bzip2" longfile="fail">
+      <tarfileset dir="dist_src/common/doc/" prefix="gootool-${gootool.version.full}">
+        <include name="LICENSE.txt"/>
+      </tarfileset>
       <tarfileset dir="." prefix="gootool-${gootool.version.full}">
         <include name="dist_src/"/>
         <include name="installer/"/>
