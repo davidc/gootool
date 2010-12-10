@@ -166,6 +166,12 @@ public class WorldOfGooWindows extends WorldOfGoo
         catch (IOException e) {
           // do nothing
         }
+        try {
+          process.waitFor();
+        }
+        catch (InterruptedException e) {
+          // do nothing
+        }
       }
     });
   }
