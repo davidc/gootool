@@ -301,7 +301,7 @@ public class ConfigurationWriterTask extends ProgressIndicatingTask
       String id = addins.get(i);
       beginStep("Merging addin " + id, false);
 
-      List<Addin> availableAddins = WorldOfGoo.getAvailableAddins();
+      List<Addin> availableAddins = AddinsStore.getAvailableAddins();
       boolean addinFound = false;
       for (Addin addin : availableAddins) {
         if (addin.getId().equals(id)) {
@@ -351,7 +351,7 @@ public class ConfigurationWriterTask extends ProgressIndicatingTask
     c.setSkipOpeningMovie(true);
     c.setWatermark("hi there!");
 
-    for (Addin addin : WorldOfGoo.getAvailableAddins()) {
+    for (Addin addin : AddinsStore.getAvailableAddins()) {
       System.out.println("addin.getId() = " + addin.getId());
     }
 

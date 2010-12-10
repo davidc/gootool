@@ -23,6 +23,7 @@ import com.goofans.gootool.GooTool;
 import com.goofans.gootool.GooToolResourceBundle;
 import com.goofans.gootool.addins.Addin;
 import com.goofans.gootool.addins.AddinFactory;
+import com.goofans.gootool.addins.AddinsStore;
 import com.goofans.gootool.siteapi.APIException;
 import com.goofans.gootool.siteapi.AddinUpdatesCheckRequest;
 import com.goofans.gootool.util.DebugUtil;
@@ -85,7 +86,7 @@ public class AddinUpdatesChooser extends JDialog
     // Prepare data model
     updateRows = new ArrayList<UpdateRow>(updates.size());
 
-    for (Addin addin : WorldOfGoo.getAvailableAddins()) {
+    for (Addin addin : AddinsStore.getAvailableAddins()) {
       AddinUpdatesCheckRequest.AvailableUpdate update = updates.get(addin.getId());
       if (update != null) {
         if (update.version.compareTo(addin.getVersion()) > 0) {
@@ -165,7 +166,7 @@ public class AddinUpdatesChooser extends JDialog
 
           }
           beginStep(resourceBundle.getString("addinUpdating.status.reloading"), false);
-          wog.updateInstalledAddins();
+          AddinsStore.updateAvailableAddins();
         }
       });
     }

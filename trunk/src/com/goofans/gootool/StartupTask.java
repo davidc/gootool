@@ -5,6 +5,7 @@
 
 package com.goofans.gootool;
 
+import com.goofans.gootool.addins.AddinsStore;
 import com.goofans.gootool.model.Configuration;
 import com.goofans.gootool.profile.ProfileFactory;
 import com.goofans.gootool.util.ProgressIndicatingTask;
@@ -127,7 +128,7 @@ public class StartupTask extends ProgressIndicatingTask
 
     File addinsDir = null;
     try {
-      addinsDir = wog.getAddinsDir();
+      addinsDir = AddinsStore.getAddinsDir();
     }
     catch (IOException e) {
       log.log(Level.SEVERE, "Unable to create addins directory " + addinsDir, e);
@@ -162,7 +163,7 @@ public class StartupTask extends ProgressIndicatingTask
       oldAddinsDir.delete();
     }
 
-    wog.updateInstalledAddins();
+    AddinsStore.updateAvailableAddins();
   }
 
   private void showMessageDialog(final String title, final String message, final int messageType)

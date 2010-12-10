@@ -26,6 +26,7 @@ import java.beans.PropertyChangeEvent;
 import static com.goofans.gootool.GameFileCodecTool.CodecType;
 import com.goofans.gootool.addins.Addin;
 import com.goofans.gootool.addins.AddinFactory;
+import com.goofans.gootool.addins.AddinsStore;
 import com.goofans.gootool.model.Configuration;
 import com.goofans.gootool.profile.ProfileFactory;
 import com.goofans.gootool.profile.GenerateOnlineIds;
@@ -271,7 +272,7 @@ public class Controller implements ActionListener
 
     JFileChooser chooser = new JFileChooser(ToolPreferences.getMruAddinDir());
     chooser.setMultiSelectionEnabled(true);
-    FileNameExtensionFilter filter = new FileNameExtensionFilter("World of Goo Mods", WorldOfGoo.GOOMOD_EXTENSION);
+    FileNameExtensionFilter filter = new FileNameExtensionFilter("World of Goo Mods", AddinsStore.GOOMOD_EXTENSION);
     chooser.setFileFilter(filter);
     int returnVal = chooser.showOpenDialog(mainFrame);
 
@@ -348,7 +349,7 @@ public class Controller implements ActionListener
     WorldOfGoo worldOfGoo = WorldOfGoo.getTheInstance();
 
     try {
-      for (Addin installedAddin : WorldOfGoo.getAvailableAddins()) {
+      for (Addin installedAddin : AddinsStore.getAvailableAddins()) {
         if (installedAddin.getId().equals(addin.getId())) {
           msg = resourceBundle.formatString("installAddin.exists.message", installedAddin.getName(), installedAddin.getVersion());
 
@@ -429,7 +430,7 @@ public class Controller implements ActionListener
 
     // TODO better checking of satisfaction here (use editor config, i.e. what's enabled)
 
-    if (!addin.areDependenciesSatisfiedBy(WorldOfGoo.getAvailableAddins())) {
+    if (!addin.areDependenciesSatisfiedBy(AddinsStore.getAvailableAddins())) {
       log.info("Not installing because dependencies not satisfied");
       showErrorDialog(resourceBundle.getString("enableAddin.dependencies.title"), resourceBundle.formatString("enableAddin.dependencies.message", addin.getName()));
       return;
@@ -802,7 +803,7 @@ public class Controller implements ActionListener
   private void removeUnavailableAddins(Configuration config)
   {
     // Remove any addins that are enabled but don't exist
-    List<Addin> availableAddins = WorldOfGoo.getAvailableAddins();
+    List<Addin> availableAddins = AddinsStore.getAvailableAddins();
     boolean foundThisAddin = false;
     do {
       for (String enabledAddinName : config.getEnabledAddins()) {
@@ -921,7 +922,7 @@ public class Controller implements ActionListener
 
   public List<Addin> getDisplayAddins()
   {
-    List<Addin> availableAddins = new ArrayList<Addin>(WorldOfGoo.getAvailableAddins());
+    List<Addin> availableAddins = new ArrayList<Addin>(AddinsStore.getAvailableAddins());
     List<Addin> displayAddins = new ArrayList<Addin>(availableAddins.size());
 
     /* First, all the enabled addins, in order */
