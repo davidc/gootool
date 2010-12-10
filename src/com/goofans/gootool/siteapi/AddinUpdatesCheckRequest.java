@@ -12,6 +12,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.goofans.gootool.addins.Addin;
+import com.goofans.gootool.addins.AddinsStore;
 import com.goofans.gootool.util.DebugUtil;
 import com.goofans.gootool.util.VersionSpec;
 import com.goofans.gootool.util.XMLUtil;
@@ -44,7 +45,7 @@ public class AddinUpdatesCheckRequest extends APIRequest
    */
   public Map<String, AvailableUpdate> checkUpdates() throws APIException
   {
-    List<Addin> availableAddins = WorldOfGoo.getAvailableAddins();
+    List<Addin> availableAddins = AddinsStore.getAvailableAddins();
     if (availableAddins.isEmpty()) {
       return new TreeMap<String, AvailableUpdate>();
     }
@@ -177,7 +178,7 @@ public class AddinUpdatesCheckRequest extends APIRequest
 //    new AddinUpdatesCheckRequest().checkUpdatesById(Arrays.asList(new String[]{"goas", "com.goofans.billboards"}));
     final Map<String, AvailableUpdate> updates = new AddinUpdatesCheckRequest().checkUpdates();
 
-    for (Addin addin : WorldOfGoo.getAvailableAddins()) {
+    for (Addin addin : AddinsStore.getAvailableAddins()) {
       AvailableUpdate update = updates.get(addin.getId());
       if (update != null) {
         System.out.println("addin.getId() = " + addin.getId());

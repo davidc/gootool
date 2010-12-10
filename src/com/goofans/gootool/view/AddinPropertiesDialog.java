@@ -7,8 +7,8 @@ package com.goofans.gootool.view;
 
 import com.goofans.gootool.addins.Addin;
 import com.goofans.gootool.addins.AddinDependency;
+import com.goofans.gootool.addins.AddinsStore;
 import com.goofans.gootool.util.GUIUtil;
-import com.goofans.gootool.wog.WorldOfGoo;
 
 import javax.swing.*;
 import java.util.List;
@@ -68,7 +68,7 @@ public class AddinPropertiesDialog extends JDialog
       depends.setText("Nothing");
     }
     else {
-      List<Addin> addins = WorldOfGoo.getAvailableAddins();
+      List<Addin> addins = AddinsStore.getAvailableAddins();
 
       StringBuilder sb = new StringBuilder("<html>");
       for (AddinDependency dependency : a.getDependencies()) {

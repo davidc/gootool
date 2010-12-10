@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.goofans.gootool.addins.Addin;
-import com.goofans.gootool.wog.WorldOfGoo;
+import com.goofans.gootool.addins.AddinsStore;
 
 /**
  * Represents the current World of Goo configuration.
@@ -160,7 +160,7 @@ public class Configuration
 
   public List<Addin> getEnabledAddinsAsAddins()
   {
-    List<Addin> availableAddins = WorldOfGoo.getAvailableAddins();
+    List<Addin> availableAddins = AddinsStore.getAvailableAddins();
     List<Addin> addins = new ArrayList<Addin>(enabledAddins.size());
 
     for (String enabledAddinId : enabledAddins) {

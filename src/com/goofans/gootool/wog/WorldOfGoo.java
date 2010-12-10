@@ -9,9 +9,6 @@ import java.awt.*;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.StringTokenizer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -19,8 +16,7 @@ import java.util.prefs.Preferences;
 
 import com.goofans.gootool.GooTool;
 import com.goofans.gootool.addins.Addin;
-import com.goofans.gootool.addins.AddinFactory;
-import com.goofans.gootool.addins.AddinFormatException;
+import com.goofans.gootool.addins.AddinsStore;
 import com.goofans.gootool.model.Configuration;
 import com.goofans.gootool.model.Language;
 import com.goofans.gootool.model.Resolution;
@@ -43,10 +39,7 @@ public abstract class WorldOfGoo
 {
   private static final Logger log = Logger.getLogger(WorldOfGoo.class.getName());
 
-  public static final String GOOMOD_EXTENSION = "goomod";
-  protected static final String GOOMOD_EXTENSION_WITH_DOT = "." + GOOMOD_EXTENSION;
   private static final String USER_CONFIG_FILE = "properties/config.txt";
-
 
   private static final WorldOfGoo theInstance;
 
@@ -67,8 +60,6 @@ public abstract class WorldOfGoo
   }
 
 
-  private static List<Addin> availableAddins = new LinkedList<Addin>();
-
   // TODO these should move into a new Preferences class
   static final String PREF_LASTVERSION = "gootool_version";
   static final String PREF_ALLOW_WIDESCREEN = "allow_widescreen";
@@ -81,8 +72,6 @@ public abstract class WorldOfGoo
   static final String PREF_UIINSET = "ui_inset";
   static final String PREF_ADDINS = "addins";
   static final String PREF_WINDOWS_VOLUME_CONTROL = "windows_volume_control";
-
-  private static final String STORAGE_DIR_ADDINS = "addins";
 
   protected WorldOfGoo()
   {
@@ -116,49 +105,6 @@ public abstract class WorldOfGoo
    * @return The addin directory, or null if it doesn't exist.
    */
   public abstract File getOldAddinsDir();
-
-  /**
-   * Returns the new directory that GooTool stores installed addins from version 1.1 onward.
-   *
-   * @return The addin directory.
-   * @throws IOException if the addin directory couldn't be determined or created.
-   */
-  public File getAddinsDir() throws IOException
-  {
-    File addinsDir = new File(PlatformSupport.getToolStorageDirectory(), STORAGE_DIR_ADDINS);
-    Utilities.mkdirsOrException(addinsDir);
-    return addinsDir;
-  }
-
-  public void updateInstalledAddins()
-  {
-    availableAddins = new LinkedList<Addin>();
-
-    File addinsDir;
-    try {
-      addinsDir = getAddinsDir();
-    }
-    catch (IOException e) {
-      log.log(Level.SEVERE, "No addinsDir", e);
-      throw new RuntimeException(e);
-    }
-
-    File[] files = addinsDir.listFiles();
-
-    for (File file : files) {
-      if (file.isFile() && file.getName().endsWith(GOOMOD_EXTENSION_WITH_DOT)) {
-        try {
-          availableAddins.add(AddinFactory.loadAddin(file));
-        }
-        catch (AddinFormatException e) {
-          log.log(Level.WARNING, "Ignoring invalid addin " + file + " in addins dir", e);
-        }
-        catch (IOException e) {
-          log.log(Level.WARNING, "Ignoring invalid addin " + file + " in addins dir", e);
-        }
-      }
-    }
-  }
 
   public Configuration readConfiguration() throws IOException
   {
@@ -234,29 +180,24 @@ public abstract class WorldOfGoo
 
   public static void DEBUGaddAvailableAddin(Addin a)
   {
-    availableAddins.add(a);
+    AddinsStore.availableAddins.add(a);
   }
 
   // ONLY FOR USE BY TEST CASES !!!!!
 
   public static void DEBUGremoveAddinById(String id)
   {
-    for (Addin availableAddin : availableAddins) {
+    for (Addin availableAddin : AddinsStore.availableAddins) {
       if (availableAddin.getId().equals(id)) {
-        availableAddins.remove(availableAddin);
+        AddinsStore.availableAddins.remove(availableAddin);
         return;
       }
     }
   }
 
-  public static List<Addin> getAvailableAddins()
-  {
-    return Collections.unmodifiableList(availableAddins);
-  }
-
   private File getAddinInstalledFile(String addinId) throws IOException
   {
-    return new File(getAddinsDir(), addinId + GOOMOD_EXTENSION_WITH_DOT);
+    return new File(AddinsStore.getAddinsDir(), addinId + AddinsStore.GOOMOD_EXTENSION_WITH_DOT);
   }
 
 
@@ -265,7 +206,7 @@ public abstract class WorldOfGoo
     // If we're skipping the auto-update, we're in a batch process, so don't check the addin already exists
     if (!skipUpdate) {
       // Check we don't already have an addin with this ID
-      for (Addin availableAddin : availableAddins) {
+      for (Addin availableAddin : AddinsStore.availableAddins) {
         if (availableAddin.getId().equals(addinId)) {
           throw new IOException("An addin with id " + addinId + " already exists!");
         }
@@ -279,7 +220,7 @@ public abstract class WorldOfGoo
     Utilities.copyFile(addinFile, destFile);
 
     if (!skipUpdate)
-      updateInstalledAddins();
+      AddinsStore.updateAvailableAddins();
   }
 
   public void uninstallAddin(Addin addin, boolean skipUpdate) throws IOException
@@ -292,7 +233,7 @@ public abstract class WorldOfGoo
     }
 
     if (!skipUpdate)
-      updateInstalledAddins();
+      AddinsStore.updateAvailableAddins();
   }
 
   public abstract File chooseCustomDir(Component mainFrame);
