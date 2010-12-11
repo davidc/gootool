@@ -37,8 +37,11 @@ public class ProfileData
 
   public ProfileData(File f) throws IOException
   {
-    byte[] profile = GameFormat.decodeProfileFile(f);
+    this(GameFormat.decodeProfileFile(f));
+  }
 
+  public ProfileData(byte[] profile) throws IOException
+  {
     readProfileData(profile);
 
     log.finest("ProfileData is " + data);
