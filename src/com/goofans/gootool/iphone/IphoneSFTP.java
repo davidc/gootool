@@ -7,8 +7,13 @@ package com.goofans.gootool.iphone;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.Vector;
 
+import com.goofans.gootool.util.Utilities;
 import com.jcraft.jsch.*;
 
 /**
@@ -19,9 +24,9 @@ public class IphoneSFTP
 {
 
   @SuppressWarnings({"UseOfSystemOutOrSystemErr", "HardCodedStringLiteral", "HardcodedFileSeparator"})
-  public static void main(String[] args) throws JSchException, SftpException
+  public static void main(String[] args) throws JSchException, SftpException, IOException
   {
-    String host = "192.168.5.12";
+    String host = "192.168.2.162";
     String user = "root";
     int port = 22;
 
@@ -40,7 +45,7 @@ public class IphoneSFTP
       ChannelSftp c = (ChannelSftp) channel;
 
       try {
-        c.cd("/var/mobile");
+        c.cd("/var/mobile/Library/Preferences");
 
         @SuppressWarnings({"unchecked"})
         Vector<ChannelSftp.LsEntry> lsEntries = (Vector<ChannelSftp.LsEntry>) c.ls(".");
@@ -62,6 +67,9 @@ public class IphoneSFTP
 //          if (cmd.equals("stat")) attrs = c.stat(p1);
         System.out.println("SFTP protocol version " + c.version());
 
+        InputStream is = c.get("com.2dboy.worldofgoo.plist");
+        OutputStream os = new FileOutputStream("plist");
+        Utilities.copyStreams(is, os);
       }
       finally {
         c.disconnect();
