@@ -1,3 +1,7 @@
+1.1.0, unreleased
+
+- Pull pers2.dat from iPad
+
 1.0.3, 15-October-2010
 
 - This is the first release with the full source code released simultaneously (#0000244).
