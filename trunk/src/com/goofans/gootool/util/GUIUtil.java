@@ -6,6 +6,7 @@
 package com.goofans.gootool.util;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -123,7 +124,13 @@ public class GUIUtil
   public static void runTask(JFrame owner, String windowTitle, final ProgressIndicatingTask task) throws Exception
   {
     final ProgressDialog progressDialog = new ProgressDialog(owner, windowTitle);
+
+    if (owner == null) {
+      ((Frame) progressDialog.getOwner()).setIconImage(GooTool.getMainIconImage());
+    }
+
     task.addListener(progressDialog);
+    task.setParentComponent(progressDialog);
     runTask(task, progressDialog);
   }
 
@@ -138,7 +145,13 @@ public class GUIUtil
   public static void runTask(JDialog owner, String windowTitle, final ProgressIndicatingTask task) throws Exception
   {
     final ProgressDialog progressDialog = new ProgressDialog(owner, windowTitle);
+
+    if (owner == null) {
+      ((Frame) progressDialog.getOwner()).setIconImage(GooTool.getMainIconImage());
+    }
+    
     task.addListener(progressDialog);
+    task.setParentComponent(progressDialog);
     runTask(task, progressDialog);
   }
 

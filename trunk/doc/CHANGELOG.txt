@@ -1,6 +1,10 @@
 1.1.0, unreleased
 
 - Pull pers2.dat from iPad
+- New project-based structure
+- Migrate projects from old configuation to project 0
+- allow_widescreen moved to ToolPreferences
+- use the gootool icon for startup windows
 
 1.0.3, 15-October-2010
 

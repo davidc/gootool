@@ -5,6 +5,7 @@
 
 package com.goofans.gootool.util;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,6 +18,7 @@ import java.util.List;
 public abstract class ProgressIndicatingTask
 {
   private final List<ProgressListener> listeners = new ArrayList<ProgressListener>();
+  protected Component parentComponent;
 
   public abstract void run() throws Exception;
 
@@ -44,5 +46,10 @@ public abstract class ProgressIndicatingTask
     for (ProgressListener listener : listeners) {
       listener.progressStep(percent);
     }
+  }
+
+  public void setParentComponent(Component c)
+  {
+    this.parentComponent = c;
   }
 }
