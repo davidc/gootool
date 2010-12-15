@@ -12,6 +12,10 @@ import com.goofans.gootool.GooTool;
 import com.goofans.gootool.util.ProgressListener;
 
 /**
+ * Shows a dialog with a progress bar that can be updated to show the step name and (optionally)
+ * the step progress percentage. If no percentage is specified, the dialog is given an indeterminate
+ * progress bar.
+ *
  * @author David Croft (davidc@goofans.com)
  * @version $Id$
  */
@@ -57,7 +61,7 @@ public class ProgressDialog extends JDialog implements ProgressListener
 
     iconLabel.setIcon(GooTool.getMainIcon());
 
-    pack();
+    setSize(300, 100);
     setLocationRelativeTo(owner);
   }
 
@@ -70,7 +74,6 @@ public class ProgressDialog extends JDialog implements ProgressListener
         task.setText(taskDescription);
         progressBar.setIndeterminate(!progressAvailable);
         progressBar.setValue(0);
-        pack();
       }
     });
   }
