@@ -3,10 +3,7 @@
  * is permitted only in accordance with the GooTool license agreement distributed with this file.
  */
 
-package com.goofans.gootool.iphone;
-
-import net.infotrek.util.BigEndianBinaryBuffer;
-import net.infotrek.util.BinaryBuffer;
+package net.infotrek.util;
 
 import java.io.File;
 import java.io.IOException;
