@@ -5,20 +5,25 @@
 
 package com.goofans.gootool.platform;
 
+import javax.swing.*;
+import java.awt.*;
+import java.io.File;
+import java.io.IOException;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import com.apple.eawt.Application;
 import com.apple.eawt.ApplicationEvent;
 import com.apple.eawt.ApplicationListener;
-import com.goofans.gootool.Controller;
 import com.goofans.gootool.GooTool;
+import com.goofans.gootool.MainController;
+import com.goofans.gootool.util.FileNameExtensionFilter;
 import com.goofans.gootool.util.Utilities;
-
-import java.io.File;
-import java.util.logging.Logger;
-import java.util.List;
 
 /**
  * Support routines for Mac OS X
- *
+ * <p/>
  * See http://developer.apple.com/documentation/Java/Reference/1.5.0/appledoc/api/index.html for the ApplicationListener API.
  *
  * @author David Croft (davidc@goofans.com)
@@ -36,7 +41,16 @@ public class MacOSXSupport extends PlatformSupport implements ApplicationListene
   @SuppressWarnings({"HardcodedFileSeparator"})
   private static final String TOOL_STORAGE_DIRECTORY = "%HOME%/Library/Application Support/GooTool/";
 
-  private Controller controller;
+  private MainController mainController;
+
+  @SuppressWarnings({"HardcodedFileSeparator"})
+  public static final String[] SOURCE_SEARCH_PATHS = {
+          "/Applications/World of Goo.app",
+  };
+
+  @SuppressWarnings({"HardcodedFileSeparator"})
+  public static final String[] EXE_FILENAMES = {"Contents/MacOS/World of Goo",
+          "Contents/MacOS/BigMacWrapper", "Contents/MacOS/BigMacWrapper_ppc", "Contents/MacOS/BigMacWrapper_x86"};
 
   MacOSXSupport()
   {
@@ -51,9 +65,9 @@ public class MacOSXSupport extends PlatformSupport implements ApplicationListene
   }
 
   @Override
-  protected void doStartup(Controller controller)
+  protected void doStartup(MainController mainController)
   {
-    this.controller = controller;
+    this.mainController = mainController;
 
     Application app = new Application();
     app.addAboutMenuItem();
@@ -64,7 +78,7 @@ public class MacOSXSupport extends PlatformSupport implements ApplicationListene
   public void handleAbout(ApplicationEvent event)
   {
     log.fine("Mac: handleAbout");
-    controller.openAboutDialog();
+    mainController.openAboutDialog();
     event.setHandled(true);
   }
 
@@ -84,7 +98,7 @@ public class MacOSXSupport extends PlatformSupport implements ApplicationListene
     {
       public void run()
       {
-        controller.installAddin(addinFile);
+        mainController.installAddin(addinFile);
       }
     });
     event.setHandled(true);
@@ -101,7 +115,7 @@ public class MacOSXSupport extends PlatformSupport implements ApplicationListene
   public void handleQuit(ApplicationEvent event)
   {
     log.fine("Mac: handleQuit");
-    controller.maybeExit();
+    mainController.maybeExit();
 //    event.setHandled(true);  this causes us to always quit even if they cancel
   }
 
@@ -115,5 +129,75 @@ public class MacOSXSupport extends PlatformSupport implements ApplicationListene
   public File doGetToolStorageDirectory()
   {
     return new File(Utilities.expandEnvVars(TOOL_STORAGE_DIRECTORY));
+  }
+
+
+  @Override
+  protected File doChooseLocalTargetDir(Component mainFrame, File defaultFile)
+  {
+    JFileChooser chooser = new JFileChooser();
+
+    chooser.setDialogTitle("Choose where to save your World of Goo");
+    chooser.setFileFilter(new FileNameExtensionFilter("Application", "app"));
+
+    if (defaultFile != null)
+      chooser.setSelectedFile(defaultFile);
+    else
+      chooser.setSelectedFile(new File(System.getProperty("user.home") + "/Desktop", "My Custom World of Goo"));
+
+    if (chooser.showSaveDialog(mainFrame) != JFileChooser.APPROVE_OPTION) {
+      return null;
+    }
+
+    File selectedFile = chooser.getSelectedFile();
+
+    if (!selectedFile.getName().endsWith(".app")) {
+      selectedFile = new File(selectedFile.getAbsoluteFile() + ".app");
+    }
+
+    return selectedFile;
+  }
+
+  /**
+   * Attempts to locate WoG in various default locations.
+   */
+  @Override
+  protected File doDetectWorldOfGooSource()
+  {
+    for (String searchPath : SOURCE_SEARCH_PATHS) {
+      String newSearchPath = Utilities.expandEnvVars(searchPath);
+
+      if (newSearchPath != null) {
+        File dir = new File(newSearchPath);
+        if (isWorldOfGooInDir(dir)) {
+          log.info("Found World of Goo through default search of \"" + searchPath + "\" at: " + dir);
+          return dir;
+        }
+      }
+    }
+
+    return null;
+  }
+
+  private boolean isWorldOfGooInDir(File dir)
+  {
+    log.finest("looking for World of Goo at " + dir);
+
+    for (String exeFilename : EXE_FILENAMES) {
+      if (new File(dir, exeFilename).exists()) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  @Override
+  protected void doLaunch(File targetDir) throws IOException
+  {
+    log.log(Level.FINE, "Launching application at " + targetDir); //NON-NLS
+
+    ProcessBuilder pb = new ProcessBuilder("open", targetDir.getAbsolutePath()); //NON-NLS
+    pb.directory(targetDir);
+    pb.start();
   }
 }

@@ -243,7 +243,7 @@
         </inspection_tool>
         <inspection_tool class="StringBufferReplaceableByStringBuilder" enabled="true" level="WARNING" enabled_by_default="true" />
         <inspection_tool class="StringBufferToStringInConcatenation" enabled="true" level="WARNING" enabled_by_default="true" />
-        <inspection_tool class="StringConcatenation" enabled="true" level="WARNING" enabled_by_default="true">
+        <inspection_tool class="StringConcatenation" enabled="false" level="WARNING" enabled_by_default="false">
           <option name="ignoreAsserts" value="false" />
           <option name="ignoreSystemOuts" value="true" />
           <option name="ignoreSystemErrs" value="true" />
@@ -437,8 +437,28 @@
   <component name="ProjectDictionaryState">
     <dictionary name="david">
       <words>
+        <w>addin</w>
+        <w>addins</w>
+        <w>addr</w>
+        <w>args</w>
+        <w>codec</w>
+        <w>dest</w>
+        <w>dropdown</w>
+        <w>goofans</w>
+        <w>goomod</w>
+        <w>gootool</w>
         <w>gootoolcmd</w>
+        <w>loopback</w>
+        <w>mkdir</w>
         <w>online</w>
+        <w>popup</w>
+        <w>prefs</w>
+        <w>readme</w>
+        <w>tooltip</w>
+        <w>uninstalled</w>
+        <w>uninstalling</w>
+        <w>username</w>
+        <w>widescreen</w>
       </words>
     </dictionary>
   </component>

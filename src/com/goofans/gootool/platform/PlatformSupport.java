@@ -7,17 +7,22 @@ package com.goofans.gootool.platform;
 
 import net.infotrek.util.prefs.FilePreferencesFactory;
 
-import com.goofans.gootool.Controller;
-import com.goofans.gootool.util.Utilities;
-
+import java.awt.*;
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.prefs.Preferences;
-import java.util.List;
+
+import com.goofans.gootool.MainController;
+import com.goofans.gootool.profile.ProfileData;
+import com.goofans.gootool.projects.LocalProject;
+import com.goofans.gootool.util.Utilities;
 
 /**
- * Platform support abstraction class. Automatically detects the current platform unless overridden with -Dgootool.platform.
+ * Platform support abstraction class. This handles features of the HOST platform, i.e. the platform GooTool is running on.
+ * Automatically detects the current platform unless overridden with -Dgootool.platform.
  * <p/>
  * Also handles setting up an alternative preferences store if -preferences &lt;file&gt; is set on command line.
  *
@@ -27,6 +32,8 @@ import java.util.List;
 public abstract class PlatformSupport
 {
   private static final Logger log = Logger.getLogger(PlatformSupport.class.getName());
+
+  private static final String PROFILE_DAT_FILENAME = "pers2.dat";
 
   public enum Platform
   {
@@ -90,6 +97,8 @@ public abstract class PlatformSupport
       case LINUX:
         support = new LinuxSupport();
         break;
+      default:
+        support = null;
     }
 
     log.fine("Platform detected: " + platform);
@@ -138,12 +147,12 @@ public abstract class PlatformSupport
 
   protected abstract boolean doPreStartup(List<String> args);
 
-  public static void startup(Controller controller)
+  public static void startup(MainController mainController)
   {
-    support.doStartup(controller);
+    support.doStartup(mainController);
   }
 
-  protected abstract void doStartup(Controller controller);
+  protected abstract void doStartup(MainController mainController);
 
   public static String[] getProfileSearchPaths()
   {
@@ -160,4 +169,47 @@ public abstract class PlatformSupport
   }
 
   protected abstract File doGetToolStorageDirectory() throws IOException;
+
+  public static File chooseLocalTargetDir(Component mainFrame, File defaultFile)
+  {
+    return support.doChooseLocalTargetDir(mainFrame, defaultFile);
+  }
+
+  protected abstract File doChooseLocalTargetDir(Component mainFrame, File defaultFile);
+
+  public static File detectWorldOfGooSource()
+  {
+    return support.doDetectWorldOfGooSource();
+  }
+
+  protected abstract File doDetectWorldOfGooSource();
+
+  public static File detectProfileFile()
+  {
+    for (String searchPath : getProfileSearchPaths()) {
+      String expandedPath = Utilities.expandEnvVars(searchPath);
+
+      if (expandedPath != null) {
+        File file = new File(expandedPath, PROFILE_DAT_FILENAME);
+        log.finest("Looking for profile at " + file);
+        if (ProfileData.isValidProfile(file)) {
+          log.info("Found profile through default search of \"" + searchPath + "\" at: " + file);
+          return file;
+        }
+      }
+    }
+    log.log(Level.INFO, "Couldn't find the user's profile in any default location");
+
+    return null;
+  }
+
+  public static void launch(LocalProject project) throws IOException
+  {
+    File targetDir = new File(project.getTargetDir());
+    if (!targetDir.isDirectory()) throw new IOException("Target directory " + targetDir + " isn't a directory");
+
+    support.doLaunch(targetDir);
+  }
+
+  protected abstract void doLaunch(File targetDir) throws IOException;
 }

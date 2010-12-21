@@ -35,7 +35,7 @@ public class ProfileData
   private final Map<String, String> data = new LinkedHashMap<String, String>();
   private final Profile[] profiles = new Profile[MAX_PROFILES];
 
-  public ProfileData(File f) throws IOException
+  private ProfileData(File f) throws IOException
   {
     this(GameFormat.decodeProfileFile(f));
   }
@@ -209,5 +209,20 @@ public class ProfileData
 //    System.out.println(pd.getCurrentProfile().getTower());
 
 //    GameFormat.encodeBinFile(new File("pers2.dat"), pd.toData());
+  }
+
+  public static boolean isValidProfile(File file)
+  {
+    if (!file.exists()) return false;
+
+    // Attempt to read it in
+    try {
+      new ProfileData(file);
+      return true;
+    }
+    catch (IOException e) {
+      log.log(Level.WARNING, "Unable to read profile at " + file, e);
+      return false;
+    }
   }
 }

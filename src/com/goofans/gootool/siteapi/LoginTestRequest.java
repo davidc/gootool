@@ -29,8 +29,8 @@ public class LoginTestRequest extends APIRequestAuthenticated
   {
     Document doc = doRequest();
 
-    if (!"login-test-success".equalsIgnoreCase(doc.getDocumentElement().getTagName())) {
-      throw new APIException("Login test failed");
+    if (!"login-test-success".equalsIgnoreCase(doc.getDocumentElement().getTagName())) { //NON-NLS
+      throw new APIException("Login test failed"); //NON-NLS
     }
   }
 

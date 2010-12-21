@@ -123,7 +123,7 @@ public class GUIUtil
    */
   public static void runTask(JFrame owner, String windowTitle, final ProgressIndicatingTask task) throws Exception
   {
-    final ProgressDialog progressDialog = new ProgressDialog(owner, windowTitle);
+    ProgressDialog progressDialog = new ProgressDialog(owner, windowTitle);
 
     if (owner == null) {
       ((Frame) progressDialog.getOwner()).setIconImage(GooTool.getMainIconImage());
@@ -144,7 +144,7 @@ public class GUIUtil
    */
   public static void runTask(JDialog owner, String windowTitle, final ProgressIndicatingTask task) throws Exception
   {
-    final ProgressDialog progressDialog = new ProgressDialog(owner, windowTitle);
+    ProgressDialog progressDialog = new ProgressDialog(owner, windowTitle);
 
     if (owner == null) {
       ((Frame) progressDialog.getOwner()).setIconImage(GooTool.getMainIconImage());
@@ -176,7 +176,7 @@ public class GUIUtil
           result[0] = success;
         }
         catch (Exception e) {
-          log.log(Level.SEVERE, "runTask " + task.getClass().getName() + " threw exception", e);
+          log.log(Level.SEVERE, "runTask " + task.getClass().getName() + " threw exception", e); //NON-NLS
           result[0] = e;
         }
         finally {
@@ -189,6 +189,12 @@ public class GUIUtil
           });
         }
       }
+
+      @Override
+      public String toString()
+      {
+        return "GUIUtil task " + task;
+      }
     });
 
     progressDialog.setVisible(true); // blocks until dialog is closed by our thread.
@@ -199,7 +205,7 @@ public class GUIUtil
       throw (Exception) result[0];
     }
     else if (result[0] != success) {
-      log.log(Level.SEVERE, "Task " + task + " failed to execute");
+      log.log(Level.SEVERE, "Task " + task + " failed to execute"); //NON-NLS
       throw new Exception("The task failed to complete due to a fatal error - check the log.");
     }
   }

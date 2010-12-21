@@ -6,21 +6,21 @@
 package com.goofans.gootoolsp.leveledit.resource;
 
 import java.awt.*;
-import java.awt.geom.Rectangle2D;
 import java.awt.geom.Ellipse2D;
+import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.StringTokenizer;
 
+import com.goofans.gootool.facades.TargetFile;
 import com.goofans.gootool.io.GameFormat;
-import com.goofans.gootoolsp.leveledit.model.Resources;
+import com.goofans.gootool.projects.ProjectManager;
 import com.goofans.gootool.util.DebugUtil;
 import com.goofans.gootool.util.XMLUtil;
-import com.goofans.gootool.wog.WorldOfGoo;
+import com.goofans.gootoolsp.leveledit.model.Resources;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 
@@ -38,15 +38,15 @@ public class Ball
   public Ball(String ballName) throws IOException
   {
     this.ballName = ballName;
-    File ballDir = WorldOfGoo.getTheInstance().getCustomGameFile("res/balls/" + ballName);
+    TargetFile ballDir = ProjectManager.simpleInit().getTarget().getRoot().getChild("res/balls/" + ballName);
     if (!ballDir.isDirectory()) {
       throw new IOException("Ball dir " + ballDir + " doesn't exist");
     }
 
-    Document resDoc = GameFormat.decodeXmlBinFile(new File(ballDir, "resources.xml.bin"));
+    Document resDoc = GameFormat.decodeXmlBinFile(ballDir.getChild("resources.xml.bin"));
     Resources resources = new Resources(resDoc);
 
-    Document ballDoc = GameFormat.decodeXmlBinFile(new File(ballDir, "balls.xml.bin"));
+    Document ballDoc = GameFormat.decodeXmlBinFile(ballDir.getChild("balls.xml.bin"));
 
     if (!ballName.equals(XMLUtil.getAttributeStringRequired(ballDoc.getDocumentElement(), "name"))) {
       throw new IOException("Ball name in xml doc doesn't equal ball dir");
@@ -211,7 +211,6 @@ public class Ball
   @SuppressWarnings({"HardCodedStringLiteral", "DuplicateStringLiteralInspection", "MagicNumber"})
   public static void main(String[] args) throws IOException
   {
-    WorldOfGoo.getTheInstance().init();
 
 //    DebugUtil.showImageWindow(new Ball("common").getImageInState("standing", new Dimension(20, 20)));
 //    DebugUtil.showImageWindow(new Ball("common").getImageInState("attached", new Dimension(20, 20)));

@@ -29,6 +29,7 @@ public class AddinsStore
   public static final String GOOMOD_EXTENSION_WITH_DOT = "." + GOOMOD_EXTENSION;
 
   public static List<Addin> availableAddins = new LinkedList<Addin>();
+  private static File addinsDir = null;
 
   private AddinsStore()
   {
@@ -40,11 +41,16 @@ public class AddinsStore
    * @return The addin directory.
    * @throws IOException if the addin directory couldn't be determined or created.
    */
-  public static File getAddinsDir() throws IOException
+  public static File getAddinsDir()
   {
-    File addinsDir = new File(PlatformSupport.getToolStorageDirectory(), STORAGE_DIR_ADDINS);
-    Utilities.mkdirsOrException(addinsDir);
+    if (addinsDir == null) throw new RuntimeException("Addins directory requested before initialisation"); //NON-NLS
     return addinsDir;
+  }
+
+  public static synchronized void initAddinsDir() throws IOException
+  {
+    addinsDir = new File(PlatformSupport.getToolStorageDirectory(), STORAGE_DIR_ADDINS);
+    Utilities.mkdirsOrException(addinsDir);
   }
 
   /**
@@ -61,29 +67,75 @@ public class AddinsStore
   {
     availableAddins = new LinkedList<Addin>();
 
-    File addinsDir;
-    try {
-      addinsDir = getAddinsDir();
-    }
-    catch (IOException e) {
-      log.log(Level.SEVERE, "No addinsDir", e);
-      throw new RuntimeException(e);
-    }
-
     File[] files = addinsDir.listFiles();
 
     for (File file : files) {
       if (file.isFile() && file.getName().endsWith(GOOMOD_EXTENSION_WITH_DOT)) {
         try {
-          availableAddins.add(AddinFactory.loadAddin(file));
+          updateAddAddin(file);
         }
         catch (AddinFormatException e) {
-          log.log(Level.WARNING, "Ignoring invalid addin " + file + " in addins dir", e);
+          log.log(Level.WARNING, "Ignoring invalid addin " + file + " in addins dir", e); //NON-NLS
         }
         catch (IOException e) {
-          log.log(Level.WARNING, "Ignoring unreadable addin " + file + " in addins dir", e);
+          log.log(Level.WARNING, "Ignoring unreadable addin " + file + " in addins dir", e); //NON-NLS
         }
       }
     }
+  }
+
+  private static void updateAddAddin(File file) throws AddinFormatException, IOException
+  {
+    availableAddins.add(AddinFactory.loadAddin(file));
+  }
+
+  public static File getAddinInstalledFile(String addinId) throws IOException
+  {
+    return new File(getAddinsDir(), addinId + GOOMOD_EXTENSION_WITH_DOT);
+  }
+
+  public static void installAddin(File addinFile, String addinId) throws IOException, AddinFormatException
+  {
+    // Check we don't already have an addin with this ID
+    for (Addin availableAddin : availableAddins) {
+      if (availableAddin.getId().equals(addinId)) {
+        throw new IOException("An addin with id " + addinId + " already exists!");
+      }
+    }
+
+    File destFile = getAddinInstalledFile(addinId);
+
+    log.log(Level.INFO, "Installing addin " + addinId + " from " + addinFile + " to " + destFile);
+
+    Utilities.copyFile(addinFile, destFile);
+
+    availableAddins.add(AddinFactory.loadAddin(destFile));
+  }
+
+  public static void uninstallAddin(Addin addin) throws IOException
+  {
+    File addinFile = addin.getDiskFile();
+    log.log(Level.INFO, "Uninstalling addin, deleting " + addinFile);
+
+    if (!addinFile.delete()) {
+      throw new IOException("Couldn't delete " + addinFile);
+    }
+
+    for (Addin availableAddin : availableAddins) {
+      if (availableAddin.getId().equals(addin.getId())) {
+        availableAddins.remove(availableAddin);
+        break;
+      }
+    }
+  }
+
+  public static Addin getAddinById(String id)
+  {
+    for (Addin addin : availableAddins) {
+      if (addin.getId().equals(id)) {
+        return addin;
+      }
+    }
+    return null;
   }
 }

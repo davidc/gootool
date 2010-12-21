@@ -6,10 +6,11 @@
 package com.goofans.gootool.profile;
 
 import java.io.IOException;
-import java.util.Random;
 import java.security.SecureRandom;
+import java.util.Random;
 
-import com.goofans.gootool.io.GameFormat;
+import com.goofans.gootool.projects.Project;
+import com.goofans.gootool.projects.ProjectManager;
 
 /**
  * Updates the user's profile file to add online IDs to each profile that is missing one.
@@ -29,9 +30,9 @@ public class GenerateOnlineIds
   {
   }
 
-  public static void generateOnlineIds() throws IOException
+  public static void generateOnlineIds(Project project) throws IOException
   {
-    ProfileData profileData = ProfileFactory.getProfileData();
+    ProfileData profileData = project.getProfileData();
 
     for (Profile profile : profileData.getProfiles()) {
       if (profile != null && profile.getOnlineId() == null) {
@@ -39,7 +40,7 @@ public class GenerateOnlineIds
       }
     }
 
-    GameFormat.encodeProfileFile(ProfileFactory.getProfileFile(), profileData.toData());
+    project.setProfileBytes(profileData.toData());
   }
 
   @SuppressWarnings({"MagicNumber"})
@@ -62,9 +63,9 @@ public class GenerateOnlineIds
     return new String(chars);
   }
 
-  public static void removeGeneratedOnlineIds() throws IOException
+  public static void removeGeneratedOnlineIds(Project project) throws IOException
   {
-    ProfileData profileData = ProfileFactory.getProfileData();
+    ProfileData profileData = project.getProfileData();
 
     for (Profile profile : profileData.getProfiles()) {
       if (profile != null) {
@@ -74,7 +75,7 @@ public class GenerateOnlineIds
       }
     }
 
-    GameFormat.encodeProfileFile(ProfileFactory.getProfileFile(), profileData.toData());
+    project.setProfileBytes(profileData.toData());
   }
 
   public static boolean isGeneratedId(String onlineId)
@@ -91,11 +92,11 @@ public class GenerateOnlineIds
     System.out.println(generateId());
     System.out.println(generateId());
     System.out.println(generateId());
-    ProfileFactory.init();
-    generateOnlineIds();
-    ProfileFactory.init();
-    removeGeneratedOnlineIds();
-    ProfileFactory.init();
-    generateOnlineIds();
+
+    Project project = ProjectManager.simpleInit();
+
+    generateOnlineIds(project);
+    removeGeneratedOnlineIds(project);
+    generateOnlineIds(project);
   }
 }

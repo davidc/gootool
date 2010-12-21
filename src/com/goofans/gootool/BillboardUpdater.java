@@ -16,14 +16,18 @@ import java.util.logging.Logger;
 import com.goofans.gootool.addins.Addin;
 import com.goofans.gootool.addins.AddinFactory;
 import com.goofans.gootool.addins.AddinFormatException;
+import com.goofans.gootool.platform.PlatformSupport;
+import com.goofans.gootool.projects.Project;
+import com.goofans.gootool.projects.ProjectConfiguration;
+import com.goofans.gootool.projects.ProjectManager;
 import com.goofans.gootool.siteapi.APIException;
 import com.goofans.gootool.siteapi.AddinUpdatesCheckRequest;
 import com.goofans.gootool.util.DebugUtil;
 import com.goofans.gootool.util.Utilities;
-import com.goofans.gootool.wog.WorldOfGoo;
 
 /**
  * Checks the billboards goomod file and updates it if a later version is available.
+ * TODO this should use the tool storage directory, not the custom directory!
  *
  * @author David Croft (davidc@goofans.com)
  * @version $Id$
@@ -51,12 +55,12 @@ public class BillboardUpdater implements Runnable
         update = updates.get(BILLBOARDS_ADDIN_ID);
       }
       catch (APIException e) {
-        log.log(Level.SEVERE, "Error in addin update check request", e);
+        log.log(Level.SEVERE, "Error in addin update check request", e); //NON-NLS
         return;
       }
 
       if (update == null) {
-        log.log(Level.WARNING, "Billboard addin update not found!");
+        log.log(Level.WARNING, "Billboard addin update not found!"); //NON-NLS
         return;
       }
 
@@ -64,10 +68,10 @@ public class BillboardUpdater implements Runnable
 
       File billboardModFile;
       try {
-        billboardModFile = WorldOfGoo.getTheInstance().getCustomGameFile(BILLBOARDS_GOOMOD_FILENAME);
+        billboardModFile = new File(PlatformSupport.getToolStorageDirectory(), BILLBOARDS_GOOMOD_FILENAME);
       }
       catch (IOException e) {
-        log.log(Level.SEVERE, "Unable to locate billboards.goomod file");
+        log.log(Level.SEVERE, "Unable to locate billboards.goomod file in run"); //NON-NLS
         return;
       }
 
@@ -77,74 +81,87 @@ public class BillboardUpdater implements Runnable
           Addin billboardAddin = AddinFactory.loadAddin(billboardModFile);
 
           if (billboardAddin.getVersion().compareTo(update.version) >= 0) {
-            log.log(Level.INFO, "Billboard addin already up to date (" + billboardAddin.getVersion() + ")");
+            log.log(Level.INFO, "Billboard addin already up to date (" + billboardAddin.getVersion() + ")"); //NON-NLS
             return;
           }
-          log.fine("Downloading billboards because our version " + billboardAddin.getVersion() + " is lower than " + update.version);
+          log.fine("Downloading billboards because our version " + billboardAddin.getVersion() + " is lower than " + update.version); //NON-NLS
         }
         else {
-          log.fine("Downloading billboards because we have no copy");
+          log.fine("Downloading billboards because we have no copy"); //NON-NLS
         }
       }
       catch (IOException e) {
-        log.log(Level.SEVERE, "Unable to read billboards.goomod file");
+        log.log(Level.SEVERE, "Unable to read billboards.goomod file"); //NON-NLS
         return;
       }
       catch (AddinFormatException e) {
-        log.log(Level.WARNING, "billboards.goomod is in invalid format, forcing re-download");
+        log.log(Level.WARNING, "billboards.goomod is in invalid format, forcing re-download"); //NON-NLS
       }
 
-      log.log(Level.INFO, "Billboards update is available, downloading " + update.downloadUrl);
+      log.log(Level.INFO, "Billboards update is available, downloading " + update.downloadUrl); //NON-NLS
 
       try {
         Utilities.downloadFile(new URL(update.downloadUrl), billboardModFile);
       }
       catch (IOException e) {
-        log.log(Level.SEVERE, "Unable to download billboard goomod", e);
+        log.log(Level.SEVERE, "Unable to download billboard goomod", e); //NON-NLS
       }
 
-      log.log(Level.INFO, "Billboards version " + update.version + " downloaded to " + billboardModFile);
+      log.log(Level.INFO, "Billboards version " + update.version + " downloaded to " + billboardModFile); //NON-NLS
     }
   }
 
   public static synchronized void maybeUpdateBillboards()
   {
-    if (ToolPreferences.isBillboardDisable())
-      return;
+    // If all projects have their billboards disabled, don't download.
+    boolean billboardsEnabled = false;
+    for (Project project : ProjectManager.getProjects()) {
+      if (project != null) {
+        ProjectConfiguration c = project.getConfiguration();
+        if (!c.isBillboardsDisabled()) {
+          billboardsEnabled = true;
+          break;
+        }
+      }
+    }
 
-    final WorldOfGoo wog = WorldOfGoo.getTheInstance();
-    if (!wog.isCustomDirSet()) {
-      log.log(Level.WARNING, "Aborting update check as no custom dir set yet");
+    if (!billboardsEnabled) {
+      log.log(Level.FINE, "Not updating billboards as no projects have billboards enabled"); //NON-NLS
       return;
     }
 
     long nextCheck = ToolPreferences.getBillboardLastCheck() + UPDATE_INTERVAL;
     long now = System.currentTimeMillis();
 
-    log.finer("maybe update billboards. nextCheck = " + nextCheck + ", current time = " + now);
+    log.finer("maybe update billboards. nextCheck = " + nextCheck + ", current time = " + now); //NON-NLS
 
-    File billboardModFile;
+    File billboardModFile = null;
     try {
-      billboardModFile = WorldOfGoo.getTheInstance().getCustomGameFile(BILLBOARDS_GOOMOD_FILENAME);
+      billboardModFile = new File(PlatformSupport.getToolStorageDirectory(), BILLBOARDS_GOOMOD_FILENAME);
     }
     catch (IOException e) {
-      // won't happen due to isCustomDirSet check above
+      log.log(Level.SEVERE, "Unable to locate billboards.goomod file for maybeUpdateBillboards"); //NON-NLS
       return;
     }
 
     if (now < nextCheck && billboardModFile.exists())
       return;
 
-    log.log(Level.INFO, "Billboard update check is due");
+    log.log(Level.INFO, "Billboard update check is due"); //NON-NLS
 
     GooTool.executeTaskInThreadPool(new BillboardUpdater());
+  }
+
+  @Override
+  public String toString()
+  {
+    return "BillboardUpdater";
   }
 
   public static void main(String[] args)
   {
     DebugUtil.setAllLogging();
     GooTool.initExecutors();
-    WorldOfGoo.getTheInstance().init();
 
     BillboardUpdater.maybeUpdateBillboards();
   }

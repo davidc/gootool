@@ -21,8 +21,9 @@ import com.goofans.gootool.addins.Addin;
 import com.goofans.gootool.addins.AddinFactory;
 import com.goofans.gootool.addins.AddinFormatException;
 import com.goofans.gootool.profile.*;
+import com.goofans.gootool.projects.Project;
+import com.goofans.gootool.projects.ProjectManager;
 import com.goofans.gootool.util.Version;
-import com.goofans.gootool.wog.WorldOfGoo;
 
 /**
  * Command-line interface to some GooTool functions.
@@ -40,7 +41,7 @@ public class GooInfo
   private static DrawType drawType = DrawType.FULL;
   private static ArrayList<String> arglist = null;
   private static int currentArg = 0;
-  private static WorldOfGoo worldOfGoo = null;
+  private static Project project = null;
 
   private enum DrawType
   {
@@ -59,11 +60,7 @@ public class GooInfo
       arglist = new ArrayList<String>(Arrays.asList(args));
       log.info("gooinfo: " + arglist);
 
-      ProfileFactory.init();
-      if (!ProfileFactory.isProfileFound()) {
-        System.err.println("Cannot locate profile file automatically. Run GooTool manually once to detect it.");
-        System.exit(1);
-      }
+      project = ProjectManager.simpleInit();
 
       profileData = null;
       selectedProfile = null;
@@ -116,6 +113,7 @@ public class GooInfo
 
   private static void dieSyntax()
   {
+    // TODO Note that this defaults to current project.
     System.err.println("Syntax: gooinfo [<switches>] <command> [[<switches>] <command> ...]");
     System.err.println("Switches:");
     System.err.println(" -profile <0-2>        Selects the profile for subsequent commands");
@@ -136,20 +134,11 @@ public class GooInfo
 
   private static synchronized void initProfileData() throws IOException
   {
-    if (profileData == null)
-      profileData = ProfileFactory.getProfileData();
-  }
+    if (profileData != null) return;
 
-  private static synchronized void initWorldOfGoo()
-  {
-    if (worldOfGoo == null) {
-      worldOfGoo = WorldOfGoo.getTheInstance();
-      worldOfGoo.init();
-
-      if (!worldOfGoo.isWogFound()) {
-        System.err.println("World of Goo couldn't be located. Run GooTool first and save.");
-        System.exit(1);
-      }
+    if ((profileData = project.getProfileData()) == null) {
+      System.err.println("Cannot locate profile file automatically. Run GooTool manually once to detect it.");
+      System.exit(1);
     }
   }
 
@@ -269,11 +258,11 @@ public class GooInfo
 
     /* Initialise WoG */
 
-    initWorldOfGoo();
+//    initWorldOfGoo(); // TODO need to get the current project so we have the source images?
 
     /* Render the image */
 
-    TowerRenderer tr = new TowerRenderer(selectedProfile.getTower());
+    TowerRenderer tr = new TowerRenderer(project, selectedProfile.getTower());
     tr.render();
 
     BufferedImage image = null;

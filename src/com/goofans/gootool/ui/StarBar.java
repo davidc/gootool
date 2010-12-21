@@ -35,6 +35,7 @@ public class StarBar extends JPanel implements MouseListener
   private final JLabel[] stars;
   private int rating = 0;
   private int overStar = 0;
+  public static final String RATING_PROPERTY = "rating";
 
   public StarBar()
   {
@@ -157,7 +158,7 @@ public class StarBar extends JPanel implements MouseListener
   {
     int oldRating = this.rating;
     setRatingQuietly(newRating);
-    firePropertyChange("rating", oldRating, newRating);
+    firePropertyChange(RATING_PROPERTY, oldRating, newRating);
   }
 
   public void setRatingQuietly(int newRating)
@@ -245,7 +246,7 @@ public class StarBar extends JPanel implements MouseListener
     final StarBar bar = new StarBar(0);
 //    bar.setEnabled(false);
 
-    bar.addPropertyChangeListener("rating", new PropertyChangeListener()
+    bar.addPropertyChangeListener(RATING_PROPERTY, new PropertyChangeListener()
     {
       public void propertyChange(PropertyChangeEvent evt)
       {

@@ -10,9 +10,11 @@ import javax.swing.*;
 import java.awt.image.BufferedImage;
 import java.awt.image.RenderedImage;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 
-import com.goofans.gootool.io.AESBinFormat;
+import com.goofans.gootool.io.Codec;
+import com.goofans.gootool.io.GameFormat;
 import com.goofans.gootool.io.MacBinFormat;
 import com.goofans.gootool.io.MacGraphicFormat;
 import com.goofans.gootool.movie.BinImageAnimation;
@@ -204,20 +206,20 @@ public class GameFileCodecTool
 
     switch (codecType) {
       case AES_DECODE:
-        bytes = AESBinFormat.decodeFile(inputFile);
+        bytes = GameFormat.AES_BIN_CODEC.decodeFile(inputFile);
         Utilities.writeFile(outputFile, bytes);
         break;
       case AES_ENCODE:
         bytes = Utilities.readFile(inputFile);
-        AESBinFormat.encodeFile(outputFile, bytes);
+        GameFormat.AES_BIN_CODEC.encodeFile(outputFile, bytes);
         break;
       case XOR_DECODE:
-        bytes = MacBinFormat.decodeFile(inputFile);
+        bytes = GameFormat.MAC_BIN_CODEC.decodeFile(inputFile);
         Utilities.writeFile(outputFile, bytes);
         break;
       case XOR_ENCODE:
         bytes = Utilities.readFile(inputFile);
-        MacBinFormat.encodeFile(outputFile, bytes);
+        GameFormat.MAC_BIN_CODEC.encodeFile(outputFile, bytes);
         break;
       case PNGBINLTL_DECODE:
         RenderedImage decImage = MacGraphicFormat.decodeImage(inputFile);
@@ -232,7 +234,7 @@ public class GameFileCodecTool
         Utilities.writeFile(outputFile, anim.toXMLDocument().getBytes());
         break;
       case MOVIE_DECODE:
-        BinMovie movie = new BinMovie(inputFile);
+        BinMovie movie = new BinMovie(Utilities.readFile(inputFile));
         Utilities.writeFile(outputFile, movie.toXMLDocument().getBytes());
         break;
     }

@@ -7,19 +7,21 @@ package com.goofans.gootool.movie;
 
 import net.infotrek.util.XMLStringBuffer;
 
-import java.io.*;
-import java.util.Map;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.ArrayList;
+import java.util.Map;
 
-import com.goofans.gootool.wog.WorldOfGoo;
+import com.goofans.gootool.facades.SourceFile;
+import com.goofans.gootool.projects.ProjectManager;
 import com.goofans.gootool.util.Utilities;
 import com.goofans.gootool.util.XMLUtil;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
-import org.w3c.dom.Node;
 
 /**
  * TODO check number of actors is sensible, and other validation on the file when loading.
@@ -39,22 +41,13 @@ public class BinMovie
 
   private BinImageAnimation soundAnim;
 
-  public BinMovie(File file) throws IOException
+  public BinMovie(SourceFile file) throws IOException
   {
-    byte[] contents;
+    this(Utilities.readStreamIntoBytes(file.read()));
+  }
 
-    FileInputStream is = new FileInputStream(file);
-    try {
-      int fileLength = (int) file.length();
-      contents = new byte[fileLength];
-      if (is.read(contents) != fileLength) {
-        throw new IOException("short read on movie " + file.getName());
-      }
-    }
-    finally {
-      is.close();
-    }
-
+  public BinMovie(byte[] contents)
+  {
     length = BinaryFormat.getFloat(contents, 0);
     int numActors = BinaryFormat.getInt(contents, 4);
     int actorsOffset = BinaryFormat.getInt(contents, 8);
@@ -110,10 +103,10 @@ public class BinMovie
 
     length = XMLUtil.getAttributeFloatRequired(movieEl, "length");
 
-        NodeList actorEls = movieEl.getElementsByTagName("actor");
+    NodeList actorEls = movieEl.getElementsByTagName("actor");
 
     List<BinActor> actorsList = new ArrayList<BinActor>(actorEls.getLength());
-    List<BinImageAnimation> animsList= new ArrayList<BinImageAnimation>(actorEls.getLength());
+    List<BinImageAnimation> animsList = new ArrayList<BinImageAnimation>(actorEls.getLength());
 
     for (int i = 0; i < actorEls.getLength(); ++i) {
       Element actorEl = (Element) actorEls.item(i);
@@ -183,21 +176,17 @@ public class BinMovie
   @SuppressWarnings({"UseOfSystemOutOrSystemErr", "HardcodedLineSeparator", "HardCodedStringLiteral", "HardcodedFileSeparator", "StringConcatenation"})
   public static void main(String[] args) throws IOException
   {
-    WorldOfGoo wog = WorldOfGoo.getTheInstance();
-    wog.init();
-
-    File f = wog.getGameFile("res\\movie");
-    for (File file : f.listFiles()) {
+    SourceFile f = ProjectManager.simpleInit().getSource().getRoot().getChild(("res\\movie"));
+    for (SourceFile file : f.list()) {
       String movie = file.getName();
       if (!"_generic".equals(movie)) {
         System.out.println("\n\n>>>>>>>> " + file.getName());
 
 //        Document doc = GameFormat.decodeXmlBinFile(wog.getGameFile("res\\movie\\" + movie + "\\" + movie + ".resrc.bin"));
 //        Resources r = new Resources(doc);
-        BinMovie m = new BinMovie(wog.getGameFile("res\\movie\\" + movie + "\\" + movie + ".movie.binltl"));//, r);
+        BinMovie m = new BinMovie(file.getChild(movie + ".movie.binltl"));//, r);
 //        System.out.println(m.toXMLDocument());
         Utilities.writeFile(new File("movie", movie + ".movie.xml"), m.toXMLDocument().getBytes());
-
       }
     }
 

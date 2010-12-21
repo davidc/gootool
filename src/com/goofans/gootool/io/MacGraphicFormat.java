@@ -29,8 +29,11 @@ public class MacGraphicFormat
 
   public static BufferedImage decodeImage(File file) throws IOException
   {
-    InputStream is = new FileInputStream(file);
+    return decodeImage(new FileInputStream(file));
+  }
 
+  public static BufferedImage decodeImage(InputStream is) throws IOException
+  {
     int width = readUnsignedShort(is);
     int height = readUnsignedShort(is);
 
@@ -82,6 +85,17 @@ public class MacGraphicFormat
 
   public static void encodeImage(File file, Image image) throws IOException
   {
+    OutputStream os = new FileOutputStream(file);
+    try {
+      encodeImage(os, image);
+    }
+    finally {
+      os.close();
+    }
+  }
+
+  public static void encodeImage(OutputStream os, Image image) throws IOException
+  {
     int width = image.getWidth(null);
     int height = image.getHeight(null);
 
@@ -123,8 +137,6 @@ public class MacGraphicFormat
     int compressedSize = compressedData.length;
 
     // Now write to the file
-
-    OutputStream os = new FileOutputStream(file);
 
     writeUnsignedShort(os, width);
     writeUnsignedShort(os, height);

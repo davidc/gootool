@@ -7,12 +7,14 @@ package com.goofans.gootool.siteapi;
 
 import net.infotrek.util.TextUtil;
 
+import javax.print.attribute.standard.PDLOverrideSupported;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.goofans.gootool.io.GameFormat;
-import com.goofans.gootool.profile.ProfileFactory;
+import com.goofans.gootool.projects.Project;
+import com.goofans.gootool.projects.ProjectManager;
 import com.goofans.gootool.util.DebugUtil;
 import org.w3c.dom.Document;
 
@@ -31,20 +33,21 @@ public class ProfileBackupRequest extends APIRequestAuthenticated
     super(API_PROFILE_BACKUP);
   }
 
-  public void backupProfile(String description) throws APIException
+  // TODO default description should include the project name
+  public void backupProfile(Project project, String description) throws APIException
   {
     log.log(Level.FINE, "Profile upload " + description);
 
-    if (!ProfileFactory.isProfileFound()) {
-      throw new APIException("Profile hasn't been located yet");
-    }
-
-    byte[] profile;
+    byte[] profile ;
     try {
-      profile = GameFormat.decodeProfileFile(ProfileFactory.getProfileFile());
+      profile = project.getProfileBytes();
     }
     catch (IOException e) {
-      throw new APIException("Profile decoding failed", e);
+      throw new APIException("Can't read profile", e);
+    }
+
+    if (profile == null) {
+      throw new APIException("Profile hasn't been located yet");
     }
 
     addPostParameter("profile", TextUtil.base64Encode(profile));
@@ -61,9 +64,9 @@ public class ProfileBackupRequest extends APIRequestAuthenticated
   public static void main(String[] args) throws APIException, IOException
   {
     DebugUtil.setAllLogging();
-    ProfileFactory.init();
 
-    new ProfileBackupRequest().backupProfile("test 213");
+    Project project = ProjectManager.simpleInit();
+    new ProfileBackupRequest().backupProfile(project, "test 213");
 
   }
 }

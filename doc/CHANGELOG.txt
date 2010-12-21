@@ -1,3 +1,6 @@
+
+test profile backup/publish/restore
+
 1.1.0, unreleased
 
 - Pull pers2.dat from iPad
@@ -5,6 +8,9 @@
 - Migrate projects from old configuation to project 0
 - allow_widescreen moved to ToolPreferences
 - use the gootool icon for startup windows
+- Image Localisation Tool moved to the Advanced menu.
+
+TODO test with no registry on startup!
 
 1.0.3, 15-October-2010
 

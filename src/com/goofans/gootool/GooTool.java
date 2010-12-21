@@ -15,14 +15,17 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.prefs.Preferences;
 
 import com.goofans.gootool.platform.PlatformSupport;
+import com.goofans.gootool.projects.Project;
+import com.goofans.gootool.projects.ProjectManager;
 import com.goofans.gootool.util.GUIUtil;
 import com.goofans.gootool.util.ProgressIndicatingTask;
 import com.goofans.gootool.util.Version;
 
 /**
- * Responsible for launching the application, creating the view and controller, and linking them together.
+ * Responsible for launching the application, creating the view and mainController, and linking them together.
  *
  * @author David Croft (davidc@goofans.com)
  * @version $Id$
@@ -33,7 +36,7 @@ public class GooTool
 
   private static ImageIcon icon;
   private static GooToolResourceBundle resourceBundle;
-  private static Controller controller;
+  private static MainController mainController;
 
   private static ExecutorService threadPoolExecutor;
   private static ScheduledExecutorService scheduledExecutor;
@@ -61,11 +64,11 @@ public class GooTool
       initTextProvider();
       initExecutors();
 
-      controller = new Controller();
+      mainController = new MainController();
 
-      PlatformSupport.startup(controller);
+      PlatformSupport.startup(mainController);
 
-      ProgressIndicatingTask startupTask = new StartupTask(controller);
+      ProgressIndicatingTask startupTask = new StartupTask(mainController);
 
       GUIUtil.runTask((JFrame) null, resourceBundle.formatString("launcher.title", Version.RELEASE_FRIENDLY), startupTask);
       // In preparation for new splash screen:
@@ -167,9 +170,9 @@ public class GooTool
     return resourceBundle;
   }
 
-  public static Controller getController()
+  public static MainController getController()
   {
-    return controller;
+    return mainController;
   }
 
   public static void executeTaskInThreadPool(Runnable task)
@@ -188,5 +191,10 @@ public class GooTool
   {
     log.log(Level.FINEST, "Scheduling task " + task + " with init delay " + initialDelayMsec + " and recurring delay " + delayMsec);
     scheduledExecutor.scheduleWithFixedDelay(task, initialDelayMsec, delayMsec, TimeUnit.MILLISECONDS);
+  }
+
+  public static Preferences getPreferences()
+  {
+    return Preferences.userNodeForPackage(GooTool.class);
   }
 }

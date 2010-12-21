@@ -11,7 +11,6 @@ import java.util.logging.Logger;
 import java.text.DateFormat;
 import java.text.ParseException;
 
-import com.goofans.gootool.profile.ProfileFactory;
 import com.goofans.gootool.util.DebugUtil;
 import com.goofans.gootool.util.XMLUtil;
 import org.w3c.dom.Document;
@@ -102,7 +101,6 @@ public class ProfileListRequest extends APIRequestAuthenticated
   public static void main(String[] args) throws APIException, IOException
   {
     DebugUtil.setAllLogging();
-    ProfileFactory.init();
 
     List<BackupInstance> backups = new ProfileListRequest().listBackups();
     for (BackupInstance backup : backups) {

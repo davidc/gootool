@@ -5,19 +5,20 @@
 
 package com.goofans.datamining;
 
-import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPath;
-import javax.xml.xpath.XPathFactory;
+import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathExpressionException;
-import java.io.IOException;
+import javax.xml.xpath.XPathFactory;
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 
-import com.goofans.gootool.wog.WorldOfGoo;
-import com.goofans.gootool.util.XMLUtil;
+import com.goofans.gootool.facades.SourceFile;
 import com.goofans.gootool.io.GameFormat;
+import com.goofans.gootool.projects.ProjectManager;
+import com.goofans.gootool.util.XMLUtil;
 import org.w3c.dom.Document;
-import org.w3c.dom.NodeList;
 import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
 
 /**
  * @author David Croft (davidc@goofans.com)
@@ -28,15 +29,18 @@ public class Levels
 {
   private static final XPath xpath = XPathFactory.newInstance().newXPath();
 
+  private Levels()
+  {
+  }
+
   public static void main(String[] args) throws IOException, XPathExpressionException
   {
-    WorldOfGoo worldOfGoo = WorldOfGoo.getTheInstance();
-    worldOfGoo.init();
+    SourceFile sourceDir = ProjectManager.simpleInit().getSource().getRoot();
 
-    Document textDoc = XMLUtil.loadDocumentFromInputStream(new ByteArrayInputStream(GameFormat.decodeBinFile(worldOfGoo.getGameFile("properties/text.xml.bin"))));
+    Document textDoc = XMLUtil.loadDocumentFromInputStream(new ByteArrayInputStream(GameFormat.decodeBinFile(sourceDir.getChild("properties/text.xml.bin"))));
 
     for (int island = 1; island <= 5; ++island) {
-      Document islandDoc = XMLUtil.loadDocumentFromInputStream(new ByteArrayInputStream(GameFormat.decodeBinFile(worldOfGoo.getGameFile("res/islands/island" + island + ".xml.bin"))));
+      Document islandDoc = XMLUtil.loadDocumentFromInputStream(new ByteArrayInputStream(GameFormat.decodeBinFile(sourceDir.getChild("res/islands/island" + island + ".xml.bin"))));
       NodeList levelList = islandDoc.getElementsByTagName("level");
       for (int i = 0; i < levelList.getLength(); i++) {
         Element levelNode = (Element) levelList.item(i);
