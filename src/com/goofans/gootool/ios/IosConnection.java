@@ -3,7 +3,7 @@
  * is permitted only in accordance with the GooTool license agreement distributed with this file.
  */
 
-package com.goofans.gootool.iphone;
+package com.goofans.gootool.ios;
 
 import net.infotrek.util.BinaryPlistParser;
 
