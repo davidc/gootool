@@ -20,16 +20,14 @@ import java.beans.PropertyChangeListener;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Map;
+import java.util.*;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.goofans.gootool.Controller;
-import com.goofans.gootool.GooTool;
-import com.goofans.gootool.ToolPreferences;
-import com.goofans.gootool.GooToolResourceBundle;
+import com.goofans.gootool.*;
 import com.goofans.gootool.addins.Addin;
-import com.goofans.gootool.model.Configuration;
+import com.goofans.gootool.model.ProjectModel;
 import com.goofans.gootool.siteapi.APIException;
 import com.goofans.gootool.siteapi.RatingSubmitRequest;
 import com.goofans.gootool.ui.HyperlinkLabel;
@@ -47,6 +45,8 @@ public class AddinsPanel implements ViewComponent, PropertyChangeListener
   public JTable addinTable;
   public JPanel rootPanel;
 
+  private ProjectController projectController;
+
   private JButton installButton;
   private JButton uninstallButton;
   private JButton enableButton;
@@ -58,9 +58,7 @@ public class AddinsPanel implements ViewComponent, PropertyChangeListener
   private HyperlinkLabel findMoreHyperlink;
   private StarBar ratingBar;
   private JButton updateCheckButton;
-  private final AddinsTableModel addinsModel;
-
-  private final Controller controller;
+  private AddinsTableModel addinsModel;
 
   private static final String[] COLUMN_NAMES;
   private static final Class[] COLUMN_CLASSES = new Class[]{String.class, String.class, String.class, String.class, Boolean.class};
@@ -78,9 +76,27 @@ public class AddinsPanel implements ViewComponent, PropertyChangeListener
   }
 
 
-  public AddinsPanel(Controller controller)
+  public AddinsPanel()
   {
-    this.controller = controller;
+  }
+
+  public void initController(ProjectController projectController)
+  {
+    this.projectController = projectController;
+
+    propertiesButton.setActionCommand(ProjectController.CMD_ADDIN_PROPERTIES);
+    propertiesButton.addActionListener(projectController);
+    installButton.setActionCommand(ProjectController.CMD_ADDIN_INSTALL);
+    installButton.addActionListener(projectController);
+    updateCheckButton.setActionCommand(ProjectController.CMD_ADDIN_UPDATECHECK);
+    updateCheckButton.addActionListener(projectController);
+    uninstallButton.setActionCommand(ProjectController.CMD_ADDIN_UNINSTALL);
+    uninstallButton.addActionListener(projectController);
+    enableButton.setActionCommand(ProjectController.CMD_ADDIN_ENABLE);
+    enableButton.addActionListener(projectController);
+    disableButton.setActionCommand(ProjectController.CMD_ADDIN_DISABLE);
+    disableButton.addActionListener(projectController);
+
     addinsModel = new AddinsTableModel();
 
     addinTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -89,7 +105,7 @@ public class AddinsPanel implements ViewComponent, PropertyChangeListener
     TableColumnModel columnModel = addinTable.getColumnModel();
     addinTable.setDefaultRenderer(String.class, new AddinsTableCellStringRenderer());
 
-    log.finer("Columns in table = " + columnModel.getColumnCount());
+    log.finer("Columns in table = " + columnModel.getColumnCount()); //NON-NLS
     columnModel.getColumn(0).setPreferredWidth(150);
     columnModel.getColumn(1).setPreferredWidth(50);
     columnModel.getColumn(2).setPreferredWidth(75);
@@ -99,7 +115,7 @@ public class AddinsPanel implements ViewComponent, PropertyChangeListener
     addinTable.getTableHeader().setReorderingAllowed(false);
 
     addinTable.setDragEnabled(true);
-    addinTable.setTransferHandler(new MyTransferHandler(controller));
+    addinTable.setTransferHandler(new MyTransferHandler());
 
     // TODO 1.6
 //    addinTable.setDropMode(DropMode.INSERT_ROWS);
@@ -113,35 +129,22 @@ public class AddinsPanel implements ViewComponent, PropertyChangeListener
       }
     });
 
-    propertiesButton.setActionCommand(Controller.CMD_ADDIN_PROPERTIES);
-    propertiesButton.addActionListener(controller);
-    installButton.setActionCommand(Controller.CMD_ADDIN_INSTALL);
-    installButton.addActionListener(controller);
-    updateCheckButton.setActionCommand(Controller.CMD_ADDIN_UPDATECHECK);
-    updateCheckButton.addActionListener(controller);
-    uninstallButton.setActionCommand(Controller.CMD_ADDIN_UNINSTALL);
-    uninstallButton.addActionListener(controller);
-    enableButton.setActionCommand(Controller.CMD_ADDIN_ENABLE);
-    enableButton.addActionListener(controller);
-    disableButton.setActionCommand(Controller.CMD_ADDIN_DISABLE);
-    disableButton.addActionListener(controller);
-
-    ratingBar.addPropertyChangeListener("rating", this);
+    ratingBar.addPropertyChangeListener(StarBar.RATING_PROPERTY, this);
 
     try {
-      findMoreHyperlink.setURL(new URL("http://goofans.com/"));
+      findMoreHyperlink.setURL(new URL(resourceBundle.getString("url.findMoreAddins")));
       findMoreHyperlink.addHyperlinkListener(new HyperlinkLaunchingListener(rootPanel));
     }
     catch (MalformedURLException e) {
-      log.log(Level.WARNING, "Unable to make GooFans URL", e);
+      log.log(Level.WARNING, "Unable to make GooFans URL", e); //NON-NLS
     }
   }
 
   private void updateButtonStates()
   {
-    int row = addinTable.getSelectedRow();
+    Addin addin = getSelectedAddin();
 
-    if (row < 0 || controller.getDisplayAddins().isEmpty()) {
+    if (addin == null) {
       description.setText(null);
       propertiesButton.setEnabled(false);
       enableButton.setEnabled(false);
@@ -151,15 +154,14 @@ public class AddinsPanel implements ViewComponent, PropertyChangeListener
       ratingBar.setRatingQuietly(0);
     }
     else {
-      Addin addin = controller.getDisplayAddins().get(row);
-      boolean isEnabled = controller.getEditorConfig().isEnabledAdddin(addin.getId());
+      boolean isEnabled = projectController.getProjectModel().getEditorConfig().isEnabledAdddin(addin.getId());
 
-      if (addin.getDescription().startsWith("<html>")) {
+      if (addin.getDescription().startsWith("<html>")) { //NON-NLS
         description.setText(addin.getDescription());
       }
       else {
         // add <html> to make sure it wraps, replace newlines with <br>, remove any HTML that may be in there already.
-        description.setText("<html>" + addin.getDescription().replaceAll("<", "&lt;").replaceAll("\n", "<br>") + "</html>");
+        description.setText("<html>" + addin.getDescription().replaceAll("<", "&lt;").replaceAll("\n", "<br>") + "</html>"); //NON-NLS
       }
       description.setCaretPosition(0);
 
@@ -190,7 +192,12 @@ public class AddinsPanel implements ViewComponent, PropertyChangeListener
   }
 
 
-  public void updateViewFromModel(Configuration c)
+  public void updateViewFromModel(ProjectModel model)
+  {
+    refreshAddinsTable();
+  }
+
+  public void refreshAddinsTable()
   {
     int selectedRow = addinTable.getSelectedRow();
     addinsModel.fireTableDataChanged();
@@ -198,7 +205,7 @@ public class AddinsPanel implements ViewComponent, PropertyChangeListener
     updateButtonStates();
   }
 
-  public void updateModelFromView(Configuration c)
+  public void updateModelFromView(ProjectModel model)
   {
   }
 
@@ -209,32 +216,31 @@ public class AddinsPanel implements ViewComponent, PropertyChangeListener
 
   public void propertyChange(PropertyChangeEvent evt)
   {
-    if (evt.getSource() instanceof StarBar && "rating".equals(evt.getPropertyName())) {
-      int row = addinTable.getSelectedRow();
+    if (evt.getSource() instanceof StarBar && StarBar.RATING_PROPERTY.equals(evt.getPropertyName())) {
 
-      if (row >= 0 && !controller.getDisplayAddins().isEmpty()) {
-        final Addin addin = controller.getDisplayAddins().get(row);
-        final int rating = (Integer) evt.getNewValue() * RATING_FACTOR;
+      final Addin addin = getSelectedAddin();
+      if (addin == null) return;
 
-        /* Update our ToolPreferences for this addin */
-        Map<String, Integer> ratings = ToolPreferences.getRatings();
-        ratings.put(addin.getId(), rating);
-        ToolPreferences.setRatings(ratings);
+      final int rating = (Integer) evt.getNewValue() * RATING_FACTOR;
 
-        /* Send the rating update to the server */
-        GooTool.executeTaskInThreadPool(new Runnable()
+      /* Update our ToolPreferences for this addin */
+      Map<String, Integer> ratings = ToolPreferences.getRatings();
+      ratings.put(addin.getId(), rating);
+      ToolPreferences.setRatings(ratings);
+
+      /* Send the rating update to the server */
+      GooTool.executeTaskInThreadPool(new Runnable()
+      {
+        public void run()
         {
-          public void run()
-          {
-            try {
-              new RatingSubmitRequest().submitRating(addin.getId(), rating);
-            }
-            catch (APIException e) {
-              log.log(Level.SEVERE, "Unable to submit rating for " + addin.getId(), e);
-            }
+          try {
+            new RatingSubmitRequest().submitRating(addin.getId(), rating);
           }
-        });
-      }
+          catch (APIException e) {
+            log.log(Level.SEVERE, "Unable to submit rating for " + addin.getId(), e); //NON-NLS
+          }
+        }
+      });
     }
   }
 
@@ -242,23 +248,27 @@ public class AddinsPanel implements ViewComponent, PropertyChangeListener
   {
     public int getRowCount()
     {
-      return controller.getDisplayAddins().size();
+      ProjectModel model = projectController.getProjectModel();
+      return model == null ? 0 : model.getDisplayAddins().size();
     }
 
     public int getColumnCount()
     {
-      return 5;
+      return COLUMN_NAMES.length;
     }
 
     public Object getValueAt(int rowIndex, int columnIndex)
     {
-      Addin addin = controller.getDisplayAddins().get(rowIndex);
+      ProjectModel model = projectController.getProjectModel();
+      if (model == null) return null;
+
+      Addin addin = model.getDisplayAddins().get(rowIndex);
 
       if (columnIndex == 0) return addin.getName();
       if (columnIndex == 1) return addin.getTypeText();
       if (columnIndex == 2) return addin.getVersion();
       if (columnIndex == 3) return addin.getAuthor();
-      if (columnIndex == 4) return controller.getEditorConfig().isEnabledAdddin(addin.getId());
+      if (columnIndex == 4) return model.getEditorConfig().isEnabledAdddin(addin.getId());
 
       return null;
     }
@@ -285,15 +295,17 @@ public class AddinsPanel implements ViewComponent, PropertyChangeListener
     public void setValueAt(Object aValue, int rowIndex, int columnIndex)
     {
       if (columnIndex == 4) {
-        //TODO this should really call the controller to do this.
-        Addin addin = controller.getDisplayAddins().get(rowIndex);
+        ProjectModel model = projectController.getProjectModel();
+        if (model == null) return;
+
+        Addin addin = model.getDisplayAddins().get(rowIndex);
+
         if ((Boolean) aValue) {
-          controller.getEditorConfig().enableAddin(addin.getId());
+          projectController.enableAddin(addin.getId());
         }
         else {
-          controller.getEditorConfig().disableAddin(addin.getId());
+          projectController.disableAddin(addin.getId());
         }
-        updateViewFromModel(controller.getEditorConfig());
       }
     }
   }
@@ -302,11 +314,9 @@ public class AddinsPanel implements ViewComponent, PropertyChangeListener
 
   private class MyTransferHandler extends TransferHandler
   {
-    Controller controller;
 
-    public MyTransferHandler(Controller controller)
+    public MyTransferHandler()
     {
-      this.controller = controller;
     }
 
     @Override
@@ -318,23 +328,23 @@ public class AddinsPanel implements ViewComponent, PropertyChangeListener
     @Override
     protected Transferable createTransferable(JComponent c)
     {
-      int row = ((JTable) c).getSelectedRow();
-      if (row < 0) return null;
+      Addin addin = getSelectedAddin();
+      if (addin == null) return null;
 
-      String addinId = controller.getDisplayAddins().get(row).getId();
+      String addinId = addin.getId();
 
-      if (!controller.getEditorConfig().isEnabledAdddin(addinId)) {
+      if (!projectController.getProjectModel().getEditorConfig().isEnabledAdddin(addinId)) {
         return null;
       }
 
-      return new MyTransferable(row);
+      return new MyTransferable(addinTable.getSelectedRow());
     }
 
     @Override
     public boolean canImport(JComponent comp, DataFlavor[] transferFlavors)
     {
       for (DataFlavor transferFlavor : transferFlavors) {
-        if (transferFlavor == FLAVOR) {
+        if (transferFlavor.equals(FLAVOR)) {
           return true;
         }
       }
@@ -419,7 +429,7 @@ public class AddinsPanel implements ViewComponent, PropertyChangeListener
 
     public Object getTransferData(DataFlavor flavor) throws UnsupportedFlavorException, IOException
     {
-      if (flavor == FLAVOR) {
+      if (flavor.equals(FLAVOR)) {
         return row;
       }
       else {
@@ -434,7 +444,8 @@ public class AddinsPanel implements ViewComponent, PropertyChangeListener
     public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column)
     {
       Component rendererComponent = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-      if (column == 0 && !controller.getDisplayAddins().get(row).areDependenciesSatisfiedBy(controller.getEditorConfig().getEnabledAddinsAsAddins())) {
+      ProjectModel model = projectController.getProjectModel();
+      if (model != null && column == 0 && !model.getDisplayAddins().get(row).areDependenciesSatisfiedBy(model.getEditorConfig().getEnabledAddinsAsAddins())) {
         rendererComponent.setForeground(Color.RED);
       }
       else {
@@ -443,4 +454,21 @@ public class AddinsPanel implements ViewComponent, PropertyChangeListener
       return rendererComponent;
     }
   }
+
+  public Addin getSelectedAddin()
+  {
+    int selectedRow = addinTable.getSelectedRow();
+
+    ProjectModel model = projectController.getProjectModel();
+    if (model == null) return null;
+
+    List<Addin> displayAddins = model.getDisplayAddins();
+    if (selectedRow < 0 || displayAddins.isEmpty()) {
+      return null;
+    }
+    else {
+      return displayAddins.get(selectedRow);
+    }
+  }
+
 }

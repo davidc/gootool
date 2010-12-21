@@ -5,13 +5,13 @@
 
 package com.goofans.gootool.util;
 
-import com.goofans.gootool.platform.PlatformSupport;
-import com.goofans.gootool.wog.WorldOfGooWindows;
-import com.goofans.gootool.wog.WorldOfGooMacOSX;
-import com.goofans.gootool.wog.WorldOfGooLinux;
-
 import javax.swing.filechooser.FileFilter;
 import java.io.File;
+
+import com.goofans.gootool.platform.LinuxSupport;
+import com.goofans.gootool.platform.MacOSXSupport;
+import com.goofans.gootool.platform.PlatformSupport;
+import com.goofans.gootool.platform.WindowsSupport;
 
 /**
  * A file filter for JFileChoosers that only allows selection of valid World of Goo installations.
@@ -46,14 +46,14 @@ public class WogExeFileFilter extends FileFilter
           if (f.isDirectory()) {
             return true;
           }
-          if (fileName.equalsIgnoreCase(WorldOfGooWindows.EXE_FILENAME)) {
+          if (fileName.equalsIgnoreCase(WindowsSupport.EXE_FILENAME)) {
             return true;
           }
           break;
         case MACOSX:
           if (f.isDirectory()) {
             if (!f.getName().endsWith(".app")) return true;
-            for (String exeFilename : WorldOfGooMacOSX.EXE_FILENAMES) {
+            for (String exeFilename : MacOSXSupport.EXE_FILENAMES) {
               if (new File(f, exeFilename).exists()) return true;
             }
           }
@@ -62,7 +62,7 @@ public class WogExeFileFilter extends FileFilter
           if (f.isDirectory()) {
             return true;
           }
-          for (String exeFilename : WorldOfGooLinux.EXE_FILENAMES) {
+          for (String exeFilename : LinuxSupport.EXE_FILENAMES) {
             if (fileName.equalsIgnoreCase(exeFilename)) {
               return true;
             }
@@ -83,11 +83,11 @@ public class WogExeFileFilter extends FileFilter
   {
     switch (PlatformSupport.getPlatform()) {
       case WINDOWS:
-        return WorldOfGooWindows.EXE_FILENAME;
+        return WindowsSupport.EXE_FILENAME;
       case MACOSX:
         return "World of Goo";
       case LINUX:
-        return WorldOfGooLinux.EXE_FILENAMES[0];
+        return LinuxSupport.EXE_FILENAMES[0];
     }
     return null;
   }

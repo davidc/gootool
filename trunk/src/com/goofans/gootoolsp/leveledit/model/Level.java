@@ -5,11 +5,11 @@
 
 package com.goofans.gootoolsp.leveledit.model;
 
-import java.io.File;
 import java.io.IOException;
 
+import com.goofans.gootool.facades.SourceFile;
 import com.goofans.gootool.io.GameFormat;
-import com.goofans.gootool.wog.WorldOfGoo;
+import com.goofans.gootool.projects.ProjectManager;
 import org.w3c.dom.Document;
 
 /**
@@ -24,19 +24,17 @@ public class Level
 
   public Level(String levelName) throws IOException
   {
-    WorldOfGoo worldOfGoo = WorldOfGoo.getTheInstance();
+    SourceFile sourceDir = ProjectManager.simpleInit().getSource().getRoot().getChild("res/levels/" + levelName);
 
-    String levelPrefix = "res/levels/" + levelName + "/" + levelName;
-
-    File sceneFile = worldOfGoo.getGameFile(levelPrefix + ".scene.bin");
+    SourceFile sceneFile = sourceDir.getChild(levelName + ".scene.bin");
     Document sceneDoc = GameFormat.decodeXmlBinFile(sceneFile);
     scene = new Scene(sceneDoc);
 
-    File resourcesFile = worldOfGoo.getGameFile(levelPrefix + ".resrc.bin");
+    SourceFile resourcesFile = sourceDir.getChild(levelName + ".resrc.bin");
     Document resourcesDoc = GameFormat.decodeXmlBinFile(resourcesFile);
     resources = new Resources(resourcesDoc);
 
-    File levelFile = worldOfGoo.getGameFile(levelPrefix + ".level.bin");
+    SourceFile levelFile = sourceDir.getChild(levelName + ".level.bin");
     Document levelDoc = GameFormat.decodeXmlBinFile(levelFile);
     levelContents = new LevelContents(levelDoc);
   }
@@ -59,8 +57,6 @@ public class Level
   @SuppressWarnings({"UseOfSystemOutOrSystemErr", "HardCodedStringLiteral"})
   public static void main(String[] args) throws IOException
   {
-    WorldOfGoo worldOfGoo = WorldOfGoo.getTheInstance();
-    worldOfGoo.init();
     Level l = new Level("EconomicDivide");
 
     System.out.println("l = " + l);

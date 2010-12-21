@@ -5,7 +5,10 @@
 
 package com.goofans.gootool.view;
 
-import com.goofans.gootool.model.Configuration;
+import com.goofans.gootool.MainController;
+import com.goofans.gootool.ProjectController;
+import com.goofans.gootool.model.ProjectModel;
+import com.goofans.gootool.projects.LocalProjectConfiguration;
 
 /**
  * A component of our View. Each component should pass the event down to its children.
@@ -15,7 +18,10 @@ import com.goofans.gootool.model.Configuration;
  */
 public interface ViewComponent
 {
-  void updateViewFromModel(Configuration c);
+  // Called once and once only to tell it who the controller is
+  void initController(ProjectController projectController);
 
-  void updateModelFromView(Configuration c);
+  void updateViewFromModel(ProjectModel model);
+
+  void updateModelFromView(ProjectModel model);
 }

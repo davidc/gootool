@@ -14,12 +14,12 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Random;
 
 import com.goofans.gootool.GooTool;
+import com.goofans.gootool.facades.SourceFile;
+import com.goofans.gootool.projects.ProjectManager;
 import com.goofans.gootool.util.ProgressIndicatingTask;
 import com.goofans.gootool.util.XMLUtil;
-import com.goofans.gootool.wog.WorldOfGoo;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -103,7 +103,8 @@ public class ImageTool extends ProgressIndicatingTask
 
             try {
               constraints.gridx++;
-              contentPanel.add(makeLabel(ImageIO.read(WorldOfGoo.getTheInstance().getGameFile(destFileName + ".png"))), constraints);
+              SourceFile input = ProjectManager.simpleInit().getSource().getRoot().getChild(destFileName + ".png");
+              contentPanel.add(makeLabel(ImageIO.read(input.read())), constraints);
             }
             catch (IIOException e) {
               // don't care, e.g. test image
@@ -152,8 +153,7 @@ public class ImageTool extends ProgressIndicatingTask
   @SuppressWarnings({"HardCodedStringLiteral", "DuplicateStringLiteralInspection", "HardcodedFileSeparator"})
   public static void main(String[] args) throws Exception
   {
-    WorldOfGoo.getTheInstance().init();
-//    File sourceFile = new File("C:\\Users\\david\\Downloads\\wog-translate\\images_continue.png");
+    //    File sourceFile = new File("C:\\Users\\david\\Downloads\\wog-translate\\images_continue.png");
 
 //    ImageGenerator generator = new ImageGenerator(sourceFile);
 //    generator.writeImage("en.png");

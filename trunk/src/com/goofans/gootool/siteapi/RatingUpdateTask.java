@@ -25,18 +25,24 @@ public class RatingUpdateTask implements Runnable
   public void run()
   {
     if (ToolPreferences.isGooFansLoginOk()) {
-      log.log(Level.FINE, "User is logged in, getting their ratings");
+      log.log(Level.FINE, "User is logged in, getting their ratings"); //NON-NLS
       try {
         RatingListRequest ratingListRequest = new RatingListRequest();
         Map<String, Integer> ratings = ratingListRequest.getRatings();
         ToolPreferences.setRatings(ratings);
       }
       catch (APIException e) {
-        log.log(Level.SEVERE, "Unable to get user ratings", e);
+        log.log(Level.SEVERE, "Unable to get user ratings", e); //NON-NLS
       }
     }
     else {
-      log.log(Level.FINE, "User not logged in, not getting ratings");
+      log.log(Level.FINE, "User not logged in, not getting ratings"); //NON-NLS
     }
+  }
+
+  @Override
+  public String toString()
+  {
+    return "RatingUpdateTask";
   }
 }

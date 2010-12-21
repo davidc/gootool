@@ -6,12 +6,13 @@
 package com.goofans.datamining.balls;
 
 import javax.imageio.ImageIO;
-import java.io.File;
-import java.io.IOException;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
-import com.goofans.gootool.wog.WorldOfGoo;
+import com.goofans.gootool.facades.TargetFile;
+import com.goofans.gootool.projects.ProjectManager;
 import com.goofans.gootoolsp.leveledit.resource.Ball;
 
 /**
@@ -23,12 +24,9 @@ public class GenerateBallImages
   @SuppressWarnings({"UseOfSystemOutOrSystemErr", "HardCodedStringLiteral", "HardcodedFileSeparator", "StringConcatenation", "DuplicateStringLiteralInspection"})
   public static void main(String[] args) throws IOException
   {
-    WorldOfGoo.getTheInstance().init();
+    TargetFile ballsDir = ProjectManager.simpleInit().getTarget().getRoot().getChild("res/balls");
 
-    File ballsDir = WorldOfGoo.getTheInstance().getCustomGameFile("res/balls");
-
-    File[] ballsDirs = ballsDir.listFiles();
-    for (File dir : ballsDirs) {
+    for (TargetFile dir : ballsDir.list()) {
       if (dir.isDirectory() && !dir.getName().startsWith("_")) {
         Ball ball = new Ball(dir.getName());
 

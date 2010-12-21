@@ -16,7 +16,6 @@ import com.goofans.gootool.addins.AddinsStore;
 import com.goofans.gootool.util.DebugUtil;
 import com.goofans.gootool.util.VersionSpec;
 import com.goofans.gootool.util.XMLUtil;
-import com.goofans.gootool.wog.WorldOfGoo;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -172,8 +171,6 @@ public class AddinUpdatesCheckRequest extends APIRequest
   public static void main(String[] args) throws APIException, IOException
   {
     DebugUtil.setAllLogging();
-    final WorldOfGoo wog = WorldOfGoo.getTheInstance();
-    wog.init();
 
 //    new AddinUpdatesCheckRequest().checkUpdatesById(Arrays.asList(new String[]{"goas", "com.goofans.billboards"}));
     final Map<String, AvailableUpdate> updates = new AddinUpdatesCheckRequest().checkUpdates();

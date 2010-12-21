@@ -30,7 +30,6 @@ import com.goofans.gootool.util.DebugUtil;
 import com.goofans.gootool.util.GUIUtil;
 import com.goofans.gootool.util.ProgressIndicatingTask;
 import com.goofans.gootool.util.Utilities;
-import com.goofans.gootool.wog.WorldOfGoo;
 
 public class AddinUpdatesChooser extends JDialog
 {
@@ -139,10 +138,9 @@ public class AddinUpdatesChooser extends JDialog
         @Override
         public void run() throws Exception
         {
-          WorldOfGoo wog = WorldOfGoo.getTheInstance();
           for (UpdateRow updateRow : updateRows) {
             if (updateRow.install) {
-              log.log(Level.INFO, "Downloading update " + updateRow.addin.getId() + " version " + updateRow.update.version);
+              log.log(Level.INFO, "Downloading update " + updateRow.addin.getId() + " version " + updateRow.update.version); //NON-NLS
 
               beginStep(resourceBundle.formatString("addinUpdating.status.downloading", updateRow.addin.getId()), false);
 
@@ -154,8 +152,8 @@ public class AddinUpdatesChooser extends JDialog
                 // Load the addin once to get its ID and ensure it is valid.
                 Addin addin = AddinFactory.loadAddin(tempFile);
 
-                wog.uninstallAddin(updateRow.addin, true);
-                wog.installAddin(tempFile, addin.getId(), true);
+                AddinsStore.uninstallAddin(updateRow.addin);
+                AddinsStore.installAddin(tempFile, addin.getId());
               }
               finally {
                 Utilities.deleteFileIfExists(tempFile);
@@ -171,7 +169,7 @@ public class AddinUpdatesChooser extends JDialog
       });
     }
     catch (Exception e) {
-      log.log(Level.SEVERE, "Error downloading updates", e);
+      log.log(Level.SEVERE, "Error downloading updates", e); //NON-NLS
       JOptionPane.showMessageDialog(this, resourceBundle.formatString("addinUpdating.failed.message", e.getLocalizedMessage()),
               resourceBundle.getString("addinUpdating.failed.title"), JOptionPane.ERROR_MESSAGE);
     }
@@ -264,9 +262,6 @@ public class AddinUpdatesChooser extends JDialog
   {
     DebugUtil.setAllLogging();
     GooTool.initExecutors();
-
-    WorldOfGoo wog = WorldOfGoo.getTheInstance();
-    wog.init();
 
     AddinUpdatesCheckRequest checkRequest = new AddinUpdatesCheckRequest();
     Map<String, AddinUpdatesCheckRequest.AvailableUpdate> updates = checkRequest.checkUpdates();

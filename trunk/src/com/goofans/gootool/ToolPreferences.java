@@ -18,15 +18,17 @@ import java.util.logging.Level;
 import java.io.IOException;
 import java.io.PrintStream;
 
+import com.goofans.gootool.util.Utilities;
 import com.goofans.gootool.util.VersionSpec;
 
 /**
  * This is specifically for preferences that relate to GooTool's state (e.g. whether translator mode is enabled).
- * It is NOT for preferences that affect game building (such as "skip opening movie") - such things belong in Configuration and ConfigurationWriterTask.
+ * It is NOT for preferences that affect game building (such as "skip opening movie") - such things belong in ProjectConfiguration and WorldBuilder.
  *
  * @author David Croft (davidc@goofans.com)
  * @version $Id$
  */
+@SuppressWarnings({"StaticMethodOnlyUsedInOneClass"})
 public class ToolPreferences
 {
   private static final Logger log = Logger.getLogger(ToolPreferences.class.getName());
@@ -35,20 +37,16 @@ public class ToolPreferences
 
   private static final String PREF_GOOTOOL_ID = "gootool_random_id";
   private static final String PREF_IGNORE_UPDATE = "gootool_ignore_update";
-  private static final String PREF_L10N_MODE = "gootool_l10n_enabled";
   private static final String PREF_MRU_ADDIN_DIR = "gootool_mru_addin_dir";
   private static final String PREF_MRU_TOWER_DIR = "gootool_mru_tower_dir";
   private static final String PREF_WINDOW_POSITION = "gootool_window_position";
-
-  private static final String PREF_WOG_DIR = "wog_dir";
-  private static final String PREF_CUSTOM_DIR = "custom_dir";
 
   private static final String PREF_GOOFANS_USERNAME = "goofans_username";
   private static final String PREF_GOOFANS_PASSWORD = "goofans_password";
   private static final String PREF_GOOFANS_LOGINOK = "goofans_loginok";
 
-  private static final String PREF_BILLBOARDS_DISABLE = "billboard_disable";
   private static final String PREF_BILLBOARDS_LASTCHECK = "billboard_lastcheck";
+  private static final String PREF_ALLOW_WIDESCREEN = "allow_widescreen";
 
   private static final String PREF_RATINGS = "ratings";
   private static final String RATINGS_SEPARATOR = "|";
@@ -84,10 +82,10 @@ public class ToolPreferences
    */
   public static boolean isIgnoreUpdate(VersionSpec version)
   {
-    log.finer("Is ignoring update? " + version);
+    log.finer("Is ignoring update? " + version); //NON-NLS
 
     String ignoreVersion = PREFS.get(PREF_IGNORE_UPDATE, null);
-    log.finer("Current setting: " + ignoreVersion);
+    log.finer("Current setting: " + ignoreVersion); //NON-NLS
 
     return ignoreVersion != null && ignoreVersion.equals(version.toString());
   }
@@ -99,18 +97,9 @@ public class ToolPreferences
    */
   public static void setIgnoreUpdate(VersionSpec version)
   {
-    log.fine("Ignoring update " + version);
+    log.fine("Ignoring update " + version); //NON-NLS
     PREFS.put(PREF_IGNORE_UPDATE, version.toString());
-  }
-
-  public static boolean isL10nEnabled()
-  {
-    return PREFS.getBoolean(PREF_L10N_MODE, false);
-  }
-
-  public static void setL10nEnabled(boolean enabled)
-  {
-    PREFS.putBoolean(PREF_L10N_MODE, enabled);
+    Utilities.flushPrefs(PREFS);
   }
 
   public static String getMruAddinDir()
@@ -121,6 +110,7 @@ public class ToolPreferences
   public static void setMruAddinDir(String mruDir)
   {
     PREFS.put(PREF_MRU_ADDIN_DIR, mruDir);
+    Utilities.flushPrefs(PREFS);
   }
 
   public static String getMruTowerDir()
@@ -131,6 +121,7 @@ public class ToolPreferences
   public static void setMruTowerDir(String mruDir)
   {
     PREFS.put(PREF_MRU_TOWER_DIR, mruDir);
+    Utilities.flushPrefs(PREFS);
   }
 
   public static String getWindowPosition()
@@ -141,26 +132,7 @@ public class ToolPreferences
   public static void setWindowPosition(String windowPosition)
   {
     PREFS.put(PREF_WINDOW_POSITION, windowPosition);
-  }
-
-  public static String getWogDir()
-  {
-    return PREFS.get(PREF_WOG_DIR, null);
-  }
-
-  public static void setWogDir(String wogDir)
-  {
-    PREFS.put(PREF_WOG_DIR, wogDir);
-  }
-
-  public static String getCustomDir()
-  {
-    return PREFS.get(PREF_CUSTOM_DIR, null);
-  }
-
-  public static void setCustomDir(String customDir)
-  {
-    PREFS.put(PREF_CUSTOM_DIR, customDir);
+    Utilities.flushPrefs(PREFS);
   }
 
   public static String getGooFansUsername()
@@ -171,6 +143,7 @@ public class ToolPreferences
   public static void setGooFansUsername(String username)
   {
     PREFS.put(PREF_GOOFANS_USERNAME, username);
+    Utilities.flushPrefs(PREFS);
   }
 
   public static String getGooFansPassword()
@@ -182,7 +155,7 @@ public class ToolPreferences
       return new String(TextUtil.base64Decode(enc));
     }
     catch (IOException e) {
-      log.log(Level.SEVERE, "Base64 encoding exception in password, removing");
+      log.log(Level.SEVERE, "Base64 encoding exception in password, removing"); //NON-NLS
       return null;
     }
   }
@@ -190,6 +163,7 @@ public class ToolPreferences
   public static void setGooFansPassword(String password)
   {
     PREFS.put(PREF_GOOFANS_PASSWORD, TextUtil.base64Encode(password.getBytes()));
+    Utilities.flushPrefs(PREFS);
   }
 
   public static boolean isGooFansLoginOk()
@@ -200,16 +174,7 @@ public class ToolPreferences
   public static void setGooFansLoginOk(boolean ok)
   {
     PREFS.putBoolean(PREF_GOOFANS_LOGINOK, ok);
-  }
-
-  public static boolean isBillboardDisable()
-  {
-    return PREFS.getBoolean(PREF_BILLBOARDS_DISABLE, false);
-  }
-
-  public static void setBillboardDisable(boolean disable)
-  {
-    PREFS.putBoolean(PREF_BILLBOARDS_DISABLE, disable);
+    Utilities.flushPrefs(PREFS);
   }
 
   public static long getBillboardLastCheck()
@@ -220,16 +185,7 @@ public class ToolPreferences
   public static void setBillboardLastCheck(long lastCheck)
   {
     PREFS.putLong(PREF_BILLBOARDS_LASTCHECK, lastCheck);
-  }
-
-  public static void setRatings(Map<String, Integer> ratings)
-  {
-    StringBuilder sb = new StringBuilder();
-    for (Map.Entry<String, Integer> rating : ratings.entrySet()) {
-      if (sb.length() > 0) sb.append(RATINGS_SEPARATOR);
-      sb.append(rating.getKey()).append(RATINGS_VALUE_SEPARATOR).append(rating.getValue());
-    }
-    PREFS.put(PREF_RATINGS, sb.toString());
+    Utilities.flushPrefs(PREFS);
   }
 
   public static Map<String, Integer> getRatings()
@@ -252,6 +208,28 @@ public class ToolPreferences
     }
 
     return ratings;
+  }
+
+  public static void setRatings(Map<String, Integer> ratings)
+  {
+    StringBuilder sb = new StringBuilder();
+    for (Map.Entry<String, Integer> rating : ratings.entrySet()) {
+      if (sb.length() > 0) sb.append(RATINGS_SEPARATOR);
+      sb.append(rating.getKey()).append(RATINGS_VALUE_SEPARATOR).append(rating.getValue());
+    }
+    PREFS.put(PREF_RATINGS, sb.toString());
+    Utilities.flushPrefs(PREFS);
+  }
+
+  public static boolean isAllowWidescreen()
+  {
+    return PREFS.getBoolean(PREF_ALLOW_WIDESCREEN, false);
+  }
+
+  public static void setAllowWidescreen(boolean allow)
+  {
+    PREFS.putBoolean(PREF_ALLOW_WIDESCREEN, allow);
+    Utilities.flushPrefs(PREFS);
   }
 
   /**

@@ -8,14 +8,12 @@ package com.goofans.gootool.siteapi;
 import net.infotrek.util.TextUtil;
 
 import java.io.IOException;
-import java.io.File;
 import java.util.logging.Logger;
 
-import com.goofans.gootool.profile.ProfileFactory;
+import com.goofans.gootool.projects.Project;
+import com.goofans.gootool.projects.ProjectManager;
 import com.goofans.gootool.util.DebugUtil;
 import com.goofans.gootool.util.XMLUtil;
-import com.goofans.gootool.util.Utilities;
-import com.goofans.gootool.io.GameFormat;
 import org.w3c.dom.Document;
 
 /**
@@ -33,7 +31,7 @@ public class ProfileRestoreRequest extends APIRequestAuthenticated
     super(API_PROFILE_RESTORE);
   }
 
-  public void restoreProfile(int backupId) throws APIException
+  public void restoreProfile(Project project, int backupId) throws APIException
   {
     addPostParameter("backup_id", String.valueOf(backupId));
 
@@ -50,12 +48,17 @@ public class ProfileRestoreRequest extends APIRequestAuthenticated
       throw new APIException("No profile content returned by server");
     }
 
-    if (!ProfileFactory.isProfileFound()) {
-      throw new APIException("You don't have a profile on this computer yet. Create one before restoring.");
-    }
-    
     try {
-      GameFormat.encodeProfileFile(ProfileFactory.getProfileFile(), profileContent);
+      if (project.getProfileData() == null) {
+        throw new APIException("You don't have a profile on this computer yet. Create one before restoring.");
+      }
+    }
+    catch (IOException e) {
+      throw new APIException("You don't have a profile on this computer yet. Create one before restoring.", e);
+    }
+
+    try {
+      project.setProfileBytes(profileContent);
     }
     catch (IOException e) {
       throw new APIException("Unable to write the profile: " + e.getMessage(), e);
@@ -65,8 +68,8 @@ public class ProfileRestoreRequest extends APIRequestAuthenticated
   public static void main(String[] args) throws APIException, IOException
   {
     DebugUtil.setAllLogging();
-    ProfileFactory.init();
 
-    new ProfileRestoreRequest().restoreProfile(1);
+    Project project = ProjectManager.simpleInit();
+    new ProfileRestoreRequest().restoreProfile(project, 1);
   }
 }

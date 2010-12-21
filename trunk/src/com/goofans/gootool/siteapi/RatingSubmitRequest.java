@@ -7,7 +7,6 @@ package com.goofans.gootool.siteapi;
 
 import java.io.IOException;
 
-import com.goofans.gootool.profile.ProfileFactory;
 import com.goofans.gootool.util.DebugUtil;
 import org.w3c.dom.Document;
 
@@ -45,7 +44,6 @@ public class RatingSubmitRequest extends APIRequestAuthenticated
   public static void main(String[] args) throws APIException, IOException
   {
     DebugUtil.setAllLogging();
-    ProfileFactory.init();
 
     new RatingSubmitRequest().submitRating("com.goofans.davidc.jingleballs", 20);
   }

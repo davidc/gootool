@@ -11,9 +11,11 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import com.goofans.gootool.GooTool;
+import com.goofans.gootool.GooToolResourceBundle;
 import com.goofans.gootool.ToolPreferences;
-import com.goofans.gootool.view.NewVersionDialog;
 import com.goofans.gootool.util.*;
+import com.goofans.gootool.view.NewVersionDialog;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -60,12 +62,13 @@ public class VersionCheck implements Runnable
       }
     }
     catch (Exception e) {
-      log.log(Level.WARNING, "Unable to check version", e);
+      log.log(Level.WARNING, "Unable to check version", e); //NON-NLS
       completed = true;
       failureReason = e;
 
       if (alwaysAlertUser) {
-        JOptionPane.showMessageDialog(parentWindow, "Can't check version: " + e.getLocalizedMessage(), "Can't check version", JOptionPane.ERROR_MESSAGE);
+        GooToolResourceBundle resourceBundle = GooTool.getTextProvider();
+        JOptionPane.showMessageDialog(parentWindow, resourceBundle.formatString("checkVersion.error.message", e.getLocalizedMessage()), resourceBundle.getString("checkVersion.error.title"), JOptionPane.ERROR_MESSAGE);
       }
     }
   }
@@ -73,9 +76,10 @@ public class VersionCheck implements Runnable
   public void runUpdateCheck() throws APIException, IOException
   {
     APIRequest request = new APIRequest(APIRequest.API_CHECKVERSION);
+    //noinspection DuplicateStringLiteralInspection
     request.addGetParameter("version", Version.RELEASE.toString());
 
-    log.log(Level.FINE, "Checkversion " + request);
+    log.log(Level.FINE, "Check version " + request); //NON-NLS
 
     Document doc = request.doRequest();
 
@@ -87,8 +91,8 @@ public class VersionCheck implements Runnable
 
   private boolean findUpToDate(Document doc)
   {
-    if (XMLUtil.getElement(doc.getDocumentElement(), "up-to-date") != null) {
-      log.log(Level.FINE, "We are up to date");
+    if (XMLUtil.getElement(doc.getDocumentElement(), "up-to-date") != null) { //NON-NLS
+      log.log(Level.FINE, "We are up to date"); //NON-NLS
       completed = true;
       upToDate = true;
 
@@ -97,7 +101,8 @@ public class VersionCheck implements Runnable
         {
           public void run()
           {
-            JOptionPane.showMessageDialog(parentWindow, "You are running the latest version " + Version.RELEASE_FRIENDLY, "GooTool is up to date", JOptionPane.INFORMATION_MESSAGE);
+            GooToolResourceBundle resourceBundle = GooTool.getTextProvider();
+            JOptionPane.showMessageDialog(parentWindow, resourceBundle.formatString("checkVersion.upToDate.message", Version.RELEASE_FRIENDLY), resourceBundle.getString("checkVersion.upToDate.title"), JOptionPane.INFORMATION_MESSAGE);
           }
         });
       }
@@ -109,16 +114,16 @@ public class VersionCheck implements Runnable
 
   private boolean findUpdateAvailable(Document doc) throws IOException
   {
-    Element updateAvailableEl = XMLUtil.getElement(doc.getDocumentElement(), "update-available");
+    Element updateAvailableEl = XMLUtil.getElement(doc.getDocumentElement(), "update-available"); //NON-NLS
     if (updateAvailableEl == null) {
       return false;
     }
 
-    newVersion = new VersionSpec(XMLUtil.getElementStringRequired(updateAvailableEl, "version"));
-    newVersionMessage = XMLUtil.getElementString(updateAvailableEl, "message");
-    newVersionDownloadUrl = XMLUtil.getElementString(updateAvailableEl, "download-url");
+    newVersion = new VersionSpec(XMLUtil.getElementStringRequired(updateAvailableEl, "version")); //NON-NLS
+    newVersionMessage = XMLUtil.getElementString(updateAvailableEl, "message"); //NON-NLS
+    newVersionDownloadUrl = XMLUtil.getElementString(updateAvailableEl, "download-url"); //NON-NLS
 
-    log.log(Level.FINE, "New version available, ver=" + newVersion + ", message=" + newVersionMessage + ", downloadUrl=" + newVersionDownloadUrl);
+    log.log(Level.FINE, "New version available, ver=" + newVersion + ", message=" + newVersionMessage + ", downloadUrl=" + newVersionDownloadUrl); //NON-NLS
     completed = true;
     upToDate = false;
 
@@ -134,7 +139,13 @@ public class VersionCheck implements Runnable
     return upToDate;
   }
 
-  @SuppressWarnings({"UseOfSystemOutOrSystemErr"})
+  @Override
+  public String toString()
+  {
+    return "VersionCheck task";
+  }
+
+  @SuppressWarnings({"UseOfSystemOutOrSystemErr", "HardCodedStringLiteral"})
   public static void main(String[] args) throws Exception
   {
     DebugUtil.setAllLogging();

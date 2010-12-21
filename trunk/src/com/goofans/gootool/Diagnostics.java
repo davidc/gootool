@@ -16,7 +16,6 @@ import com.goofans.gootool.util.ProgressIndicatingTask;
 import com.goofans.gootool.util.ProgressListener;
 import com.goofans.gootool.util.Utilities;
 import com.goofans.gootool.util.Version;
-import com.goofans.gootool.wog.WorldOfGoo;
 
 /**
  * Produces a file with a diagnostic information.
@@ -59,6 +58,8 @@ public class Diagnostics extends ProgressIndicatingTask
     // TODO:
     // WoG config
     // Installed addins and their zip contents
+
+    // TODO project configuration
 
     out.close();
   }
@@ -116,36 +117,38 @@ public class Diagnostics extends ProgressIndicatingTask
     beginStep("Dumping World of Goo directory", false);
     out.println("--- Source World of Goo ---");
     out.println();
-    WorldOfGoo wog = WorldOfGoo.getTheInstance();
-    if (wog.isWogFound()) {
-      try {
-        listDir(out, wog.getWogDir());
-      }
-      catch (IOException e) {
-        out.println("Can't list WoG dir:");
-        e.printStackTrace(out);
-      }
-    }
-    else {
+    // TODO redo completely!
+//    WorldOfGoo wog = WorldOfGoo.getTheInstance();
+//    if (wog.isWogFound()) {
+//      try {
+//        listDir(out, wog.getWogDir());
+//      }
+//      catch (IOException e) {
+//        out.println("Can't list WoG dir:");
+//        e.printStackTrace(out);
+//      }
+//    }
+//    else {
       out.println("No WoG dir set.");
-    }
+//    }
     out.println();
 
     beginStep("Dumping custom directory", false);
     out.println("--- Custom World of Goo ---");
     out.println();
-    if (wog.isCustomDirSet()) {
-      try {
-        listDir(out, wog.getCustomDir());
-      }
-      catch (IOException e) {
-        out.println("Can't list custom dir:");
-        e.printStackTrace(out);
-      }
-    }
-    else {
+    // TODO redo completely!!
+//    if (wog.isCustomDirSet()) {
+//      try {
+//        listDir(out, wog.getCustomDir());
+//      }
+//      catch (IOException e) {
+//        out.println("Can't list custom dir:");
+//        e.printStackTrace(out);
+//      }
+//    }
+//    else {
       out.println("No custom dir set.");
-    }
+//    }
     out.println();
   }
 
@@ -251,9 +254,10 @@ public class Diagnostics extends ProgressIndicatingTask
   @SuppressWarnings({"UseOfSystemOutOrSystemErr"})
   public static void main(String[] args) throws IOException
   {
-    WorldOfGoo.getTheInstance().init();
 
     Diagnostics d = new Diagnostics(System.out);
+
+    d.setParentComponent(null);
 
     d.addListener(new ProgressListener()
     {

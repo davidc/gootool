@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2008, 2009, 2010 David C A Croft. All rights reserved. Your use of this computer software
+ * is permitted only in accordance with the GooTool license agreement distributed with this file.
+ */
+
 package net.infotrek.util.prefs;
 
 import java.io.File;
@@ -7,7 +12,6 @@ import java.util.prefs.PreferencesFactory;
 import java.util.prefs.BackingStoreException;
 
 import com.goofans.gootool.GooTool;
-import com.goofans.gootool.wog.WorldOfGoo;
 import com.goofans.gootool.util.DebugUtil;
 
 /**
@@ -66,7 +70,7 @@ public class FilePreferencesFactory implements PreferencesFactory
     System.setProperty("java.util.prefs.PreferencesFactory", FilePreferencesFactory.class.getName());
     System.setProperty(SYSTEM_PROPERTY_FILE, "myprefs.txt");
 
-    Preferences p2 = Preferences.userNodeForPackage(WorldOfGoo.class);
+    Preferences p2 = Preferences.userNodeForPackage(FilePreferencesFactory.class);
     p2.put("hello", "there");
     Preferences p = Preferences.userNodeForPackage(GooTool.class);
 

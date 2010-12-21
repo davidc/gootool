@@ -9,7 +9,6 @@ import java.io.IOException;
 import java.util.Map;
 import java.util.TreeMap;
 
-import com.goofans.gootool.profile.ProfileFactory;
 import com.goofans.gootool.util.DebugUtil;
 import com.goofans.gootool.util.XMLUtil;
 import org.w3c.dom.Document;
@@ -60,7 +59,6 @@ public class RatingListRequest extends APIRequestAuthenticated
   public static void main(String[] args) throws APIException, IOException
   {
     DebugUtil.setAllLogging();
-    ProfileFactory.init();
 
     Map<String, Integer> ratings = new RatingListRequest().getRatings();
     for (Map.Entry<String, Integer> rating : ratings.entrySet()) {

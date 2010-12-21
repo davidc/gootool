@@ -11,6 +11,10 @@ import java.nio.channels.FileChannel;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.prefs.BackingStoreException;
+import java.util.prefs.Preferences;
+
+import com.goofans.gootool.projects.ProjectManager;
 
 /**
  * Miscellaneous utilities, mostly IO-related.
@@ -86,6 +90,25 @@ public class Utilities
     finally {
       is.close();
     }
+  }
+
+  /**
+   * Reads the stream into a byte array.
+   *
+   * @param is The stream to read from.
+   * @throws IOException if the stream cannot be read.
+   */
+  public static byte[] readStream(InputStream is) throws IOException
+  {
+    ByteArrayOutputStream os = new ByteArrayOutputStream();
+    try {
+      copyStreams(is, os);
+    }
+    finally {
+      os.close();
+    }
+
+    return os.toByteArray();
   }
 
   /**
@@ -219,13 +242,47 @@ public class Utilities
 
     char[] buf = new char[BUFSIZ];
     BufferedReader r = new BufferedReader(new InputStreamReader(is));
+    try {
 
-    int numRead;
-    while ((numRead = r.read(buf, 0, BUFSIZ)) != -1) {
-      sb.append(buf, 0, numRead);
+      int numRead;
+      while ((numRead = r.read(buf, 0, BUFSIZ)) != -1) {
+        sb.append(buf, 0, numRead);
+      }
+
+      return sb.toString();
     }
+    finally {
+      r.close();
+      is.close();
+    }
+  }
 
-    return sb.toString();
+
+  /**
+   * Reads the remainder of the stream into a byte array.
+   * TODO: Not the most efficient implementation since we're using a tmpbuf and BAOS is using a resizable byte[], we need to implement this ourselves.
+   *
+   * @param is The stream to read from.
+   * @return The byte array read from the stream.
+   * @throws IOException if the stream couldn't be read.
+   */
+  public static byte[] readStreamIntoBytes(InputStream is) throws IOException
+  {
+    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+    try {
+      byte[] tmp = new byte[1024];
+
+      int numRead;
+
+      while (((numRead = is.read(tmp, 0, tmp.length)) != -1)) {
+        baos.write(tmp, 0, numRead);
+      }
+      return baos.toByteArray();
+    }
+    finally {
+      baos.close();
+      is.close();
+    }
   }
 
   /**
@@ -336,6 +393,17 @@ public class Utilities
 
     if (!testFile.delete()) {
       throw new IOException("Can't delete test file " + testFile);
+    }
+  }
+
+  public static void flushPrefs(Preferences prefsNode)
+  {
+    try {
+      prefsNode.flush();
+    }
+    catch (BackingStoreException e) {
+      log.log(Level.SEVERE, "Unable to flush preferences", e);
+      throw new RuntimeException("Unable to flush preferences to backing store", e);
     }
   }
 

@@ -13,13 +13,14 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 
+import com.goofans.gootool.facades.TargetFile;
+import com.goofans.gootool.projects.ProjectManager;
+import com.goofans.gootool.util.GUIUtil;
 import com.goofans.gootoolsp.leveledit.resource.Ball;
 import com.goofans.gootoolsp.leveledit.ui.WrappingGridLayout;
-import com.goofans.gootool.util.GUIUtil;
-import com.goofans.gootool.wog.WorldOfGoo;
 
 /**
  * @author David Croft (davidc@goofans.com)
@@ -54,9 +55,11 @@ public class BallPalette extends JComponent implements Scrollable
 
   public void addBalls() throws IOException
   {
-    File ballsDir = WorldOfGoo.getTheInstance().getCustomGameFile("res/balls");
+    TargetFile ballsDir = ProjectManager.simpleInit().getTarget().getRoot().getChild("res/balls");
 
-    File[] ballsDirs = ballsDir.listFiles();
+    // TODO
+//    File[] ballsDirs = ballsDir.list();
+    File[] ballsDirs = null;
     int i = 0;
     for (File dir : ballsDirs) {
       if (dir.isDirectory() && !dir.getName().startsWith("_")) {
@@ -87,7 +90,6 @@ public class BallPalette extends JComponent implements Scrollable
   public static void main(String[] args) throws IOException
   {
     GUIUtil.switchToSystemLookAndFeel();
-    WorldOfGoo.getTheInstance().init();
 
     JFrame frame = new JFrame("Ball Palette");
     frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);

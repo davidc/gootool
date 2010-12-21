@@ -7,13 +7,14 @@ package com.goofans.gootoolsp.leveledit.model;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
-import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.goofans.gootool.facades.SourceFile;
+import com.goofans.gootool.facades.TargetFile;
 import com.goofans.gootool.io.GameFormat;
-import com.goofans.gootool.wog.WorldOfGoo;
+import com.goofans.gootool.projects.ProjectManager;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -26,7 +27,7 @@ import org.w3c.dom.NodeList;
 public class Resources
 {
   private final Map<String, Image> images = new HashMap<String, Image>();
-  private final Map<String, File> sounds = new HashMap<String, File>();
+  private final Map<String, SourceFile> sounds = new HashMap<String, SourceFile>();
 
   public Resources(Document d) throws IOException
   {
@@ -35,9 +36,10 @@ public class Resources
     for (int i = 0; i < resourcesNodes.getLength(); i++) {
       Node resourcesEl = resourcesNodes.item(i);
 
-      File rootDir = WorldOfGoo.getTheInstance().getCustomGameFile("");
+//      File rootDir = WorldOfGoo.getTheInstance().getCustomGameFile("");
+      SourceFile rootDir = ProjectManager.simpleInit().getSource().getRoot();
 
-      File defaultPath = rootDir;
+      SourceFile defaultPath = rootDir;
       String defaultIdPrefix = "";
 
       for (int j = 0; j < resourcesEl.getChildNodes().getLength(); j++) {
@@ -46,27 +48,27 @@ public class Resources
           Element el = (Element) node;
 
           if ("SetDefaults".equals(el.getNodeName())) {
-            defaultPath = new File(rootDir, el.getAttribute("path"));
+            defaultPath = rootDir.getChild(el.getAttribute("path"));
             defaultIdPrefix = el.getAttribute("idprefix");
           }
           else if ("Image".equals(el.getNodeName())) {
             String id = defaultIdPrefix + el.getAttribute("id");
-            File f = new File(defaultPath, el.getAttribute("path") + ".png");
+            SourceFile f = defaultPath.getChild(el.getAttribute("path") + ".png");
 
             // HACK: fix Fish
             if ("IMAGE_BALL_FISH_WINGLEFT".equals(id)) id = "IMAGE_BALL_TIMEBUG_WINGLEFT";
             if ("IMAGE_BALL_FISH_WINGRIGHT".equals(id)) id = "IMAGE_BALL_TIMEBUG_WINGRIGHT";
 
             try {
-              images.put(id, ImageIO.read(f));
+              images.put(id, ImageIO.read(f.read()));
             }
             catch (IOException e) {
-              throw new IOException("Can't read " + f.getPath() + ": " + e.getMessage());
+              throw new IOException("Can't read " + f + ": " + e.getMessage());
             }
           }
           else if ("Sound".equals(el.getNodeName())) {
             String id = defaultIdPrefix + el.getAttribute("id");
-            File f = new File(defaultPath, el.getAttribute("path") + ".ogg");
+            SourceFile f = defaultPath.getChild(el.getAttribute("path") + ".ogg");
 
 //          System.out.println(id + "->" + f.getAbsolutePath());
             sounds.put(id, f);
@@ -81,7 +83,7 @@ public class Resources
     return images;
   }
 
-  public Map<String, File> getSounds()
+  public Map<String, SourceFile> getSounds()
   {
     return sounds;
   }
@@ -102,7 +104,7 @@ public class Resources
   public static synchronized Resources getGlobalResources() throws IOException
   {
     if (globalResources == null) {
-      File f = WorldOfGoo.getTheInstance().getCustomGameFile("properties/resources.xml.bin");
+      TargetFile f = ProjectManager.simpleInit().getTarget().getRoot().getChild(("properties/resources.xml.bin"));
       Document doc = GameFormat.decodeXmlBinFile(f);
       globalResources = new Resources(doc);
     }
@@ -112,9 +114,6 @@ public class Resources
   @SuppressWarnings({"UseOfSystemOutOrSystemErr", "HardCodedStringLiteral"})
   public static void main(String[] args) throws IOException
   {
-    WorldOfGoo worldOfGoo = WorldOfGoo.getTheInstance();
-    worldOfGoo.init();
-
 //    File f = worldOfGoo.getCustomGameFile("res/levels/AB3/AB3.resrc.bin");
 //    Document doc = GameFormat.decodeXmlBinFile(f);
 //    Resources res = new Resources(doc);

@@ -13,17 +13,15 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.prefs.Preferences;
 
 import com.goofans.gootool.util.GUIUtil;
 import com.goofans.gootool.util.ProgressIndicatingTask;
-import com.goofans.gootool.wog.WorldOfGoo;
 
 /**
  * @author David Croft (davidc@goofans.com)
  * @version $Id$
  */
-public class ImageL10nPanel implements ActionListener
+public class ImageLocalisationDialog extends JDialog implements ActionListener
 {
   private JTextField inputDirectoryTextField;
   private JButton inputDirectoryChangeButton;
@@ -40,8 +38,6 @@ public class ImageL10nPanel implements ActionListener
   private JCheckBox debugModeCheckBox;
   public LanguagesTableModel languagesDataModel;
 
-  private static final String PREF_L10N_WIKI_BASE = "l10n_wiki_base";
-
   private static final String CMD_ADD_LANGUAGE = "AddLanguage";
   private static final String CMD_REMOVE_LANGUAGE = "RemoveLanguage";
   private static final String CMD_BUILD_AND_VIEW = "BuildAndView";
@@ -50,8 +46,21 @@ public class ImageL10nPanel implements ActionListener
   private static final String CMD_CHANGE_OUTPUT = "ChangeOutputDir";
   private static final String CMD_CHANGE_COLOR = "ChangeColor";
 
-  public ImageL10nPanel()
+  public ImageLocalisationDialog(JFrame mainFrame)
   {
+    super(mainFrame, "Image Localisation Tool", false);
+
+
+//    setDefaultCloseOperation(HIDE_ON_CLOSE);
+
+//    setResizable(false);
+
+    setContentPane(rootPanel);
+
+
+//    GUIUtil.setDefaultClosingOkButton(okButton, this);
+    GUIUtil.setCloseOnEscape(this);
+
     languagesDataModel = new LanguagesTableModel();
     languagesTable.setModel(languagesDataModel);
 
@@ -75,8 +84,7 @@ public class ImageL10nPanel implements ActionListener
     buildAndSaveButton.setActionCommand(CMD_BUILD_AND_SAVE);
     buildAndSaveButton.addActionListener(this);
 
-    Preferences p = WorldOfGoo.getPreferences();
-    wikiBaseURLTextField.setText(p.get(PREF_L10N_WIKI_BASE, TranslationDownloader.DEFAULT_WIKI_URL));
+    wikiBaseURLTextField.setText(TranslationDownloader.DEFAULT_WIKI_URL);
 
     colorChooser.setBackground(Color.WHITE);
     colorChooser.setForeground(Color.WHITE);
@@ -85,6 +93,9 @@ public class ImageL10nPanel implements ActionListener
 
     outputDirectoryChangeButton.setActionCommand(CMD_CHANGE_OUTPUT);
     outputDirectoryChangeButton.addActionListener(this);
+
+    pack();
+    setLocationRelativeTo(mainFrame);
   }
 
   public void actionPerformed(ActionEvent event)

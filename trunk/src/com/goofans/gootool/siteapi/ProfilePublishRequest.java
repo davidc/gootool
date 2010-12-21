@@ -5,17 +5,18 @@
 
 package com.goofans.gootool.siteapi;
 
-import net.infotrek.util.TextUtil;
 import net.infotrek.util.EncodingUtil;
+import net.infotrek.util.TextUtil;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.List;
-import java.util.ArrayList;
 
-import com.goofans.gootool.profile.ProfileFactory;
 import com.goofans.gootool.profile.Profile;
+import com.goofans.gootool.projects.Project;
+import com.goofans.gootool.projects.ProjectManager;
 import com.goofans.gootool.util.DebugUtil;
 import com.goofans.gootool.util.XMLUtil;
 import org.w3c.dom.Document;
@@ -42,10 +43,6 @@ public class ProfilePublishRequest extends APIRequestAuthenticated
   public String publishProfile(Profile profile) throws APIException
   {
     log.log(Level.FINE, "Profile publish started");
-
-    if (!ProfileFactory.isProfileFound()) {
-      throw new APIException("Profile hasn't been located yet");
-    }
 
     addPostParameter("profile", TextUtil.base64Encode(EncodingUtil.stringToBytesUtf8(profile.getData())));
 
@@ -78,9 +75,8 @@ public class ProfilePublishRequest extends APIRequestAuthenticated
   public static void main(String[] args) throws APIException, IOException
   {
     DebugUtil.setAllLogging();
-    ProfileFactory.init();
 
-    new ProfilePublishRequest().publishProfile(ProfileFactory.getProfileData().getCurrentProfile());
-
+    Project project = ProjectManager.simpleInit();
+    new ProfilePublishRequest().publishProfile(project.getProfileData().getCurrentProfile());
   }
 }

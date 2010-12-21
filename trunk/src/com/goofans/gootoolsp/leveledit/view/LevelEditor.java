@@ -7,32 +7,32 @@ package com.goofans.gootoolsp.leveledit.view;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreeSelectionModel;
+import javax.swing.undo.CannotRedoException;
+import javax.swing.undo.CannotUndoException;
 import javax.swing.undo.UndoManager;
 import javax.swing.undo.UndoableEdit;
-import javax.swing.undo.CannotUndoException;
-import javax.swing.undo.CannotRedoException;
-import javax.swing.event.ChangeListener;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ListSelectionListener;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.TreeSelectionModel;
-import javax.swing.tree.DefaultTreeModel;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.IOException;
-import java.util.logging.Logger;
-import static java.util.logging.Level.*;
 import java.text.NumberFormat;
+import java.util.logging.Logger;
 
 import com.goofans.gootool.GooTool;
 import com.goofans.gootool.GooToolResourceBundle;
+import com.goofans.gootool.util.GUIUtil;
 import com.goofans.gootoolsp.leveledit.model.Level;
 import com.goofans.gootoolsp.leveledit.model.LevelContentsItem;
 import com.goofans.gootoolsp.leveledit.tools.*;
 import com.goofans.gootoolsp.leveledit.ui.Toolbar;
-import com.goofans.gootool.util.GUIUtil;
-import com.goofans.gootool.wog.WorldOfGoo;
+
+import static java.util.logging.Level.*;
 
 /**
  * @author David Croft (davidc@goofans.com)
@@ -491,8 +491,7 @@ public class LevelEditor extends JFrame implements ActionListener
     GUIUtil.switchToSystemLookAndFeel();
 //    DebugUtil.setAllLogging();
 
-    WorldOfGoo.getTheInstance().init();
-
+    
     Level level = new Level("GoingUp");
 
     LevelEditor dialog = new LevelEditor(level);

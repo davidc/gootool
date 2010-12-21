@@ -36,6 +36,6 @@ public abstract class APIRequestAuthenticated extends APIRequest
 
     addPostParameter(PARAM_USERNAME, username);
     addPostParameter(PARAM_PASSWORD, password);
-    log.finest("Instantiated authenticated APIRequest for user " + username + " to " + url);
+    log.finest("Instantiated authenticated APIRequest for user " + username + " to " + url); //NON-NLS
   }
 }
