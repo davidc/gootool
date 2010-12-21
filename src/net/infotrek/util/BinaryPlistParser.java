@@ -51,7 +51,7 @@ public class BinaryPlistParser
   private int numObjects;
   private int offsetTableOffset;
 
-  private BinaryPlistParser(byte[] data)
+  public BinaryPlistParser(byte[] data)
   {
     buf = new BigEndianBinaryBuffer(data);
   }
