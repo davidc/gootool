@@ -25,6 +25,7 @@ public class Tower
 
   private static final String TOWERELEMENT_BALL = "b";
   private static final String TOWERELEMENT_STRAND = "s";
+  private static final int MAX_BALLS = 300;
 
   private final List<Ball> balls;
   private final List<Strand> strands;
@@ -37,14 +38,14 @@ public class Tower
 
   public Tower(String towerStr) throws IOException
   {
-    log.fine("Constructing tower from " + towerStr);
+    log.fine("Constructing tower from " + towerStr); //NON-NLS
 
     if (towerStr.charAt(0) == '_') {
       towerStr = towerStr.substring(1);
     }
 
-    balls = new ArrayList<Ball>(300);
-    strands = new ArrayList<Strand>(300);
+    balls = new ArrayList<Ball>(MAX_BALLS);
+    strands = new ArrayList<Strand>(MAX_BALLS);
 
     usedStrandBalls = 0;
     totalBalls = 0;
