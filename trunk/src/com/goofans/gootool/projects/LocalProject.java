@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008, 2009, 2010 David C A Croft. All rights reserved. Your use of this computer software
+ * Copyright (c) 2008, 2009, 2010, 2011 David C A Croft. All rights reserved. Your use of this computer software
  * is permitted only in accordance with the GooTool license agreement distributed with this file.
  */
 
@@ -86,7 +86,7 @@ public class LocalProject extends Project
     File profileFile = new File(profileFilePath);
     if (!profileFile.exists()) return null;
 
-    return GameFormat.decodeProfileFile(profileFile);
+    return getCodecForGameXml().decodeFile(profileFile);
   }
 
   @Override
@@ -95,7 +95,7 @@ public class LocalProject extends Project
     File profileFile = new File(getProfileFile());
     if (!profileFile.exists()) throw new IOException("Profile not found yet");
 
-    GameFormat.encodeProfileFile(profileFile, profileBytes);
+    getCodecForGameXml().encodeFile(profileFile, profileBytes);
   }
 
   @Override
@@ -111,7 +111,8 @@ public class LocalProject extends Project
   @Override
   protected void loadProjectConfiguration(ProjectConfiguration c)
   {
-    if (!(c instanceof LocalProjectConfiguration)) throw new RuntimeException("LocalProject can only load LocalProjectConfigurations");
+    if (!(c instanceof LocalProjectConfiguration))
+      throw new RuntimeException("LocalProject can only load LocalProjectConfigurations");
 
     super.loadProjectConfiguration(c);
 
@@ -143,7 +144,8 @@ public class LocalProject extends Project
 
   protected void saveProjectConfiguration(ProjectConfiguration c)
   {
-    if (!(c instanceof LocalProjectConfiguration)) throw new RuntimeException("LocalProject can only save LocalProjectConfigurations");
+    if (!(c instanceof LocalProjectConfiguration))
+      throw new RuntimeException("LocalProject can only save LocalProjectConfigurations");
 
     super.saveProjectConfiguration(c);
 
@@ -212,5 +214,41 @@ public class LocalProject extends Project
         return GameFormat.MAC_BIN_CODEC;
     }
     return null;
+  }
+
+  @Override
+  public String getGameXmlFilename(String baseName)
+  {
+    return baseName + ".bin"; //NON-NLS
+  }
+
+  @Override
+  public String getGamePngFilename(String baseName)
+  {
+    if (PlatformSupport.getPlatform() == PlatformSupport.Platform.MACOSX) {
+      return baseName + ".binltl"; //NON-NLS
+    }
+    else {
+      return baseName;
+    }
+  }
+
+  @Override
+  public String getGameSoundFilename(String baseName)
+  {
+    return baseName + ".ogg"; //NON-NLS
+  }
+
+  @Override
+  public String getGameMusicFilename(String baseName)
+  {
+    return baseName + ".ogg"; //NON-NLS
+  }
+
+  @Override
+  public String getGameAnimMovieFilename(String baseName)
+  {
+    //TODO if linux-64, return binltl64
+    return baseName + ".binltl"; //NON-NLS
   }
 }

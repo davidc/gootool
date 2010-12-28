@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008, 2009, 2010 David C A Croft. All rights reserved. Your use of this computer software
+ * Copyright (c) 2008, 2009, 2010, 2011 David C A Croft. All rights reserved. Your use of this computer software
  * is permitted only in accordance with the GooTool license agreement distributed with this file.
  */
 
@@ -273,7 +273,7 @@ public class BinaryPlistParser
 
     System.out.println("data = " + data);
 
-    byte[] pers2dat = (byte[]) ((Map) data).get("pers2.dat");
+    byte[] pers2dat = (byte[]) ((Map) data).get("pers2.dat"); //NON-NLS
 
     ProfileData pd = new ProfileData(pers2dat);
     System.out.println("pd = " + pd);

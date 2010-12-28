@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008, 2009, 2010 David C A Croft. All rights reserved. Your use of this computer software
+ * Copyright (c) 2008, 2009, 2010, 2011 David C A Croft. All rights reserved. Your use of this computer software
  * is permitted only in accordance with the GooTool license agreement distributed with this file.
  */
 
@@ -132,7 +132,7 @@ public class StartupTask extends ProgressIndicatingTask
       int r = JOptionPane.showConfirmDialog(parentComponent, resourceBundle.getString("launcher.upgrade.1.1.0.message"), resourceBundle.getString("launcher.upgrade.1.1.0.title"), JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
 
       if (r != JOptionPane.OK_OPTION) {
-        log.log(Level.SEVERE, "User refused to migrate to 1.1.0"); // NON-NLS
+        log.log(Level.SEVERE, "User refused to migrate to 1.1.0");
         showMessageDialog(resourceBundle.getString("launcher.upgrade.1.1.0.title"), resourceBundle.getString("launcher.upgrade.1.1.0.cancelled"), JOptionPane.WARNING_MESSAGE);
         System.exit(1);
       }
@@ -172,7 +172,7 @@ public class StartupTask extends ProgressIndicatingTask
           Utilities.moveFile(file, destFile);
         }
         catch (IOException e) {
-          log.log(Level.WARNING, "Unable to move " + file + " to " + destFile, e); //NON-NLS
+          log.log(Level.WARNING, "Unable to move " + file + " to " + destFile, e);
           showMessageDialog(resourceBundle.getString("launcher.upgrade.1.0.3.migrateAddins.failure.title"),
                   resourceBundle.formatString("launcher.upgrade.1.0.3.migrateAddins.failure.message", file, destFile),
                   JOptionPane.ERROR_MESSAGE);
@@ -180,7 +180,7 @@ public class StartupTask extends ProgressIndicatingTask
       }
 
       if (!oldAddinsDir.delete()) {
-        log.log(Level.WARNING, "Unable to delete old addins directory " + oldAddinsDir); //NON-NLS
+        log.log(Level.WARNING, "Unable to delete old addins directory " + oldAddinsDir);
       }
     }
   }
@@ -218,7 +218,7 @@ public class StartupTask extends ProgressIndicatingTask
       AddinsStore.initAddinsDir();
     }
     catch (IOException e) {
-      log.log(Level.SEVERE, "Unable to create addins directory", e); //NON-NLS
+      log.log(Level.SEVERE, "Unable to create addins directory", e);
       showMessageDialog(resourceBundle.getString("launcher.initAddins.cantCreate.title"),
               resourceBundle.formatString("launcher.initAddins.cantCreate.message", e.getLocalizedMessage()),
               JOptionPane.ERROR_MESSAGE);

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008, 2009, 2010 David C A Croft. All rights reserved. Your use of this computer software
+ * Copyright (c) 2008, 2009, 2010, 2011 David C A Croft. All rights reserved. Your use of this computer software
  * is permitted only in accordance with the GooTool license agreement distributed with this file.
  */
 
@@ -38,7 +38,7 @@ public class Tower
 
   public Tower(String towerStr) throws IOException
   {
-    log.fine("Constructing tower from " + towerStr); //NON-NLS
+    log.fine("Constructing tower from " + towerStr);
 
     if (towerStr.charAt(0) == '_') {
       towerStr = towerStr.substring(1);

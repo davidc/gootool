@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008, 2009, 2010 David C A Croft. All rights reserved. Your use of this computer software
+ * Copyright (c) 2008, 2009, 2010, 2011 David C A Croft. All rights reserved. Your use of this computer software
  * is permitted only in accordance with the GooTool license agreement distributed with this file.
  */
 
@@ -21,6 +21,7 @@ import com.goofans.gootool.io.GameFormat;
 import com.goofans.gootool.model.Language;
 import com.goofans.gootool.model.Resolution;
 import com.goofans.gootool.projects.LocalProjectConfiguration;
+import com.goofans.gootool.projects.Project;
 import com.goofans.gootool.projects.ProjectConfiguration;
 import com.goofans.gootool.util.XMLUtil;
 import org.w3c.dom.Document;
@@ -66,8 +67,7 @@ public class GamePreferences
 
   public static void readGamePreferences(ProjectConfiguration c, Source source) throws IOException
   {
-    // TODO platform-specific locations
-    SourceFile sourceFile = source.getRoot().getChild(USER_CONFIG_FILE);
+    SourceFile sourceFile = source.getGameRoot().getChild(USER_CONFIG_FILE);
 
     // Load the user's config.txt
     Document document;
@@ -117,11 +117,10 @@ public class GamePreferences
     }
   }
 
-  static void writeGamePreferences(ProjectConfiguration c, Source source, Target target) throws IOException
+  static void writeGamePreferences(Project project, ProjectConfiguration c, Source source, Target target) throws IOException
   {
-    // TODO platform-specific locations
-    SourceFile sourceFile = source.getRoot().getChild(GamePreferences.USER_CONFIG_FILE);
-    TargetFile targetFile = target.getRoot().getChild(GamePreferences.USER_CONFIG_FILE);
+    SourceFile sourceFile = source.getGameRoot().getChild(USER_CONFIG_FILE);
+    TargetFile targetFile = target.getGameRoot().getChild(USER_CONFIG_FILE);
 
     // Load the user's config.txt
     Document document;
@@ -163,7 +162,7 @@ public class GamePreferences
       }
     }
     catch (XPathExpressionException e) {
-      log.log(Level.SEVERE, "Unable to execute XPath", e); //NON-NLS
+      log.log(Level.SEVERE, "Unable to execute XPath", e);
       throw new IOException("Unable to execute XPath: " + e.getLocalizedMessage());
     }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008, 2009, 2010 David C A Croft. All rights reserved. Your use of this computer software
+ * Copyright (c) 2008, 2009, 2010, 2011 David C A Croft. All rights reserved. Your use of this computer software
  * is permitted only in accordance with the GooTool license agreement distributed with this file.
  */
 
@@ -112,7 +112,7 @@ public class LinuxSupport extends PlatformSupport
           while ((line = r.readLine()) != null) {
             String[] bits = line.split("=", 2);
             log.finest("lastrun: " + bits[0] + " -> " + bits[1]);
-            if ("gamedir".equalsIgnoreCase(bits[0])) {
+            if ("gamedir".equalsIgnoreCase(bits[0])) { //NON-NLS
               File dir = new File(bits[1]);
               if (isWorldOfGooInDir(dir)) {
                 log.info("Found World of Goo through lastrun pointer at " + dir);
@@ -162,7 +162,7 @@ public class LinuxSupport extends PlatformSupport
   protected void doLaunch(File targetDir) throws IOException
   {
     File exe = new File(targetDir, SCRIPT_FILENAME);
-    log.log(Level.FINE, "Launching " + exe + " in " + targetDir); //NON-NLS
+    log.log(Level.FINE, "Launching " + exe + " in " + targetDir);
 
     ProcessBuilder pb = new ProcessBuilder(exe.getAbsolutePath());
     pb.directory(targetDir);

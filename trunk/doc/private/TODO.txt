@@ -1,3 +1,5 @@
+- Enabled addins aren't getting stored on save.
+
 - Project drop-down shouldn't list the null projects!!!
 
 -menu options save/save&launch/revert should only be active if active project, and should call projectcontroller

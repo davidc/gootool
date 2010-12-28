@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008, 2009, 2010 David C A Croft. All rights reserved. Your use of this computer software
+ * Copyright (c) 2008, 2009, 2010, 2011 David C A Croft. All rights reserved. Your use of this computer software
  * is permitted only in accordance with the GooTool license agreement distributed with this file.
  */
 
@@ -25,7 +25,7 @@ public class TranslationDownloader
 
   public static Map<String, String> getTranslations(String wikiBase, String wikiPage, boolean getTranslation) throws IOException
   {
-    BufferedReader r = new BufferedReader(new InputStreamReader(new URL(wikiBase + "index.php?title=" + wikiPage + "&action=raw").openStream(), Charset.forName("UTF-8")));
+    BufferedReader r = new BufferedReader(new InputStreamReader(new URL(wikiBase + "index.php?title=" + wikiPage + "&action=raw").openStream(), Charset.forName("UTF-8"))); //NON-NLS
 
     /**
      * 0 = outside everything
@@ -77,7 +77,7 @@ public class TranslationDownloader
 //            System.out.println("english = " + english);
 //            System.out.println("translation = " + translation);
 
-            translation = translation.replaceAll("\\<br\\>", "|");
+            translation = translation.replaceAll("\\<br\\>", "|"); //NON-NLS
             translation = translation.replaceAll(" \\|", "|");
             translation = translation.replaceAll("\\| ", "|");
             translations.put(key, translation);

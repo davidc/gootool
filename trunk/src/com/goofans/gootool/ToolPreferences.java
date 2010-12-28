@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008, 2009, 2010 David C A Croft. All rights reserved. Your use of this computer software
+ * Copyright (c) 2008, 2009, 2010, 2011 David C A Croft. All rights reserved. Your use of this computer software
  * is permitted only in accordance with the GooTool license agreement distributed with this file.
  */
 
@@ -82,10 +82,10 @@ public class ToolPreferences
    */
   public static boolean isIgnoreUpdate(VersionSpec version)
   {
-    log.finer("Is ignoring update? " + version); //NON-NLS
+    log.finer("Is ignoring update? " + version);
 
     String ignoreVersion = PREFS.get(PREF_IGNORE_UPDATE, null);
-    log.finer("Current setting: " + ignoreVersion); //NON-NLS
+    log.finer("Current setting: " + ignoreVersion);
 
     return ignoreVersion != null && ignoreVersion.equals(version.toString());
   }
@@ -97,7 +97,7 @@ public class ToolPreferences
    */
   public static void setIgnoreUpdate(VersionSpec version)
   {
-    log.fine("Ignoring update " + version); //NON-NLS
+    log.fine("Ignoring update " + version);
     PREFS.put(PREF_IGNORE_UPDATE, version.toString());
     Utilities.flushPrefs(PREFS);
   }
@@ -155,7 +155,7 @@ public class ToolPreferences
       return new String(TextUtil.base64Decode(enc));
     }
     catch (IOException e) {
-      log.log(Level.SEVERE, "Base64 encoding exception in password, removing"); //NON-NLS
+      log.log(Level.SEVERE, "Base64 encoding exception in password, removing");
       return null;
     }
   }
@@ -245,7 +245,7 @@ public class ToolPreferences
     for (String prefKey : prefKeys) {
       out.print(prefKey + "=");
       if (prefKey.equals(PREF_GOOFANS_PASSWORD)) {
-        out.println("[hidden]");
+        out.println("[hidden]"); //NON-NLS
       }
       else {
         out.println(PREFS.get(prefKey, null));

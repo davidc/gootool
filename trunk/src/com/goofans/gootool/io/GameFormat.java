@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008, 2009, 2010 David C A Croft. All rights reserved. Your use of this computer software
+ * Copyright (c) 2008, 2009, 2010, 2011 David C A Croft. All rights reserved. Your use of this computer software
  * is permitted only in accordance with the GooTool license agreement distributed with this file.
  */
 
@@ -117,46 +117,18 @@ public class GameFormat
     return decoded;
   }
 
-  @Deprecated
-  public static void encodeProfileFile(File file, byte[] input) throws IOException
-  {
-    log.finest("encode profile file: " + file);
-
-    switch (PlatformSupport.getPlatform()) {
-      case WINDOWS:
-      case LINUX:
-        AES_BIN_CODEC.encodeFile(file, input);
-        break;
-      case MACOSX:
-        MAC_BIN_CODEC.encodeFile(file, input);
-        break;
-    }
-  }
-
-  // pass File WITHOUT binltl suffix
-  @Deprecated
-  public static BufferedImage decodeImage(File file) throws IOException
-  {
-    switch (PlatformSupport.getPlatform()) {
-      case WINDOWS:
-      case LINUX:
-        return ImageIO.read(file);
-      case MACOSX:
-        return MacGraphicFormat.decodeImage(new File(file.getParent(), file.getName() + ".binltl"));
-    }
-    return null;
-  }
-
-  // pass File WITHOUT binltl suffix
+  // pass File WITH binltl suffix if required
   @Deprecated
   public static BufferedImage decodeImage(SourceFile file) throws IOException
   {
+    if (file == null) throw new RuntimeException("null image passed to decodeImage");
+    if (!file.isFile()) throw new IOException("File " + file + " not found in decodeImage");
     switch (PlatformSupport.getPlatform()) {
       case WINDOWS:
       case LINUX:
         return ImageIO.read(file.read());
       case MACOSX:
-        return MacGraphicFormat.decodeImage(file.getParentDirectory().getChild(file.getName() + ".binltl").read());
+        return MacGraphicFormat.decodeImage(file.read()); //NON-NLS
     }
     return null;
   }

@@ -1,9 +1,19 @@
 /*
- * Copyright (c) 2008, 2009, 2010 David C A Croft. All rights reserved. Your use of this computer software
+ * Copyright (c) 2008, 2009, 2010, 2011 David C A Croft. All rights reserved. Your use of this computer software
  * is permitted only in accordance with the GooTool license agreement distributed with this file.
  */
 
 package com.goofans.datamining;
+
+import com.goofans.gootool.facades.Source;
+import com.goofans.gootool.facades.SourceFile;
+import com.goofans.gootool.io.Codec;
+import com.goofans.gootool.projects.Project;
+import com.goofans.gootool.projects.ProjectManager;
+import com.goofans.gootool.util.XMLUtil;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
 
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathExpression;
@@ -11,14 +21,6 @@ import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-
-import com.goofans.gootool.facades.SourceFile;
-import com.goofans.gootool.io.GameFormat;
-import com.goofans.gootool.projects.ProjectManager;
-import com.goofans.gootool.util.XMLUtil;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
 
 /**
  * @author David Croft (davidc@goofans.com)
@@ -35,12 +37,15 @@ public class Levels
 
   public static void main(String[] args) throws IOException, XPathExpressionException
   {
-    SourceFile sourceDir = ProjectManager.simpleInit().getSource().getRoot();
+    Project project = ProjectManager.simpleInit();
+    SourceFile sourceRoot = project.getSource().getGameRoot();
 
-    Document textDoc = XMLUtil.loadDocumentFromInputStream(new ByteArrayInputStream(GameFormat.decodeBinFile(sourceDir.getChild("properties/text.xml.bin"))));
+    Codec codec = project.getCodecForGameXml();
+
+    Document textDoc = XMLUtil.loadDocumentFromInputStream(new ByteArrayInputStream(codec.decodeFile(sourceRoot.getChild(project.getGameXmlFilename("properties/text.xml")))));
 
     for (int island = 1; island <= 5; ++island) {
-      Document islandDoc = XMLUtil.loadDocumentFromInputStream(new ByteArrayInputStream(GameFormat.decodeBinFile(sourceDir.getChild("res/islands/island" + island + ".xml.bin"))));
+      Document islandDoc = XMLUtil.loadDocumentFromInputStream(new ByteArrayInputStream(codec.decodeFile(sourceRoot.getChild(project.getGameXmlFilename("res/islands/island" + island + ".xml")))));
       NodeList levelList = islandDoc.getElementsByTagName("level");
       for (int i = 0; i < levelList.getLength(); i++) {
         Element levelNode = (Element) levelList.item(i);

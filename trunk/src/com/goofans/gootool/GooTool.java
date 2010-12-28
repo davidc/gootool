@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008, 2009, 2010 David C A Croft. All rights reserved. Your use of this computer software
+ * Copyright (c) 2008, 2009, 2010, 2011 David C A Croft. All rights reserved. Your use of this computer software
  * is permitted only in accordance with the GooTool license agreement distributed with this file.
  */
 
@@ -18,8 +18,6 @@ import java.util.logging.Logger;
 import java.util.prefs.Preferences;
 
 import com.goofans.gootool.platform.PlatformSupport;
-import com.goofans.gootool.projects.Project;
-import com.goofans.gootool.projects.ProjectManager;
 import com.goofans.gootool.util.GUIUtil;
 import com.goofans.gootool.util.ProgressIndicatingTask;
 import com.goofans.gootool.util.Version;
@@ -34,12 +32,12 @@ public class GooTool
 {
   private static final Logger log = Logger.getLogger(GooTool.class.getName());
 
-  private static ImageIcon icon;
-  private static GooToolResourceBundle resourceBundle;
-  private static MainController mainController;
+  private static ImageIcon icon = null;
+  private static GooToolResourceBundle resourceBundle = null;
+  private static MainController mainController = null;
 
-  private static ExecutorService threadPoolExecutor;
-  private static ScheduledExecutorService scheduledExecutor;
+  private static ExecutorService threadPoolExecutor = null;
+  private static ScheduledExecutorService scheduledExecutor = null;
 
   private GooTool()
   {
@@ -78,6 +76,8 @@ public class GooTool
     }
     catch (Throwable t) {
       log.log(Level.SEVERE, "Uncaught exception", t);
+      // This can't be l10n since we might not yet have initialised the textProvider
+      //noinspection HardCodedStringLiteral,HardcodedLineSeparator
       JOptionPane.showMessageDialog(null, "Uncaught exception (" + t.getClass().getName() + "):\n" + t.getLocalizedMessage(), "GooTool Exception", JOptionPane.ERROR_MESSAGE);
       System.exit(1);
     }
@@ -86,16 +86,16 @@ public class GooTool
   /**
    * This is public so it can be used by the main() function of test cases.
    */
-  public static void initExecutors()
+  public static synchronized void initExecutors()
   {
-    if (threadPoolExecutor != null) {
+    if (threadPoolExecutor != null || scheduledExecutor != null) {
       throw new RuntimeException("Executors are already initialised");
     }
     threadPoolExecutor = Executors.newCachedThreadPool();
     scheduledExecutor = Executors.newScheduledThreadPool(1);
   }
 
-  private static List<Runnable> queuedTasks;
+  private static List<Runnable> queuedTasks = null;
   private static boolean startupIsComplete = false;
 
   public static void initQueuedTasks()
@@ -140,7 +140,7 @@ public class GooTool
 
   private static void initIcon()
   {
-    icon = new ImageIcon(GooTool.class.getResource("/48x48.png"));
+    icon = new ImageIcon(GooTool.class.getResource("/48x48.png")); //NON-NLS
     log.fine("icon = " + icon);
   }
 
@@ -160,7 +160,7 @@ public class GooTool
   private static synchronized void initTextProvider()
   {
     if (resourceBundle == null) {
-      resourceBundle = new GooToolResourceBundle("text");
+      resourceBundle = new GooToolResourceBundle("text"); //NON-NLS
     }
   }
 

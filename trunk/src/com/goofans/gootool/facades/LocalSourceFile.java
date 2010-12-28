@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008, 2009, 2010 David C A Croft. All rights reserved. Your use of this computer software
+ * Copyright (c) 2008, 2009, 2010, 2011 David C A Croft. All rights reserved. Your use of this computer software
  * is permitted only in accordance with the GooTool license agreement distributed with this file.
  */
 
@@ -31,15 +31,19 @@ public class LocalSourceFile implements SourceFile
 
   public String getFullName()
   {
-    String rootPrefix = ((LocalSourceFile) source.getRoot()).backingFile.getAbsolutePath();
-    System.out.println("rootPrefix = " + rootPrefix);
+    String rootPrefix = ((LocalSourceFile) source.getRealRoot()).backingFile.getAbsolutePath();
+
+//    System.out.println("rootPrefix = " + rootPrefix);
     String myAbsolutePath = backingFile.getAbsolutePath();
-    System.out.println("myAbsolutePath = " + myAbsolutePath);
+//    System.out.println("myAbsolutePath = " + myAbsolutePath);
 
-    if (!myAbsolutePath.startsWith(rootPrefix)) throw new RuntimeException("Oddness abounds: local source file " + myAbsolutePath + " is not a child of root " + rootPrefix);
+    if (!myAbsolutePath.startsWith(rootPrefix))
+      throw new RuntimeException("Oddness abounds: local source file " + myAbsolutePath + " is not a child of root " + rootPrefix);
 
-    System.out.println("myAbsolutePath.substring(rootPrefix.length()) = " + myAbsolutePath.substring(rootPrefix.length()));
-    return myAbsolutePath.substring(rootPrefix.length());
+    if (myAbsolutePath.length() == rootPrefix.length()) return ""; // We are the root.
+
+//    System.out.println("myAbsolutePath.substring(rootPrefix.length()+1) = " + myAbsolutePath.substring(rootPrefix.length()+1));
+    return myAbsolutePath.substring(rootPrefix.length() + 1);
   }
 
   public boolean isFile()
@@ -68,7 +72,7 @@ public class LocalSourceFile implements SourceFile
   public SourceFile getParentDirectory()
   {
     // Are we already the root?
-    if (((LocalSourceFile) source.getRoot()).backingFile.equals(this.backingFile)) return null;
+    if (((LocalSourceFile) source.getRealRoot()).backingFile.equals(this.backingFile)) return null;
 
     File parentFile = backingFile.getParentFile();
     if (parentFile == null) return null;
@@ -95,6 +99,28 @@ public class LocalSourceFile implements SourceFile
   public InputStream read() throws IOException
   {
     return new FileInputStream(backingFile);
+  }
+
+  @Override
+  public boolean equals(Object o)
+  {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+
+    LocalSourceFile that = (LocalSourceFile) o;
+
+    if (backingFile != null ? !backingFile.equals(that.backingFile) : that.backingFile != null) return false;
+    if (source != null ? !source.equals(that.source) : that.source != null) return false;
+
+    return true;
+  }
+
+  @Override
+  public int hashCode()
+  {
+    int result = source != null ? source.hashCode() : 0;
+    result = 31 * result + (backingFile != null ? backingFile.hashCode() : 0);
+    return result;
   }
 
   @Override

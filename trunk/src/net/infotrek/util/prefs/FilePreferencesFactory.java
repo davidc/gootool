@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008, 2009, 2010 David C A Croft. All rights reserved. Your use of this computer software
+ * Copyright (c) 2008, 2009, 2010, 2011 David C A Croft. All rights reserved. Your use of this computer software
  * is permitted only in accordance with the GooTool license agreement distributed with this file.
  */
 
@@ -47,14 +47,14 @@ public class FilePreferencesFactory implements PreferencesFactory
     return rootPreferences;
   }
 
-  private static File preferencesFile;
+  private static File preferencesFile = null;
 
-  public static File getPreferencesFile()
+  public static synchronized File getPreferencesFile()
   {
     if (preferencesFile == null) {
       String prefsFile = System.getProperty(SYSTEM_PROPERTY_FILE);
       if (prefsFile == null || prefsFile.length() == 0) {
-        prefsFile = System.getProperty("user.home") + File.separator + ".fileprefs";
+        prefsFile = System.getProperty("user.home") + File.separator + ".fileprefs"; //NON-NLS
       }
       preferencesFile = new File(prefsFile).getAbsoluteFile();
       log.finer("Preferences file is " + preferencesFile);

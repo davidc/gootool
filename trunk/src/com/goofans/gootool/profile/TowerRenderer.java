@@ -1,9 +1,14 @@
 /*
- * Copyright (c) 2008, 2009, 2010 David C A Croft. All rights reserved. Your use of this computer software
+ * Copyright (c) 2008, 2009, 2010, 2011 David C A Croft. All rights reserved. Your use of this computer software
  * is permitted only in accordance with the GooTool license agreement distributed with this file.
  */
 
 package com.goofans.gootool.profile;
+
+import com.goofans.gootool.facades.SourceFile;
+import com.goofans.gootool.io.GameFormat;
+import com.goofans.gootool.projects.Project;
+import com.goofans.gootool.projects.ProjectManager;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -15,11 +20,6 @@ import java.io.IOException;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import com.goofans.gootool.facades.SourceFile;
-import com.goofans.gootool.io.GameFormat;
-import com.goofans.gootool.projects.Project;
-import com.goofans.gootool.projects.ProjectManager;
 
 /**
  * Renders a World of Goo Corporation tower to various image formats.
@@ -64,28 +64,27 @@ public class TowerRenderer implements ImageObserver
   {
     this.t = t;
 
-    SourceFile sourceRoot = project.getSource().getRoot();
+    SourceFile sourceRoot = project.getSource().getGameRoot();
 
     // Pick up the images out of the wog folder
-    SourceFile ballFile = sourceRoot.getChild("res/balls/Drained/body.png");
+    SourceFile ballFile = sourceRoot.getChild(project.getGamePngFilename("res/balls/Drained/body.png"));
     ballImage = GameFormat.decodeImage(ballFile);
 
     // Balls need to be nudged so they are centered on the given position.
     ballNudgeX = -(ballImage.getWidth() / 2);
     ballNudgeY = -(ballImage.getHeight() / 2);
 
-    SourceFile strandFile = sourceRoot.getChild("res/balls/Drained/spring_goo.png");
+    SourceFile strandFile = sourceRoot.getChild(project.getGamePngFilename("res/balls/Drained/spring_goo.png"));
     strandImage = GameFormat.decodeImage(strandFile);
 
     // Strands need to be drawn with origin on their start point, and stretched
     strandHeight = strandImage.getHeight();
     strandXOffset = -(strandImage.getWidth() / 2);
 
-
-    SourceFile groundFile = sourceRoot.getChild("res/levels/wogcd/groundTile.png");
+    SourceFile groundFile = sourceRoot.getChild(project.getGamePngFilename("res/levels/wogcd/groundTile.png"));
     groundImage = GameFormat.decodeImage(groundFile);
 
-    SourceFile skyFile = sourceRoot.getChild("res/levels/wogcd/skytile.png");
+    SourceFile skyFile = sourceRoot.getChild(project.getGamePngFilename("res/levels/wogcd/skytile.png"));
     skyImage = GameFormat.decodeImage(skyFile);
   }
 
@@ -302,7 +301,8 @@ public class TowerRenderer implements ImageObserver
 
   private void rotateTest() throws IOException
   {
-    SourceFile strandFile = ProjectManager.simpleInit().getSource().getRoot().getChild("res/balls/Drained/spring_goo.png");
+    Project project = ProjectManager.simpleInit();
+    SourceFile strandFile = project.getSource().getGameRoot().getChild(project.getGamePngFilename("res/balls/Drained/spring_goo.png"));
 
     BufferedImage strandImage = ImageIO.read(strandFile.read());
 

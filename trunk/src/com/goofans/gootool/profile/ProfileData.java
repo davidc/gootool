@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008, 2009, 2010 David C A Croft. All rights reserved. Your use of this computer software
+ * Copyright (c) 2008, 2009, 2010, 2011 David C A Croft. All rights reserved. Your use of this computer software
  * is permitted only in accordance with the GooTool license agreement distributed with this file.
  */
 
@@ -16,7 +16,6 @@ import java.util.logging.Level;
 
 import com.goofans.gootool.io.GameFormat;
 import com.goofans.gootool.util.DebugUtil;
-import com.goofans.gootool.util.Utilities;
 
 /**
  * Contains all profiles (up to 3) in the user's profile file.
@@ -35,11 +34,6 @@ public class ProfileData
   private final Map<String, String> data = new LinkedHashMap<String, String>();
   private final Profile[] profiles = new Profile[MAX_PROFILES];
 
-  private ProfileData(File f) throws IOException
-  {
-    this(GameFormat.decodeProfileFile(f));
-  }
-
   public ProfileData(byte[] profile) throws IOException
   {
     readProfileData(profile);
@@ -56,8 +50,8 @@ public class ProfileData
 
   private ProfileData(Profile p)
   {
-    data.put("countrycode", "EU");
-    data.put("mrpp", "0");
+    data.put("countrycode", "EU"); //NON-NLS
+    data.put("mrpp", "0"); //NON-NLS
     profiles[0] = p;
   }
 
@@ -194,12 +188,27 @@ public class ProfileData
     out.write(bytes);
   }
 
+  public static boolean isValidProfile(File file)
+  {
+    if (!file.exists()) return false;
+
+    // Attempt to read it in
+    try {
+      new ProfileData(GameFormat.decodeProfileFile(file));
+      return true;
+    }
+    catch (IOException e) {
+      log.log(Level.WARNING, "Unable to read profile at " + file, e);
+      return false;
+    }
+  }
+
   @SuppressWarnings({"HardCodedStringLiteral", "HardcodedFileSeparator", "UseOfSystemOutOrSystemErr"})
   public static void main(String[] args) throws IOException
   {
     DebugUtil.setAllLogging();
     // Test a profile can be loaded ok
-    ProfileData pd = new ProfileData(new File("testcases/qwsx-pers2.dat"));
+    ProfileData pd = new ProfileData(GameFormat.decodeProfileFile(new File("testcases/qwsx-pers2.dat")));
     System.out.println(pd.getCurrentProfile().getTower());
 
     // Restore a profile from goofans published profile
@@ -209,20 +218,5 @@ public class ProfileData
 //    System.out.println(pd.getCurrentProfile().getTower());
 
 //    GameFormat.encodeBinFile(new File("pers2.dat"), pd.toData());
-  }
-
-  public static boolean isValidProfile(File file)
-  {
-    if (!file.exists()) return false;
-
-    // Attempt to read it in
-    try {
-      new ProfileData(file);
-      return true;
-    }
-    catch (IOException e) {
-      log.log(Level.WARNING, "Unable to read profile at " + file, e);
-      return false;
-    }
   }
 }

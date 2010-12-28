@@ -1,17 +1,9 @@
 /*
- * Copyright (c) 2008, 2009, 2010 David C A Croft. All rights reserved. Your use of this computer software
+ * Copyright (c) 2008, 2009, 2010, 2011 David C A Croft. All rights reserved. Your use of this computer software
  * is permitted only in accordance with the GooTool license agreement distributed with this file.
  */
 
 package com.goofans.gootool.wog;
-
-import javax.xml.transform.TransformerException;
-import java.io.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import com.goofans.gootool.BillboardUpdater;
 import com.goofans.gootool.GooTool;
@@ -31,6 +23,14 @@ import com.goofans.gootool.util.ProgressIndicatingTask;
 import com.goofans.gootool.util.ProgressListener;
 import com.goofans.gootool.util.Utilities;
 
+import javax.xml.transform.TransformerException;
+import java.io.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  * Handles the actual writing of the configuration to the World of Goo directory.
  *
@@ -49,18 +49,28 @@ public class WorldBuilder extends ProgressIndicatingTask
 
   private static final String IRRKLANG_DLL = "irrKlang.dll";
   private static final String REAL_IRRKLANG_DLL = "RealIrrKlang.dll";
+  private static final String INTRO_MOVIE_DIR = "res/movie/2dboyLogo";
+  private static final String MAC_ICON_FILE = "Contents/Resources/gooicon.icns";
 
   private final Project project;
 
   private List<SourceFile> filesToCopy;
   private final GooToolResourceBundle resourceBundle;
   private final ProjectConfiguration config;
+  private final Source source;
+  private final Target target;
+  private final SourceFile sourceRealRoot;
+  private final TargetFile targetRealRoot;
 
   public WorldBuilder(Project project)
   {
     this.project = project;
     this.config = project.getConfiguration();
     resourceBundle = GooTool.getTextProvider();
+    source = project.getSource();
+    target = project.getTarget();
+    sourceRealRoot = source.getRealRoot();
+    targetRealRoot = target.getRealRoot();
   }
 
   @Override
@@ -88,16 +98,10 @@ public class WorldBuilder extends ProgressIndicatingTask
 //      throw new IOException("Custom directory cannot be the same as the source directory!");
 //    }
 
-    Source source = project.getSource();
-    Target target = project.getTarget();
+    log.info("Building from " + source + " to " + target);
 
-    log.info("Building from " + source + " to " + target); //NON-NLS
-
-    SourceFile sourceRoot = source.getRoot();
-    TargetFile targetRoot = target.getRoot();
-
-    log.fine("Source root: " + sourceRoot); //NON-NLS
-    log.fine("Target root: " + targetRoot); //NON-NLS
+    log.fine("Source root: " + sourceRealRoot);
+    log.fine("Target root: " + targetRealRoot);
 
     beginStep(resourceBundle.getString("worldBuilder.step.preparing"), false);
 
@@ -109,12 +113,12 @@ public class WorldBuilder extends ProgressIndicatingTask
     // TODO: OR project instanceof IosProject
     if (project instanceof LocalProject && PlatformSupport.getPlatform() == PlatformSupport.Platform.MACOSX) {
 //      getFilesInFolder(wogDir, filesToCopy, "");
-      addFilesToCopy(sourceRoot);
+      addFilesToCopy(sourceRealRoot);
     }
     else {
       // WINDOWS/LINUX
       for (String resourceDirName : RESOURCE_DIRS) {
-        SourceFile resourceDir = sourceRoot.getChild(resourceDirName);
+        SourceFile resourceDir = sourceRealRoot.getChild(resourceDirName);
 //        File resourceDir = new File(wogDir, resourceDirName);
         if (resourceDir != null) {
           addFilesToCopy(resourceDir);
@@ -122,7 +126,7 @@ public class WorldBuilder extends ProgressIndicatingTask
       }
 
       /* Add all files (but not directories) in the root directory */
-      for (SourceFile file : sourceRoot.list()) {
+      for (SourceFile file : sourceRealRoot.list()) {
         if (file.isFile() && !SKIPPED_FILES.contains(file.getName())) {
           filesToCopy.add(file);
         }
@@ -131,7 +135,7 @@ public class WorldBuilder extends ProgressIndicatingTask
 
     // TODO Project needs a getPropertiesDir() and getResDir() as it differs based on target platform. There should be no use of PlatformSupport (host platform) in this class!! 
 
-    log.fine(filesToCopy.size() + " files in source directories"); //NON-NLS
+    log.fine(filesToCopy.size() + " files in source directories");
 
     /*
      * Now reomve any files that we are going to overwrite or remove anyway.
@@ -139,7 +143,7 @@ public class WorldBuilder extends ProgressIndicatingTask
     // TODO we can also skip files that are overwritten by addins.
 
     removeSkippedFiles();
-    log.fine(filesToCopy.size() + " files after skipping"); //NON-NLS
+    log.fine(filesToCopy.size() + " files after skipping");
 
     /*
      * Now copy files from source to target.
@@ -147,7 +151,7 @@ public class WorldBuilder extends ProgressIndicatingTask
 
     beginStep(resourceBundle.getString("worldBuilder.step.copying"), true);
 
-    targetRoot.mkdir();
+    targetRealRoot.mkdir();
 
     int copied = 0;
 
@@ -158,9 +162,7 @@ public class WorldBuilder extends ProgressIndicatingTask
         progressStep((100f * i) / filesToCopy.size());
       }
 
-      TargetFile destFile = targetRoot.getChild(srcFile.getFullName());
-
-      System.out.println(srcFile + " -> " + destFile);
+      TargetFile destFile = targetRealRoot.getChild(srcFile.getFullName());
 
       if (srcFile.isDirectory()) {
         if (!destFile.isDirectory()) {
@@ -170,6 +172,7 @@ public class WorldBuilder extends ProgressIndicatingTask
       }
       else {
         if (!destFile.isFile() || srcFile.lastModified() != destFile.lastModified()) {
+          System.out.println(srcFile + " -> " + destFile);
           copyFile(srcFile, destFile);
           copied++;
         }
@@ -179,8 +182,7 @@ public class WorldBuilder extends ProgressIndicatingTask
 
     // TODO remove files/dirs that only exist in dest dir
 
-    log.fine(copied + " files copied"); //NON-NLS
-
+    log.fine(copied + " files copied");
 
     // Some hacks for local projects!
 
@@ -189,25 +191,25 @@ public class WorldBuilder extends ProgressIndicatingTask
       // Windows hack: If the user already had a RealIrrKlang.dll in the source directory, they must have manually
       // installed Maks' volume control in the past, so move that to irrKlang.dll (#0000219)
       if (PlatformSupport.getPlatform() == PlatformSupport.Platform.WINDOWS) {
-        SourceFile realIrrKlangFile = sourceRoot.getChild(REAL_IRRKLANG_DLL);
+        SourceFile realIrrKlangFile = sourceRealRoot.getChild(REAL_IRRKLANG_DLL);
         if (realIrrKlangFile.isFile()) {
-          copyFile(realIrrKlangFile, targetRoot.getChild(IRRKLANG_DLL));
+          copyFile(realIrrKlangFile, targetRealRoot.getChild(IRRKLANG_DLL));
         }
       }
 
       if (PlatformSupport.getPlatform() == PlatformSupport.Platform.MACOSX) {
         // Make the EXE files executable
         for (String exeFilename : MacOSXSupport.EXE_FILENAMES) {
-          TargetFile exe = targetRoot.getChild(exeFilename);
+          TargetFile exe = targetRealRoot.getChild(exeFilename);
           if (exe.isFile()) {
             exe.makeExecutable();
           }
         }
 
         // Add the Mac icon
-        InputStream is = getClass().getResourceAsStream("/customapp.icns");
+        InputStream is = getClass().getResourceAsStream("/customapp.icns"); //NON-NLS
         try {
-          TargetFile targetFile = targetRoot.getChild("Contents/Resources/gooicon.icns");
+          TargetFile targetFile = targetRealRoot.getChild(MAC_ICON_FILE); //NON-NLS
           OutputStream os = targetFile.write();
           try {
             Utilities.copyStreams(is, os);
@@ -222,12 +224,12 @@ public class WorldBuilder extends ProgressIndicatingTask
       }
       else if (PlatformSupport.getPlatform() == PlatformSupport.Platform.LINUX) {
         // Make the script executable
-        TargetFile script = targetRoot.getChild(LinuxSupport.SCRIPT_FILENAME);
+        TargetFile script = targetRealRoot.getChild(LinuxSupport.SCRIPT_FILENAME);
         script.makeExecutable();
 
         // Make the EXE files executable
         for (String exeFilename : LinuxSupport.EXE_FILENAMES) {
-          TargetFile exe = targetRoot.getChild(exeFilename);
+          TargetFile exe = targetRealRoot.getChild(exeFilename);
           if (exe.isFile()) {
             exe.makeExecutable();
           }
@@ -274,12 +276,15 @@ public class WorldBuilder extends ProgressIndicatingTask
   {
     for (int i = 0; i < filesToCopy.size(); i++) {
       SourceFile s = filesToCopy.get(i);
-      if ((config.isSkipOpeningMovie() && s.getFullName().startsWith("res/movie/2dboyLogo")) // If we're skipping the opening movie
+      if ((config.isSkipOpeningMovie() && s.getFullName().startsWith(INTRO_MOVIE_DIR)) // If we're skipping the opening movie.  NON-NLS
               ) {
         filesToCopy.remove(i);
         i--;
       }
     }
+
+    // On Mac, no need to copy the icns file since we're going to overwrite it again.
+    filesToCopy.remove(sourceRealRoot.getChild(MAC_ICON_FILE)); //NON-NLS
   }
 
   private void saveConfig()
@@ -299,24 +304,25 @@ public class WorldBuilder extends ProgressIndicatingTask
   {
     beginStep(resourceBundle.getString("worldBuilder.step.writeConfig"), false);
 
-    TargetFile targetRoot = project.getTarget().getRoot();
+    TargetFile targetGameRoot = target.getGameRoot();
 
-    // TODO doesn't it have to be in a subdir on mac?
-
-    GamePreferences.writeGamePreferences(config, project.getSource(), project.getTarget());
+    GamePreferences.writeGamePreferences(project, config, source, target);
 
     /* If we're skipping opening movie, we need to remove res/movie/2dboy */
     // TODO this should be done in another step
     if (config.isSkipOpeningMovie()) {
-      TargetFile movieDir = targetRoot.getChild("res/movie/2dboyLogo/");
+      TargetFile movieDir = targetGameRoot.getChild(INTRO_MOVIE_DIR);
       if (movieDir.isDirectory()) {
+        for (TargetFile movieFile : movieDir.list()) {
+          movieFile.delete();
+        }
         movieDir.delete();
       }
     }
 
     /* If we have a watermark, we need to modify properties/text.xml.bin */
     if (config.getWatermark().length() > 0) {
-      TargetFile textFile = targetRoot.getChild("properties/text.xml.bin"); // TODO not .bin on iphone!
+      TargetFile textFile = targetGameRoot.getChild(project.getGameXmlFilename("properties/text.xml"));
       InputStreamReader xslReader = new InputStreamReader(getClass().getResourceAsStream("/watermark.xsl"));
       try {
         Codec codec = project.getCodecForGameXml();
@@ -356,10 +362,10 @@ public class WorldBuilder extends ProgressIndicatingTask
 
     /* Add new irrKlang.dll if Windows volume control enabled */
     if (project instanceof LocalProject && PlatformSupport.getPlatform() == PlatformSupport.Platform.WINDOWS && ((LocalProjectConfiguration) config).isWindowsVolumeControl()) {
-      log.log(Level.FINER, "Copying custom irrKlang.dll"); //NON-NLS
+      log.log(Level.FINER, "Copying custom irrKlang.dll");
 
-      TargetFile installedIrrKlangFile = targetRoot.getChild(IRRKLANG_DLL);
-      TargetFile realIrrKlangFile = targetRoot.getChild(REAL_IRRKLANG_DLL);
+      TargetFile installedIrrKlangFile = targetRealRoot.getChild(IRRKLANG_DLL);
+      TargetFile realIrrKlangFile = targetRealRoot.getChild(REAL_IRRKLANG_DLL);
 
       try {
         realIrrKlangFile.delete();
@@ -424,7 +430,7 @@ public class WorldBuilder extends ProgressIndicatingTask
 
     if (!config.isBillboardsDisabled()) {
       beginStep(resourceBundle.getString("worldBuilder.step.installBillboards"), false);
-      log.info("Installing billboards goomod"); //NON-NLS
+      log.info("Installing billboards goomod");
 
       try {
         File addinFile = new File(PlatformSupport.getToolStorageDirectory(), BillboardUpdater.BILLBOARDS_GOOMOD_FILENAME);

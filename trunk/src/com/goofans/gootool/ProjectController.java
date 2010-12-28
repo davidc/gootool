@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008, 2009, 2010 David C A Croft. All rights reserved. Your use of this computer software
+ * Copyright (c) 2008, 2009, 2010, 2011 David C A Croft. All rights reserved. Your use of this computer software
  * is permitted only in accordance with the GooTool license agreement distributed with this file.
  */
 
@@ -78,7 +78,6 @@ public class ProjectController implements ActionListener
   public ProjectController(MainController mainController)
   {
     this.mainController = mainController;
-
   }
 
   public void setMainWindow(MainWindow w)
@@ -99,9 +98,7 @@ public class ProjectController implements ActionListener
     else {
       loadProjectModel();
 
-      // Warn if demo!#
       warnIfDemo();
-
     }
     projectPanel.profilePanel.projectChanged(projectModel);
 
@@ -110,11 +107,8 @@ public class ProjectController implements ActionListener
 
   private void warnIfDemo()
   {
-    // TODO will be in a different subdir on different platforms!
-    // TODO won't have a .bin suffix on ios!
-
     // A file that will not exist in the demo version.
-    SourceFile flagFile = currentProject.getSource().getRoot().getChild("res/levels/island3/island3.level.bin");
+    SourceFile flagFile = currentProject.getSource().getGameRoot().getChild(currentProject.getGameXmlFilename("res/levels/island3/island3.level"));
 
     if (flagFile == null || !flagFile.isFile()) {
       String[] options = new String[]{resourceBundle.getString("project.demoWarning.upgrade"),
@@ -153,14 +147,14 @@ public class ProjectController implements ActionListener
   public void actionPerformed(ActionEvent event)
   {
     if (currentProject == null) {
-      log.log(Level.SEVERE, "Action " + event.getActionCommand() + " requested while no project loaded"); //NON-NLS
+      log.log(Level.SEVERE, "Action " + event.getActionCommand() + " requested while no project loaded");
       mainController.showErrorDialog("Invalid state", "can't perform action " + event.getActionCommand() + " with no project loaded!");
       return;
     }
 
     String cmd = event.getActionCommand();
 
-    log.log(Level.FINEST, "ProjectController action: " + cmd); //NON-NLS
+    log.log(Level.FINEST, "ProjectController action: " + cmd);
 
     if (cmd.equals(CMD_SAVE)) {
       save(false);
@@ -169,7 +163,7 @@ public class ProjectController implements ActionListener
       save(true);
     }
     else if (cmd.equals(CMD_REVERT)) {
-      log.info("Reverting configuration to saved"); //NON-NLS
+      log.info("Reverting configuration to saved");
       projectModel = new ProjectModel(new LocalProjectConfiguration(liveConfig));
       updateViewFromModel();
     }
@@ -207,6 +201,9 @@ public class ProjectController implements ActionListener
     }
     else if (cmd.equals(CMD_REMOVE_ONLINE_ID)) {
       removeOnlineId();
+    }
+    else {
+      mainController.showErrorDialog("ProjectController", "Unrecognised ProjectController action " + cmd);
     }
   }
 
@@ -545,7 +542,7 @@ public class ProjectController implements ActionListener
       GUIUtil.runTask(mainController.getMainWindow(), resourceBundle.getString("worldBuilder.progress.title"), configWriter);
     }
     catch (Exception e) {
-      log.log(Level.SEVERE, "Error writing configuration", e); //NON-NLS
+      log.log(Level.SEVERE, "Error writing configuration", e);
       mainController.showErrorDialog(resourceBundle.getString("worldBuilder.error.title"), e.getMessage() + " (" + e.getClass().getName() + ")");
       errored = true;
     }
@@ -557,10 +554,10 @@ public class ProjectController implements ActionListener
 
     if (launch && !errored && currentProject instanceof LocalProject) {
       try {
-        PlatformSupport.launch((LocalProject)currentProject);
+        PlatformSupport.launch((LocalProject) currentProject);
       }
       catch (IOException e) {
-        log.log(Level.SEVERE, "Error launching World of Goo", e); //NON-NLS
+        log.log(Level.SEVERE, "Error launching World of Goo", e);
         mainController.showErrorDialog(resourceBundle.getString("launch.error.title"), e.getLocalizedMessage());
       }
     }

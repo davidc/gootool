@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008, 2009, 2010 David C A Croft. All rights reserved. Your use of this computer software
+ * Copyright (c) 2008, 2009, 2010, 2011 David C A Croft. All rights reserved. Your use of this computer software
  * is permitted only in accordance with the GooTool license agreement distributed with this file.
  */
 
@@ -94,17 +94,17 @@ public class MainWindow extends JFrame
   {
     String windowPosition = ToolPreferences.getWindowPosition();
     if (windowPosition == null) {
-      log.finer("Opening GooTool window at platform default position"); //NON-NLS
+      log.finer("Opening GooTool window at platform default position");
       setLocationByPlatform(true);
     }
     else if (windowPosition.equals(WINDOW_POSITION_MAXIMISED)) {
-      log.finer("Opening GooTool window in maximised state"); //NON-NLS
+      log.finer("Opening GooTool window in maximised state");
       setLocationByPlatform(true);
       setExtendedState(MAXIMIZED_BOTH);
     }
     else {
       //noinspection StringConcatenation
-      log.finer("Opening GooTool window at stored position " + windowPosition); //NON-NLS
+      log.finer("Opening GooTool window at stored position " + windowPosition);
       StringTokenizer tok = new StringTokenizer(windowPosition, ",");
       setBounds(Integer.valueOf(tok.nextToken()), Integer.valueOf(tok.nextToken()), Integer.valueOf(tok.nextToken()), Integer.valueOf(tok.nextToken()));
     }

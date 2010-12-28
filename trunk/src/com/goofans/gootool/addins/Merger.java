@@ -1,19 +1,20 @@
 /*
- * Copyright (c) 2008, 2009, 2010 David C A Croft. All rights reserved. Your use of this computer software
+ * Copyright (c) 2008, 2009, 2010, 2011 David C A Croft. All rights reserved. Your use of this computer software
  * is permitted only in accordance with the GooTool license agreement distributed with this file.
  */
 
 package com.goofans.gootool.addins;
 
 import com.goofans.gootool.facades.SourceFile;
-import com.goofans.gootool.projects.ProjectManager;
 import com.goofans.gootool.io.FinalNewlineRemovingReader;
 import com.goofans.gootool.io.GameFormat;
 import com.goofans.gootool.io.UnicodeReader;
+import com.goofans.gootool.projects.Project;
+import com.goofans.gootool.projects.ProjectManager;
 
 import javax.xml.transform.*;
-import javax.xml.transform.stream.StreamSource;
 import javax.xml.transform.stream.StreamResult;
+import javax.xml.transform.stream.StreamSource;
 import java.io.*;
 
 /**
@@ -100,7 +101,8 @@ public class Merger
 //    File out = new File(WorldOfGoo.getWogDir(), "res\\levels\\EconomicDivide\\EconomicDivide.level.bin");
 
     FileReader transformReader = new FileReader(new File("resources/watermark.xsl"));
-    SourceFile in = ProjectManager.simpleInit().getSource().getRoot().getChild("properties/text.xml.bin");
+    Project project = ProjectManager.simpleInit();
+    SourceFile in = project.getSource().getGameRoot().getChild(project.getGameXmlFilename("properties/text.xml"));
     File out = new File("newtext.xml.bin");
 
     Merger merger = new Merger(GameFormat.AES_BIN_CODEC.decodeFile(in), transformReader);

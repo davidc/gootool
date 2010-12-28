@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008, 2009, 2010 David C A Croft. All rights reserved. Your use of this computer software
+ * Copyright (c) 2008, 2009, 2010, 2011 David C A Croft. All rights reserved. Your use of this computer software
  * is permitted only in accordance with the GooTool license agreement distributed with this file.
  */
 
@@ -340,8 +340,8 @@ public class BinImageAnimation
     StringBuffer sb = new StringBuffer();
     // TODO xml prolog
     XMLStringBuffer xml = new XMLStringBuffer(sb, "");
-    xml.addComment("This XML format is subject to change. Do not program against this format yet!");
-    xml.addComment("See: http://goofans.com/forum/world-of-goo/modding/407");
+    xml.addComment("This XML format is subject to change. Do not program against this format yet!"); //NON-NLS
+    xml.addComment("See: http://goofans.com/forum/world-of-goo/modding/407"); //NON-NLS
     toXML(xml);
     return xml.toXML();
   }

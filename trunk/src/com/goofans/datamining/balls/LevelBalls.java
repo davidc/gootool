@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008, 2009, 2010 David C A Croft. All rights reserved. Your use of this computer software
+ * Copyright (c) 2008, 2009, 2010, 2011 David C A Croft. All rights reserved. Your use of this computer software
  * is permitted only in accordance with the GooTool license agreement distributed with this file.
  */
 
@@ -11,8 +11,9 @@ import javax.xml.xpath.XPathFactory;
 import java.io.ByteArrayInputStream;
 import java.util.*;
 
+import com.goofans.gootool.facades.Source;
 import com.goofans.gootool.facades.SourceFile;
-import com.goofans.gootool.io.GameFormat;
+import com.goofans.gootool.projects.Project;
 import com.goofans.gootool.projects.ProjectManager;
 import com.goofans.gootool.util.XMLUtil;
 import org.w3c.dom.Document;
@@ -36,19 +37,22 @@ public class LevelBalls
 
 //    System.out.println("\n==== BY LEVEL ====\n");
 
-    SourceFile levelsDir = ProjectManager.simpleInit().getSource().getRoot().getChild("res/levels/");
+    Project project = ProjectManager.simpleInit();
+    Source source = project.getSource();
+    SourceFile levelsDir = source.getGameRoot().getChild("res/levels/");
 
-    for (SourceFile file : levelsDir.list()) {
-      if (file.isDirectory()) {
-        String levelName = file.getName();
+    for (SourceFile levelDir : levelsDir.list()) {
+      if (levelDir.isDirectory()) {
+        String levelName = levelDir.getName();
 
 //        System.out.println("Level " + levelName);
 
-        byte[] xmlBytes = GameFormat.decodeBinFile(file.getChild(levelName + ".level.bin"));
+        SourceFile levelFile = levelDir.getChild(project.getGameXmlFilename(levelName + "/" + levelName + ".level"));
+
+        byte[] xmlBytes = project.getCodecForGameXml().decodeFile(levelFile);
         Document doc = XMLUtil.loadDocumentFromInputStream(new ByteArrayInputStream(xmlBytes));
 
         XPath xPath = XPathFactory.newInstance().newXPath();
-
 
         Set<String> attachedIds = new HashSet<String>();
 

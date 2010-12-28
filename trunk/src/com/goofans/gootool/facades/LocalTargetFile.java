@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008, 2009, 2010 David C A Croft. All rights reserved. Your use of this computer software
+ * Copyright (c) 2008, 2009, 2010, 2011 David C A Croft. All rights reserved. Your use of this computer software
  * is permitted only in accordance with the GooTool license agreement distributed with this file.
  */
 
@@ -101,7 +101,7 @@ public class LocalTargetFile implements TargetFile
   public TargetFile getParentDirectory()
   {
     // Are we already the root?
-    if (((LocalTargetFile) target.getRoot()).backingFile.equals(this.backingFile)) return null;
+    if (((LocalTargetFile) target.getRealRoot()).backingFile.equals(this.backingFile)) return null;
 
     File parentFile = backingFile.getParentFile();
     if (parentFile == null) return null;
@@ -123,6 +123,28 @@ public class LocalTargetFile implements TargetFile
     }
 
     return list;
+  }
+
+  @Override
+  public boolean equals(Object o)
+  {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+
+    LocalTargetFile that = (LocalTargetFile) o;
+
+    if (backingFile != null ? !backingFile.equals(that.backingFile) : that.backingFile != null) return false;
+    if (target != null ? !target.equals(that.target) : that.target != null) return false;
+
+    return true;
+  }
+
+  @Override
+  public int hashCode()
+  {
+    int result = target != null ? target.hashCode() : 0;
+    result = 31 * result + (backingFile != null ? backingFile.hashCode() : 0);
+    return result;
   }
 
   @Override

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008, 2009, 2010 David C A Croft. All rights reserved. Your use of this computer software
+ * Copyright (c) 2008, 2009, 2010, 2011 David C A Croft. All rights reserved. Your use of this computer software
  * is permitted only in accordance with the GooTool license agreement distributed with this file.
  */
 
@@ -126,7 +126,7 @@ public final class ProfilePanel implements ActionListener, ViewComponent
       levelsTable.setAutoCreateRowSorter(true);
       */
     try {
-      Method setAutoCreateRowSorterMethod = levelsTable.getClass().getMethod("setAutoCreateRowSorter", boolean.class);
+      Method setAutoCreateRowSorterMethod = levelsTable.getClass().getMethod("setAutoCreateRowSorter", boolean.class); //NON-NLS
       setAutoCreateRowSorterMethod.invoke(levelsTable, true);
     }
     catch (Exception e) {
@@ -168,7 +168,7 @@ public final class ProfilePanel implements ActionListener, ViewComponent
     }
     else if (cmd.equals(CMD_PROFILE_CHANGED) && profilesCombo.getSelectedItem() != currentProfile) {
       Profile newProfile = getSelectedProfile();
-      propertyChangeSupport.firePropertyChange("currentProfile", currentProfile, newProfile);
+      propertyChangeSupport.firePropertyChange("currentProfile", currentProfile, newProfile); //NON-NLS
 
       currentProfile = newProfile;
       log.fine("currentProfile = " + currentProfile);
@@ -244,7 +244,7 @@ public final class ProfilePanel implements ActionListener, ViewComponent
     if (flagInfo.length() == 0) {
       flagInfo.append(resourceBundle.getString("profile.info.flags.none"));
     }
-    flags.setText("<html>" + flagInfo + "</html>");
+    flags.setText("<html>" + flagInfo + "</html>"); //NON-NLS
 
     levelsModel.fireTableDataChanged();
 
@@ -427,8 +427,8 @@ public final class ProfilePanel implements ActionListener, ViewComponent
       }
     }
 
-    propertyChangeSupport.firePropertyChange("allProfilesAreOnline", oldAllProfilesAreOnline, allProfilesAreOnline);
-    propertyChangeSupport.firePropertyChange("anyProfilesHaveGeneratedId", oldAnyProfilesHaveGeneratedId, anyProfilesHaveGeneratedId);
+    propertyChangeSupport.firePropertyChange("allProfilesAreOnline", oldAllProfilesAreOnline, allProfilesAreOnline); //NON-NLS
+    propertyChangeSupport.firePropertyChange("anyProfilesHaveGeneratedId", oldAnyProfilesHaveGeneratedId, anyProfilesHaveGeneratedId); //NON-NLS
 
     profilesCombo.setSelectedItem(profileData.getCurrentProfile());
       }
@@ -436,7 +436,7 @@ public final class ProfilePanel implements ActionListener, ViewComponent
   private String formatHeight(double height)
   {
     NumberFormat nf = NumberFormat.getNumberInstance();
-    return nf.format(height) + " m";
+    return nf.format(height) + " m"; //NON-NLS
   }
 
   public void updateViewFromModel(ProjectModel model)

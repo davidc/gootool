@@ -1,0 +1,14 @@
+<root>
+  <item name='com.goofans.gootool.siteapi.APIRequest void addGetParameter(java.lang.String, java.lang.String) 0'>
+    <annotation name='org.jetbrains.annotations.NonNls'/>
+  </item>
+  <item name='com.goofans.gootool.siteapi.APIRequest void addGetParameter(java.lang.String, java.lang.String) 1'>
+    <annotation name='org.jetbrains.annotations.NonNls'/>
+  </item>
+  <item name='com.goofans.gootool.siteapi.APIRequest void addPostParameter(java.lang.String, java.lang.String) 0'>
+    <annotation name='org.jetbrains.annotations.NonNls'/>
+  </item>
+  <item name='com.goofans.gootool.siteapi.APIRequest void addPostParameter(java.lang.String, java.lang.String) 1'>
+    <annotation name='org.jetbrains.annotations.NonNls'/>
+  </item>
+</root>

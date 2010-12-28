@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008, 2009, 2010 David C A Croft. All rights reserved. Your use of this computer software
+ * Copyright (c) 2008, 2009, 2010, 2011 David C A Croft. All rights reserved. Your use of this computer software
  * is permitted only in accordance with the GooTool license agreement distributed with this file.
  */
 
@@ -11,7 +11,6 @@ import java.awt.event.HierarchyBoundsAdapter;
 import java.awt.event.HierarchyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -55,13 +54,11 @@ public class BallPalette extends JComponent implements Scrollable
 
   public void addBalls() throws IOException
   {
-    TargetFile ballsDir = ProjectManager.simpleInit().getTarget().getRoot().getChild("res/balls");
+    TargetFile ballsDir = ProjectManager.simpleInit().getTarget().getGameRoot().getChild("res/balls"); //NON-NLS
 
-    // TODO
-//    File[] ballsDirs = ballsDir.list();
-    File[] ballsDirs = null;
-    int i = 0;
-    for (File dir : ballsDirs) {
+    List<TargetFile> ballsDirs = ballsDir.list();
+
+    for (TargetFile dir : ballsDirs) {
       if (dir.isDirectory() && !dir.getName().startsWith("_")) {
         Ball ball = new Ball(dir.getName());
         final BallPaletteBall button = new BallPaletteBall(dir.getName(), ball);
@@ -76,7 +73,7 @@ public class BallPalette extends JComponent implements Scrollable
           public void mousePressed(MouseEvent e)
           {
             for (BallPaletteBall paletteEntry : paletteEntries) {
-              paletteEntry.setSelected(paletteEntry == button);
+              paletteEntry.setSelected(paletteEntry.equals(button));
             }
             notifySelectionListeners(button);
           }
@@ -91,7 +88,7 @@ public class BallPalette extends JComponent implements Scrollable
   {
     GUIUtil.switchToSystemLookAndFeel();
 
-    JFrame frame = new JFrame("Ball Palette");
+    JFrame frame = new JFrame("Ball Palette"); //NON-NLS
     frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     BallPalette palette = new BallPalette();
     palette.addBalls();

@@ -1,10 +1,11 @@
 /*
- * Copyright (c) 2008, 2009, 2010 David C A Croft. All rights reserved. Your use of this computer software
+ * Copyright (c) 2008, 2009, 2010, 2011 David C A Croft. All rights reserved. Your use of this computer software
  * is permitted only in accordance with the GooTool license agreement distributed with this file.
  */
 
 package com.goofans.gootool.addins;
 
+import com.goofans.gootool.projects.LocalProject;
 import net.infotrek.util.EncodingUtil;
 
 import javax.imageio.ImageIO;
@@ -53,28 +54,28 @@ public class AddinInstaller
   private static final int PASS_MERGE = 1;
   private static final int PASS_COMPILE = 2;
 
-  private static final List<String> SKIP_FILES = Arrays.asList(".svn", "Thumbs.db", "thumbs.db", ".DS_Store");
+  private static final List<String> SKIP_FILES = Arrays.asList(".svn", "Thumbs.db", "thumbs.db", ".DS_Store"); //NON-NLS
   private static final String EXTENSION_PNG = ".png";
   private static final String EXTENSION_XSL = ".xsl";
   private static final String EXTENSION_BIN = ".bin";
   private static final String EXTENSION_XML = ".xml";
 
   private Project project;
-  private final SourceFile sourceRoot;
-  private final TargetFile targetRoot;
+  private final SourceFile sourceGameRoot;
+  private final TargetFile targetGameRoot;
   private Codec gameXmlCodec;
 
   public AddinInstaller(Project project)
   {
     this.project = project;
-    this.sourceRoot = project.getSource().getRoot();
-    this.targetRoot = project.getTarget().getRoot();
+    this.sourceGameRoot = project.getSource().getGameRoot();
+    this.targetGameRoot = project.getTarget().getGameRoot();
     gameXmlCodec = project.getCodecForGameXml();
   }
 
   public void installAddin(Addin addin) throws IOException, AddinFormatException
   {
-    log.log(Level.FINE, "Installing addin " + addin.getId()); //NON-NLS
+    log.log(Level.FINE, "Installing addin " + addin.getId());
 
     AddinReader addinReader = AddinFactory.getAddinReader(addin.getDiskFile());
 
@@ -97,14 +98,14 @@ public class AddinInstaller
       }
     }
 
-    log.log(Level.FINE, "Addin " + addin.getId() + " installed"); //NON-NLS
+    log.log(Level.FINE, "Addin " + addin.getId() + " installed");
   }
 
   private void doPasses(Addin addin, AddinReader addinReader) throws IOException, AddinFormatException
   {
     for (int pass = 0; pass < PASSES.length; ++pass) {
       String passPrefix = PASSES[pass];
-      log.log(Level.FINER, "Pass " + pass + " (looking in " + passPrefix + ")"); //NON-NLS
+      log.log(Level.FINER, "Pass " + pass + " (looking in " + passPrefix + ")");
 
       Iterator<String> passEntries = addinReader.getEntriesInDirectory(passPrefix, SKIP_FILES);
 
@@ -141,7 +142,6 @@ public class AddinInstaller
       }
     }
 
-
     if (pass == PASS_OVERRIDE) {
       processOverride(fileName, is);
     }
@@ -149,7 +149,7 @@ public class AddinInstaller
       processMerge(fileName, is);
     }
     else if (pass == PASS_COMPILE) {
-      processCompile(addin, fileName, is);
+      processCompile(fileName, is);
     }
   }
 
@@ -170,23 +170,23 @@ public class AddinInstaller
 
   private void processOverride(String fileName, InputStream is) throws IOException, AddinFormatException
   {
-    log.log(Level.FINER, "Override " + fileName); //NON-NLS
+    log.log(Level.FINER, "Override " + fileName);
     checkDirOk(fileName);
 
     if (fileName.endsWith(EXTENSION_BIN)) {
       throw new AddinFormatException("Bin files are not allowed in the override directory");
     }
-    else if (fileName.endsWith(EXTENSION_PNG) && PlatformSupport.getPlatform() == PlatformSupport.Platform.MACOSX) {
+    else if (fileName.endsWith(EXTENSION_PNG) && project instanceof LocalProject && PlatformSupport.getPlatform() == PlatformSupport.Platform.MACOSX) {
       // Mac PNG files need to be "compiled"
 
-      TargetFile destFile = targetRoot.getChild(fileName + ".binltl");
+      TargetFile destFile = targetGameRoot.getChild(project.getGamePngFilename(fileName));
       destFile.getParentDirectory().mkdirs();
 
       Image image = ImageIO.read(is);
       MacGraphicFormat.encodeImage(destFile.write(), image);
     }
     else {
-      TargetFile destFile = targetRoot.getChild(fileName);
+      TargetFile destFile = targetGameRoot.getChild(fileName);
       destFile.getParentDirectory().mkdirs();
 
       OutputStream os = destFile.write();
@@ -207,13 +207,13 @@ public class AddinInstaller
 
   private void processMerge(String fileName, InputStream xslInputStream) throws IOException, AddinFormatException
   {
-    log.log(Level.FINER, "Merge " + fileName); //NON-NLS
+    log.log(Level.FINER, "Merge " + fileName);
     checkDirOk(fileName);
 
-    if (!fileName.endsWith(EXTENSION_XSL)) throw new AddinFormatException("Addin has a non-XSLT file in the merge directory: " + fileName);
+    if (!fileName.endsWith(EXTENSION_XSL))
+      throw new AddinFormatException("Addin has a non-XSLT file in the merge directory: " + fileName);
 
-    // TODO ios doesn't want encryption or .bin suffix
-    TargetFile mergeFile = targetRoot.getChild(fileName.substring(0, fileName.length() - 4) + EXTENSION_BIN);
+    TargetFile mergeFile = targetGameRoot.getChild(project.getGameXmlFilename(fileName.substring(0, fileName.length() - 4)));
 
     if (!mergeFile.isFile()) throw new AddinFormatException("Addin tries to merge a nonexistent file: " + fileName);
 
@@ -229,9 +229,9 @@ public class AddinInstaller
     }
   }
 
-  private void processCompile(Addin addin, String fileName, InputStream is) throws IOException, AddinFormatException
+  private void processCompile(String fileName, InputStream is) throws IOException, AddinFormatException
   {
-    log.log(Level.FINER, "Compile " + fileName); //NON-NLS
+    log.log(Level.FINER, "Compile " + fileName);
     checkDirOk(fileName);
 
     if (fileName.endsWith(".anim.xml")) {
@@ -245,8 +245,7 @@ public class AddinInstaller
       throw new AddinFormatException("Movies are not supported in this spec-version");
     }
     else if (fileName.endsWith(EXTENSION_XML)) {
-      // TODO ios doesn't want compiling or an extension
-      TargetFile destFile = targetRoot.getChild(fileName.substring(0, fileName.length() - 4) + EXTENSION_BIN);
+      TargetFile destFile = targetGameRoot.getChild(project.getGameXmlFilename(fileName.substring(0, fileName.length() - 4)));
       destFile.getParentDirectory().mkdirs();
 
       String xml = Utilities.readStreamIntoString(is);
@@ -260,23 +259,19 @@ public class AddinInstaller
 
   private void installLevel(AddinLevel level) throws IOException, AddinFormatException
   {
-    String levelNameId = "LEVEL_NAME_" + level.getDir().toUpperCase();
-    String levelTextId = "LEVEL_TEXT_" + level.getDir().toUpperCase();
+    String levelNameId = "LEVEL_NAME_" + level.getDir().toUpperCase(); //NON-NLS
+    String levelTextId = "LEVEL_TEXT_" + level.getDir().toUpperCase(); //NON-NLS
 
     /* First add our two level strings to text.xml */
 
-    // TODO no bin suffix on ios
-
     try {
-      TargetFile textFile = targetRoot.getChild("properties/text.xml.bin");
+      TargetFile textFile = targetGameRoot.getChild(project.getGameXmlFilename("properties/text.xml"));
       byte[] sourceBytes = gameXmlCodec.decodeFile(textFile);
 
-      Merger merger = new Merger(sourceBytes, new InputStreamReader(AddinInstaller.class.getResourceAsStream("/level-text.xsl"), "UTF-8"));
+      Merger merger = new Merger(sourceBytes, new InputStreamReader(AddinInstaller.class.getResourceAsStream("/level-text.xsl"), GameFormat.DEFAULT_CHARSET));
       merger.setTransformParameter("level_name_string", makeString(levelNameId, level.getNames()));
       merger.setTransformParameter("level_text_string", makeString(levelTextId, level.getSubtitles()));
       merger.merge();
-//      System.out.println("s = " + s);
-//      merger.writeEncoded(textFile);
       gameXmlCodec.encodeFile(textFile, merger.getResult());
     }
     catch (TransformerException e) {
@@ -284,12 +279,13 @@ public class AddinInstaller
     }
 
     /* Now add ourselves into the island.xml */
+    // TODO we should buffer these up and do them for all levels at the end
 
     try {
-      TargetFile islandFile = targetRoot.getChild("res/islands/island1.xml.bin");
+      TargetFile islandFile = targetGameRoot.getChild(project.getGameXmlFilename("res/islands/island1.xml"));
       byte[] sourceBytes = gameXmlCodec.decodeFile(islandFile);
 
-      Merger merger = new Merger(sourceBytes, new InputStreamReader(AddinInstaller.class.getResourceAsStream("/level-island.xsl"), "UTF-8"));
+      Merger merger = new Merger(sourceBytes, new InputStreamReader(AddinInstaller.class.getResourceAsStream("/level-island.xsl"), GameFormat.DEFAULT_CHARSET));
 
       merger.setTransformParameter("level_id", level.getDir());
       merger.setTransformParameter("level_name_id", levelNameId);
@@ -304,7 +300,6 @@ public class AddinInstaller
         merger.setTransformParameter("level_skipeolsequence", true);
       }
       merger.merge();
-//      merger.writeEncoded(islandFile);
       gameXmlCodec.encodeFile(islandFile, merger.getResult());
     }
     catch (TransformerException e) {
@@ -312,11 +307,13 @@ public class AddinInstaller
     }
 
     /* Now add our buttons to island1.scene.xml */
+    // TODO we should buffer these up and do them for all levels at the end
+
     try {
-      TargetFile islandSceneFile = targetRoot.getChild("res/levels/island1/island1.scene.bin");
+      TargetFile islandSceneFile = targetGameRoot.getChild(project.getGameXmlFilename("res/levels/island1/island1.scene"));
       byte[] sourceBytes = gameXmlCodec.decodeFile(islandSceneFile);
 
-      Merger merger = new Merger(sourceBytes, new InputStreamReader(AddinInstaller.class.getResourceAsStream("/level-island-scene.xsl"), "UTF-8"));
+      Merger merger = new Merger(sourceBytes, new InputStreamReader(AddinInstaller.class.getResourceAsStream("/level-island-scene.xsl"), GameFormat.DEFAULT_CHARSET));
 
       merger.setTransformParameter("level_id", level.getDir());
       merger.setTransformParameter("level_name_id", levelNameId);
@@ -352,10 +349,11 @@ public class AddinInstaller
     }
   }
 
+  // TODO this can be done at the same time as adding level strings (if this is a level), to avoid multiple writes.
   private void doStringsFile(Addin addin, InputStream inputStream) throws IOException, AddinFormatException
   {
     // Load game text.xml
-    TargetFile gameTextFile = targetRoot.getChild("properties/text.xml.bin");
+    TargetFile gameTextFile = targetGameRoot.getChild(project.getGameXmlFilename("properties/text.xml"));
     byte[] sourceBytes = gameXmlCodec.decodeFile(gameTextFile);
 
     Document gameStringsDoc = XMLUtil.loadDocumentFromInputStream(new ByteArrayInputStream(sourceBytes));

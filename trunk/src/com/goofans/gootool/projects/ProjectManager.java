@@ -1,9 +1,12 @@
 /*
- * Copyright (c) 2008, 2009, 2010 David C A Croft. All rights reserved. Your use of this computer software
+ * Copyright (c) 2008, 2009, 2010, 2011 David C A Croft. All rights reserved. Your use of this computer software
  * is permitted only in accordance with the GooTool license agreement distributed with this file.
  */
 
 package com.goofans.gootool.projects;
+
+import com.goofans.gootool.GooTool;
+import com.goofans.gootool.util.Utilities;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -12,9 +15,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
-
-import com.goofans.gootool.GooTool;
-import com.goofans.gootool.util.Utilities;
 
 /**
  * @author David Croft (davidc@goofans.com)
