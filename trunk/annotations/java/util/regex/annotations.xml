@@ -1,0 +1,5 @@
+<root>
+  <item name='java.util.regex.Pattern'>
+    <annotation name='org.jetbrains.annotations.NonNls'/>
+  </item>
+</root>
