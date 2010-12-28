@@ -1,0 +1,17 @@
+<root>
+  <item name='java.lang.System'>
+    <annotation name='org.jetbrains.annotations.NonNls'/>
+  </item>
+  <item name='java.lang.System out'>
+    <annotation name='org.jetbrains.annotations.NonNls'/>
+  </item>
+  <item name='java.lang.Thread Thread(java.lang.String) 0'>
+    <annotation name='org.jetbrains.annotations.NonNls'/>
+  </item>
+  <item name='java.lang.Class java.io.InputStream getResourceAsStream(java.lang.String) 0'>
+    <annotation name='org.jetbrains.annotations.NonNls'/>
+  </item>
+  <item name='java.lang.String boolean endsWith(java.lang.String) 0'>
+    <annotation name='org.jetbrains.annotations.NonNls'/>
+  </item>
+</root>
