@@ -291,9 +291,7 @@ public class WorldBuilder extends ProgressIndicatingTask
   {
     beginStep(resourceBundle.getString("worldBuilder.step.saveConfig"), false);
 
-    project.saveConfiguration();
-    Project project = ProjectManager.getProjects().get(0); // TODO HACK
-    ((LocalProject) project).saveConfiguration();
+    project.saveConfiguration(config);
   }
 
   /*
@@ -474,7 +472,7 @@ public class WorldBuilder extends ProgressIndicatingTask
     c.enableAddin(addinId);
 
     Project project = ProjectManager.simpleInit();
-    WorldBuilder writer = new WorldBuilder(project, project.getConfiguration());
+    WorldBuilder writer = new WorldBuilder(project, project.getSavedConfiguration());
 
     writer.setParentComponent(null);
 

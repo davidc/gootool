@@ -17,7 +17,6 @@ import com.goofans.gootool.io.Codec;
 import com.goofans.gootool.io.GameFormat;
 import com.goofans.gootool.model.Resolution;
 import com.goofans.gootool.platform.PlatformSupport;
-import com.goofans.gootool.profile.ProfileData;
 import com.goofans.gootool.util.Utilities;
 
 /**
@@ -36,7 +35,7 @@ public class LocalProject extends Project
   static final String PREF_KEY_UIINSET = "ui_inset";
   static final String PREF_KEY_WINDOWS_VOLUME_CONTROL = "windows_volume_control";
 
-  private LocalProjectConfiguration configuration;
+  private LocalProjectConfiguration savedConfiguration;
 
   public LocalProject(Preferences prefsNode)
   {
@@ -99,13 +98,13 @@ public class LocalProject extends Project
   }
 
   @Override
-  public synchronized ProjectConfiguration getConfiguration()
+  public synchronized ProjectConfiguration getSavedConfiguration()
   {
-    if (configuration == null) {
-      configuration = new LocalProjectConfiguration();
-      loadProjectConfiguration(configuration);
+    if (savedConfiguration == null) {
+      savedConfiguration = new LocalProjectConfiguration();
+      loadProjectConfiguration(savedConfiguration);
     }
-    return configuration;
+    return savedConfiguration;
   }
 
   @Override
@@ -137,9 +136,10 @@ public class LocalProject extends Project
   }
 
   @Override
-  public void saveConfiguration()
+  public void saveConfiguration(ProjectConfiguration c)
   {
-    saveProjectConfiguration(configuration);
+    saveProjectConfiguration(c);
+    savedConfiguration = null;
   }
 
   protected void saveProjectConfiguration(ProjectConfiguration c)

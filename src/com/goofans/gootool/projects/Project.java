@@ -77,7 +77,7 @@ public abstract class Project
     }
   }
 
-  public abstract ProjectConfiguration getConfiguration();
+  public abstract ProjectConfiguration getSavedConfiguration();
 
 //  public abstract ProjectConfiguration getProjectConfiguration();
 
@@ -102,7 +102,7 @@ public abstract class Project
     }
   }
 
-  public abstract void saveConfiguration();
+  public abstract void saveConfiguration(ProjectConfiguration c);
 
   protected void saveProjectConfiguration(ProjectConfiguration c)
   {
