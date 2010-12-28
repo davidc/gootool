@@ -56,14 +56,6 @@
               <text resource-bundle="text" key="about.author"/>
             </properties>
           </component>
-          <component id="c3a0d" class="javax.swing.JLabel">
-            <constraints>
-              <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-            </constraints>
-            <properties>
-              <text value="© 2008, 2009, 2010 David Croft"/>
-            </properties>
-          </component>
           <component id="6c3ee" class="javax.swing.JLabel" binding="infoPane">
             <constraints>
               <grid row="0" column="0" row-span="1" col-span="2" vsize-policy="3" hsize-policy="0" anchor="0" fill="1" indent="0" use-parent-layout="false">
@@ -78,6 +70,14 @@
               <preferredSize width="400" height="300"/>
               <text resource-bundle="text" key="about.license"/>
               <verticalAlignment value="1"/>
+            </properties>
+          </component>
+          <component id="c3a0d" class="javax.swing.JLabel">
+            <constraints>
+              <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <text value="© 2008, 2009, 2010, 2011 David Croft"/>
             </properties>
           </component>
         </children>
