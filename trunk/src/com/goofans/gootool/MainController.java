@@ -501,16 +501,15 @@ public class MainController implements ActionListener
         // then force a save
 
         // TODO test this!
-        // TODO platform-specific location!
+        ProjectConfiguration c;
         try {
-          GamePreferences.readGamePreferences(project.getConfiguration(), project.getSource());
+          c = project.getSavedConfiguration();
+          GamePreferences.readGamePreferences(c, project.getSource());
+          project.saveConfiguration(c);
         }
         catch (IOException e) {
           log.log(Level.WARNING, "Unable to initialise project properties from config.txt", e);
         }
-
-        project.saveConfiguration();
-
 
         mainWindow.mainPanel.updateProjectsCombo();
 

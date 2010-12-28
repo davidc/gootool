@@ -117,7 +117,7 @@ public class BillboardUpdater implements Runnable
     boolean billboardsEnabled = false;
     for (Project project : ProjectManager.getProjects()) {
       if (project != null) {
-        ProjectConfiguration c = project.getConfiguration();
+        ProjectConfiguration c = project.getSavedConfiguration();
         if (!c.isBillboardsDisabled()) {
           billboardsEnabled = true;
           break;

@@ -138,7 +138,7 @@ public class ProjectController implements ActionListener
   {
     // TODO maybe put this in a progressindicatingtask?
 
-    liveConfig = (LocalProjectConfiguration) currentProject.getConfiguration(); // TODO don't cast, use PC not LPC
+    liveConfig = (LocalProjectConfiguration) currentProject.getSavedConfiguration(); // TODO don't cast, use PC not LPC
     projectModel = new ProjectModel(new LocalProjectConfiguration(liveConfig));
   }
 

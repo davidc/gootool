@@ -270,7 +270,7 @@ public class StartupTask extends ProgressIndicatingTask
 
   private MainWindow initControllerAndView()
   {
-//    ProjectManager.getProjects().get(0).getConfiguration();
+//    ProjectManager.getProjects().get(0).getSavedConfiguration();
 //    mainController.setInitialConfiguration(c); //TODO
 
     MainWindow mainWindow = new MainWindow(mainController);

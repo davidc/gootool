@@ -16,6 +16,7 @@ Remove files in dest dir that don't exist in source dir and aren't added by a mo
 
 If A depends on B, B must be installed first. (bubble sort the addins list)
 
+- Addin buildling phase of WorldBuilder should have a progress bar.
 
 
 Soon!
