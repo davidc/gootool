@@ -5,15 +5,14 @@
 
 package com.goofans.gootool.model;
 
+import com.goofans.gootool.addins.Addin;
+import com.goofans.gootool.addins.AddinsStore;
+import com.goofans.gootool.projects.ProjectConfiguration;
+
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import com.goofans.gootool.addins.Addin;
-import com.goofans.gootool.addins.AddinsStore;
-import com.goofans.gootool.projects.LocalProjectConfiguration;
 
 /**
  * @author David Croft (davidc@goofans.com)
@@ -24,14 +23,14 @@ public class ProjectModel
   private static final Logger log = Logger.getLogger(ProjectModel.class.getName());
 
   // The configuration we're editing
-  private LocalProjectConfiguration editorConfig;
+  private final ProjectConfiguration editorConfig;
 
-  public ProjectModel(LocalProjectConfiguration configuration)
+  public ProjectModel(ProjectConfiguration configuration)
   {
     this.editorConfig = configuration;
   }
 
-  public LocalProjectConfiguration getEditorConfig()
+  public ProjectConfiguration getEditorConfig()
   {
     return editorConfig;
   }

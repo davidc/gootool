@@ -16,7 +16,7 @@ import com.goofans.gootool.model.Language;
  * @author David Croft (davidc@goofans.com)
  * @version $Id$
  */
-public class ProjectConfiguration
+public class ProjectConfiguration implements Cloneable
 {
   private Language language;
   private boolean skipOpeningMovie;
@@ -109,6 +109,22 @@ public class ProjectConfiguration
     return enabledAddins;
   }
 
+  public List<Addin> getEnabledAddinsAsAddins()
+  {
+
+    List<Addin> availableAddins = AddinsStore.getAvailableAddins();
+    List<Addin> addins = new ArrayList<Addin>(enabledAddins.size());
+
+    for (String enabledAddinId : enabledAddins) {
+      for (Addin availableAddin : availableAddins) {
+        if (availableAddin.getId().equals(enabledAddinId)) {
+          addins.add(availableAddin);
+        }
+      }
+    }
+    return addins;
+  }
+
   @Override
   public boolean equals(Object o)
   {
@@ -137,20 +153,18 @@ public class ProjectConfiguration
     return result;
   }
 
-  public List<Addin> getEnabledAddinsAsAddins()
+  @Override
+  public Object clone()
   {
-
-    List<Addin> availableAddins = AddinsStore.getAvailableAddins();
-    List<Addin> addins = new ArrayList<Addin>(enabledAddins.size());
-
-    for (String enabledAddinId : enabledAddins) {
-      for (Addin availableAddin : availableAddins) {
-        if (availableAddin.getId().equals(enabledAddinId)) {
-          addins.add(availableAddin);
-        }
-      }
+    ProjectConfiguration clone;
+    try {
+      clone = (ProjectConfiguration) super.clone();
     }
-    return addins;
+    catch (CloneNotSupportedException e) {
+      throw new RuntimeException("Unable to clone!", e);
+    }
+    clone.enabledAddins = new ArrayList<String>(this.enabledAddins);
+    return clone;
   }
 
   @Override

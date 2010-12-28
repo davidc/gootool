@@ -6,6 +6,7 @@
 package com.goofans.gootool;
 
 import com.goofans.gootool.facades.TargetFile;
+import com.goofans.gootool.projects.ProjectConfiguration;
 import net.infotrek.util.DesktopUtil;
 import net.infotrek.util.TextUtil;
 
@@ -67,7 +68,7 @@ public class ProjectController implements ActionListener
   private static final GooToolResourceBundle resourceBundle = GooTool.getTextProvider();
 
   // The configuration currently live on disk.
-  private LocalProjectConfiguration liveConfig;
+  private ProjectConfiguration liveConfig;
 
   private ProjectModel projectModel;
 
@@ -138,8 +139,8 @@ public class ProjectController implements ActionListener
   {
     // TODO maybe put this in a progressindicatingtask?
 
-    liveConfig = (LocalProjectConfiguration) currentProject.getSavedConfiguration(); // TODO don't cast, use PC not LPC
-    projectModel = new ProjectModel(new LocalProjectConfiguration(liveConfig));
+    liveConfig = currentProject.getSavedConfiguration(); // TODO don't cast, use PC not LPC
+    projectModel = new ProjectModel((ProjectConfiguration) liveConfig.clone());
   }
 
   /**
@@ -165,7 +166,7 @@ public class ProjectController implements ActionListener
     }
     else if (cmd.equals(CMD_REVERT)) {
       log.info("Reverting configuration to saved");
-      projectModel = new ProjectModel(new LocalProjectConfiguration(liveConfig));
+      projectModel = new ProjectModel((ProjectConfiguration) liveConfig.clone());
       updateViewFromModel();
     }
     else if (cmd.equals(CMD_ADDIN_INSTALL)) {
