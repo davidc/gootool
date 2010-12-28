@@ -5,6 +5,7 @@
 
 package com.goofans.gootool;
 
+import com.goofans.gootool.facades.TargetFile;
 import net.infotrek.util.DesktopUtil;
 import net.infotrek.util.TextUtil;
 
@@ -251,8 +252,6 @@ public class ProjectController implements ActionListener
 
   private void installAddin()
   {
-    if (!ensureCustomDirIsSet()) return;
-
     JFileChooser chooser = new JFileChooser(ToolPreferences.getMruAddinDir());
     chooser.setMultiSelectionEnabled(true);
     FileNameExtensionFilter filter = new FileNameExtensionFilter("World of Goo Mods", AddinsStore.GOOMOD_EXTENSION);
@@ -271,20 +270,6 @@ public class ProjectController implements ActionListener
     for (File addinFile : selectedFiles) {
       mainController.installAddin(addinFile);
     }
-  }
-
-  private boolean ensureCustomDirIsSet()
-  {
-    //TODO
-    /*  WorldOfGoo worldOfGoo = WorldOfGoo.getTheInstance();
-    if (!worldOfGoo.isCustomDirSet()) {
-      mainController.showMessageDialog(resourceBundle.getString("customdir.select.title"), resourceBundle.getString("customdir.select.message"));
-      changeCustomDir();
-      if (!worldOfGoo.isCustomDirSet()) {
-        return false;
-      }
-    }*/
-    return true;
   }
 
   private void uninstallAddin()
@@ -315,6 +300,7 @@ public class ProjectController implements ActionListener
 
   public void enableAddin(String id)
   {
+    System.out.println("id = " + id);
     Addin addin = AddinsStore.getAddinById(id);
     enableAddinInternal(addin);
   }
@@ -515,26 +501,17 @@ public class ProjectController implements ActionListener
     System.out.println("in save");
     updateModelFromView();
 
-
     projectModel.removeUnavailableAddins();
-
-    if (!ensureCustomDirIsSet()) return;
 
     if (!currentProject.readyToBuild()) return;
 
-//    try {
-    // TODO Need a new way to detect this
-    //if (WorldOfGoo.getTheInstance().isFirstCustomBuild()) {
-    mainController.showMessageDialog(resourceBundle.getString("firstBuild.title"), resourceBundle.getString("firstBuild.message"));
-    //  }
-//    }
-//    catch (IOException e) {
-    // shouldn't happen
-//      log.log(Level.SEVERE, "Couldn't get custom dir", e);
-//      return;
-//    }
+    TargetFile testFile = currentProject.getTarget().getGameRoot().getChild(currentProject.getGameXmlFilename("properties/text.xml"));
 
-    WorldBuilder configWriter = new WorldBuilder(currentProject);
+    if (!testFile.isFile()) {
+      mainController.showMessageDialog(resourceBundle.getString("firstBuild.title"), resourceBundle.getString("firstBuild.message"));
+    }
+
+    WorldBuilder configWriter = new WorldBuilder(currentProject, projectModel.getEditorConfig());
 
     boolean errored = false;
 
@@ -546,7 +523,6 @@ public class ProjectController implements ActionListener
       mainController.showErrorDialog(resourceBundle.getString("worldBuilder.error.title"), e.getMessage() + " (" + e.getClass().getName() + ")");
       errored = true;
     }
-
 
     loadProjectModel();
 

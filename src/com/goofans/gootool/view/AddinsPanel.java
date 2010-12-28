@@ -154,7 +154,7 @@ public class AddinsPanel implements ViewComponent, PropertyChangeListener
       ratingBar.setRatingQuietly(0);
     }
     else {
-      boolean isEnabled = projectController.getProjectModel().getEditorConfig().isEnabledAdddin(addin.getId());
+      boolean isEnabled = projectController.getProjectModel().getEditorConfig().isEnabledAddin(addin.getId());
 
       if (addin.getDescription().startsWith("<html>")) { //NON-NLS
         description.setText(addin.getDescription());
@@ -191,7 +191,6 @@ public class AddinsPanel implements ViewComponent, PropertyChangeListener
     }
   }
 
-
   public void updateViewFromModel(ProjectModel model)
   {
     refreshAddinsTable();
@@ -211,7 +210,7 @@ public class AddinsPanel implements ViewComponent, PropertyChangeListener
 
   private void createUIComponents()
   {
-    findMoreHyperlink = new HyperlinkLabel(GooTool.getTextProvider().getString("addins.getmore"));
+    findMoreHyperlink = new HyperlinkLabel(GooTool.getTextProvider().getString("addins.getMore"));
   }
 
   public void propertyChange(PropertyChangeEvent evt)
@@ -268,7 +267,7 @@ public class AddinsPanel implements ViewComponent, PropertyChangeListener
       if (columnIndex == 1) return addin.getTypeText();
       if (columnIndex == 2) return addin.getVersion();
       if (columnIndex == 3) return addin.getAuthor();
-      if (columnIndex == 4) return model.getEditorConfig().isEnabledAdddin(addin.getId());
+      if (columnIndex == 4) return model.getEditorConfig().isEnabledAddin(addin.getId());
 
       return null;
     }
@@ -333,7 +332,7 @@ public class AddinsPanel implements ViewComponent, PropertyChangeListener
 
       String addinId = addin.getId();
 
-      if (!projectController.getProjectModel().getEditorConfig().isEnabledAdddin(addinId)) {
+      if (!projectController.getProjectModel().getEditorConfig().isEnabledAddin(addinId)) {
         return null;
       }
 

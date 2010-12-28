@@ -132,7 +132,6 @@ public abstract class Project
 
   public abstract boolean readyToBuild();
 
-
   public abstract Source getSource();
 
   public abstract Target getTarget();

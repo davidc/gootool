@@ -61,7 +61,7 @@ public class ProgressDialog extends JDialog implements ProgressListener
 
     iconLabel.setIcon(GooTool.getMainIcon());
 
-    setSize(300, 100);
+    setSize(400, 100);
     setLocationRelativeTo(owner);
   }
 
