@@ -69,7 +69,6 @@ public class ProjectConfiguration
   {
     if (watermark == null) watermark = "";
     this.watermark = watermark;
-
   }
 
   public boolean isBillboardsDisabled()
@@ -82,7 +81,7 @@ public class ProjectConfiguration
     this.billboardsDisabled = billboardsDisabled;
   }
 
-  public boolean isEnabledAdddin(String id)
+  public boolean isEnabledAddin(String id)
   {
     return (enabledAddins.contains(id.intern()));
   }

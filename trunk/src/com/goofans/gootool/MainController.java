@@ -185,7 +185,7 @@ public class MainController implements ActionListener
   {
     if (!addinFile.exists()) {
       log.info("File not found: " + addinFile);
-      showErrorDialog(resourceBundle.getString("installAddin.notfound.title"), resourceBundle.formatString("installAddin.notfound.message", addinFile));
+      showErrorDialog(resourceBundle.getString("installAddin.notFound.title"), resourceBundle.formatString("installAddin.notFound.message", addinFile));
       return;
     }
 

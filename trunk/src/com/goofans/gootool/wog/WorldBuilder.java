@@ -62,10 +62,10 @@ public class WorldBuilder extends ProgressIndicatingTask
   private final SourceFile sourceRealRoot;
   private final TargetFile targetRealRoot;
 
-  public WorldBuilder(Project project)
+  public WorldBuilder(Project project, ProjectConfiguration config)
   {
     this.project = project;
-    this.config = project.getConfiguration();
+    this.config = config;
     resourceBundle = GooTool.getTextProvider();
     source = project.getSource();
     target = project.getTarget();
@@ -473,7 +473,8 @@ public class WorldBuilder extends ProgressIndicatingTask
 //    c.enableAddin("com.2dboy.talic.basketball");
     c.enableAddin(addinId);
 
-    WorldBuilder writer = new WorldBuilder(ProjectManager.simpleInit());
+    Project project = ProjectManager.simpleInit();
+    WorldBuilder writer = new WorldBuilder(project, project.getConfiguration());
 
     writer.setParentComponent(null);
 
