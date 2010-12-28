@@ -1,23 +1,23 @@
 /*
- * Copyright (c) 2008, 2009, 2010 David C A Croft. All rights reserved. Your use of this computer software
+ * Copyright (c) 2008, 2009, 2010, 2011 David C A Croft. All rights reserved. Your use of this computer software
  * is permitted only in accordance with the GooTool license agreement distributed with this file.
  */
 
 package com.goofans.gootoolsp.leveledit.ui;
 
-import javax.swing.*;
+import com.goofans.gootool.util.DebugUtil;
+import com.goofans.gootool.util.GUIUtil;
+import com.goofans.gootoolsp.leveledit.tools.SelectTool;
+import com.goofans.gootoolsp.leveledit.tools.Tool;
+
 import javax.imageio.ImageIO;
+import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import java.io.IOException;
-
-import com.goofans.gootoolsp.leveledit.tools.Tool;
-import com.goofans.gootoolsp.leveledit.tools.SelectTool;
-import com.goofans.gootool.util.GUIUtil;
-import com.goofans.gootool.util.DebugUtil;
 
 /**
  * @author David Croft (davidc@goofans.com)

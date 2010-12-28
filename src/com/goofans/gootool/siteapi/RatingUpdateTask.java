@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008, 2009, 2010 David C A Croft. All rights reserved. Your use of this computer software
+ * Copyright (c) 2008, 2009, 2010, 2011 David C A Croft. All rights reserved. Your use of this computer software
  * is permitted only in accordance with the GooTool license agreement distributed with this file.
  */
 
@@ -25,18 +25,18 @@ public class RatingUpdateTask implements Runnable
   public void run()
   {
     if (ToolPreferences.isGooFansLoginOk()) {
-      log.log(Level.FINE, "User is logged in, getting their ratings"); //NON-NLS
+      log.log(Level.FINE, "User is logged in, getting their ratings");
       try {
         RatingListRequest ratingListRequest = new RatingListRequest();
         Map<String, Integer> ratings = ratingListRequest.getRatings();
         ToolPreferences.setRatings(ratings);
       }
       catch (APIException e) {
-        log.log(Level.SEVERE, "Unable to get user ratings", e); //NON-NLS
+        log.log(Level.SEVERE, "Unable to get user ratings", e);
       }
     }
     else {
-      log.log(Level.FINE, "User not logged in, not getting ratings"); //NON-NLS
+      log.log(Level.FINE, "User not logged in, not getting ratings");
     }
   }
 

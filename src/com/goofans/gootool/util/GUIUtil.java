@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008, 2009, 2010 David C A Croft. All rights reserved. Your use of this computer software
+ * Copyright (c) 2008, 2009, 2010, 2011 David C A Croft. All rights reserved. Your use of this computer software
  * is permitted only in accordance with the GooTool license agreement distributed with this file.
  */
 
@@ -149,7 +149,7 @@ public class GUIUtil
     if (owner == null) {
       ((Frame) progressDialog.getOwner()).setIconImage(GooTool.getMainIconImage());
     }
-    
+
     task.addListener(progressDialog);
     task.setParentComponent(progressDialog);
     runTask(task, progressDialog);
@@ -176,7 +176,7 @@ public class GUIUtil
           result[0] = success;
         }
         catch (Exception e) {
-          log.log(Level.SEVERE, "runTask " + task.getClass().getName() + " threw exception", e); //NON-NLS
+          log.log(Level.SEVERE, "runTask " + task.getClass().getName() + " threw exception", e);
           result[0] = e;
         }
         finally {
@@ -205,7 +205,7 @@ public class GUIUtil
       throw (Exception) result[0];
     }
     else if (result[0] != success) {
-      log.log(Level.SEVERE, "Task " + task + " failed to execute"); //NON-NLS
+      log.log(Level.SEVERE, "Task " + task + " failed to execute");
       throw new Exception("The task failed to complete due to a fatal error - check the log.");
     }
   }

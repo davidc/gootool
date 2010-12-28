@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008, 2009, 2010 David C A Croft. All rights reserved. Your use of this computer software
+ * Copyright (c) 2008, 2009, 2010, 2011 David C A Croft. All rights reserved. Your use of this computer software
  * is permitted only in accordance with the GooTool license agreement distributed with this file.
  */
 
@@ -31,7 +31,7 @@ public class Scene
   {
     Element rootElement = d.getDocumentElement();
 
-    if (!"scene".equals(rootElement.getNodeName())) {
+    if (!"scene".equals(rootElement.getNodeName())) { //NON-NLS
       throw new IOException("Root element isn't a scene");
     }
 

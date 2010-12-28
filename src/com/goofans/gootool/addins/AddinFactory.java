@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008, 2009, 2010 David C A Croft. All rights reserved. Your use of this computer software
+ * Copyright (c) 2008, 2009, 2010, 2011 David C A Croft. All rights reserved. Your use of this computer software
  * is permitted only in accordance with the GooTool license agreement distributed with this file.
  */
 
@@ -294,7 +294,7 @@ public class AddinFactory
       Node node = map.item(i);
       levelNames.put(node.getNodeName(), node.getNodeValue());
     }
-    if (levelNames.get("text") == null) throw new AddinFormatException("No text attribute on level name");
+    if (levelNames.get("text") == null) throw new AddinFormatException("No text attribute on level name"); //NON-NLS
 
     // subtitle
     Element subtitleElement = XMLUtil.getElement(levelElement, LEVEL_SUBTITLE);
@@ -305,7 +305,7 @@ public class AddinFactory
       Node node = map.item(i);
       levelSubtitles.put(node.getNodeName(), node.getNodeValue());
     }
-    if (levelSubtitles.get("text") == null) throw new AddinFormatException("No text attribute on level subtitle");
+    if (levelSubtitles.get("text") == null) throw new AddinFormatException("No text attribute on level subtitle"); //NON-NLS
 
     // ocd (optional) TODO validate
     levelOcd = XMLUtil.getElementString(levelElement, LEVEL_OCD);

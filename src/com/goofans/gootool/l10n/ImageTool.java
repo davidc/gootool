@@ -1,9 +1,20 @@
 /*
- * Copyright (c) 2008, 2009, 2010 David C A Croft. All rights reserved. Your use of this computer software
+ * Copyright (c) 2008, 2009, 2010, 2011 David C A Croft. All rights reserved. Your use of this computer software
  * is permitted only in accordance with the GooTool license agreement distributed with this file.
  */
 
 package com.goofans.gootool.l10n;
+
+import com.goofans.gootool.GooTool;
+import com.goofans.gootool.facades.SourceFile;
+import com.goofans.gootool.projects.Project;
+import com.goofans.gootool.projects.ProjectManager;
+import com.goofans.gootool.util.ProgressIndicatingTask;
+import com.goofans.gootool.util.XMLUtil;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 import javax.imageio.IIOException;
 import javax.imageio.ImageIO;
@@ -14,16 +25,6 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
-
-import com.goofans.gootool.GooTool;
-import com.goofans.gootool.facades.SourceFile;
-import com.goofans.gootool.projects.ProjectManager;
-import com.goofans.gootool.util.ProgressIndicatingTask;
-import com.goofans.gootool.util.XMLUtil;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
 /**
  * @author David Croft (davidc@goofans.com)
@@ -83,12 +84,15 @@ public class ImageTool extends ProgressIndicatingTask
 
     Document d = XMLUtil.loadDocumentFromFile(new File(sourceDir, "l10n_images.xml"));
 
+    Project project = ProjectManager.simpleInit();
+    SourceFile sourceRoot = project.getSource().getGameRoot();
+
     NodeList processImageNodes = d.getDocumentElement().getChildNodes();
     for (int i = 0; i < processImageNodes.getLength(); i++) {
       Node node = processImageNodes.item(i);
       if (node instanceof Element) {
         Element el = (Element) node;
-        if ("process-image".equals(el.getTagName())) {
+        if ("process-image".equals(el.getTagName())) { //NON-NLS
           String sourceFileName = el.getElementsByTagName("source").item(0).getTextContent().trim();
           String destFileName = el.getElementsByTagName("dest").item(0).getTextContent().trim();
 
@@ -99,11 +103,11 @@ public class ImageTool extends ProgressIndicatingTask
           if (outputDir == null) {
             constraints.gridy++;
             constraints.gridx = 0;
-            contentPanel.add(new JLabel("<html>" + sourceFileName + " -&gt;<br>" + destFileName), constraints);
+            contentPanel.add(new JLabel("<html>" + sourceFileName + " -&gt;<br>" + destFileName), constraints); //NON-NLS
 
             try {
               constraints.gridx++;
-              SourceFile input = ProjectManager.simpleInit().getSource().getRoot().getChild(destFileName + ".png");
+              SourceFile input = ((SourceFile) sourceRoot).getChild(project.getGamePngFilename(destFileName + ".png"));
               contentPanel.add(makeLabel(ImageIO.read(input.read())), constraints);
             }
             catch (IIOException e) {

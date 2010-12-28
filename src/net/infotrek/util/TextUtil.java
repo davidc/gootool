@@ -1,7 +1,12 @@
+/*
+ * Copyright (c) 2008, 2009, 2010, 2011 David C A Croft. All rights reserved. Your use of this computer software
+ * is permitted only in accordance with the GooTool license agreement distributed with this file.
+ */
+
 package net.infotrek.util;
 
-import java.io.*;
-import java.nio.charset.Charset;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.text.NumberFormat;
 
 /**
@@ -53,6 +58,7 @@ public class TextUtil
           };
   private static final byte WHITE_SPACE_ENC = -5; // Indicates white space in encoding
   private static final byte EQUALS_SIGN_ENC = -1; // Indicates equals sign in encoding
+  private static final String UTF_8 = "UTF-8";
 
   private TextUtil()
   {
@@ -82,7 +88,7 @@ public class TextUtil
     }
 
     try {
-      return new String(outBuff, 0, e, "UTF-8");
+      return new String(outBuff, 0, e, UTF_8);
     }
     catch (UnsupportedEncodingException e1) {
       throw new RuntimeException(e1);
@@ -139,7 +145,7 @@ public class TextUtil
    */
   public static byte[] base64Decode(String str) throws IOException
   {
-    byte[] source = str.getBytes("UTF-8");
+    byte[] source = str.getBytes(UTF_8);
     int len = source.length;
 
     int len34 = len * 3 / 4;
@@ -258,7 +264,7 @@ public class TextUtil
   }
 
 
-  @SuppressWarnings({"UseOfSystemOutOrSystemErr"})
+  @SuppressWarnings({"UseOfSystemOutOrSystemErr", "HardCodedStringLiteral"})
   public static void main(String[] args) throws IOException
   {
     String original = "Hello, world!!!";
@@ -266,7 +272,7 @@ public class TextUtil
     String encoded = base64Encode(original.getBytes());
     System.out.println("encoded = " + encoded);
     byte[] decoded = base64Decode(encoded);
-    String decodedStr = new String(decoded, "UTF-8");
+    String decodedStr = new String(decoded, UTF_8);
     System.out.println("decodedStr = " + decodedStr);
     System.out.println("(original.equals(decodedStr)) = " + (original.equals(decodedStr)));
   }

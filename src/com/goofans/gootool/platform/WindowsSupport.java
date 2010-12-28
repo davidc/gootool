@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008, 2009, 2010 David C A Croft. All rights reserved. Your use of this computer software
+ * Copyright (c) 2008, 2009, 2010, 2011 David C A Croft. All rights reserved. Your use of this computer software
  * is permitted only in accordance with the GooTool license agreement distributed with this file.
  */
 
@@ -146,7 +146,7 @@ public class WindowsSupport extends PlatformSupport
   protected void doLaunch(File targetDir) throws IOException
   {
     File exe = new File(targetDir, EXE_FILENAME);
-    log.log(Level.FINE, "Launching " + exe + " in " + targetDir); //NON-NLS
+    log.log(Level.FINE, "Launching " + exe + " in " + targetDir);
 
     ProcessBuilder pb = new ProcessBuilder(exe.getAbsolutePath());
     pb.directory(targetDir);

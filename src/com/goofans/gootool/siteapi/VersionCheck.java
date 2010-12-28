@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008, 2009, 2010 David C A Croft. All rights reserved. Your use of this computer software
+ * Copyright (c) 2008, 2009, 2010, 2011 David C A Croft. All rights reserved. Your use of this computer software
  * is permitted only in accordance with the GooTool license agreement distributed with this file.
  */
 
@@ -62,7 +62,7 @@ public class VersionCheck implements Runnable
       }
     }
     catch (Exception e) {
-      log.log(Level.WARNING, "Unable to check version", e); //NON-NLS
+      log.log(Level.WARNING, "Unable to check version", e);
       completed = true;
       failureReason = e;
 
@@ -76,10 +76,9 @@ public class VersionCheck implements Runnable
   public void runUpdateCheck() throws APIException, IOException
   {
     APIRequest request = new APIRequest(APIRequest.API_CHECKVERSION);
-    //noinspection DuplicateStringLiteralInspection
     request.addGetParameter("version", Version.RELEASE.toString());
 
-    log.log(Level.FINE, "Check version " + request); //NON-NLS
+    log.log(Level.FINE, "Check version " + request);
 
     Document doc = request.doRequest();
 
@@ -91,8 +90,8 @@ public class VersionCheck implements Runnable
 
   private boolean findUpToDate(Document doc)
   {
-    if (XMLUtil.getElement(doc.getDocumentElement(), "up-to-date") != null) { //NON-NLS
-      log.log(Level.FINE, "We are up to date"); //NON-NLS
+    if (XMLUtil.getElement(doc.getDocumentElement(), "up-to-date") != null) {
+      log.log(Level.FINE, "We are up to date");
       completed = true;
       upToDate = true;
 
@@ -114,16 +113,16 @@ public class VersionCheck implements Runnable
 
   private boolean findUpdateAvailable(Document doc) throws IOException
   {
-    Element updateAvailableEl = XMLUtil.getElement(doc.getDocumentElement(), "update-available"); //NON-NLS
+    Element updateAvailableEl = XMLUtil.getElement(doc.getDocumentElement(), "update-available");
     if (updateAvailableEl == null) {
       return false;
     }
 
-    newVersion = new VersionSpec(XMLUtil.getElementStringRequired(updateAvailableEl, "version")); //NON-NLS
-    newVersionMessage = XMLUtil.getElementString(updateAvailableEl, "message"); //NON-NLS
-    newVersionDownloadUrl = XMLUtil.getElementString(updateAvailableEl, "download-url"); //NON-NLS
+    newVersion = new VersionSpec(XMLUtil.getElementStringRequired(updateAvailableEl, "version"));
+    newVersionMessage = XMLUtil.getElementString(updateAvailableEl, "message");
+    newVersionDownloadUrl = XMLUtil.getElementString(updateAvailableEl, "download-url");
 
-    log.log(Level.FINE, "New version available, ver=" + newVersion + ", message=" + newVersionMessage + ", downloadUrl=" + newVersionDownloadUrl); //NON-NLS
+    log.log(Level.FINE, "New version available, ver=" + newVersion + ", message=" + newVersionMessage + ", downloadUrl=" + newVersionDownloadUrl);
     completed = true;
     upToDate = false;
 

@@ -1,9 +1,11 @@
 /*
- * Copyright (c) 2008, 2009, 2010 David C A Croft. All rights reserved. Your use of this computer software
+ * Copyright (c) 2008, 2009, 2010, 2011 David C A Croft. All rights reserved. Your use of this computer software
  * is permitted only in accordance with the GooTool license agreement distributed with this file.
  */
 
 package com.goofans.gootool.facades;
+
+import com.goofans.gootool.platform.PlatformSupport;
 
 import java.io.File;
 
@@ -13,16 +15,38 @@ import java.io.File;
  */
 public class LocalTarget implements Target
 {
-  private File rootDirectory;
+  private final File rootDirectory;
+
+  private final LocalTargetFile realRoot;
+  private final TargetFile gameRoot;
 
   public LocalTarget(File rootDirectory)
   {
     this.rootDirectory = rootDirectory;
+
+    realRoot = new LocalTargetFile(this, this.rootDirectory);
+
+    switch (PlatformSupport.getPlatform()) {
+      case WINDOWS:
+      case LINUX:
+        gameRoot = realRoot;
+        break;
+      case MACOSX:
+        gameRoot = realRoot.getChild("Contents/Resources/game");
+        break;
+      default:
+        throw new RuntimeException("Unknown platform");
+    }
   }
 
-  public TargetFile getRoot()
+  public TargetFile getRealRoot()
   {
-    return new LocalTargetFile(this, rootDirectory);
+    return realRoot;
+  }
+
+  public TargetFile getGameRoot()
+  {
+    return gameRoot;
   }
 
   @Override

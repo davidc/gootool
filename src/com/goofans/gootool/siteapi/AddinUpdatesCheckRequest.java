@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008, 2009, 2010 David C A Croft. All rights reserved. Your use of this computer software
+ * Copyright (c) 2008, 2009, 2010, 2011 David C A Croft. All rights reserved. Your use of this computer software
  * is permitted only in accordance with the GooTool license agreement distributed with this file.
  */
 
@@ -93,7 +93,7 @@ public class AddinUpdatesCheckRequest extends APIRequest
 
     Document doc = doRequest();
 
-    if (!"updates-check-results".equalsIgnoreCase(doc.getDocumentElement().getTagName())) {
+    if (!"updates-check-results".equalsIgnoreCase(doc.getDocumentElement().getTagName())) { //NON-NLS
       throw new APIException("Update check failed");
     }
 
@@ -102,7 +102,7 @@ public class AddinUpdatesCheckRequest extends APIRequest
       updates.put(addinId, null);
     }
 
-    final NodeList theUpdates = doc.getDocumentElement().getElementsByTagName("addin");
+    NodeList theUpdates = doc.getDocumentElement().getElementsByTagName("addin");
 
     for (int i = 0; i < theUpdates.getLength(); i++) {
       Element el = (Element) theUpdates.item(i);
@@ -173,7 +173,7 @@ public class AddinUpdatesCheckRequest extends APIRequest
     DebugUtil.setAllLogging();
 
 //    new AddinUpdatesCheckRequest().checkUpdatesById(Arrays.asList(new String[]{"goas", "com.goofans.billboards"}));
-    final Map<String, AvailableUpdate> updates = new AddinUpdatesCheckRequest().checkUpdates();
+    Map<String, AvailableUpdate> updates = new AddinUpdatesCheckRequest().checkUpdates();
 
     for (Addin addin : AddinsStore.getAvailableAddins()) {
       AvailableUpdate update = updates.get(addin.getId());

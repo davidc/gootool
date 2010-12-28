@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008, 2009, 2010 David C A Croft. All rights reserved. Your use of this computer software
+ * Copyright (c) 2008, 2009, 2010, 2011 David C A Croft. All rights reserved. Your use of this computer software
  * is permitted only in accordance with the GooTool license agreement distributed with this file.
  */
 
@@ -46,19 +46,19 @@ public abstract class PlatformSupport
   static {
     /* Platform forcing via -Dgootool.platform */
 
-    String forcePlatform = System.getProperty("gootool.platform");
+    String forcePlatform = System.getProperty("gootool.platform"); //NON-NLS
 
     if (forcePlatform == null) {
       platform = null;
     }
     else {
-      if ("windows".equalsIgnoreCase(forcePlatform)) {
+      if ("windows".equalsIgnoreCase(forcePlatform)) { //NON-NLS
         platform = Platform.WINDOWS;
       }
-      else if ("macosx".equalsIgnoreCase(forcePlatform)) {
+      else if ("macosx".equalsIgnoreCase(forcePlatform)) { //NON-NLS
         platform = Platform.MACOSX;
       }
-      else if ("linux".equalsIgnoreCase(forcePlatform)) {
+      else if ("linux".equalsIgnoreCase(forcePlatform)) { //NON-NLS
         platform = Platform.LINUX;
       }
       else {
@@ -72,14 +72,14 @@ public abstract class PlatformSupport
       log.warning("Forcing platform: " + platform);
     }
     else {
-      String lcOSName = System.getProperty("os.name").toLowerCase();
-      if (lcOSName.startsWith("mac os x")) {
+      String lcOSName = System.getProperty("os.name").toLowerCase(); //NON-NLS
+      if (lcOSName.startsWith("mac os x")) { //NON-NLS
         platform = Platform.MACOSX;
       }
-      else if (lcOSName.startsWith("windows")) {
+      else if (lcOSName.startsWith("windows")) { //NON-NLS
         platform = Platform.WINDOWS;
       }
-      else if (lcOSName.startsWith("linux")) {
+      else if (lcOSName.startsWith("linux")) { //NON-NLS
         platform = Platform.LINUX;
       }
       else {
@@ -122,7 +122,7 @@ public abstract class PlatformSupport
       String arg = args.get(i);
 
       /* File preferences via -preferences */
-      if ("-preferences".equals(arg)) {
+      if ("-preferences".equals(arg)) { //NON-NLS
         if (i + 1 >= args.size()) {
           throw new RuntimeException("Must specify a filename when using -preferences");
         }

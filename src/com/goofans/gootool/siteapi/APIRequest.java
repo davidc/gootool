@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008, 2009, 2010 David C A Croft. All rights reserved. Your use of this computer software
+ * Copyright (c) 2008, 2009, 2010, 2011 David C A Croft. All rights reserved. Your use of this computer software
  * is permitted only in accordance with the GooTool license agreement distributed with this file.
  */
 
@@ -118,15 +118,15 @@ public class APIRequest
    */
   protected Document doRequest() throws APIException
   {
-    log.log(Level.FINE, "Doing " + toString()); //NON-NLS
+    log.log(Level.FINE, "Doing " + toString());
 
     try {
       InputStream is = doRequestInt();
       Document doc = XMLUtil.loadDocumentFromInputStream(is);
 
       if ("error".equals(doc.getDocumentElement().getNodeName())) { //NON-NLS
-        String message = XMLUtil.getElementString(doc.getDocumentElement(), "message"); //NON-NLS
-        log.log(Level.WARNING, "API error. Message from server: " + message); //NON-NLS
+        String message = XMLUtil.getElementString(doc.getDocumentElement(), "message");
+        log.log(Level.WARNING, "API error. Message from server: " + message);
 
         throw new APIException(message);
       }

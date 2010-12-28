@@ -26,6 +26,9 @@
     <orderEntry type="library" name="uiruntime" level="project" />
     <orderEntry type="library" name="applejavaextensions" level="project" />
     <orderEntry type="library" name="jsch" level="project" />
+    <annotation-paths>
+      <root url="file://$MODULE_DIR$/annotations" />
+    </annotation-paths>
   </component>
 </module>
 

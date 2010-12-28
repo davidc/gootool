@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008, 2009, 2010 David C A Croft. All rights reserved. Your use of this computer software
+ * Copyright (c) 2008, 2009, 2010, 2011 David C A Croft. All rights reserved. Your use of this computer software
  * is permitted only in accordance with the GooTool license agreement distributed with this file.
  */
 
@@ -13,6 +13,7 @@ import java.util.logging.Logger;
 
 import com.goofans.gootool.facades.Source;
 import com.goofans.gootool.facades.SourceFile;
+import com.goofans.gootool.projects.Project;
 import com.goofans.gootool.projects.ProjectManager;
 import com.goofans.gootool.util.XMLUtil;
 import org.bouncycastle.crypto.BlockCipher;
@@ -215,13 +216,15 @@ public class AESBinFormat extends Codec
   @SuppressWarnings({"UseOfSystemOutOrSystemErr", "HardCodedStringLiteral", "HardcodedFileSeparator", "DuplicateStringLiteralInspection"})
   public static void main(String[] args) throws IOException, TransformerException
   {
-    Source source = ProjectManager.simpleInit().getSource();
+    Project project = ProjectManager.simpleInit();
+    Source source = project.getSource();
+    SourceFile sourceGameRoot = source.getGameRoot();
 
-    Codec codec = new AESBinFormat();
+    Codec codec = project.getCodecForGameXml();
 
-    SourceFile sourceRoot = source.getRoot();
+    SourceFile textFile = sourceGameRoot.getChild(project.getGameXmlFilename("properties/text.xml"));
 
-    byte[] decoded = codec.decodeFile(sourceRoot.getChild("properties/text.xml.bin"));
+    byte[] decoded = codec.decodeFile(textFile);
 
 //    Document doc = XMLUtil.loadDocumentFromInputStream(new ByteArrayInputStream(s.getBytes()));
     Document doc = XMLUtil.loadDocumentFromInputStream(new ByteArrayInputStream(decoded));
@@ -229,13 +232,13 @@ public class AESBinFormat extends Codec
 
     TESTMODE = true;
 
-    testFile(codec, sourceRoot.getChild("properties/resources.xml.bin"));
+    testFile(codec, sourceGameRoot.getChild(project.getGameXmlFilename("properties/resources.xml")));
 //    testFile("res\\levels\\GoingUp\\GoingUp.level.bin");
 //    testFile("res\\levels\\GoingUp\\GoingUp.resrc.bin");
 //    testFile("res\\levels\\GoingUp\\GoingUp.scene.bin");
 //    testFile("properties\\materials.xml.bin");
 
-    testDir(codec, sourceRoot);
+    testDir(codec, source.getGameRoot());
 
 //    testFile("res\\anim\\ball_counter.anim.binltl");
   }

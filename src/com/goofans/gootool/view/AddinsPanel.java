@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008, 2009, 2010 David C A Croft. All rights reserved. Your use of this computer software
+ * Copyright (c) 2008, 2009, 2010, 2011 David C A Croft. All rights reserved. Your use of this computer software
  * is permitted only in accordance with the GooTool license agreement distributed with this file.
  */
 
@@ -105,7 +105,7 @@ public class AddinsPanel implements ViewComponent, PropertyChangeListener
     TableColumnModel columnModel = addinTable.getColumnModel();
     addinTable.setDefaultRenderer(String.class, new AddinsTableCellStringRenderer());
 
-    log.finer("Columns in table = " + columnModel.getColumnCount()); //NON-NLS
+    log.finer("Columns in table = " + columnModel.getColumnCount());
     columnModel.getColumn(0).setPreferredWidth(150);
     columnModel.getColumn(1).setPreferredWidth(50);
     columnModel.getColumn(2).setPreferredWidth(75);
@@ -136,7 +136,7 @@ public class AddinsPanel implements ViewComponent, PropertyChangeListener
       findMoreHyperlink.addHyperlinkListener(new HyperlinkLaunchingListener(rootPanel));
     }
     catch (MalformedURLException e) {
-      log.log(Level.WARNING, "Unable to make GooFans URL", e); //NON-NLS
+      log.log(Level.WARNING, "Unable to make GooFans URL", e);
     }
   }
 
@@ -237,7 +237,7 @@ public class AddinsPanel implements ViewComponent, PropertyChangeListener
             new RatingSubmitRequest().submitRating(addin.getId(), rating);
           }
           catch (APIException e) {
-            log.log(Level.SEVERE, "Unable to submit rating for " + addin.getId(), e); //NON-NLS
+            log.log(Level.SEVERE, "Unable to submit rating for " + addin.getId(), e);
           }
         }
       });

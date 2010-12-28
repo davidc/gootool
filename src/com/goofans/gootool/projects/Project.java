@@ -1,13 +1,9 @@
 /*
- * Copyright (c) 2008, 2009, 2010 David C A Croft. All rights reserved. Your use of this computer software
+ * Copyright (c) 2008, 2009, 2010, 2011 David C A Croft. All rights reserved. Your use of this computer software
  * is permitted only in accordance with the GooTool license agreement distributed with this file.
  */
 
 package com.goofans.gootool.projects;
-
-import java.io.IOException;
-import java.util.StringTokenizer;
-import java.util.prefs.Preferences;
 
 import com.goofans.gootool.GooTool;
 import com.goofans.gootool.facades.Source;
@@ -16,6 +12,10 @@ import com.goofans.gootool.io.Codec;
 import com.goofans.gootool.model.Language;
 import com.goofans.gootool.profile.ProfileData;
 import com.goofans.gootool.util.Utilities;
+
+import java.io.IOException;
+import java.util.StringTokenizer;
+import java.util.prefs.Preferences;
 
 /**
  * @author David Croft (davidc@goofans.com)
@@ -63,7 +63,7 @@ public abstract class Project
   {
     byte[] profileBytes = getProfileBytes();
     if (profileBytes == null) return null;
-    
+
     return new ProfileData(profileBytes);
   }
 
@@ -138,5 +138,46 @@ public abstract class Project
   public abstract Target getTarget();
 
   public abstract Codec getCodecForGameXml();
+
   public abstract Codec getCodecForProfile();
+
+  /**
+   * Gets the filename of an XML file. May have .bin appended for non-IOS platforms.
+   *
+   * @param baseName Filename, without trailing .bin.
+   * @return The filename that should be used in this project.
+   */
+  public abstract String getGameXmlFilename(String baseName);
+
+  /**
+   * Gets the filename of a PNG file. May have .binltl appended for Mac OS X.
+   *
+   * @param baseName Filename, with trailing .png but without trailing .binltl.
+   * @return Where it is on this installation.
+   */
+  public abstract String getGamePngFilename(String baseName);
+
+  /**
+   * Gets the filename of a sound file (.ogg normally, .aac for IOS).
+   *
+   * @param baseName Filename, without trailing .ogg.
+   * @return
+   */
+  public abstract String getGameSoundFilename(String baseName);
+
+  /**
+   * Gets the filename of a music file (.ogg normally, .aifc for IOS).
+   *
+   * @param baseName Filename, without trailing .ogg.
+   * @return
+   */
+  public abstract String getGameMusicFilename(String baseName);
+
+  /**
+   * Gets the filename of an animation or movie file (.binltl normally, .binltl for Linux 64-bit).
+   *
+   * @param baseName
+   * @return
+   */
+  public abstract String getGameAnimMovieFilename(String baseName);
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008, 2009, 2010 David C A Croft. All rights reserved. Your use of this computer software
+ * Copyright (c) 2008, 2009, 2010, 2011 David C A Croft. All rights reserved. Your use of this computer software
  * is permitted only in accordance with the GooTool license agreement distributed with this file.
  */
 
@@ -73,7 +73,7 @@ public class NewVersionDialog extends JDialog
 
     curVersionLabel.setText(resourceBundle.formatString("newVersion.curVersion", Version.RELEASE_MAJOR, Version.RELEASE_MINOR, Version.RELEASE_MICRO));
     latestVersionLabel.setText(resourceBundle.formatString("newVersion.latestVersion", latestVersion));
-    message.setText("<html>" + messageText + "</html>");
+    message.setText("<html>" + messageText + "</html>"); //NON-NLS
 
     pack();
     setLocationRelativeTo(parentWindow);

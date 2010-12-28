@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008, 2009, 2010 David C A Croft. All rights reserved. Your use of this computer software
+ * Copyright (c) 2008, 2009, 2010, 2011 David C A Croft. All rights reserved. Your use of this computer software
  * is permitted only in accordance with the GooTool license agreement distributed with this file.
  */
 
@@ -140,7 +140,7 @@ public class AddinUpdatesChooser extends JDialog
         {
           for (UpdateRow updateRow : updateRows) {
             if (updateRow.install) {
-              log.log(Level.INFO, "Downloading update " + updateRow.addin.getId() + " version " + updateRow.update.version); //NON-NLS
+              log.log(Level.INFO, "Downloading update " + updateRow.addin.getId() + " version " + updateRow.update.version);
 
               beginStep(resourceBundle.formatString("addinUpdating.status.downloading", updateRow.addin.getId()), false);
 
@@ -169,7 +169,7 @@ public class AddinUpdatesChooser extends JDialog
       });
     }
     catch (Exception e) {
-      log.log(Level.SEVERE, "Error downloading updates", e); //NON-NLS
+      log.log(Level.SEVERE, "Error downloading updates", e);
       JOptionPane.showMessageDialog(this, resourceBundle.formatString("addinUpdating.failed.message", e.getLocalizedMessage()),
               resourceBundle.getString("addinUpdating.failed.title"), JOptionPane.ERROR_MESSAGE);
     }

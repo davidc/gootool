@@ -1,25 +1,25 @@
 /*
- * Copyright (c) 2008, 2009, 2010 David C A Croft. All rights reserved. Your use of this computer software
+ * Copyright (c) 2008, 2009, 2010, 2011 David C A Croft. All rights reserved. Your use of this computer software
  * is permitted only in accordance with the GooTool license agreement distributed with this file.
  */
 
 package com.goofans.gootool.util;
 
+import com.goofans.gootool.io.GameFormat;
+import com.goofans.gootool.io.UnicodeReader;
+import org.w3c.dom.*;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.*;
-import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 import java.io.*;
-import java.util.logging.Logger;
 import java.util.logging.Level;
-
-import org.w3c.dom.*;
-import org.xml.sax.SAXException;
-import org.xml.sax.InputSource;
-import com.goofans.gootool.io.UnicodeReader;
-import com.goofans.gootool.io.GameFormat;
+import java.util.logging.Logger;
 
 /**
  * XML manipulation utilities.
@@ -44,12 +44,16 @@ public class XMLUtil
    */
   public static Document loadDocumentFromFile(File file) throws IOException
   {
+    FileInputStream is = new FileInputStream(file);
     try {
-      return loadDocumentInternal(new FileInputStream(file));
+      return loadDocumentInternal(is);
     }
     catch (SAXException e) {
       log.log(Level.SEVERE, "Unable to parse " + file.getName(), e);
       throw new IOException("Unable to parse " + file.getName());
+    }
+    finally {
+      is.close();
     }
   }
 
@@ -85,8 +89,12 @@ public class XMLUtil
     /* Swallow any BOM at the start of file */
 
     UnicodeReader r = new UnicodeReader(is, GameFormat.DEFAULT_CHARSET);
-
-    return builder.parse(new InputSource(r));
+    try {
+      return builder.parse(new InputSource(r));
+    }
+    finally {
+      r.close();
+    }
   }
 
   /**
@@ -157,7 +165,8 @@ public class XMLUtil
   public static String getAttributeStringRequired(Node node, String attributeName) throws IOException
   {
     String s = getAttributeString(node, attributeName, null);
-    if (s == null) throw new IOException("Mandatory attribute " + attributeName + " not specified on " + node.getNodeName());
+    if (s == null)
+      throw new IOException("Mandatory attribute " + attributeName + " not specified on " + node.getNodeName());
     return s;
   }
 
@@ -182,7 +191,8 @@ public class XMLUtil
   public static double getAttributeDoubleRequired(Node node, String attributeName) throws IOException
   {
     Double d = getAttributeDouble(node, attributeName, null);
-    if (d == null) throw new IOException("Mandatory attribute " + attributeName + " not specified on " + node.getNodeName());
+    if (d == null)
+      throw new IOException("Mandatory attribute " + attributeName + " not specified on " + node.getNodeName());
     return d;
   }
 
@@ -207,7 +217,8 @@ public class XMLUtil
   public static float getAttributeFloatRequired(Node node, String attributeName) throws IOException
   {
     Float f = getAttributeFloat(node, attributeName, null);
-    if (f == null) throw new IOException("Mandatory attribute " + attributeName + " not specified on " + node.getNodeName());
+    if (f == null)
+      throw new IOException("Mandatory attribute " + attributeName + " not specified on " + node.getNodeName());
     return f;
   }
 
@@ -230,7 +241,8 @@ public class XMLUtil
   public static int getAttributeIntegerRequired(Node node, String attributeName) throws IOException
   {
     Integer integer = getAttributeInteger(node, attributeName, null);
-    if (integer == null) throw new IOException("Mandatory attribute " + attributeName + " not specified on " + node.getNodeName());
+    if (integer == null)
+      throw new IOException("Mandatory attribute " + attributeName + " not specified on " + node.getNodeName());
     return integer;
   }
 
@@ -250,7 +262,8 @@ public class XMLUtil
   public static boolean getAttributeBooleanRequired(Node node, String attributeName) throws IOException
   {
     Boolean b = getAttributeBoolean(node, attributeName, null);
-    if (b == null) throw new IOException("Mandatory attribute " + attributeName + " not specified on " + node.getNodeName());
+    if (b == null)
+      throw new IOException("Mandatory attribute " + attributeName + " not specified on " + node.getNodeName());
     return b;
   }
 
@@ -337,6 +350,7 @@ public class XMLUtil
     return null;
   }
 
+  @SuppressWarnings({"HardCodedStringLiteral"})
   public static String escapeEntities(String input)
   {
     return input.replaceAll("&", "&amp;")

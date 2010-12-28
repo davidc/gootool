@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008, 2009, 2010 David C A Croft. All rights reserved. Your use of this computer software
+ * Copyright (c) 2008, 2009, 2010, 2011 David C A Croft. All rights reserved. Your use of this computer software
  * is permitted only in accordance with the GooTool license agreement distributed with this file.
  */
 
@@ -39,7 +39,7 @@ public class ProjectPanel extends JPanel implements ViewComponent
 
   private void createUIComponents()
   {
-    System.err.println("creating projectpanel");
+//    System.err.println("creating projectpanel");
     optionsPanel = new OptionsPanel();
     addinsPanel = new AddinsPanel();
     profilePanel = new ProfilePanel();

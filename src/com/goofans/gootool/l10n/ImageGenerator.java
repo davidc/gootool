@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008, 2009, 2010 David C A Croft. All rights reserved. Your use of this computer software
+ * Copyright (c) 2008, 2009, 2010, 2011 David C A Croft. All rights reserved. Your use of this computer software
  * is permitted only in accordance with the GooTool license agreement distributed with this file.
  */
 
@@ -374,6 +374,7 @@ public class ImageGenerator
     throw new IOException("No position specified on " + drawEl.getTagName());
   }
 
+  @SuppressWarnings({"HardCodedStringLiteral"})
   private int decodeXJustify(String val) throws IOException
   {
     if ("left".equalsIgnoreCase(val)) return FixedPosition.X_JUSTIFY_LEFT;
@@ -382,6 +383,7 @@ public class ImageGenerator
     throw new IOException("Invalid x-justify value " + val);
   }
 
+  @SuppressWarnings({"HardCodedStringLiteral"})
   private int decodeYJustify(String val) throws IOException
   {
     if ("top".equalsIgnoreCase(val)) return FixedPosition.Y_JUSTIFY_TOP;

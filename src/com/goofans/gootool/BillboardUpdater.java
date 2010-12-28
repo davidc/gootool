@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008, 2009, 2010 David C A Croft. All rights reserved. Your use of this computer software
+ * Copyright (c) 2008, 2009, 2010, 2011 David C A Croft. All rights reserved. Your use of this computer software
  * is permitted only in accordance with the GooTool license agreement distributed with this file.
  */
 
@@ -55,12 +55,12 @@ public class BillboardUpdater implements Runnable
         update = updates.get(BILLBOARDS_ADDIN_ID);
       }
       catch (APIException e) {
-        log.log(Level.SEVERE, "Error in addin update check request", e); //NON-NLS
+        log.log(Level.SEVERE, "Error in addin update check request", e);
         return;
       }
 
       if (update == null) {
-        log.log(Level.WARNING, "Billboard addin update not found!"); //NON-NLS
+        log.log(Level.WARNING, "Billboard addin update not found!");
         return;
       }
 
@@ -71,7 +71,7 @@ public class BillboardUpdater implements Runnable
         billboardModFile = new File(PlatformSupport.getToolStorageDirectory(), BILLBOARDS_GOOMOD_FILENAME);
       }
       catch (IOException e) {
-        log.log(Level.SEVERE, "Unable to locate billboards.goomod file in run"); //NON-NLS
+        log.log(Level.SEVERE, "Unable to locate billboards.goomod file in run");
         return;
       }
 
@@ -81,33 +81,33 @@ public class BillboardUpdater implements Runnable
           Addin billboardAddin = AddinFactory.loadAddin(billboardModFile);
 
           if (billboardAddin.getVersion().compareTo(update.version) >= 0) {
-            log.log(Level.INFO, "Billboard addin already up to date (" + billboardAddin.getVersion() + ")"); //NON-NLS
+            log.log(Level.INFO, "Billboard addin already up to date (" + billboardAddin.getVersion() + ")");
             return;
           }
-          log.fine("Downloading billboards because our version " + billboardAddin.getVersion() + " is lower than " + update.version); //NON-NLS
+          log.fine("Downloading billboards because our version " + billboardAddin.getVersion() + " is lower than " + update.version);
         }
         else {
-          log.fine("Downloading billboards because we have no copy"); //NON-NLS
+          log.fine("Downloading billboards because we have no copy");
         }
       }
       catch (IOException e) {
-        log.log(Level.SEVERE, "Unable to read billboards.goomod file"); //NON-NLS
+        log.log(Level.SEVERE, "Unable to read billboards.goomod file");
         return;
       }
       catch (AddinFormatException e) {
-        log.log(Level.WARNING, "billboards.goomod is in invalid format, forcing re-download"); //NON-NLS
+        log.log(Level.WARNING, "billboards.goomod is in invalid format, forcing re-download");
       }
 
-      log.log(Level.INFO, "Billboards update is available, downloading " + update.downloadUrl); //NON-NLS
+      log.log(Level.INFO, "Billboards update is available, downloading " + update.downloadUrl);
 
       try {
         Utilities.downloadFile(new URL(update.downloadUrl), billboardModFile);
       }
       catch (IOException e) {
-        log.log(Level.SEVERE, "Unable to download billboard goomod", e); //NON-NLS
+        log.log(Level.SEVERE, "Unable to download billboard goomod", e);
       }
 
-      log.log(Level.INFO, "Billboards version " + update.version + " downloaded to " + billboardModFile); //NON-NLS
+      log.log(Level.INFO, "Billboards version " + update.version + " downloaded to " + billboardModFile);
     }
   }
 
@@ -126,28 +126,28 @@ public class BillboardUpdater implements Runnable
     }
 
     if (!billboardsEnabled) {
-      log.log(Level.FINE, "Not updating billboards as no projects have billboards enabled"); //NON-NLS
+      log.log(Level.FINE, "Not updating billboards as no projects have billboards enabled");
       return;
     }
 
     long nextCheck = ToolPreferences.getBillboardLastCheck() + UPDATE_INTERVAL;
     long now = System.currentTimeMillis();
 
-    log.finer("maybe update billboards. nextCheck = " + nextCheck + ", current time = " + now); //NON-NLS
+    log.finer("maybe update billboards. nextCheck = " + nextCheck + ", current time = " + now);
 
-    File billboardModFile = null;
+    File billboardModFile;
     try {
       billboardModFile = new File(PlatformSupport.getToolStorageDirectory(), BILLBOARDS_GOOMOD_FILENAME);
     }
     catch (IOException e) {
-      log.log(Level.SEVERE, "Unable to locate billboards.goomod file for maybeUpdateBillboards"); //NON-NLS
+      log.log(Level.SEVERE, "Unable to locate billboards.goomod file for maybeUpdateBillboards");
       return;
     }
 
     if (now < nextCheck && billboardModFile.exists())
       return;
 
-    log.log(Level.INFO, "Billboard update check is due"); //NON-NLS
+    log.log(Level.INFO, "Billboard update check is due");
 
     GooTool.executeTaskInThreadPool(new BillboardUpdater());
   }

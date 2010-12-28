@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008, 2009, 2010 David C A Croft. All rights reserved. Your use of this computer software
+ * Copyright (c) 2008, 2009, 2010, 2011 David C A Croft. All rights reserved. Your use of this computer software
  * is permitted only in accordance with the GooTool license agreement distributed with this file.
  */
 
@@ -105,14 +105,14 @@ public class SingleInstance
   private void testTempDir()
   {
     File testFile = getTempFile(TEST_FILE + new Random().nextInt(Integer.MAX_VALUE));
-    log.finest("Testing tmpdir at " + testFile); //NON-NLS
+    log.finest("Testing temp directory at " + testFile);
 
     try {
       RandomAccessFile randomAccessFile = new RandomAccessFile(testFile, "rws");
       FileChannel channel = randomAccessFile.getChannel();
       FileLock lock = channel.tryLock();
       if (lock == null) {
-        log.log(Level.SEVERE, "Unable to lock temp file " + testFile); //NON-NLS
+        log.log(Level.SEVERE, "Unable to lock temp file " + testFile);
         throw new RuntimeException("Unable to write to lock temp file " + testFile);
       }
 
@@ -126,7 +126,7 @@ public class SingleInstance
       fos.close();
     }
     catch (IOException e) {
-      log.log(Level.SEVERE, "Unable to write to temp directory " + testFile, e); //NON-NLS
+      log.log(Level.SEVERE, "Unable to write to temp directory " + testFile, e);
       throw new RuntimeException("Unable to write to temporary directory " + testFile);
     }
     testFile.delete();
@@ -140,7 +140,7 @@ public class SingleInstance
    */
   private FileLock tryLock()
   {
-    log.finest("Attempting lock at " + lockFile); //NON-NLS
+    log.finest("Attempting lock at " + lockFile);
 
     FileLock lock;
 
@@ -150,7 +150,7 @@ public class SingleInstance
       lock = channel.tryLock();
     }
     catch (IOException e) {
-      log.log(Level.SEVERE, "Unable to lock the lock file " + lockFile); //NON-NLS
+      log.log(Level.SEVERE, "Unable to lock the lock file " + lockFile);
       throw new RuntimeException("Unable to lock our lock file " + lockFile);
     }
     return lock;
@@ -165,7 +165,7 @@ public class SingleInstance
    */
   private void primaryInstance(final FileLock lock, List<String> args)
   {
-    log.finer("We're the primary instance"); //NON-NLS
+    log.finer("We're the primary instance");
 
     Runtime.getRuntime().addShutdownHook(new Thread()
     {
@@ -177,7 +177,7 @@ public class SingleInstance
           lockFileRAF.close();
         }
         catch (IOException e) {
-          log.log(Level.WARNING, "Unable to release lock on shutdown", e); //NON-NLS
+          log.log(Level.WARNING, "Unable to release lock on shutdown", e);
         }
         //noinspection ResultOfMethodCallIgnored
         lockFile.delete();
@@ -210,7 +210,7 @@ public class SingleInstance
       // do nothing
     }
 
-    log.info("GooTool already running, send arguments to primary instance"); //NON-NLS
+    log.info("GooTool already running, send arguments to primary instance");
 
     int port;
     try {
@@ -222,14 +222,14 @@ public class SingleInstance
       fis.close();
     }
     catch (IOException e) {
-      log.log(Level.SEVERE, "Unable to determine socket of primary instance", e); //NON-NLS
+      log.log(Level.SEVERE, "Unable to determine socket of primary instance", e);
       throw new RuntimeException("Unable to determine socket of primary GooTool", e);
     }
 
 
     try {
       InetAddress addr = getLoopbackAddress();
-      log.finer("Connecting to " + addr + " port " + port); //NON-NLS
+      log.finer("Connecting to " + addr + " port " + port);
 
       Socket s = new Socket(addr, port);
       ObjectOutputStream oos = new ObjectOutputStream(s.getOutputStream());
@@ -238,10 +238,10 @@ public class SingleInstance
       s.close();
     }
     catch (IOException e) {
-      log.log(Level.SEVERE, "Unable to send args to primary instance", e); //NON-NLS
+      log.log(Level.SEVERE, "Unable to send args to primary instance", e);
       throw new RuntimeException("Unable to send args to primary GooTool", e);
     }
-    log.finer("Sent arguments, exiting"); //NON-NLS
+    log.finer("Sent arguments, exiting");
   }
 
   /**
@@ -252,7 +252,7 @@ public class SingleInstance
    */
   private static File getTempFile(String fileName)
   {
-    String tmpDir = System.getProperty("java.io.tmpdir"); //NON-NLS
+    String tmpDir = System.getProperty("java.io.tmpdir");
     return new File(tmpDir, fileName);
   }
 
@@ -264,9 +264,9 @@ public class SingleInstance
    */
   private void handleCommandLineArgs(final List<String> args)
   {
-    log.finer("Processing arguments:"); //NON-NLS
+    log.finer("Processing arguments:");
     for (int i = 0; i < args.size(); i++) {
-      log.finer("args[" + i + "] = " + args.get(i)); //NON-NLS
+      log.finer("args[" + i + "] = " + args.get(i));
     }
 
     // Queue for the event-dispatch thread to pass to the MainController once startup is fully completed.
@@ -322,7 +322,7 @@ public class SingleInstance
 
     public PrimaryInstanceSocket() throws IOException
     {
-      super("Primary instance socket"); //NON-NLS
+      super("Primary instance socket");
 
       // Open a listening socket
       serverSocketChannel = openSocket();
@@ -335,11 +335,11 @@ public class SingleInstance
         socketFile.deleteOnExit();
       }
       catch (IOException e) {
-        log.log(Level.SEVERE, "Unable to write our socket details to socketfile", e); //NON-NLS
-        throw new RuntimeException("Unable to write our socket details to socketfile");
+        log.log(Level.SEVERE, "Unable to write our socket details to socket file", e);
+        throw new RuntimeException("Unable to write our socket details to socket file");
       }
 
-      log.log(Level.FINE, "Primary instance listening on " + serverSocketChannel); //NON-NLS
+      log.log(Level.FINE, "Primary instance listening on " + serverSocketChannel);
     }
 
     private static final int MIN_PORT = 20000;
@@ -372,7 +372,7 @@ public class SingleInstance
           break;
         }
         catch (IOException e) {
-          log.log(Level.WARNING, "Unable to open socket on " + addr + " port " + port, e); //NON-NLS
+          log.log(Level.WARNING, "Unable to open socket on " + addr + " port " + port, e);
           if (++attempt > 9) throw e;
         }
       }
@@ -381,7 +381,7 @@ public class SingleInstance
     }
 
     /**
-     * Main loop that blocks waiting for args from clients, then dispatchse them.
+     * Main loop that blocks waiting for args from clients, then dispatches them.
      */
     @Override
     public void run()

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008, 2009, 2010 David C A Croft. All rights reserved. Your use of this computer software
+ * Copyright (c) 2008, 2009, 2010, 2011 David C A Croft. All rights reserved. Your use of this computer software
  * is permitted only in accordance with the GooTool license agreement distributed with this file.
  */
 
@@ -21,10 +21,14 @@ import com.goofans.gootoolsp.leveledit.resource.Ball;
  */
 public class GenerateBallImages
 {
+  private GenerateBallImages()
+  {
+  }
+
   @SuppressWarnings({"UseOfSystemOutOrSystemErr", "HardCodedStringLiteral", "HardcodedFileSeparator", "StringConcatenation", "DuplicateStringLiteralInspection"})
   public static void main(String[] args) throws IOException
   {
-    TargetFile ballsDir = ProjectManager.simpleInit().getTarget().getRoot().getChild("res/balls");
+    TargetFile ballsDir = ProjectManager.simpleInit().getTarget().getGameRoot().getChild("res/balls");
 
     for (TargetFile dir : ballsDir.list()) {
       if (dir.isDirectory() && !dir.getName().startsWith("_")) {

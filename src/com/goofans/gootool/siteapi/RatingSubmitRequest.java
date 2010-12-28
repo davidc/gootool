@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008, 2009, 2010 David C A Croft. All rights reserved. Your use of this computer software
+ * Copyright (c) 2008, 2009, 2010, 2011 David C A Croft. All rights reserved. Your use of this computer software
  * is permitted only in accordance with the GooTool license agreement distributed with this file.
  */
 
@@ -36,7 +36,7 @@ public class RatingSubmitRequest extends APIRequestAuthenticated
     addPostParameter("vote", Integer.toString(vote));
 
     Document doc = doRequest();
-    if (!"rating-submit-success".equalsIgnoreCase(doc.getDocumentElement().getTagName())) {
+    if (!"rating-submit-success".equalsIgnoreCase(doc.getDocumentElement().getTagName())) { //NON-NLS
       throw new APIException("Rating submission failed");
     }
   }
@@ -45,6 +45,6 @@ public class RatingSubmitRequest extends APIRequestAuthenticated
   {
     DebugUtil.setAllLogging();
 
-    new RatingSubmitRequest().submitRating("com.goofans.davidc.jingleballs", 20);
+    new RatingSubmitRequest().submitRating("com.goofans.davidc.jingleballs", 20); //NON-NLS
   }
 }

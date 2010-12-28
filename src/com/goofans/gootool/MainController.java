@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008, 2009, 2010 David C A Croft. All rights reserved. Your use of this computer software
+ * Copyright (c) 2008, 2009, 2010, 2011 David C A Croft. All rights reserved. Your use of this computer software
  * is permitted only in accordance with the GooTool license agreement distributed with this file.
  */
 
@@ -161,6 +161,9 @@ public class MainController implements ActionListener
         showErrorDialog("Error coding file", e.getLocalizedMessage());
       }
     }
+    else {
+      showErrorDialog("MainController", "Unrecognised MainController action " + cmd);
+    }
   }
 
 
@@ -285,7 +288,7 @@ public class MainController implements ActionListener
       ToolPreferences.setGooFansLoginOk(true);
     }
     catch (APIException e) {
-      log.log(Level.WARNING, "Login test API call failed", e); //NON-NLS
+      log.log(Level.WARNING, "Login test API call failed", e);
       ToolPreferences.setGooFansLoginOk(false);
       showErrorDialog(resourceBundle.getString("gooFansLogin.error.title"), resourceBundle.formatString("gooFansLogin.error.message", e.getLocalizedMessage()));
     }
@@ -317,11 +320,11 @@ public class MainController implements ActionListener
 
   public void maybeExit()
   {
-    log.fine("Exit requested"); //NON-NLS
+    log.fine("Exit requested");
 
     if (!projectController.canExit()) return;
 
-    log.info("Exiting"); //NON-NLS
+    log.info("Exiting");
     System.exit(0);
   }
 
@@ -341,7 +344,7 @@ public class MainController implements ActionListener
           }
         }
         if (!foundThisAddin) {
-          log.log(Level.WARNING, "Removed enabled addin " + enabledAddinName + " as it is not installed"); //NON-NLS
+          log.log(Level.WARNING, "Removed enabled addin " + enabledAddinName + " as it is not installed");
           config.disableAddin(enabledAddinName);
           break;
         }
@@ -367,7 +370,7 @@ public class MainController implements ActionListener
     int returnVal = chooser.showSaveDialog(mainWindow);
 
     if (returnVal != JFileChooser.APPROVE_OPTION) {
-      log.finer("User cancelled diagnostics file chooser"); //NON-NLS
+      log.finer("User cancelled diagnostics file chooser");
       return;
     }
 
@@ -377,7 +380,7 @@ public class MainController implements ActionListener
       GUIUtil.runTask(mainWindow, resourceBundle.getString("diagnostics.running.title"), diagnostics);
     }
     catch (Exception e) {
-      log.log(Level.SEVERE, "Unable to run diagnostics", e); //NON-NLS
+      log.log(Level.SEVERE, "Unable to run diagnostics", e);
       showErrorDialog(resourceBundle.getString("diagnostics.error.title"),
               resourceBundle.formatString("diagnostics.error.message", e.getLocalizedMessage()));
       return;
@@ -397,7 +400,7 @@ public class MainController implements ActionListener
     {
       public void propertyChange(PropertyChangeEvent evt)
       {
-        if ("allProfilesAreOnline".equals(evt.getPropertyName()) || "anyProfilesHaveGeneratedId".equals(evt.getPropertyName())) {
+        if ("allProfilesAreOnline".equals(evt.getPropertyName()) || "anyProfilesHaveGeneratedId".equals(evt.getPropertyName())) { //NON-NLS
           updateGenerateOnlineIdMenu();
         }
       }
@@ -424,7 +427,7 @@ public class MainController implements ActionListener
 
   public void bringToForeground()
   {
-    log.finest("MainController is requesting focus on MainWindow"); //NON-NLS
+    log.finest("MainController is requesting focus on MainWindow");
     mainWindow.toFront();
     mainWindow.requestFocus();
   }
@@ -503,7 +506,7 @@ public class MainController implements ActionListener
           GamePreferences.readGamePreferences(project.getConfiguration(), project.getSource());
         }
         catch (IOException e) {
-          log.log(Level.WARNING, "Unable to initialise project properties from config.txt", e); //NON-NLS
+          log.log(Level.WARNING, "Unable to initialise project properties from config.txt", e);
         }
 
         project.saveConfiguration();

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008, 2009, 2010 David C A Croft. All rights reserved. Your use of this computer software
+ * Copyright (c) 2008, 2009, 2010, 2011 David C A Croft. All rights reserved. Your use of this computer software
  * is permitted only in accordance with the GooTool license agreement distributed with this file.
  */
 
@@ -22,9 +22,9 @@ import com.goofans.gootool.util.GUIUtil;
  */
 public class StarBar extends JPanel implements MouseListener
 {
-  private static ImageIcon imgOff;
-  private static ImageIcon imgOn;
-  private static ImageIcon imgOver;
+  private static ImageIcon imgOff = null;
+  private static ImageIcon imgOn = null;
+  private static ImageIcon imgOver = null;
 
   private static final String[] TOOLTIPS = new String[]{"Poor", "OK", "Good", "Great", "Awesome"};
   private static final int NUM_STARS = 5;
@@ -57,12 +57,12 @@ public class StarBar extends JPanel implements MouseListener
     }
   }
 
-  private static void loadIcons()
+  private static synchronized void loadIcons()
   {
     if (imgOff == null) {
-      imgOff = new ImageIcon(StarBar.class.getResource("/star-off.png"));
-      imgOn = new ImageIcon(StarBar.class.getResource("/star-on.png"));
-      imgOver = new ImageIcon(StarBar.class.getResource("/star-over.png"));
+      imgOff = new ImageIcon(StarBar.class.getResource("/star-off.png")); //NON-NLS
+      imgOn = new ImageIcon(StarBar.class.getResource("/star-on.png")); //NON-NLS
+      imgOver = new ImageIcon(StarBar.class.getResource("/star-over.png")); //NON-NLS
     }
   }
 
@@ -70,7 +70,7 @@ public class StarBar extends JPanel implements MouseListener
   {
     if (!isEnabled()) return;
 
-    final int star = getStar(e);
+    int star = getStar(e);
     if (star == 0) return;
 
     setRating(star);
@@ -88,7 +88,7 @@ public class StarBar extends JPanel implements MouseListener
   {
     if (!isEnabled()) return;
 
-    final int star = getStar(e);
+    int star = getStar(e);
     if (star == 0) return;
 
     overStar = star;
@@ -101,7 +101,7 @@ public class StarBar extends JPanel implements MouseListener
       JLabel star = (JLabel) e.getComponent();
       for (int i = 0; i < stars.length; i++) {
         JLabel jLabel = stars[i];
-        if (star == jLabel) {
+        if (star.equals(jLabel)) {
           return i + 1;
         }
       }
@@ -243,7 +243,7 @@ public class StarBar extends JPanel implements MouseListener
   {
     GUIUtil.switchToSystemLookAndFeel();
     JFrame frame = new JFrame("Test starbar");
-    final StarBar bar = new StarBar(0);
+    StarBar bar = new StarBar(0);
 //    bar.setEnabled(false);
 
     bar.addPropertyChangeListener(RATING_PROPERTY, new PropertyChangeListener()

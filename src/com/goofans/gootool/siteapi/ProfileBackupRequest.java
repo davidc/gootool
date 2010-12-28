@@ -1,22 +1,19 @@
 /*
- * Copyright (c) 2008, 2009, 2010 David C A Croft. All rights reserved. Your use of this computer software
+ * Copyright (c) 2008, 2009, 2010, 2011 David C A Croft. All rights reserved. Your use of this computer software
  * is permitted only in accordance with the GooTool license agreement distributed with this file.
  */
 
 package com.goofans.gootool.siteapi;
 
-import net.infotrek.util.TextUtil;
-
-import javax.print.attribute.standard.PDLOverrideSupported;
-import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-import com.goofans.gootool.io.GameFormat;
 import com.goofans.gootool.projects.Project;
 import com.goofans.gootool.projects.ProjectManager;
 import com.goofans.gootool.util.DebugUtil;
+import net.infotrek.util.TextUtil;
 import org.w3c.dom.Document;
+
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * A request to backup the profile file to the server.
@@ -54,13 +51,14 @@ public class ProfileBackupRequest extends APIRequestAuthenticated
     addPostParameter("description", description);
 
     Document doc = doRequest();
-    if (!"profile-backup-success".equalsIgnoreCase(doc.getDocumentElement().getTagName())) {
+    if (!"profile-backup-success".equalsIgnoreCase(doc.getDocumentElement().getTagName())) { //NON-NLS
       throw new APIException("Profile backup failed");
     }
 
 //    System.out.println("Utilities.readStreamIntoString(doRequestInt()) = " + Utilities.readStreamIntoString(doRequestInt()));
   }
 
+  @SuppressWarnings({"HardCodedStringLiteral"})
   public static void main(String[] args) throws APIException, IOException
   {
     DebugUtil.setAllLogging();
