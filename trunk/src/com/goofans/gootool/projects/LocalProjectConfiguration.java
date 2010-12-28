@@ -109,6 +109,14 @@ public class LocalProjectConfiguration extends ProjectConfiguration
   }
 
   @Override
+  public Object clone()
+  {
+    LocalProjectConfiguration clone;
+    clone = (LocalProjectConfiguration) super.clone();
+    return clone;
+  }
+
+  @Override
   public String toString()
   {
     return "LocalProjectConfiguration{" +
