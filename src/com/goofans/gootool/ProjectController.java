@@ -209,18 +209,6 @@ public class ProjectController implements ActionListener
     }
   }
 
-  private void updateImageLocalisationPanel(boolean enabled)
-  {
-//    if (enabled) {
-//      mainWindow.tabbedPane.add("Image localisation", projectPanel.imageLocalisationPanel.rootPanel);
-//    }
-//    else {
-//      projectPanel.tabbedPane.remove(projectPanel.imageLocalisationPanel.rootPanel);
-//    }
-    //@@TODO this needs to be outside the project panes
-  }
-
-
   private void addinUpdateCheck()
   {
     final Map<String, AddinUpdatesCheckRequest.AvailableUpdate>[] updates = new Map[1];

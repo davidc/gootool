@@ -1,5 +1,3 @@
-- Enabled addins aren't getting stored on save.
-
 - Project drop-down shouldn't list the null projects!!!
 
 -menu options save/save&launch/revert should only be active if active project, and should call projectcontroller
@@ -8,7 +6,7 @@
 
 - diagnostics: dump projects
 
-- prevent window smaller than contnts
+- prevent main window smaller than contents
 
 set svn:eol-style native on all java, xml and text files
 
