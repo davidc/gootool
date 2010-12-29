@@ -26,7 +26,6 @@
            classname="net.sf.launch4j.ant.Launch4jTask"
            classpath="${launch4j.dir}/launch4j.jar:${launch4j.dir}/lib/xstream.jar"/>
 
-  <taskdef resource="proguard/ant/task.properties" classpathref="build.classpath"/>
   <taskdef resource="org/tigris/subversion/svnant/svnantlib.xml" classpathref="build.classpath"/>
   <taskdef resource="net/sf/antcontrib/antcontrib.properties" classpathref="build.classpath"/>
 
@@ -68,7 +67,7 @@
   <!-- JDK definitions -->
 
   <property name="jdk.bin" value="${jdk.home}/bin"/>
-  <path id="jdk.classpath.1.6">
+  <path id="jdk.classpath">
     <fileset dir="${jdk.home}">
       <include name="jre/lib/charsets.jar"/>
       <include name="jre/lib/deploy.jar"/>
@@ -89,7 +88,7 @@
 
   <property name="project.jdk.home" value="${jdk.home}"/>
   <property name="project.jdk.bin" value="${jdk.bin}"/>
-  <property name="project.jdk.classpath" value="jdk.classpath.1.6"/>
+  <property name="project.jdk.classpath" value="${jre.classes}"/>
 
 
   <!-- Module gootool -->
@@ -99,13 +98,12 @@
   <property name="build.dir" value="${basedir}/build"/>
   <property name="output.dir" value="${build.dir}/compiled"/>
   <property name="output.jar" value="${build.dir}/gootool.jar"/>
-  <property name="obfuscated.jar" value="${build.dir}/gootool-ob.jar"/>
 
   <property name="build.properties" value="${output.dir}/build.properties"/>
 
 
   <path id="gootool.module.runtime.classpath">
-    <path refid="${project.jdk.classpath}"/>
+    <fileset file="${project.jdk.classpath}"/>
     <!--<pathelement location="${output.dir}"/>-->
     <pathelement location="${basedir}/resources"/>
     <fileset dir="${basedir}/dist_src/common/lib/"/>
@@ -174,36 +172,12 @@
     </jar>
   </target>
 
-  <target name="obfuscate" depends="clean, jar"><!-- We must clean to remove any potential IDEA "make"-created ui designer classes in our build dir -->
-    <proguard printmapping="mapping/${gootool.version.full}.mapping" optimizationpasses="3" overloadaggressively="true"
-              repackageclasses="com.goofans.gootool"
-              allowaccessmodification="true"
-              renamesourcefileattribute="SourceFile">
-      -dontskipnonpubliclibraryclasses <!-- needed to fix DataTransferHandler errors in jdk-->
-
-      <keepattribute name="SourceFile"/>
-      <keepattribute name="LineNumberTable"/>
-      <libraryjar refid="gootool.module.build.classpath"/>
-      <injar file="${output.jar}"/>
-      <outjar file="${obfuscated.jar}"/>
-
-      <keep name="com.goofans.gootool.GooTool">
-        <method name="main"/>
-      </keep>
-      <keep name="com.goofans.gootool.GooInfo">
-        <method name="main"/>
-      </keep>
-      <keep name="net.infotrek.util.logging.jdk14.TerseFormatter"/>
-      <keep name="net.infotrek.util.prefs.FilePreferencesFactory"/>
-    </proguard>
-  </target>
-
-  <target name="launcher-win32" description="builds the launcher" depends="obfuscate">
+  <target name="launcher-win32" description="builds the launcher" depends="clean, jar">
     <mkdir dir="${dist.win32}"/>
     <mkdir dir="${dist.win32}/bin"/>
 
     <launch4j configFile="launcher/launch4j.xml"
-              jar="${obfuscated.jar}"
+              jar="${output.jar}"
               outfile="${dist.win32}/bin/gootool.exe"
               fileversion="${gootool.version}"
               txtfileversion="${gootool.version.full}"
@@ -212,7 +186,7 @@
             />
 
     <launch4j configFile="launcher/launch4j-info.xml"
-              jar="${obfuscated.jar}"
+              jar="${output.jar}"
               outfile="${dist.win32}/bin/gooinfo.exe"
               fileversion="${gootool.version}"
               txtfileversion="${gootool.version.full}"
@@ -250,10 +224,10 @@
 
   </target>
 
-  <target name="dist-macosx" description="Build the Mac OS X distribution" depends="obfuscate">
+  <target name="dist-macosx" description="Build the Mac OS X distribution" depends="clean, jar">
     <mkdir dir="${dist.macosx}"/>
 
-    <copy file="${obfuscated.jar}" tofile="${dist.macosx}/gootool.jar"/>
+    <copy file="${output.jar}" tofile="${dist.macosx}/gootool.jar"/>
 
     <jarbundler dir="${dist.macosx}" verbose="false" showPlist="false"
                 name="GooTool"
@@ -303,7 +277,7 @@
 
   </target>
 
-  <target name="dist-linux" description="Build the Linux distribution" depends="obfuscate">
+  <target name="dist-linux" description="Build the Linux distribution" depends="clean, jar">
     <copy todir="${dist.linux}">
       <fileset dir="dist_src/common">
         <patternset refid="ignored.files"/>
@@ -319,7 +293,7 @@
     <copy todir="${dist.linux}/doc">
       <fileset file="doc/CHANGELOG.txt"/>
     </copy>
-    <copy file="${obfuscated.jar}" tofile="${dist.linux}/lib/gootool.jar"/>
+    <copy file="${output.jar}" tofile="${dist.linux}/lib/gootool.jar"/>
     <copy file="lib/build/AppleJavaExtensions.jar" todir="${dist.linux}/lib"/>
 
     <tar destfile="${dist.dir}/gootool-${gootool.version.full}-linux.tar.bz2" compression="bzip2">
