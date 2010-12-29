@@ -192,7 +192,7 @@ public class WorldBuilder extends ProgressIndicatingTask
       // installed Maks' volume control in the past, so move that to irrKlang.dll (#0000219)
       if (PlatformSupport.getPlatform() == PlatformSupport.Platform.WINDOWS) {
         SourceFile realIrrKlangFile = sourceRealRoot.getChild(REAL_IRRKLANG_DLL);
-        if (realIrrKlangFile.isFile()) {
+        if (realIrrKlangFile != null && realIrrKlangFile.isFile()) {
           copyFile(realIrrKlangFile, targetRealRoot.getChild(IRRKLANG_DLL));
         }
       }

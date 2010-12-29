@@ -9,6 +9,7 @@ test profile backup/publish/restore
 - allow_widescreen moved to ToolPreferences
 - use the gootool icon for startup windows
 - Image Localisation Tool moved to the Advanced menu.
+- Distributed binaries are no longer obfuscated.
 
 TODO test with no registry on startup!
 
