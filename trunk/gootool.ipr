@@ -44,6 +44,7 @@
           <option name="SMART_TABS" value="false" />
           <option name="LABEL_INDENT_SIZE" value="0" />
           <option name="LABEL_INDENT_ABSOLUTE" value="false" />
+          <option name="USE_RELATIVE_INDENTS" value="false" />
         </ADDITIONAL_INDENT_OPTIONS>
         <ADDITIONAL_INDENT_OPTIONS fileType="js">
           <option name="INDENT_SIZE" value="4" />
@@ -53,6 +54,7 @@
           <option name="SMART_TABS" value="false" />
           <option name="LABEL_INDENT_SIZE" value="0" />
           <option name="LABEL_INDENT_ABSOLUTE" value="false" />
+          <option name="USE_RELATIVE_INDENTS" value="false" />
         </ADDITIONAL_INDENT_OPTIONS>
         <ADDITIONAL_INDENT_OPTIONS fileType="jsp">
           <option name="INDENT_SIZE" value="4" />
@@ -62,6 +64,7 @@
           <option name="SMART_TABS" value="false" />
           <option name="LABEL_INDENT_SIZE" value="0" />
           <option name="LABEL_INDENT_ABSOLUTE" value="false" />
+          <option name="USE_RELATIVE_INDENTS" value="false" />
         </ADDITIONAL_INDENT_OPTIONS>
         <ADDITIONAL_INDENT_OPTIONS fileType="xml">
           <option name="INDENT_SIZE" value="4" />
@@ -71,6 +74,7 @@
           <option name="SMART_TABS" value="false" />
           <option name="LABEL_INDENT_SIZE" value="0" />
           <option name="LABEL_INDENT_ABSOLUTE" value="false" />
+          <option name="USE_RELATIVE_INDENTS" value="false" />
         </ADDITIONAL_INDENT_OPTIONS>
       </value>
     </option>
@@ -96,7 +100,7 @@
   </component>
   <component name="CopyrightManager" default="">
     <copyright>
-      <option name="notice" value="Copyright (c) 2008, 2009, 2010 David C A Croft. All rights reserved. Your use of this computer software&#10;is permitted only in accordance with the GooTool license agreement distributed with this file." />
+      <option name="notice" value="Copyright (c) 2008, 2009, 2010, 2011 David C A Croft. All rights reserved. Your use of this computer software&#10;is permitted only in accordance with the GooTool license agreement distributed with this file." />
       <option name="keyword" value="Copyright" />
       <option name="allowReplaceKeyword" value="" />
       <option name="myName" value="GooTool" />
@@ -140,13 +144,15 @@
         <inspection_tool class="AssignmentToCatchBlockParameter" enabled="true" level="WARNING" enabled_by_default="true" />
         <inspection_tool class="AssignmentToStaticFieldFromInstanceMethod" enabled="true" level="WARNING" enabled_by_default="true" />
         <inspection_tool class="CStyleArrayDeclaration" enabled="true" level="WARNING" enabled_by_default="true" />
-        <inspection_tool class="ChannelResource" enabled="true" level="WARNING" enabled_by_default="true" />
+        <inspection_tool class="ChannelResource" enabled="true" level="WARNING" enabled_by_default="true">
+          <option name="insideTryAllowed" value="false" />
+        </inspection_tool>
         <inspection_tool class="CharacterComparison" enabled="true" level="WARNING" enabled_by_default="true" />
         <inspection_tool class="ClassInTopLevelPackage" enabled="true" level="WARNING" enabled_by_default="true" />
         <inspection_tool class="ClassMayBeInterface" enabled="true" level="WARNING" enabled_by_default="true" />
         <inspection_tool class="ClassNameDiffersFromFileName" enabled="true" level="WARNING" enabled_by_default="true" />
         <inspection_tool class="ClassWithMultipleLoggers" enabled="true" level="WARNING" enabled_by_default="true">
-          <option name="loggerClassName" value="java.util.logging.Logger" />
+          <option name="loggerNamesString" value="java.util.logging.Logger,org.slf4j.Logger,org.apache.commons.logging.Log,org.apache.log4j.Logger" />
         </inspection_tool>
         <inspection_tool class="CollectionAddedToSelf" enabled="true" level="WARNING" enabled_by_default="true" />
         <inspection_tool class="ComparableImplementedButEqualsNotOverridden" enabled="true" level="WARNING" enabled_by_default="true" />
@@ -161,10 +167,6 @@
           <option name="CHECK_DUPLICATE_VALUES" value="true" />
           <option name="CHECK_DUPLICATE_KEYS" value="true" />
           <option name="CHECK_DUPLICATE_KEYS_WITH_DIFFERENT_VALUES" value="true" />
-        </inspection_tool>
-        <inspection_tool class="DuplicateStringLiteralInspection" enabled="true" level="WARNING" enabled_by_default="true">
-          <option name="MIN_STRING_LENGTH" value="5" />
-          <option name="IGNORE_PROPERTY_KEYS" value="false" />
         </inspection_tool>
         <inspection_tool class="EmptyClass" enabled="true" level="WARNING" enabled_by_default="true" />
         <inspection_tool class="FieldMayBeFinal" enabled="true" level="WARNING" enabled_by_default="true" />
@@ -186,6 +188,7 @@
         <inspection_tool class="HardcodedLineSeparators" enabled="true" level="WARNING" enabled_by_default="true" />
         <inspection_tool class="IOResource" enabled="true" level="WARNING" enabled_by_default="true">
           <option name="ignoredTypesString" value="java.io.ByteArrayOutputStream,java.io.ByteArrayInputStream,java.io.StringBufferInputStream,java.io.CharArrayWriter,java.io.CharArrayReader,java.io.StringWriter,java.io.StringReader" />
+          <option name="insideTryAllowed" value="false" />
         </inspection_tool>
         <inspection_tool class="IndexOfReplaceableByContains" enabled="true" level="WARNING" enabled_by_default="true" />
         <inspection_tool class="InstantiationOfUtilityClass" enabled="true" level="WARNING" enabled_by_default="true" />
@@ -201,9 +204,13 @@
         </inspection_tool>
         <inspection_tool class="MethodOnlyUsedFromInnerClass" enabled="true" level="WARNING" enabled_by_default="true">
           <option name="ignoreMethodsAccessedFromAnonymousClass" value="false" />
+          <option name="ignoreStaticMethodsFromNonStaticInnerClass" value="false" />
+          <option name="onlyReportStaticMethods" value="false" />
         </inspection_tool>
         <inspection_tool class="MissingDeprecatedAnnotation" enabled="true" level="WARNING" enabled_by_default="true" />
-        <inspection_tool class="MissingOverrideAnnotation" enabled="true" level="WARNING" enabled_by_default="true" />
+        <inspection_tool class="MissingOverrideAnnotation" enabled="true" level="WARNING" enabled_by_default="true">
+          <option name="ignoreObjectMethods" value="true" />
+        </inspection_tool>
         <inspection_tool class="MissortedModifiers" enabled="true" level="WARNING" enabled_by_default="true">
           <option name="m_requireAnnotationsFirst" value="true" />
         </inspection_tool>
@@ -233,7 +240,9 @@
         <inspection_tool class="SizeReplaceableByIsEmpty" enabled="true" level="WARNING" enabled_by_default="true">
           <option name="ignoreNegations" value="false" />
         </inspection_tool>
-        <inspection_tool class="SocketResource" enabled="true" level="WARNING" enabled_by_default="true" />
+        <inspection_tool class="SocketResource" enabled="true" level="WARNING" enabled_by_default="true">
+          <option name="insideTryAllowed" value="false" />
+        </inspection_tool>
         <inspection_tool class="StaticMethodOnlyUsedInOneClass" enabled="true" level="WARNING" enabled_by_default="true" />
         <inspection_tool class="StaticVariableInitialization" enabled="true" level="WARNING" enabled_by_default="true">
           <option name="m_ignorePrimitives" value="false" />
@@ -470,6 +479,9 @@
       <module fileurl="file://$PROJECT_DIR$/gootool.iml" filepath="$PROJECT_DIR$/gootool.iml" />
     </modules>
   </component>
+  <component name="ProjectResources">
+    <default-html-doctype>http://www.w3.org/1999/xhtml</default-html-doctype>
+  </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_1_5" assert-keyword="true" jdk-15="true" project-jdk-name="1.5" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build" />
   </component>
@@ -491,7 +503,6 @@
     </configuration>
     <configuration default="false" name="LevelEditor" type="Application" factoryName="Application">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="emma" />
-      <extension name="snapshooter" />
       <option name="MAIN_CLASS_NAME" value="com.goofans.gootoolsp.leveledit.view.LevelEditor" />
       <option name="VM_PARAMETERS" value="" />
       <option name="PROGRAM_PARAMETERS" value="" />
@@ -509,7 +520,6 @@
     </configuration>
     <configuration default="false" name="GooTool" type="Application" factoryName="Application">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="emma" />
-      <extension name="snapshooter" />
       <option name="MAIN_CLASS_NAME" value="com.goofans.gootool.GooTool" />
       <option name="VM_PARAMETERS" value="-Djava.util.logging.config.file=logger_dev.properties" />
       <option name="PROGRAM_PARAMETERS" value="" />
@@ -533,7 +543,6 @@
     </configuration>
     <configuration default="false" name="cmd -listprofiles" type="Application" factoryName="Application">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="emma" />
-      <extension name="snapshooter" />
       <option name="MAIN_CLASS_NAME" value="com.goofans.gootool.GooInfo" />
       <option name="VM_PARAMETERS" value="-Djava.util.logging.config.file=logger_dev.properties" />
       <option name="PROGRAM_PARAMETERS" value="-listprofiles" />
@@ -551,7 +560,6 @@
     </configuration>
     <configuration default="false" name="cmd -profile 0 -dumpprofile" type="Application" factoryName="Application">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="emma" />
-      <extension name="snapshooter" />
       <option name="MAIN_CLASS_NAME" value="com.goofans.gootool.GooInfo" />
       <option name="VM_PARAMETERS" value="-Djava.util.logging.config.file=logger_dev.properties" />
       <option name="PROGRAM_PARAMETERS" value="-profile 0 -dumpprofile" />
@@ -569,7 +577,6 @@
     </configuration>
     <configuration default="false" name="cmd -profile 0 -drawtower" type="Application" factoryName="Application">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="emma" />
-      <extension name="snapshooter" />
       <option name="MAIN_CLASS_NAME" value="com.goofans.gootool.GooInfo" />
       <option name="VM_PARAMETERS" value="-Djava.util.logging.config.file=logger_dev.properties" />
       <option name="PROGRAM_PARAMETERS" value="-profile 0 -drawtype full -drawTower c:\dev\gootool\test-full.png -drawtype transparent -drawTower c:\dev\gootool\test-transparent.png -drawtype thumbnail -drawTower c:\dev\gootool\test-thumbnail.png" />
@@ -587,7 +594,6 @@
     </configuration>
     <configuration default="false" name="cmd -version" type="Application" factoryName="Application">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="emma" />
-      <extension name="snapshooter" />
       <option name="MAIN_CLASS_NAME" value="com.goofans.gootool.GooInfo" />
       <option name="VM_PARAMETERS" value="-Djava.util.logging.config.file=logger_dev.properties" />
       <option name="PROGRAM_PARAMETERS" value="-version" />
@@ -605,7 +611,6 @@
     </configuration>
     <configuration default="false" name="cmd -validateaddin" type="Application" factoryName="Application">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="emma" />
-      <extension name="snapshooter" />
       <option name="MAIN_CLASS_NAME" value="com.goofans.gootool.GooInfo" />
       <option name="VM_PARAMETERS" value="-Djava.util.logging.config.file=logger_dev.properties" />
       <option name="PROGRAM_PARAMETERS" value="-validateaddin addins\dist\com.2dboy.talic.ironball_1.0.goomod -validateaddin addins\dist\net.davidc.test.badoverride_1.0.goomod -validateaddin &quot;addins\dist\net.davidc.test.invalid manifest_1.0.goomod&quot;" />
@@ -669,6 +674,13 @@
   </component>
   <component name="WebServicesPlugin" addRequiredLibraries="true" />
   <component name="libraryTable">
+    <library name="applejavaextensions">
+      <CLASSES>
+        <root url="jar://$PROJECT_DIR$/lib/build/AppleJavaExtensions.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES />
+    </library>
     <library name="bouncycastle">
       <CLASSES>
         <root url="jar://$PROJECT_DIR$/dist_src/common/lib/lcrypto-jdk15-141.jar!/" />
@@ -680,20 +692,6 @@
         <root url="file://$PROJECT_DIR$/../src/lcrypto-jdk15-141/src" />
       </SOURCES>
     </library>
-    <library name="uiruntime">
-      <CLASSES>
-        <root url="jar://$PROJECT_DIR$/dist_src/common/lib/uiruntime.jar!/" />
-      </CLASSES>
-      <JAVADOC />
-      <SOURCES />
-    </library>
-    <library name="applejavaextensions">
-      <CLASSES>
-        <root url="jar://$PROJECT_DIR$/lib/build/AppleJavaExtensions.jar!/" />
-      </CLASSES>
-      <JAVADOC />
-      <SOURCES />
-    </library>
     <library name="jsch">
       <CLASSES>
         <root url="jar://$PROJECT_DIR$/dist_src/common/lib/jsch-0.1.42.jar!/" />
@@ -702,6 +700,13 @@
       <SOURCES>
         <root url="file://$PROJECT_DIR$/../src/jsch-0.1.42/src" />
       </SOURCES>
+    </library>
+    <library name="uiruntime">
+      <CLASSES>
+        <root url="jar://$PROJECT_DIR$/dist_src/common/lib/uiruntime.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES />
     </library>
   </component>
 </project>

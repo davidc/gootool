@@ -216,10 +216,10 @@
     <!--<zipfileset dir="${dist.win32}" prefix="GooTool-${gootool.version.full}"/>-->
     <!--</zip>-->
 
-    <!--<nsis script="installer/installer.nsi" verbosity="2" path="${nsis.dir}" nocd="true">-->
-      <!--<define name="gootool.version" value="${gootool.version}"/>-->
-      <!--<define name="gootool.version.full" value="${gootool.version.full}"/>-->
-    <!--</nsis>-->
+    <nsis script="installer/installer.nsi" verbosity="2" path="${nsis.dir}" nocd="true">
+      <define name="gootool.version" value="${gootool.version}"/>
+      <define name="gootool.version.full" value="${gootool.version.full}"/>
+    </nsis>
 
   </target>
 
