@@ -11,18 +11,17 @@ import java.awt.image.BufferedImage;
 import java.awt.image.RenderedImage;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 
-import com.goofans.gootool.io.Codec;
 import com.goofans.gootool.io.GameFormat;
-import com.goofans.gootool.io.MacBinFormat;
-import com.goofans.gootool.io.MacGraphicFormat;
 import com.goofans.gootool.movie.BinImageAnimation;
 import com.goofans.gootool.movie.BinMovie;
 import com.goofans.gootool.util.FileNameExtensionFilter;
 import com.goofans.gootool.util.GUIUtil;
 import com.goofans.gootool.util.ProgressIndicatingTask;
 import com.goofans.gootool.util.Utilities;
+
 /**
  * Handles the GUI interaction of encoding/decoding and launches the actual codec in the background.
  *
@@ -40,7 +39,7 @@ public class GameFileCodecTool
     PNGBINLTL_DECODE(false),
     PNGBINLTL_ENCODE(true),
     ANIM_DECODE(false),
-//   ANIM_ENCODE(true),
+    //   ANIM_ENCODE(true),
     MOVIE_DECODE(false);
     //MOVIE_ENCODE(true);
 
@@ -221,12 +220,25 @@ public class GameFileCodecTool
         GameFormat.MAC_BIN_CODEC.encodeFile(outputFile, bytes);
         break;
       case PNGBINLTL_DECODE:
-        RenderedImage decImage = MacGraphicFormat.decodeImage(inputFile);
-        ImageIO.write(decImage, "PNG", outputFile);
+        RenderedImage decImage;
+        FileInputStream is = new FileInputStream(inputFile);
+        try {
+          decImage = GameFormat.MAC_IMAGE_CODEC.readImage(is);
+        }
+        finally {
+          is.close();
+        }
+        ImageIO.write(decImage, GameFormat.PNG_FORMAT, outputFile);
         break;
       case PNGBINLTL_ENCODE:
         BufferedImage encImage = ImageIO.read(inputFile);
-        MacGraphicFormat.encodeImage(outputFile, encImage);
+        FileOutputStream os = new FileOutputStream(outputFile);
+        try {
+          GameFormat.MAC_IMAGE_CODEC.writeImage(encImage, os);
+        }
+        finally {
+          os.close();
+        }
         break;
       case ANIM_DECODE:
         BinImageAnimation anim = new BinImageAnimation(inputFile);

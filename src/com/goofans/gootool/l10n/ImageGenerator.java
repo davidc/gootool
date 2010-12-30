@@ -21,8 +21,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import com.goofans.gootool.image.GaussianFilter;
-import com.goofans.gootool.util.XMLUtil;
+import com.goofans.gootool.io.GameFormat;
 import com.goofans.gootool.util.Utilities;
+import com.goofans.gootool.util.XMLUtil;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -235,7 +236,7 @@ public class ImageGenerator
   public void writeImage(File file) throws IOException
   {
     Utilities.mkdirsOrException(file.getParentFile());
-    ImageIO.write(finalImage, "PNG", file);
+    ImageIO.write(finalImage, GameFormat.PNG_FORMAT, file);
   }
 
   private void drawPoint(Graphics2D g, int x, int y, Color color)

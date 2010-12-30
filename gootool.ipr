@@ -450,22 +450,32 @@
         <w>addins</w>
         <w>addr</w>
         <w>args</w>
+        <w>binltl</w>
         <w>codec</w>
+        <w>codecs</w>
+        <w>davidc</w>
         <w>dest</w>
         <w>dropdown</w>
+        <w>fisty</w>
+        <w>goocorp</w>
         <w>goofans</w>
         <w>goomod</w>
         <w>gootool</w>
         <w>gootoolcmd</w>
+        <w>infesty</w>
         <w>loopback</w>
         <w>mkdir</w>
         <w>online</w>
         <w>popup</w>
         <w>prefs</w>
         <w>readme</w>
+        <w>screenshot</w>
+        <w>superclass</w>
         <w>tooltip</w>
+        <w>tuples</w>
         <w>uninstalled</w>
         <w>uninstalling</w>
+        <w>unparsable</w>
         <w>username</w>
         <w>widescreen</w>
       </words>

@@ -9,12 +9,15 @@ import net.infotrek.util.EncodingUtil;
 
 import java.io.*;
 import java.util.Arrays;
-import java.util.Map;
 import java.util.LinkedHashMap;
-import java.util.logging.Logger;
+import java.util.Map;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import com.goofans.gootool.io.GameFormat;
+import com.goofans.gootool.platform.PlatformSupport;
+import com.goofans.gootool.projects.Project;
+import com.goofans.gootool.projects.ProjectManager;
 import com.goofans.gootool.util.DebugUtil;
 
 /**
@@ -188,13 +191,32 @@ public class ProfileData
     out.write(bytes);
   }
 
+  /**
+   * This method checks to see if the given file is a valid profile.
+   * It's only ever used for local projects, and we don't currently have an active project, so it's OK to not use project.getCodecForProfile() and
+   * just use the codec directly instead.
+   *
+   * @param file The file to test for validity
+   * @return True if this is a valid profile file.
+   */
   public static boolean isValidProfile(File file)
   {
+    log.finest("Is valid profile? " + file);
     if (!file.exists()) return false;
 
     // Attempt to read it in
     try {
-      new ProfileData(GameFormat.decodeProfileFile(file));
+      byte[] decoded = null;
+      switch (PlatformSupport.getPlatform()) {
+        case WINDOWS:
+        case LINUX:
+          decoded = GameFormat.AES_BIN_CODEC.decodeFile(file);
+          break;
+        case MACOSX:
+          decoded = GameFormat.MAC_BIN_CODEC.decodeFile(file);
+          break;
+      }
+      new ProfileData(decoded);
       return true;
     }
     catch (IOException e) {
@@ -207,8 +229,11 @@ public class ProfileData
   public static void main(String[] args) throws IOException
   {
     DebugUtil.setAllLogging();
+
+    Project project = ProjectManager.simpleInit();
+
     // Test a profile can be loaded ok
-    ProfileData pd = new ProfileData(GameFormat.decodeProfileFile(new File("testcases/qwsx-pers2.dat")));
+    ProfileData pd = new ProfileData(project.getCodecForProfile().decodeFile(new File("testcases/qwsx-pers2.dat")));
     System.out.println(pd.getCurrentProfile().getTower());
 
     // Restore a profile from goofans published profile
