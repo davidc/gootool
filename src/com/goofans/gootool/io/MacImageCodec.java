@@ -178,13 +178,13 @@ public class MacImageCodec implements ImageCodec
 
     ImageCodec codec = new MacImageCodec();
 
-    BufferedImage image = codec.readImage(new FileInputStream(new File("cliff_left.png.binltl")));
+    BufferedImage image = codec.readImage(new FileInputStream(new File("testcases\\mac-images\\cliff_left.png.binltl")));
 
     File tmpfile = new File("cliff_left-OUT.png.binltl");
     codec.writeImage(image, new FileOutputStream(tmpfile));
     DebugUtil.showImageWindow(codec.readImage(new FileInputStream(tmpfile)));
 
-    image = codec.readImage(new FileInputStream(new File("cliff_right.png.binltl")));
+    image = codec.readImage(new FileInputStream(new File("testcases\\mac-images\\cliff_right.png.binltl")));
 
     tmpfile = new File("cliff_right-OUT.png.binltl");
     codec.writeImage(image, new FileOutputStream(tmpfile));
@@ -192,5 +192,4 @@ public class MacImageCodec implements ImageCodec
 
 //    ImageIO.write(image, GameFormat.PNG_FORMAT, new File("cliff_left.png"));
   }
-
 }
