@@ -38,68 +38,6 @@ public class GameFormat
   }
 
   @Deprecated
-  public static byte[] decodeBinFile(ReadableFile file) throws IOException
-  {
-    log.finest("decode bin file: " + file);
-
-    switch (PlatformSupport.getPlatform()) {
-      case WINDOWS:
-      case LINUX:
-        return AES_BIN_CODEC.decodeFile(file);
-      case MACOSX:
-        return MAC_BIN_CODEC.decodeFile(file);
-    }
-    return null;
-  }
-
-  @Deprecated
-  public static byte[] decodeBinFile(File file) throws IOException
-  {
-    log.finest("decode bin file: " + file);
-
-    switch (PlatformSupport.getPlatform()) {
-      case WINDOWS:
-      case LINUX:
-        return AES_BIN_CODEC.decodeFile(file);
-      case MACOSX:
-        return MAC_BIN_CODEC.decodeFile(file);
-    }
-    return null;
-  }
-
-  @Deprecated
-  public static void encodeBinFile(File file, byte[] input) throws IOException
-  {
-    log.finest("encode bin file: " + file);
-
-    switch (PlatformSupport.getPlatform()) {
-      case WINDOWS:
-      case LINUX:
-        AES_BIN_CODEC.encodeFile(file, input);
-        break;
-      case MACOSX:
-        MAC_BIN_CODEC.encodeFile(file, input);
-        break;
-    }
-  }
-
-  @Deprecated
-  public static Document decodeXmlBinFile(ReadableFile file) throws IOException
-  {
-    byte[] decoded = decodeBinFile(file);
-    InputStream is = new ByteArrayInputStream(decoded);
-    return XMLUtil.loadDocumentFromInputStream(is);
-  }
-
-  @Deprecated
-  public static Document decodeXmlBinFile(File file) throws IOException
-  {
-    byte[] decoded = decodeBinFile(file);
-    InputStream is = new ByteArrayInputStream(decoded);
-    return XMLUtil.loadDocumentFromInputStream(is);
-  }
-
-  @Deprecated
   public static byte[] decodeProfileFile(File file) throws IOException
   {
     log.finest("decode profile file: " + file);
