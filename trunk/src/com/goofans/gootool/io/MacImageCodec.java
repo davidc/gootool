@@ -21,18 +21,13 @@ import com.goofans.gootool.util.DebugUtil;
  * @author David Croft (davidc@goofans.com)
  * @version $Id$
  */
-public class MacGraphicFormat
+public class MacImageCodec implements ImageCodec
 {
-  private MacGraphicFormat()
+  MacImageCodec()
   {
   }
 
-  public static BufferedImage decodeImage(File file) throws IOException
-  {
-    return decodeImage(new FileInputStream(file));
-  }
-
-  public static BufferedImage decodeImage(InputStream is) throws IOException
+  public BufferedImage readImage(InputStream is) throws IOException
   {
     int width = readUnsignedShort(is);
     int height = readUnsignedShort(is);
@@ -77,27 +72,23 @@ public class MacGraphicFormat
     return new BufferedImage(colorModel, raster, false, null);
   }
 
+  private static ComponentColorModel getColorModel()
+  {
+    ColorSpace colorSpace = ColorSpace.getInstance(ColorSpace.CS_sRGB);
+    int[] pixInfo = new int[]{8, 8, 8, 8};
+    return new ComponentColorModel(colorSpace, pixInfo, true, false, Transparency.TRANSLUCENT, DataBuffer.TYPE_BYTE);
+  }
+
   private static PixelInterleavedSampleModel getSampleModel(int width, int height, int squareSide)
   {
     int[] bandOffsets = new int[]{0, 1, 2, 3};
     return new PixelInterleavedSampleModel(DataBuffer.TYPE_BYTE, width, height, 4, squareSide * 4, bandOffsets);
   }
 
-  public static void encodeImage(File file, Image image) throws IOException
+  public void writeImage(BufferedImage image, OutputStream os) throws IOException
   {
-    OutputStream os = new FileOutputStream(file);
-    try {
-      encodeImage(os, image);
-    }
-    finally {
-      os.close();
-    }
-  }
-
-  public static void encodeImage(OutputStream os, Image image) throws IOException
-  {
-    int width = image.getWidth(null);
-    int height = image.getHeight(null);
+    int width = image.getWidth();
+    int height = image.getHeight();
 
     // Need to make a square first
 
@@ -150,13 +141,6 @@ public class MacGraphicFormat
     deflater.end();
   }
 
-  private static ComponentColorModel getColorModel()
-  {
-    ColorSpace colorSpace = ColorSpace.getInstance(ColorSpace.CS_sRGB);
-    int[] pixInfo = new int[]{8, 8, 8, 8};
-    return new ComponentColorModel(colorSpace, pixInfo, true, false, Transparency.TRANSLUCENT, DataBuffer.TYPE_BYTE);
-  }
-
   private static int readUnsignedShort(InputStream is) throws IOException
   {
     byte[] tmp = new byte[2];
@@ -187,23 +171,26 @@ public class MacGraphicFormat
     os.write((value >> 24) & 0xff);
   }
 
-  @SuppressWarnings({"HardCodedStringLiteral"})
+  @SuppressWarnings({"HardCodedStringLiteral", "IOResourceOpenedButNotSafelyClosed"})
   public static void main(String[] args) throws IOException
   {
 //    showImageWindow(decodeImage(new File("bg.png.binltl")));
 
-    BufferedImage image = decodeImage(new File("cliff_left.png.binltl"));
+    ImageCodec codec = new MacImageCodec();
+
+    BufferedImage image = codec.readImage(new FileInputStream(new File("cliff_left.png.binltl")));
 
     File tmpfile = new File("cliff_left-OUT.png.binltl");
-    encodeImage(tmpfile, image);
-    DebugUtil.showImageWindow(decodeImage(tmpfile));
+    codec.writeImage(image, new FileOutputStream(tmpfile));
+    DebugUtil.showImageWindow(codec.readImage(new FileInputStream(tmpfile)));
 
-    image = decodeImage(new File("cliff_right.png.binltl"));
+    image = codec.readImage(new FileInputStream(new File("cliff_right.png.binltl")));
 
     tmpfile = new File("cliff_right-OUT.png.binltl");
-    encodeImage(tmpfile, image);
-    DebugUtil.showImageWindow(decodeImage(tmpfile));
+    codec.writeImage(image, new FileOutputStream(tmpfile));
+    DebugUtil.showImageWindow(codec.readImage(new FileInputStream(tmpfile)));
 
-//    ImageIO.write(image, "PNG", new File("cliff_left.png"));
+//    ImageIO.write(image, GameFormat.PNG_FORMAT, new File("cliff_left.png"));
   }
+
 }

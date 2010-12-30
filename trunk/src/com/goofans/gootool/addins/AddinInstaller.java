@@ -5,12 +5,11 @@
 
 package com.goofans.gootool.addins;
 
-import com.goofans.gootool.projects.LocalProject;
 import net.infotrek.util.EncodingUtil;
 
 import javax.imageio.ImageIO;
 import javax.xml.transform.TransformerException;
-import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.*;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -23,9 +22,10 @@ import com.goofans.gootool.facades.SourceFile;
 import com.goofans.gootool.facades.TargetFile;
 import com.goofans.gootool.io.Codec;
 import com.goofans.gootool.io.GameFormat;
-import com.goofans.gootool.io.MacGraphicFormat;
+import com.goofans.gootool.io.ImageCodec;
 import com.goofans.gootool.io.UnicodeReader;
 import com.goofans.gootool.platform.PlatformSupport;
+import com.goofans.gootool.projects.LocalProject;
 import com.goofans.gootool.projects.Project;
 import com.goofans.gootool.projects.ProjectManager;
 import com.goofans.gootool.util.Utilities;
@@ -64,6 +64,7 @@ public class AddinInstaller
   private final SourceFile sourceGameRoot;
   private final TargetFile targetGameRoot;
   private Codec gameXmlCodec;
+  private ImageCodec imageCodec;
 
   public AddinInstaller(Project project)
   {
@@ -71,6 +72,7 @@ public class AddinInstaller
     this.sourceGameRoot = project.getSource().getGameRoot();
     this.targetGameRoot = project.getTarget().getGameRoot();
     gameXmlCodec = project.getCodecForGameXml();
+    imageCodec = project.getImageCodec();
   }
 
   public void installAddin(Addin addin) throws IOException, AddinFormatException
@@ -177,13 +179,15 @@ public class AddinInstaller
       throw new AddinFormatException("Bin files are not allowed in the override directory");
     }
     else if (fileName.endsWith(EXTENSION_PNG) && project instanceof LocalProject && PlatformSupport.getPlatform() == PlatformSupport.Platform.MACOSX) {
-      // Mac PNG files need to be "compiled"
+      // Mac PNG files need to be "compiled".
+      // We follow this process even if we're not on a Mac, so that the image is forced to be read, so Windows users can detect images
+      // that Java can't read and prevent that addin having later problems on Mac.
 
       TargetFile destFile = targetGameRoot.getChild(project.getGamePngFilename(fileName));
       destFile.getParentDirectory().mkdirs();
 
-      Image image = ImageIO.read(is);
-      MacGraphicFormat.encodeImage(destFile.write(), image);
+      BufferedImage image = ImageIO.read(is);
+      imageCodec.writeImage(image, destFile.write());
     }
     else {
       TargetFile destFile = targetGameRoot.getChild(fileName);
@@ -195,12 +199,6 @@ public class AddinInstaller
       }
       finally {
         os.close();
-      }
-
-      if (fileName.endsWith(EXTENSION_PNG)) {
-        // Force the image to be read, so Windows users can detect images that Java can't read and prevent
-        // problems on Mac
-        ImageIO.read(destFile.read());
       }
     }
   }

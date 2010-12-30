@@ -5,17 +5,18 @@
 
 package com.goofans.gootool.projects;
 
+import java.io.IOException;
+import java.util.StringTokenizer;
+import java.util.prefs.Preferences;
+
 import com.goofans.gootool.GooTool;
 import com.goofans.gootool.facades.Source;
 import com.goofans.gootool.facades.Target;
 import com.goofans.gootool.io.Codec;
+import com.goofans.gootool.io.ImageCodec;
 import com.goofans.gootool.model.Language;
 import com.goofans.gootool.profile.ProfileData;
 import com.goofans.gootool.util.Utilities;
-
-import java.io.IOException;
-import java.util.StringTokenizer;
-import java.util.prefs.Preferences;
 
 /**
  * @author David Croft (davidc@goofans.com)
@@ -139,6 +140,10 @@ public abstract class Project
   public abstract Codec getCodecForGameXml();
 
   public abstract Codec getCodecForProfile();
+
+  // TODO getCodecForMovie/Anim
+
+  public abstract ImageCodec getImageCodec();
 
   /**
    * Gets the filename of an XML file. May have .bin appended for non-IOS platforms.

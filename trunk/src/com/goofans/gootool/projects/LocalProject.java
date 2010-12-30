@@ -15,6 +15,7 @@ import com.goofans.gootool.facades.Source;
 import com.goofans.gootool.facades.Target;
 import com.goofans.gootool.io.Codec;
 import com.goofans.gootool.io.GameFormat;
+import com.goofans.gootool.io.ImageCodec;
 import com.goofans.gootool.model.Resolution;
 import com.goofans.gootool.platform.PlatformSupport;
 import com.goofans.gootool.util.Utilities;
@@ -85,7 +86,7 @@ public class LocalProject extends Project
     File profileFile = new File(profileFilePath);
     if (!profileFile.exists()) return null;
 
-    return getCodecForGameXml().decodeFile(profileFile);
+    return getCodecForProfile().decodeFile(profileFile);
   }
 
   @Override
@@ -94,7 +95,7 @@ public class LocalProject extends Project
     File profileFile = new File(getProfileFile());
     if (!profileFile.exists()) throw new IOException("Profile not found yet");
 
-    getCodecForGameXml().encodeFile(profileFile, profileBytes);
+    getCodecForProfile().encodeFile(profileFile, profileBytes);
   }
 
   @Override
@@ -116,7 +117,6 @@ public class LocalProject extends Project
     super.loadProjectConfiguration(c);
 
     LocalProjectConfiguration lpc = (LocalProjectConfiguration) c;
-
 
     Resolution configResolution = lpc.getResolution();
     int width;
@@ -212,6 +212,19 @@ public class LocalProject extends Project
         return GameFormat.AES_BIN_CODEC;
       case MACOSX:
         return GameFormat.MAC_BIN_CODEC;
+    }
+    return null;
+  }
+
+  @Override
+  public ImageCodec getImageCodec()
+  {
+    switch (PlatformSupport.getPlatform()) {
+      case WINDOWS:
+      case LINUX:
+        return GameFormat.NULL_IMAGE_CODEC;
+      case MACOSX:
+        return GameFormat.MAC_IMAGE_CODEC;
     }
     return null;
   }
