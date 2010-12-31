@@ -23,7 +23,7 @@ import com.goofans.gootool.util.DebugUtil;
 import com.goofans.gootool.util.GUIUtil;
 
 /**
- * Properties dialog for local projects.
+ * Properties dialog for remote IOS projects.
  *
  * @author David Croft (davidc@goofans.com)
  * @version $Id$

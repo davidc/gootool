@@ -28,7 +28,7 @@ public class ProjectManager
 
   private static final String PREF_KEY_SUFFIX_TYPE = "_type";
   private static final String PREF_TYPE_LOCAL = "local";
-//  private static final String PREF_TYPE_IOS = "ios";
+  private static final String PREF_TYPE_IOS = "ios";
 
   private static List<Project> projects = null;
 
@@ -61,15 +61,14 @@ public class ProjectManager
     for (String key : keys) {
       if (key.endsWith(PREF_KEY_SUFFIX_TYPE)) {
         int projectId = Integer.parseInt(key.substring(0, key.length() - PREF_KEY_SUFFIX_TYPE.length()));
-        String projectType = PREFS.get(key, null);
+	while (projects.size() - 1 < projectId) projects.add(null);
 
+        String projectType = PREFS.get(key, null);
         if (PREF_TYPE_LOCAL.equals(projectType)) {
-          while (projects.size() - 1 < projectId) projects.add(null);
           projects.set(projectId, new LocalProject(getPrefsForProject(projectId)));
         }
-//          case PREF_TYPE_IOS:
-//            projects.set(projectId, new IosProject(PREFS, projectId));
-//            break;
+        else if (PREF_TYPE_IOS.equals(projectType)) {
+          projects.set(projectId, new IosProject(getPrefsForProject(projectId)));
         else {
           throw new RuntimeException("Unrecognised stored project type " + projectType);
         }
