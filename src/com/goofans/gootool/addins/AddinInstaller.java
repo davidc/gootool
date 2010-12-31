@@ -178,7 +178,7 @@ public class AddinInstaller
     if (fileName.endsWith(EXTENSION_BIN)) {
       throw new AddinFormatException("Bin files are not allowed in the override directory");
     }
-    else if (fileName.endsWith(EXTENSION_PNG) && project instanceof LocalProject && PlatformSupport.getPlatform() == PlatformSupport.Platform.MACOSX) {
+    else if (fileName.endsWith(EXTENSION_PNG)) {
       // Mac PNG files need to be "compiled".
       // We follow this process even if we're not on a Mac, so that the image is forced to be read, so Windows users can detect images
       // that Java can't read and prevent that addin having later problems on Mac.

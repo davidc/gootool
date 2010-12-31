@@ -147,6 +147,7 @@ public abstract class Project
 
   public abstract Codec getCodecForGameXml();
 
+    // TODO we should not expose this, since it's not even a file on IOS!
   public abstract Codec getCodecForProfile();
 
   // TODO getCodecForMovie/Anim
