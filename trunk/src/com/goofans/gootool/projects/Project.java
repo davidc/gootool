@@ -19,6 +19,8 @@ import com.goofans.gootool.profile.ProfileData;
 import com.goofans.gootool.util.Utilities;
 
 /**
+ * Superclass for all project types handled by GooTool.
+ *
  * @author David Croft (davidc@goofans.com)
  * @version $Id$
  */
@@ -51,12 +53,18 @@ public abstract class Project
   }
 
   /**
-   * Returns DECODED bytes
+   * Get the DECODED bytes of the project's profile.
+   *
+   * @return the decoded bytes of the profile.
+   * @throws IOException if the profile could not be loaded.
    */
   public abstract byte[] getProfileBytes() throws IOException;
 
   /**
    * Pass in UNENCRYPTED bytes
+   *
+   * @param profileBytes the unencrypted bytes of the profile to store.
+   * @throws IOException if the profile could not be loaded.
    */
   public abstract void setProfileBytes(byte[] profileBytes) throws IOException;
 
@@ -165,7 +173,7 @@ public abstract class Project
    * Gets the filename of a sound file (.ogg normally, .aac for IOS).
    *
    * @param baseName Filename, without trailing .ogg.
-   * @return
+   * @return The filename on this installation.
    */
   public abstract String getGameSoundFilename(String baseName);
 
@@ -173,15 +181,15 @@ public abstract class Project
    * Gets the filename of a music file (.ogg normally, .aifc for IOS).
    *
    * @param baseName Filename, without trailing .ogg.
-   * @return
+   * @return The filename on this installation.
    */
   public abstract String getGameMusicFilename(String baseName);
 
   /**
    * Gets the filename of an animation or movie file (.binltl normally, .binltl for Linux 64-bit).
    *
-   * @param baseName
-   * @return
+   * @param baseName Filename, without trailing .binltl.
+   * @return The filename on this installation.
    */
   public abstract String getGameAnimMovieFilename(String baseName);
 }

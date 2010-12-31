@@ -33,7 +33,7 @@ import com.goofans.gootool.util.WogExeFileFilter;
  * @author David Croft (davidc@goofans.com)
  * @version $Id$
  */
-public class LocalProjectPropertiesDialog extends JDialog implements ActionListener
+public class LocalProjectPropertiesDialog extends JDialog implements ActionListener, ProjectPropertiesDialog
 {
   private static final Logger log = Logger.getLogger(LocalProjectPropertiesDialog.class.getName());
 
@@ -60,9 +60,16 @@ public class LocalProjectPropertiesDialog extends JDialog implements ActionListe
   private final JFrame mainWindow;
   private boolean okButtonPressed = false;
 
-  public LocalProjectPropertiesDialog(JFrame mainWindow, String title, LocalProject project)
+  public LocalProjectPropertiesDialog(JFrame mainWindow, LocalProject project)
   {
-    super(mainWindow, title, true);
+    super(mainWindow, true);
+
+    if (project == null) {
+      setTitle(resourceBundle.getString("projectProps.local.title.add"));
+    }
+    else {
+      setTitle(resourceBundle.getString("projectProps.local.title.properties"));
+    }
 
     this.mainWindow = mainWindow;
 
@@ -321,12 +328,13 @@ public class LocalProjectPropertiesDialog extends JDialog implements ActionListe
     return okButtonPressed;
   }
 
-  public void saveToProject(LocalProject project)
+  public void saveToProject(Project project)
   {
-    project.setName(projectNameText.getText());
-    project.setSourceDir(sourceDirText.getText());
-    project.setTargetDir(targetDirText.getText());
-    project.setProfileFile(profileFileText.getText());
+    LocalProject localProject = (LocalProject) project;
+    localProject.setName(projectNameText.getText());
+    localProject.setSourceDir(sourceDirText.getText());
+    localProject.setTargetDir(targetDirText.getText());
+    localProject.setProfileFile(profileFileText.getText());
   }
 
 
@@ -360,9 +368,9 @@ public class LocalProjectPropertiesDialog extends JDialog implements ActionListe
   {
     GUIUtil.switchToSystemLookAndFeel();
 
-    Project p = ProjectManager.getProjects().get(0);
+    Project p = ProjectManager.simpleInit();
 
-    LocalProjectPropertiesDialog dialog = new LocalProjectPropertiesDialog(null, resourceBundle.getString("project.local.title.add"), (LocalProject) p);
+    LocalProjectPropertiesDialog dialog = new LocalProjectPropertiesDialog(null, (LocalProject) p);
     dialog.setVisible(true);
     System.exit(0);
   }
