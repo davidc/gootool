@@ -38,11 +38,10 @@ public class LocalProject extends Project
 
   private LocalProjectConfiguration savedConfiguration;
 
-  public LocalProject(Preferences prefsNode)
+  LocalProject(Preferences prefsNode)
   {
     super(prefsNode);
   }
-
 
   public String getSourceDir()
   {

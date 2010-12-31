@@ -24,6 +24,8 @@ import com.goofans.gootool.util.Utilities;
 import com.jcraft.jsch.*;
 
 /**
+ * TODO should really do connection pooling here.
+ *
  * @author David Croft (davidc@goofans.com)
  * @version $Id$
  */
@@ -37,6 +39,7 @@ public class IosConnection
   private static final String SSH_CHANNEL_TYPE_SFTP = "sftp";
 
   private final String host;
+  private final String password;
   private final JSch jsch;
   private Session session;
   private ChannelSftp sftp;
@@ -47,9 +50,15 @@ public class IosConnection
   private int prefsFileSize;
 
 
-  public IosConnection(String host)
+  public IosConnection(String host, String password)
   {
     this.host = host;
+    if (password != null && password.length() > 0) {
+      this.password = password;
+    }
+    else {
+      this.password = null;
+    }
 
     jsch = new JSch();
 
@@ -101,26 +110,23 @@ public class IosConnection
     UserInfo ui = new MyUserInfo();
     session.setUserInfo(ui);
 
-    System.out.println("session connecting");
+    log.log(Level.FINER, "Connecting to IOS device at " + host);
 
     session.connect();
 
-    System.out.println("session connected");
+    log.log(Level.FINER, "Connected to IOS device");
 
     sftp = (ChannelSftp) session.openChannel(SSH_CHANNEL_TYPE_SFTP);
 
-    System.out.println("channel opened");
+    log.log(Level.FINER, "Opening SFTP channel");
     sftp.connect();
 
-    System.out.println("connect complete");
-
-
-    log.log(Level.FINER, "SSH connected to " + host + ", server version " + session.getServerVersion() + ", SFTP protocol version " + sftp.version());
+    log.log(Level.INFO, "SSH connected to " + host + ", server version " + session.getServerVersion() + ", SFTP protocol version " + sftp.version());
   }
 
-  private synchronized void locateWog() throws JSchException, SftpException
+  private synchronized boolean locateWog() throws JSchException, SftpException
   {
-    if (wogDir != null) return;
+    if (wogDir != null) return true;
 
     connect();
 
@@ -161,9 +167,11 @@ public class IosConnection
 
     if (wogDir == null) {
       log.log(Level.WARNING, "World of Goo not found on " + host);
+      return false;
     }
     else {
-      log.log(Level.INFO, "World of Goo found at " + wogDir);
+      log.log(Level.INFO, "World of Goo found at " + wogDir + " on " + host);
+      return true;
     }
   }
 
@@ -221,6 +229,18 @@ public class IosConnection
     // TODO Symbolic link our prefs to their originals on DEPLOY
   }
 
+  /**
+   * Tests the connection to the IOS host.
+   *
+   * @return True if connected successfully and World of Goo was found, false if connected successfully but no World of Goo found.
+   * @throws Exception if any problem occurred (e.g. bad password) connecting to the device.
+   */
+  public boolean testConnection() throws Exception
+  {
+    connect();
+    return locateWog();
+  }
+
   private Vector<ChannelSftp.LsEntry> ls(String dir) throws SftpException
   {
     //noinspection unchecked
@@ -230,7 +250,7 @@ public class IosConnection
 // TODO all popups should be modal and with an owner window
 // TODO move to another class
 
-  public static class MyUserInfo implements UserInfo, UIKeyboardInteractive
+  public class MyUserInfo implements UserInfo, UIKeyboardInteractive
   {
     public String getPassword()
     {
@@ -264,6 +284,10 @@ public class IosConnection
 
     public boolean promptPassword(String message)
     {
+      if (password != null) {
+        passwd = password;
+        return true;
+      }
       Object[] ob = {passwordField};
       int result =
               JOptionPane.showConfirmDialog(null, ob, message,
@@ -294,6 +318,10 @@ public class IosConnection
                                               String[] prompt,
                                               boolean[] echo)
     {
+      if (password != null && prompt.length == 1) {
+        return new String[]{password};
+      }
+
       panel = new JPanel();
       panel.setLayout(new GridBagLayout());
 
@@ -388,9 +416,10 @@ public class IosConnection
 
   public static void main(String[] args) throws JSchException, IOException, SftpException
   {
-    IosConnection ios = new IosConnection("192.168.2.162");
+    IosConnection ios = new IosConnection("192.168.2.162", null);
 
     ProfileData data = ios.getProfileData();
+    ios.close();
     System.out.println("data = " + data);
   }
 }

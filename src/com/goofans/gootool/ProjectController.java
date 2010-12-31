@@ -5,8 +5,6 @@
 
 package com.goofans.gootool;
 
-import com.goofans.gootool.facades.TargetFile;
-import com.goofans.gootool.projects.ProjectConfiguration;
 import net.infotrek.util.DesktopUtil;
 import net.infotrek.util.TextUtil;
 
@@ -23,12 +21,13 @@ import java.util.logging.Logger;
 import com.goofans.gootool.addins.Addin;
 import com.goofans.gootool.addins.AddinsStore;
 import com.goofans.gootool.facades.SourceFile;
+import com.goofans.gootool.facades.TargetFile;
 import com.goofans.gootool.model.ProjectModel;
 import com.goofans.gootool.platform.PlatformSupport;
 import com.goofans.gootool.profile.GenerateOnlineIds;
 import com.goofans.gootool.projects.LocalProject;
-import com.goofans.gootool.projects.LocalProjectConfiguration;
 import com.goofans.gootool.projects.Project;
+import com.goofans.gootool.projects.ProjectConfiguration;
 import com.goofans.gootool.siteapi.*;
 import com.goofans.gootool.util.FileNameExtensionFilter;
 import com.goofans.gootool.util.GUIUtil;
@@ -333,7 +332,7 @@ public class ProjectController implements ActionListener
     try {
       ProfileBackupRequest request = new ProfileBackupRequest();
       request.backupProfile(currentProject, description);
-      mainController.showMessageDialog(resourceBundle.getString("gooFansBackup.succcess.title"), resourceBundle.getString("gooFansBackup.succcess.message"));
+      mainController.showMessageDialog(resourceBundle.getString("gooFansBackup.success.title"), resourceBundle.getString("gooFansBackup.success.message"));
     }
     catch (APIException e) {
       log.log(Level.WARNING, "Backup failed", e);

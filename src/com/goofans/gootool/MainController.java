@@ -25,10 +25,7 @@ import com.goofans.gootool.addins.AddinFactory;
 import com.goofans.gootool.addins.AddinFormatException;
 import com.goofans.gootool.addins.AddinsStore;
 import com.goofans.gootool.l10n.ImageLocalisationDialog;
-import com.goofans.gootool.projects.LocalProject;
-import com.goofans.gootool.projects.Project;
-import com.goofans.gootool.projects.ProjectConfiguration;
-import com.goofans.gootool.projects.ProjectManager;
+import com.goofans.gootool.projects.*;
 import com.goofans.gootool.siteapi.APIException;
 import com.goofans.gootool.siteapi.LoginTestRequest;
 import com.goofans.gootool.siteapi.VersionCheck;
@@ -36,9 +33,7 @@ import com.goofans.gootool.util.FileNameExtensionFilter;
 import com.goofans.gootool.util.GUIUtil;
 import com.goofans.gootool.util.ProgressIndicatingTask;
 import com.goofans.gootool.util.VersionSpec;
-import com.goofans.gootool.view.AboutDialog;
-import com.goofans.gootool.view.LocalProjectPropertiesDialog;
-import com.goofans.gootool.view.MainWindow;
+import com.goofans.gootool.view.*;
 import com.goofans.gootool.wog.GamePreferences;
 
 import static com.goofans.gootool.GameFileCodecTool.CodecType;
@@ -488,51 +483,70 @@ public class MainController implements ActionListener
 
     if (option == null) return; // cancelled
 
-    if (option == options[0]) {
-      LocalProjectPropertiesDialog propsDialog = new LocalProjectPropertiesDialog(mainWindow, resourceBundle.getString("project.local.title.add"), null);
+    Project newProject = null;
 
+    if (option == options[0]) {
+      LocalProjectPropertiesDialog propsDialog = new LocalProjectPropertiesDialog(mainWindow, null);
       propsDialog.setVisible(true);
 
       if (propsDialog.isOkButtonPressed()) {
-        LocalProject project = ProjectManager.createLocalProject();
-        propsDialog.saveToProject(project);
-
-        // Initialise their preferences from their existing game config.txt file
-        // then force a save
-
-        // TODO test this!
-        ProjectConfiguration c;
-        try {
-          c = project.getSavedConfiguration();
-          GamePreferences.readGamePreferences(c, project.getSource());
-          project.saveConfiguration(c);
-        }
-        catch (IOException e) {
-          log.log(Level.WARNING, "Unable to initialise project properties from config.txt", e);
-        }
-
-        mainWindow.mainPanel.updateProjectsCombo();
-
-        changeProject(project);
+        newProject = ProjectManager.createLocalProject();
+        propsDialog.saveToProject(newProject);
       }
     }
     else {
-      showErrorDialog("Error", "This type of project cannot be created yet.");
+      IosProjectPropertiesDialog propsDialog = new IosProjectPropertiesDialog(mainWindow, null);
+      propsDialog.setVisible(true);
+
+      if (propsDialog.isOkButtonPressed()) {
+        newProject = ProjectManager.createIosProject();
+        propsDialog.saveToProject(newProject);
+      }
     }
+
+    if (newProject == null) {
+      return;
+    }
+
+    // Initialise their preferences from their existing game config.txt file
+    // then force a save
+
+    // TODO test this!
+    ProjectConfiguration c;
+    try {
+      c = newProject.getSavedConfiguration();
+      GamePreferences.readGamePreferences(c, newProject.getSource());
+      newProject.saveConfiguration(c);
+    }
+    catch (IOException e) {
+      log.log(Level.WARNING, "Unable to initialise project properties from config.txt", e);
+    }
+
+    mainWindow.mainPanel.updateProjectsCombo();
+
+    changeProject(newProject);
   }
 
   private void projectProperties()
   {
     Project project = projectController.getCurrentProject();
 
+    ProjectPropertiesDialog propsDialog;
     if (project instanceof LocalProject) {
-      LocalProjectPropertiesDialog propsDialog = new LocalProjectPropertiesDialog(mainWindow, resourceBundle.getString("project.local.title.properties"), (LocalProject) project);
-      propsDialog.setVisible(true);
+      propsDialog = new LocalProjectPropertiesDialog(mainWindow, (LocalProject) project);
+    }
+    else if (project instanceof IosProject) {
+      propsDialog = new IosProjectPropertiesDialog(mainWindow, (IosProject) project);
+    }
+    else {
+      throw new RuntimeException("Unknown project type");
+    }
 
-      if (propsDialog.isOkButtonPressed()) {
-        propsDialog.saveToProject((LocalProject) project);
-        mainWindow.mainPanel.updateProjectsCombo();
-      }
+    propsDialog.setVisible(true);
+
+    if (propsDialog.isOkButtonPressed()) {
+      propsDialog.saveToProject(project);
+      mainWindow.mainPanel.updateProjectsCombo();
     }
   }
 
