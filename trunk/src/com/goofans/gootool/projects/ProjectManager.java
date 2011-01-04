@@ -61,7 +61,7 @@ public class ProjectManager
     for (String key : keys) {
       if (key.endsWith(PREF_KEY_SUFFIX_TYPE)) {
         int projectId = Integer.parseInt(key.substring(0, key.length() - PREF_KEY_SUFFIX_TYPE.length()));
-	while (projects.size() - 1 < projectId) projects.add(null);
+        while (projects.size() - 1 < projectId) projects.add(null);
 
         String projectType = PREFS.get(key, null);
         if (PREF_TYPE_LOCAL.equals(projectType)) {
@@ -69,6 +69,7 @@ public class ProjectManager
         }
         else if (PREF_TYPE_IOS.equals(projectType)) {
           projects.set(projectId, new IosProject(getPrefsForProject(projectId)));
+        }
         else {
           throw new RuntimeException("Unrecognised stored project type " + projectType);
         }
