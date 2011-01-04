@@ -16,7 +16,7 @@ import java.util.regex.Pattern;
 
 import com.goofans.gootool.GooTool;
 import com.goofans.gootool.GooToolResourceBundle;
-import com.goofans.gootool.ios.IosConnection;
+import com.goofans.gootool.ios.TestIosConnection;
 import com.goofans.gootool.projects.IosProject;
 import com.goofans.gootool.projects.Project;
 import com.goofans.gootool.util.DebugUtil;
@@ -50,6 +50,7 @@ public class IosProjectPropertiesDialog extends JDialog implements ActionListene
 
   private final JFrame mainWindow;
   private boolean okButtonPressed = false;
+  private boolean connectionTestedOk = false;
 
   public IosProjectPropertiesDialog(JFrame mainWindow, IosProject project)
   {
@@ -112,7 +113,7 @@ public class IosProjectPropertiesDialog extends JDialog implements ActionListene
 
     log.log(Level.FINEST, "IosProjectPropertiesDialog action: " + cmd);
     if (cmd.equals(CMD_TEST_CONNECTION)) {
-      testConnection();
+      testConnection(false);
     }
     else if (cmd.equals(CMD_OK)) {
       onOK();
@@ -122,27 +123,27 @@ public class IosProjectPropertiesDialog extends JDialog implements ActionListene
     }
   }
 
-  // TODO this needs to go on a progressindicating task
-  private void testConnection()
+  private void testConnection(boolean silentSuccess)
   {
-    IosConnection con = new IosConnection(hostText.getText(), new String(passwordText.getPassword()));
+    TestIosConnection test = new TestIosConnection(hostText.getText(), new String(passwordText.getPassword()));
+    connectionTestedOk = false;
 
-    boolean success;
     try {
-      success = con.testConnection();
+      GUIUtil.runTask(this, resourceBundle.getString("projectProps.ios.device.testConnection.title"), test);
     }
     catch (Exception e) {
+      log.log(Level.WARNING, "TestIosConnection failed", e);
       JOptionPane.showMessageDialog(mainWindow, resourceBundle.formatString("projectProps.ios.device.testConnection.exception", e.getMessage()),
               resourceBundle.getString("projectProps.ios.device.testConnection.result"), JOptionPane.WARNING_MESSAGE);
       return;
     }
-    finally {
-      con.close();
-    }
 
-    if (success) {
-      JOptionPane.showMessageDialog(mainWindow, resourceBundle.getString("projectProps.ios.device.testConnection.success"),
-              resourceBundle.getString("projectProps.ios.device.testConnection.result"), JOptionPane.INFORMATION_MESSAGE);
+    if (test.isWogFound()) {
+      connectionTestedOk = true;
+      if (!silentSuccess) {
+        JOptionPane.showMessageDialog(mainWindow, resourceBundle.getString("projectProps.ios.device.testConnection.success"),
+                resourceBundle.getString("projectProps.ios.device.testConnection.result"), JOptionPane.INFORMATION_MESSAGE);
+      }
     }
     else {
       JOptionPane.showMessageDialog(mainWindow, resourceBundle.getString("projectProps.ios.device.testConnection.failure"),
@@ -174,9 +175,14 @@ public class IosProjectPropertiesDialog extends JDialog implements ActionListene
 
     // TODO make sure this host's not in use by any other projects
 
-    // Make sure source directory isn't the same as the target directory and that neither are parents of the other
+    // If we've not done a test connection, do it now.
+    if (!connectionTestedOk) {
+      testConnection(true);
+      if (!connectionTestedOk) {
+        return;
+      }
+    }
 
-    // TODO If we've not done a test connection, do it now.
 
     // OK save.
     okButtonPressed = true;
@@ -201,6 +207,7 @@ public class IosProjectPropertiesDialog extends JDialog implements ActionListene
   {
     okButton.setEnabled(arePropertiesValid());
     testConnectionButton.setEnabled(arePropertiesValid());
+    connectionTestedOk = false;
   }
 
   public void insertUpdate(DocumentEvent e)
@@ -221,7 +228,7 @@ public class IosProjectPropertiesDialog extends JDialog implements ActionListene
   public static void main(String[] args)
   {
     DebugUtil.setAllLogging();
-
+    GooTool.initExecutors();
     GUIUtil.switchToSystemLookAndFeel();
 
     IosProjectPropertiesDialog dialog = new IosProjectPropertiesDialog(null, null);

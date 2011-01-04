@@ -37,6 +37,7 @@ public class IosConnection
   private static final String SSH_USER = "root";
   private static final int SSH_PORT = 22;
   private static final String SSH_CHANNEL_TYPE_SFTP = "sftp";
+  private static final int CONNECT_TIMEOUT = 5000; //msec
 
   private final String host;
   private final String password;
@@ -100,7 +101,7 @@ public class IosConnection
     }
   }
 
-  private void connect() throws JSchException
+  void connect() throws JSchException
   {
     if (session != null && session.isConnected()) return;
 
@@ -112,7 +113,7 @@ public class IosConnection
 
     log.log(Level.FINER, "Connecting to IOS device at " + host);
 
-    session.connect();
+    session.connect(CONNECT_TIMEOUT);
 
     log.log(Level.FINER, "Connected to IOS device");
 
@@ -124,7 +125,7 @@ public class IosConnection
     log.log(Level.INFO, "SSH connected to " + host + ", server version " + session.getServerVersion() + ", SFTP protocol version " + sftp.version());
   }
 
-  private synchronized boolean locateWog() throws JSchException, SftpException
+  synchronized boolean locateWog() throws JSchException, SftpException
   {
     if (wogDir != null) return true;
 
@@ -155,7 +156,6 @@ public class IosConnection
 
     try {
       SftpATTRS attrs = sftp.stat("/Applications/wog.app");
-      System.out.println("attrs = " + attrs);
       if (attrs.isDir()) {
         wogDir = "/Applications";
         jailbrokenWog = true;

@@ -1,3 +1,5 @@
+- Need a way to have cancellable progress-indicating tasks (e.g. testiosconnection)
+
 - Project drop-down shouldn't list the null projects!!!
 
 -menu options save/save&launch/revert should only be active if active project, and should call projectcontroller
