@@ -24,8 +24,6 @@ import com.goofans.gootool.io.Codec;
 import com.goofans.gootool.io.GameFormat;
 import com.goofans.gootool.io.ImageCodec;
 import com.goofans.gootool.io.UnicodeReader;
-import com.goofans.gootool.platform.PlatformSupport;
-import com.goofans.gootool.projects.LocalProject;
 import com.goofans.gootool.projects.Project;
 import com.goofans.gootool.projects.ProjectManager;
 import com.goofans.gootool.util.Utilities;
@@ -183,7 +181,7 @@ public class AddinInstaller
       // We follow this process even if we're not on a Mac, so that the image is forced to be read, so Windows users can detect images
       // that Java can't read and prevent that addin having later problems on Mac.
 
-      TargetFile destFile = targetGameRoot.getChild(project.getGamePngFilename(fileName));
+      TargetFile destFile = targetGameRoot.getChild(project.getGamePngFilename(fileName.substring(0, fileName.length() - EXTENSION_PNG.length())));
       destFile.getParentDirectory().mkdirs();
 
       BufferedImage image = ImageIO.read(is);

@@ -88,8 +88,6 @@ public abstract class Project
 
   public abstract ProjectConfiguration getSavedConfiguration();
 
-//  public abstract ProjectConfiguration getProjectConfiguration();
-
   protected void loadProjectConfiguration(ProjectConfiguration c)
   {
     if (c == null) throw new RuntimeException("loadProjectConfiguration was passed a null project");
@@ -147,10 +145,8 @@ public abstract class Project
 
   public abstract Codec getCodecForGameXml();
 
-    // TODO we should not expose this, since it's not even a file on IOS!
+  // TODO we should not expose this, since it's not even a file on IOS!
   public abstract Codec getCodecForProfile();
-
-  // TODO getCodecForMovie/Anim
 
   public abstract ImageCodec getImageCodec();
 
@@ -163,9 +159,9 @@ public abstract class Project
   public abstract String getGameXmlFilename(String baseName);
 
   /**
-   * Gets the filename of a PNG file. May have .binltl appended for Mac OS X.
+   * Gets the filename of a PNG file. Will have .png appended, or .png.binltl appended for Mac OS X.
    *
-   * @param baseName Filename, with trailing .png but without trailing .binltl.
+   * @param baseName Filename, without trailing .png but without trailing .binltl.
    * @return Where it is on this installation.
    */
   public abstract String getGamePngFilename(String baseName);
@@ -187,7 +183,7 @@ public abstract class Project
   public abstract String getGameMusicFilename(String baseName);
 
   /**
-   * Gets the filename of an animation or movie file (.binltl normally, .binltl for Linux 64-bit).
+   * Gets the filename of an animation or movie file (.binltl normally, .binltl64 for Linux 64-bit).
    *
    * @param baseName Filename, without trailing .binltl.
    * @return The filename on this installation.

@@ -5,6 +5,16 @@
 
 package com.goofans.gootool.l10n;
 
+import javax.imageio.IIOException;
+import javax.imageio.ImageIO;
+import javax.swing.*;
+import javax.swing.border.Border;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
+
 import com.goofans.gootool.GooTool;
 import com.goofans.gootool.facades.SourceFile;
 import com.goofans.gootool.projects.Project;
@@ -15,16 +25,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-
-import javax.imageio.IIOException;
-import javax.imageio.ImageIO;
-import javax.swing.*;
-import javax.swing.border.Border;
-import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * @author David Croft (davidc@goofans.com)
@@ -107,7 +107,7 @@ public class ImageTool extends ProgressIndicatingTask
 
             try {
               constraints.gridx++;
-              SourceFile input = ((SourceFile) sourceRoot).getChild(project.getGamePngFilename(destFileName + ".png"));
+              SourceFile input = ((SourceFile) sourceRoot).getChild(project.getGamePngFilename(destFileName));
               contentPanel.add(makeLabel(ImageIO.read(input.read())), constraints);
             }
             catch (IIOException e) {
