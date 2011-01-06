@@ -238,10 +238,10 @@ public class LocalProject extends Project
   public String getGamePngFilename(String baseName)
   {
     if (PlatformSupport.getPlatform() == PlatformSupport.Platform.MACOSX) {
-      return baseName + ".binltl"; //NON-NLS
+      return baseName + ".png.binltl"; //NON-NLS
     }
     else {
-      return baseName;
+      return baseName + ".png"; //NON-NLS
     }
   }
 

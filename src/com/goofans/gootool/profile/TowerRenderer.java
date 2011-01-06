@@ -68,24 +68,24 @@ public class TowerRenderer implements ImageObserver
     ImageCodec imageCodec = project.getImageCodec();
 
     // Pick up the images out of the wog folder
-    SourceFile ballFile = sourceRoot.getChild(project.getGamePngFilename("res/balls/Drained/body.png")); //NON-NLS
+    SourceFile ballFile = sourceRoot.getChild(project.getGamePngFilename("res/balls/Drained/body")); //NON-NLS
     ballImage = imageCodec.readImage(ballFile.read());
 
     // Balls need to be nudged so they are centered on the given position.
     ballNudgeX = -(ballImage.getWidth() / 2);
     ballNudgeY = -(ballImage.getHeight() / 2);
 
-    SourceFile strandFile = sourceRoot.getChild(project.getGamePngFilename("res/balls/Drained/spring_goo.png")); //NON-NLS
+    SourceFile strandFile = sourceRoot.getChild(project.getGamePngFilename("res/balls/Drained/spring_goo")); //NON-NLS
     strandImage = imageCodec.readImage(strandFile.read());
 
     // Strands need to be drawn with origin on their start point, and stretched
     strandHeight = strandImage.getHeight();
     strandXOffset = -(strandImage.getWidth() / 2);
 
-    SourceFile groundFile = sourceRoot.getChild(project.getGamePngFilename("res/levels/wogcd/groundTile.png")); //NON-NLS
+    SourceFile groundFile = sourceRoot.getChild(project.getGamePngFilename("res/levels/wogcd/groundTile")); //NON-NLS
     groundImage = imageCodec.readImage(groundFile.read());
 
-    SourceFile skyFile = sourceRoot.getChild(project.getGamePngFilename("res/levels/wogcd/skytile.png")); //NON-NLS
+    SourceFile skyFile = sourceRoot.getChild(project.getGamePngFilename("res/levels/wogcd/skytile")); //NON-NLS
     skyImage = imageCodec.readImage(skyFile.read());
   }
 
@@ -303,7 +303,7 @@ public class TowerRenderer implements ImageObserver
   private void rotateTest() throws IOException
   {
     Project project = ProjectManager.simpleInit();
-    SourceFile strandFile = project.getSource().getGameRoot().getChild(project.getGamePngFilename("res/balls/Drained/spring_goo.png"));
+    SourceFile strandFile = project.getSource().getGameRoot().getChild(project.getGamePngFilename("res/balls/Drained/spring_goo"));
 
     BufferedImage strandImage = ImageIO.read(strandFile.read());
 

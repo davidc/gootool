@@ -47,7 +47,6 @@ public class IosProject extends Project
     Utilities.flushPrefs(prefsNode);
   }
 
-
   public String getPassword()
   {
     String enc = prefsNode.get(PREF_KEY_PASSWORD, null);
