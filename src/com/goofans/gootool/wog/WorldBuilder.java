@@ -5,6 +5,14 @@
 
 package com.goofans.gootool.wog;
 
+import javax.xml.transform.TransformerException;
+import java.io.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import com.goofans.gootool.BillboardUpdater;
 import com.goofans.gootool.GooTool;
 import com.goofans.gootool.GooToolResourceBundle;
@@ -23,14 +31,6 @@ import com.goofans.gootool.util.ProgressIndicatingTask;
 import com.goofans.gootool.util.ProgressListener;
 import com.goofans.gootool.util.Utilities;
 
-import javax.xml.transform.TransformerException;
-import java.io.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 /**
  * Handles the actual writing of the configuration to the World of Goo directory.
  *
@@ -45,7 +45,7 @@ public class WorldBuilder extends ProgressIndicatingTask
 
   private static final List<String> SKIPPED_FILES = Arrays.asList("Thumbs.db"); //NON-NLS
 
-  private static final int ESTIMATED_SOURCE_FILES = 2500;
+  public static final int ESTIMATED_SOURCE_FILES = 2500;
 
   private static final String IRRKLANG_DLL = "irrKlang.dll";
   private static final String REAL_IRRKLANG_DLL = "RealIrrKlang.dll";
