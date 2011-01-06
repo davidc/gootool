@@ -139,8 +139,18 @@ public abstract class Project
 
   public abstract boolean readyToBuild();
 
+  /**
+   * Gets the Source representing the source files for this project. The caller is responsible for closing it after use.
+   *
+   * @return the Source for this project.
+   */
   public abstract Source getSource();
 
+  /**
+   * Gets the Source representing the target files for this project. The caller is responsible for closing it after use.
+   *
+   * @return the Target for this project.
+   */
   public abstract Target getTarget();
 
   public abstract Codec getCodecForGameXml();

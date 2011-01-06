@@ -5,9 +5,10 @@
 
 package com.goofans.gootool.facades;
 
-import com.goofans.gootool.platform.PlatformSupport;
-
 import java.io.File;
+import java.io.IOException;
+
+import com.goofans.gootool.platform.PlatformSupport;
 
 /**
  * @author David Croft (davidc@goofans.com)
@@ -49,16 +50,16 @@ public class LocalSource implements Source
     return gameRoot;
   }
 
-  public SourceFile getGameFile(String filename)
-  {
-    return gameRoot.getChild(filename);
-  }
-
   @Override
   public String toString()
   {
     return "LocalSource{" +
             "rootDirectory=" + rootDirectory +
             '}';
+  }
+
+  public void close() throws IOException
+  {
+    // Nothing to do for a local source.
   }
 }
