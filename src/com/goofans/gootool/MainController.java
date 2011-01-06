@@ -407,11 +407,7 @@ public class MainController implements ActionListener
 
     mainWindow.mainPanel.updateProjectsCombo();
 
-    // TODO load current project number from ToolPreferences
-
-    if (ProjectManager.getProjects().isEmpty()) changeProject(null);
-    else
-      changeProject(ProjectManager.getProjects().get(0)); // TODO a tool preference for currently selected project
+    changeProject(ProjectManager.getCurrentProject());
   }
 
   private void updateGenerateOnlineIdMenu()
@@ -469,6 +465,8 @@ public class MainController implements ActionListener
     mainWindow.mainPanel.setSelectedProject(newProject);
 
     projectController.setCurrentProject(newProject);
+
+    ProjectManager.setCurrentProject(newProject);
   }
 
   private void addProject()

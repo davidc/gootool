@@ -26,6 +26,7 @@ public class ProjectManager
 
   private static final Preferences PREFS = Preferences.userNodeForPackage(ProjectManager.class);
 
+  private static final String PREF_KEY_CURRENT_PROJECT = "current_project";
   private static final String PREF_KEY_SUFFIX_TYPE = "_type";
   private static final String PREF_TYPE_LOCAL = "local";
   private static final String PREF_TYPE_IOS = "ios";
@@ -142,13 +143,7 @@ public class ProjectManager
 //      throw new RuntimeException("Attempt to delete non-existent project " + id);
 //    }
 
-    int id = -1;
-    for (int i = 0; i < projects.size(); i++) {
-      if (projects.get(i) == project) {
-        id = i;
-      }
-    }
-
+    int id = getIdForProject(project);
     if (id == -1) throw new RuntimeException("Attempt to delete non-existent or already-deleted project " + project.getName());
 
     log.log(Level.INFO, "Deleting project " + project.getName() + " id " + id);
@@ -166,6 +161,7 @@ public class ProjectManager
     }
     catch (BackingStoreException e) {
       log.log(Level.SEVERE, "Unable to remove prefs node for project " + id);
+      throw new RuntimeException("Unable to remove prefs node for project", e);
     }
 
     Utilities.flushPrefs(PREFS);
@@ -176,6 +172,16 @@ public class ProjectManager
     }
   }
 
+  private static int getIdForProject(Project project)
+  {
+    int id = -1;
+    for (int i = 0; i < projects.size(); i++) {
+      if (projects.get(i) == project) {
+        id = i;
+      }
+    }
+    return id;
+  }
 
   /**
    * Migrates preferences from pre-1.1.0 single-project versions to new project number 0.
@@ -241,13 +247,57 @@ public class ProjectManager
   }
 
   /**
+   * Gets the currently selected project, if one exists. If not, returns first available project, or null if there are no projects.
+   *
+   * @return A Project, or null if there are no projects.
+   */
+  public static Project getCurrentProject()
+  {
+    System.out.println("Get current project");
+    initProjects();
+    if (projects.isEmpty()) return null;
+
+    // If they have a saved current_project, and it's still valid, use it
+
+    int currentProjectId = PREFS.getInt(PREF_KEY_CURRENT_PROJECT, -1);
+    if (currentProjectId >= 0 && projects.get(currentProjectId) != null) {
+      System.out.println("Get current project, saved (" + currentProjectId + "): " + projects.get(currentProjectId));
+      return projects.get(currentProjectId);
+    }
+
+    // No saved current_project, use the first existing project.
+
+    for (Project project : projects) {
+      if (project != null) {
+        System.out.println("Get current project, first available: " + project);
+        return project;
+      }
+    }
+
+    return null;
+  }
+
+  /**
+   * Sets the currently-selected project, for use on next startup.
+   *
+   * @param project The current project.
+   */
+  public static void setCurrentProject(Project project)
+  {
+    int id = getIdForProject(project);
+    if (id == -1) throw new RuntimeException("Attempt to set current project to non-existent or already-deleted project " + project.getName());
+
+    PREFS.putInt(PREF_KEY_CURRENT_PROJECT, id);
+    Utilities.flushPrefs(PREFS);
+  }
+
+  /**
    * Returns the currently-selected project. Only for use by psvm test cases.
    *
    * @return the current Project.
    */
   public static Project simpleInit()
   {
-    // TODO use "latest used project"
-    return getProjects().get(0);
+    return getCurrentProject();
   }
 }
