@@ -5,9 +5,10 @@
 
 package com.goofans.gootool.facades;
 
-import com.goofans.gootool.platform.PlatformSupport;
-
 import java.io.File;
+import java.io.IOException;
+
+import com.goofans.gootool.platform.PlatformSupport;
 
 /**
  * @author David Croft (davidc@goofans.com)
@@ -55,5 +56,10 @@ public class LocalTarget implements Target
     return "LocalTarget{" +
             "rootDirectory=" + rootDirectory +
             '}';
+  }
+
+  public void close() throws IOException
+  {
+    // Nothing to do for a local target.
   }
 }

@@ -5,11 +5,13 @@
 
 package com.goofans.gootool.facades;
 
+import java.io.Closeable;
+
 /**
  * @author David Croft (davidc@goofans.com)
  * @version $Id$
  */
-public interface Target
+public interface Target extends Closeable
 {
   /**
    * Returns the full root directory of the game installation, i.e. the directory of WorldOfGoo(.exe) for Windows/Linux,
