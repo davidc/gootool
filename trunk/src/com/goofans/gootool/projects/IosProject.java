@@ -50,7 +50,7 @@ public class IosProject extends Project
 
   public String getPassword()
   {
-    String enc = prefsNode.get(PREF_KEY_HOST, null);
+    String enc = prefsNode.get(PREF_KEY_PASSWORD, null);
     if (enc == null) return null;
 
     try {
@@ -64,10 +64,9 @@ public class IosProject extends Project
 
   public void setPassword(String password)
   {
-    prefsNode.put(PREF_KEY_HOST, TextUtil.base64Encode(password.getBytes()));
+    prefsNode.put(PREF_KEY_PASSWORD, TextUtil.base64Encode(password.getBytes()));
     Utilities.flushPrefs(prefsNode);
   }
-
 
   @Override
   public byte[] getProfileBytes() throws IOException
