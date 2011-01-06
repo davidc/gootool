@@ -68,6 +68,7 @@ public class GamePreferences
   public static void readGamePreferences(ProjectConfiguration c, Source source) throws IOException
   {
     SourceFile sourceFile = source.getGameRoot().getChild(USER_CONFIG_FILE);
+    if (sourceFile == null) throw new IOException("Cannot locate source config file");
 
     // Load the user's config.txt
     Document document;
