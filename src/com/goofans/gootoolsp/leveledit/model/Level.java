@@ -10,7 +10,6 @@ import java.io.IOException;
 import com.goofans.gootool.facades.Source;
 import com.goofans.gootool.facades.SourceFile;
 import com.goofans.gootool.io.Codec;
-import com.goofans.gootool.io.GameFormat;
 import com.goofans.gootool.projects.Project;
 import com.goofans.gootool.projects.ProjectManager;
 import org.w3c.dom.Document;
@@ -28,21 +27,27 @@ public class Level
   public Level(String levelName) throws IOException
   {
     Project project = ProjectManager.simpleInit();
-    SourceFile sourceDir = project.getSource().getGameRoot().getChild("res/levels/" + levelName);
+    Source source = project.getSource();
+    try {
+      SourceFile sourceDir = source.getGameRoot().getChild("res/levels/" + levelName);
 
-    Codec codec = project.getCodecForGameXml();
+      Codec codec = project.getCodecForGameXml();
 
-    SourceFile sceneFile = sourceDir.getChild(project.getGameXmlFilename(levelName + ".scene"));
-    Document sceneDoc = codec.decodeFileToXML(sceneFile);
-    scene = new Scene(sceneDoc);
+      SourceFile sceneFile = sourceDir.getChild(project.getGameXmlFilename(levelName + ".scene"));
+      Document sceneDoc = codec.decodeFileToXML(sceneFile);
+      scene = new Scene(sceneDoc);
 
-    SourceFile resourcesFile = sourceDir.getChild(project.getGameXmlFilename(levelName + ".resrc"));
-    Document resourcesDoc = codec.decodeFileToXML(resourcesFile);
-    resources = new Resources(resourcesDoc);
+      SourceFile resourcesFile = sourceDir.getChild(project.getGameXmlFilename(levelName + ".resrc"));
+      Document resourcesDoc = codec.decodeFileToXML(resourcesFile);
+      resources = new Resources(resourcesDoc);
 
-    SourceFile levelFile = sourceDir.getChild(project.getGameXmlFilename(levelName + ".level"));
-    Document levelDoc = codec.decodeFileToXML(levelFile);
-    levelContents = new LevelContents(levelDoc);
+      SourceFile levelFile = sourceDir.getChild(project.getGameXmlFilename(levelName + ".level"));
+      Document levelDoc = codec.decodeFileToXML(levelFile);
+      levelContents = new LevelContents(levelDoc);
+    }
+    finally {
+      source.close();
+    }
   }
 
   public Scene getScene()

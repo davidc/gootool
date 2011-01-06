@@ -20,7 +20,9 @@ import java.util.logging.Logger;
 
 import com.goofans.gootool.addins.Addin;
 import com.goofans.gootool.addins.AddinsStore;
+import com.goofans.gootool.facades.Source;
 import com.goofans.gootool.facades.SourceFile;
+import com.goofans.gootool.facades.Target;
 import com.goofans.gootool.facades.TargetFile;
 import com.goofans.gootool.model.ProjectModel;
 import com.goofans.gootool.platform.PlatformSupport;
@@ -108,10 +110,24 @@ public class ProjectController implements ActionListener
 
   private void warnIfDemo()
   {
-    // A file that will not exist in the demo version.
-    SourceFile flagFile = currentProject.getSource().getGameRoot().getChild(currentProject.getGameXmlFilename("res/levels/island3/island3.level"));
+    boolean isDemo;
 
-    if (flagFile == null || !flagFile.isFile()) {
+    // A file that will not exist in the demo version.
+    Source source = currentProject.getSource();
+    try {
+      SourceFile flagFile = source.getGameRoot().getChild(currentProject.getGameXmlFilename("res/levels/island3/island3.level"));
+      isDemo = (flagFile == null || !flagFile.isFile());
+    }
+    finally {
+      try {
+        source.close();
+      }
+      catch (IOException e) {
+        log.log(Level.WARNING, "Unable to close source", e);
+      }
+    }
+
+    if (isDemo) {
       String[] options = new String[]{resourceBundle.getString("project.demoWarning.upgrade"),
               resourceBundle.getString("project.demoWarning.proceed")};
 
@@ -493,10 +509,23 @@ public class ProjectController implements ActionListener
 
     if (!currentProject.readyToBuild()) return;
 
-    TargetFile testFile = currentProject.getTarget().getGameRoot().getChild(currentProject.getGameXmlFilename("properties/text.xml"));
+    Target target = currentProject.getTarget();
+    try {
+      TargetFile testFile = target.getGameRoot().getChild(currentProject.getGameXmlFilename("properties/text.xml"));
 
-    if (!testFile.isFile()) {
-      mainController.showMessageDialog(resourceBundle.getString("firstBuild.title"), resourceBundle.getString("firstBuild.message"));
+      if (!testFile.isFile()) {
+        mainController.showMessageDialog(resourceBundle.getString("firstBuild.title"), resourceBundle.getString("firstBuild.message"));
+      }
+    }
+    finally {
+      // TODO Ideally we would pass the target into WorldBuilder here to avoid closing and reopening it. Or even better, a flag on project to indicate
+      // first build
+      try {
+        target.close();
+      }
+      catch (IOException e) {
+        log.log(Level.WARNING, "Unable to close target", e);
+      }
     }
 
     WorldBuilder configWriter = new WorldBuilder(currentProject, projectModel.getEditorConfig());

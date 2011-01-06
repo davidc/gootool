@@ -5,6 +5,13 @@
 
 package com.goofans.datamining;
 
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathExpression;
+import javax.xml.xpath.XPathExpressionException;
+import javax.xml.xpath.XPathFactory;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+
 import com.goofans.gootool.facades.Source;
 import com.goofans.gootool.facades.SourceFile;
 import com.goofans.gootool.io.Codec;
@@ -14,13 +21,6 @@ import com.goofans.gootool.util.XMLUtil;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
-
-import javax.xml.xpath.XPath;
-import javax.xml.xpath.XPathExpression;
-import javax.xml.xpath.XPathExpressionException;
-import javax.xml.xpath.XPathFactory;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
 
 /**
  * @author David Croft (davidc@goofans.com)
@@ -38,26 +38,33 @@ public class Levels
   public static void main(String[] args) throws IOException, XPathExpressionException
   {
     Project project = ProjectManager.simpleInit();
-    SourceFile sourceRoot = project.getSource().getGameRoot();
-
     Codec codec = project.getCodecForGameXml();
 
-    Document textDoc = XMLUtil.loadDocumentFromInputStream(new ByteArrayInputStream(codec.decodeFile(sourceRoot.getChild(project.getGameXmlFilename("properties/text.xml")))));
+    Source source = project.getSource();
+    try {
+      SourceFile sourceRoot = source.getGameRoot();
 
-    for (int island = 1; island <= 5; ++island) {
-      Document islandDoc = XMLUtil.loadDocumentFromInputStream(new ByteArrayInputStream(codec.decodeFile(sourceRoot.getChild(project.getGameXmlFilename("res/islands/island" + island + ".xml")))));
-      NodeList levelList = islandDoc.getElementsByTagName("level");
-      for (int i = 0; i < levelList.getLength(); i++) {
-        Element levelNode = (Element) levelList.item(i);
-        String levelId = levelNode.getAttribute("id");
-        String levelName = getText(textDoc, levelNode.getAttribute("name"));
-        String levelSubtitle = getText(textDoc, levelNode.getAttribute("text"));
-        String levelOcd = levelNode.getAttribute("ocd");
-        String levelDepends = levelNode.getAttribute("depends");
 
-        System.out.print("INSERT INTO goofans_wog_levels (dirname, official, ocd, depends, name_en, subtitle_en, island) VALUES ");
-        System.out.println("('" + levelId + "', 1, '" + levelOcd + "', '" + levelDepends + "', '" + levelName + "', '" + levelSubtitle + "', " + island + ");");
+      Document textDoc = XMLUtil.loadDocumentFromInputStream(new ByteArrayInputStream(codec.decodeFile(sourceRoot.getChild(project.getGameXmlFilename("properties/text.xml")))));
+
+      for (int island = 1; island <= 5; ++island) {
+        Document islandDoc = XMLUtil.loadDocumentFromInputStream(new ByteArrayInputStream(codec.decodeFile(sourceRoot.getChild(project.getGameXmlFilename("res/islands/island" + island + ".xml")))));
+        NodeList levelList = islandDoc.getElementsByTagName("level");
+        for (int i = 0; i < levelList.getLength(); i++) {
+          Element levelNode = (Element) levelList.item(i);
+          String levelId = levelNode.getAttribute("id");
+          String levelName = getText(textDoc, levelNode.getAttribute("name"));
+          String levelSubtitle = getText(textDoc, levelNode.getAttribute("text"));
+          String levelOcd = levelNode.getAttribute("ocd");
+          String levelDepends = levelNode.getAttribute("depends");
+
+          System.out.print("INSERT INTO goofans_wog_levels (dirname, official, ocd, depends, name_en, subtitle_en, island) VALUES ");
+          System.out.println("('" + levelId + "', 1, '" + levelOcd + "', '" + levelDepends + "', '" + levelName + "', '" + levelSubtitle + "', " + island + ");");
+        }
       }
+    }
+    finally {
+      source.close();
     }
   }
 

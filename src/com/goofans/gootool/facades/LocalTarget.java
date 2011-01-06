@@ -61,5 +61,6 @@ public class LocalTarget implements Target
   public void close() throws IOException
   {
     // Nothing to do for a local target.
+    // TODO have TargetFile throw an exception if we're closed
   }
 }

@@ -5,16 +5,6 @@
 
 package com.goofans.gootoolsp.leveledit.resource;
 
-import com.goofans.gootool.facades.TargetFile;
-import com.goofans.gootool.io.Codec;
-import com.goofans.gootool.projects.Project;
-import com.goofans.gootool.projects.ProjectManager;
-import com.goofans.gootool.util.DebugUtil;
-import com.goofans.gootool.util.XMLUtil;
-import com.goofans.gootoolsp.leveledit.model.Resources;
-import org.w3c.dom.Document;
-import org.w3c.dom.NodeList;
-
 import java.awt.*;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Rectangle2D;
@@ -24,6 +14,17 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.StringTokenizer;
+
+import com.goofans.gootool.facades.Target;
+import com.goofans.gootool.facades.TargetFile;
+import com.goofans.gootool.io.Codec;
+import com.goofans.gootool.projects.Project;
+import com.goofans.gootool.projects.ProjectManager;
+import com.goofans.gootool.util.DebugUtil;
+import com.goofans.gootool.util.XMLUtil;
+import com.goofans.gootoolsp.leveledit.model.Resources;
+import org.w3c.dom.Document;
+import org.w3c.dom.NodeList;
 
 /**
  * @author David Croft (davidc@goofans.com)
@@ -39,18 +40,27 @@ public class Ball
   public Ball(String ballName) throws IOException
   {
     this.ballName = ballName;
+
+    Resources resources;
+    Document ballDoc;
+
     Project project = ProjectManager.simpleInit();
-    TargetFile ballDir = project.getTarget().getGameRoot().getChild("res/balls/" + ballName); //NON-NLS
-    if (!ballDir.isDirectory()) {
-      throw new IOException("Ball dir " + ballDir + " doesn't exist");
+    Target target = project.getTarget();
+    try {
+      TargetFile ballDir = target.getGameRoot().getChild("res/balls/" + ballName); //NON-NLS
+      if (!ballDir.isDirectory()) {
+        throw new IOException("Ball dir " + ballDir + " doesn't exist");
+      }
+
+      Codec codec = project.getCodecForGameXml();
+
+      Document resDoc = codec.decodeFileToXML(ballDir.getChild(project.getGameXmlFilename("resources.xml"))); //NON-NLS
+      resources = new Resources(resDoc);
+      ballDoc = codec.decodeFileToXML(ballDir.getChild(project.getGameXmlFilename("balls.xml"))); //NON-NLS
     }
-
-    Codec codec = project.getCodecForGameXml();
-
-    Document resDoc = codec.decodeFileToXML(ballDir.getChild(project.getGameXmlFilename("resources.xml"))); //NON-NLS
-    Resources resources = new Resources(resDoc);
-
-    Document ballDoc = codec.decodeFileToXML(ballDir.getChild(project.getGameXmlFilename("balls.xml"))); //NON-NLS
+    finally {
+      target.close();
+    }
 
     if (!ballName.equals(XMLUtil.getAttributeStringRequired(ballDoc.getDocumentElement(), "name"))) { //NON-NLS
       throw new IOException("Ball name in xml doc doesn't equal ball dir");
@@ -65,7 +75,7 @@ public class Ball
     }
     else if ("circle".equals(shapeName)) { //NON-NLS
       double radius = Double.valueOf(tok.nextToken());
-      outlineShape = new Ellipse2D.Double(0, 0, radius *2, radius*2);
+      outlineShape = new Ellipse2D.Double(0, 0, radius * 2, radius * 2);
     }
     else {
       throw new IOException("Unknown shape " + shapeName + " on ball " + ballName);

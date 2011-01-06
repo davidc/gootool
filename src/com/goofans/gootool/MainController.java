@@ -24,6 +24,7 @@ import com.goofans.gootool.addins.Addin;
 import com.goofans.gootool.addins.AddinFactory;
 import com.goofans.gootool.addins.AddinFormatException;
 import com.goofans.gootool.addins.AddinsStore;
+import com.goofans.gootool.facades.Source;
 import com.goofans.gootool.l10n.ImageLocalisationDialog;
 import com.goofans.gootool.projects.*;
 import com.goofans.gootool.siteapi.APIException;
@@ -513,7 +514,13 @@ public class MainController implements ActionListener
     ProjectConfiguration c;
     try {
       c = newProject.getSavedConfiguration();
-      GamePreferences.readGamePreferences(c, newProject.getSource());
+      Source source = newProject.getSource();
+      try {
+        GamePreferences.readGamePreferences(c, source);
+      }
+      finally {
+        source.close();
+      }
       newProject.saveConfiguration(c);
     }
     catch (IOException e) {

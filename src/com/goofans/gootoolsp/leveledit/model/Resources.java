@@ -5,22 +5,22 @@
 
 package com.goofans.gootoolsp.leveledit.model;
 
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+
 import com.goofans.gootool.facades.Source;
 import com.goofans.gootool.facades.SourceFile;
+import com.goofans.gootool.facades.Target;
 import com.goofans.gootool.facades.TargetFile;
-import com.goofans.gootool.io.GameFormat;
 import com.goofans.gootool.projects.Project;
 import com.goofans.gootool.projects.ProjectManager;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-
-import javax.imageio.ImageIO;
-import java.awt.*;
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * @author David Croft (davidc@goofans.com)
@@ -35,52 +35,58 @@ public class Resources
   {
     NodeList resourcesNodes = d.getDocumentElement().getElementsByTagName("Resources");
 
-    for (int i = 0; i < resourcesNodes.getLength(); i++) {
-      Node resourcesEl = resourcesNodes.item(i);
+    Project project = ProjectManager.simpleInit();
+    Source source = project.getSource();
+    try {
 
-      Project project = ProjectManager.simpleInit();
-      Source source = project.getSource();
-      SourceFile rootDir = source.getGameRoot();
+      for (int i = 0; i < resourcesNodes.getLength(); i++) {
+        Node resourcesEl = resourcesNodes.item(i);
 
-      SourceFile defaultPath = rootDir;
-      String defaultIdPrefix = "";
+        SourceFile rootDir = source.getGameRoot();
 
-      for (int j = 0; j < resourcesEl.getChildNodes().getLength(); j++) {
-        Node node = resourcesEl.getChildNodes().item(j);
-        if (node instanceof Element) {
-          Element el = (Element) node;
+        SourceFile defaultPath = rootDir;
+        String defaultIdPrefix = "";
 
-          if ("SetDefaults".equals(el.getNodeName())) { //NON-NLS
-            defaultPath = rootDir.getChild(el.getAttribute("path")); //NON-NLS
-            defaultIdPrefix = el.getAttribute("idprefix"); //NON-NLS
-          }
-          else if ("Image".equals(el.getNodeName())) { //NON-NLS
-            String id = defaultIdPrefix + el.getAttribute("id"); //NON-NLS
-            SourceFile f = defaultPath.getChild(project.getGamePngFilename(el.getAttribute("path"))); //NON-NLS
+        for (int j = 0; j < resourcesEl.getChildNodes().getLength(); j++) {
+          Node node = resourcesEl.getChildNodes().item(j);
+          if (node instanceof Element) {
+            Element el = (Element) node;
 
-            // HACK: fix Fish
-            if ("IMAGE_BALL_FISH_WINGLEFT".equals(id)) id = "IMAGE_BALL_TIMEBUG_WINGLEFT"; //NON-NLS
-            if ("IMAGE_BALL_FISH_WINGRIGHT".equals(id)) id = "IMAGE_BALL_TIMEBUG_WINGRIGHT"; //NON-NLS
-
-            try {
-              images.put(id, ImageIO.read(f.read()));
+            if ("SetDefaults".equals(el.getNodeName())) { //NON-NLS
+              defaultPath = rootDir.getChild(el.getAttribute("path")); //NON-NLS
+              defaultIdPrefix = el.getAttribute("idprefix"); //NON-NLS
             }
-            catch (IOException e) {
-              throw new IOException("Can't read " + f + ": " + e.getMessage());
+            else if ("Image".equals(el.getNodeName())) { //NON-NLS
+              String id = defaultIdPrefix + el.getAttribute("id"); //NON-NLS
+              SourceFile f = defaultPath.getChild(project.getGamePngFilename(el.getAttribute("path"))); //NON-NLS
+
+              // HACK: fix Fish
+              if ("IMAGE_BALL_FISH_WINGLEFT".equals(id)) id = "IMAGE_BALL_TIMEBUG_WINGLEFT"; //NON-NLS
+              if ("IMAGE_BALL_FISH_WINGRIGHT".equals(id)) id = "IMAGE_BALL_TIMEBUG_WINGRIGHT"; //NON-NLS
+
+              try {
+                images.put(id, ImageIO.read(f.read()));
+              }
+              catch (IOException e) {
+                throw new IOException("Can't read " + f + ": " + e.getMessage());
+              }
             }
-          }
-          else if ("Sound".equals(el.getNodeName())) { //NON-NLS
-            String id = defaultIdPrefix + el.getAttribute("id"); //NON-NLS
-            SourceFile f = defaultPath.getChild(project.getGameSoundFilename(el.getAttribute("path"))); //NON-NLS
-            if (!f.isFile()) {
-              f = defaultPath.getChild(project.getGameMusicFilename(el.getAttribute("path"))); //NON-NLS
-            }
+            else if ("Sound".equals(el.getNodeName())) { //NON-NLS
+              String id = defaultIdPrefix + el.getAttribute("id"); //NON-NLS
+              SourceFile f = defaultPath.getChild(project.getGameSoundFilename(el.getAttribute("path"))); //NON-NLS
+              if (!f.isFile()) {
+                f = defaultPath.getChild(project.getGameMusicFilename(el.getAttribute("path"))); //NON-NLS
+              }
 
 //          System.out.println(id + "->" + f.getAbsolutePath());
-            sounds.put(id, f);
+              sounds.put(id, f);
+            }
           }
         }
       }
+    }
+    finally {
+      source.close();
     }
   }
 
@@ -111,9 +117,15 @@ public class Resources
   {
     if (globalResources == null) {
       Project project = ProjectManager.simpleInit();
-      TargetFile f = project.getTarget().getGameRoot().getChild(project.getGameXmlFilename("properties/resources.xml")); //NON-NLS
-      Document doc = project.getCodecForGameXml().decodeFileToXML(f);
-      globalResources = new Resources(doc);
+      Target target = project.getTarget();
+      try {
+        TargetFile f = target.getGameRoot().getChild(project.getGameXmlFilename("properties/resources.xml")); //NON-NLS
+        Document doc = project.getCodecForGameXml().decodeFileToXML(f);
+        globalResources = new Resources(doc);
+      }
+      finally {
+        target.close();
+      }
     }
     return globalResources;
   }

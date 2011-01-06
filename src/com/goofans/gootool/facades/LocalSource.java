@@ -61,5 +61,6 @@ public class LocalSource implements Source
   public void close() throws IOException
   {
     // Nothing to do for a local source.
+    // TODO have SourceFile throw an exception if we're closed
   }
 }

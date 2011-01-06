@@ -5,19 +5,18 @@
 
 package com.goofans.gootool.movie;
 
-import com.goofans.gootool.facades.Source;
-import com.goofans.gootool.projects.Project;
 import net.infotrek.util.XMLStringBuffer;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.goofans.gootool.facades.Source;
 import com.goofans.gootool.facades.SourceFile;
+import com.goofans.gootool.projects.Project;
 import com.goofans.gootool.projects.ProjectManager;
 import com.goofans.gootool.util.Utilities;
 import com.goofans.gootool.util.XMLUtil;
@@ -179,19 +178,25 @@ public class BinMovie
   public static void main(String[] args) throws IOException
   {
     Project project = ProjectManager.simpleInit();
-    SourceFile sourceGameRoot = project.getSource().getGameRoot();
-    SourceFile f = sourceGameRoot.getChild("res\\movie");
-    for (SourceFile file : f.list()) {
-      String movie = file.getName();
-      if (!"_generic".equals(movie)) {
-        System.out.println("\n\n>>>>>>>> " + file.getName());
+    Source source = project.getSource();
+    try {
+      SourceFile sourceGameRoot = source.getGameRoot();
+      SourceFile f = sourceGameRoot.getChild("res\\movie");
+      for (SourceFile file : f.list()) {
+        String movie = file.getName();
+        if (!"_generic".equals(movie)) {
+          System.out.println("\n\n>>>>>>>> " + file.getName());
 
 //        Document doc = GameFormat.decodeXmlBinFile(wog.getGameFile("res\\movie\\" + movie + "\\" + movie + ".resrc.bin"));
 //        Resources r = new Resources(doc);
-        BinMovie m = new BinMovie(sourceGameRoot.getChild(project.getGameAnimMovieFilename("res/movie/" + movie + "/" + movie + ".movie")));//, r);
+          BinMovie m = new BinMovie(sourceGameRoot.getChild(project.getGameAnimMovieFilename("res/movie/" + movie + "/" + movie + ".movie")));//, r);
 //        System.out.println(m.toXMLDocument());
-        Utilities.writeFile(new File("movie", movie + ".movie.xml"), m.toXMLDocument().getBytes());
+          Utilities.writeFile(new File("movie", movie + ".movie.xml"), m.toXMLDocument().getBytes());
+        }
       }
+    }
+    finally {
+      source.close();
     }
 
 //    String movie = "Chapter5End";
