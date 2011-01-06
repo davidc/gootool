@@ -9,18 +9,21 @@ import net.infotrek.util.BinaryPlistParser;
 
 import javax.swing.*;
 import java.awt.*;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.zip.CRC32;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 import com.goofans.gootool.platform.PlatformSupport;
 import com.goofans.gootool.profile.ProfileData;
 import com.goofans.gootool.util.Utilities;
+import com.goofans.gootool.wog.WorldBuilder;
 import com.jcraft.jsch.*;
 
 /**
@@ -49,7 +52,6 @@ public class IosConnection
   private boolean jailbrokenWog = false;
   private String prefsFile = null;
   private int prefsFileSize;
-
 
   public IosConnection(String host, String password)
   {
@@ -190,7 +192,6 @@ public class IosConnection
       prefsFile = wogDir + "Library/Preferences/com.2dboy.worldofgoo.plist";
     }
 
-
     SftpATTRS attrs;
     try {
       attrs = sftp.stat(prefsFile);
@@ -204,7 +205,6 @@ public class IosConnection
     this.prefsFile = prefsFile;
     this.prefsFileSize = (int) attrs.getSize();
   }
-
 
   public ProfileData getProfileData() throws JSchException, SftpException, IOException
   {
@@ -229,26 +229,121 @@ public class IosConnection
     // TODO Symbolic link our prefs to their originals on DEPLOY
   }
 
-  /**
-   * Tests the connection to the IOS host.
-   *
-   * @return True if connected successfully and World of Goo was found, false if connected successfully but no World of Goo found.
-   * @throws Exception if any problem occurred (e.g. bad password) connecting to the device.
-   */
-  public boolean testConnection() throws Exception
-  {
-    connect();
-    return locateWog();
-  }
-
   private Vector<ChannelSftp.LsEntry> ls(String dir) throws SftpException
   {
     //noinspection unchecked
     return (Vector<ChannelSftp.LsEntry>) sftp.ls(dir);
   }
 
+  public void storeOriginalFiles(File zipfile) throws IOException, JSchException, SftpException
+  {
+    locateWog();
+
+    boolean failure = true;
+
+    ZipOutputStream zos = new ZipOutputStream(new BufferedOutputStream(new FileOutputStream(zipfile)));
+    try {
+      zos.setMethod(ZipOutputStream.STORED);
+
+      System.out.println("Counting source files");
+
+      List<OriginalFile> originalFiles = new ArrayList<OriginalFile>(WorldBuilder.ESTIMATED_SOURCE_FILES);
+
+      prepareDir(wogDir + "/wog.app", "", originalFiles);
+
+      System.out.println("Num files = " + originalFiles.size());
+
+      ByteArrayOutputStream tmpbuf = new ByteArrayOutputStream(8196);
+      CRC32 crc32 = new CRC32();
+
+      for (int i = 0; i < originalFiles.size(); i++) {
+        OriginalFile originalFile = originalFiles.get(i);
+
+        System.out.println("Progress: " + i + " of " + originalFiles.size());
+
+        // Get the file into our tmpbuf
+        tmpbuf.reset();
+        sftp.get(originalFile.iosLocation, tmpbuf);
+        byte[] data = tmpbuf.toByteArray(); // TODO this is inefficient since it returns a COPY of the data.
+
+        // Prepare the zip entry
+        ZipEntry ze = new ZipEntry(originalFile.zipLocation);
+        ze.setTime(originalFile.attrs.getMTime());
+        ze.setSize(originalFile.attrs.getSize());
+
+        crc32.reset();
+        crc32.update(data);
+        ze.setCrc(crc32.getValue());
+
+        // Output to zip file
+        zos.putNextEntry(ze);
+        zos.write(data);
+        zos.closeEntry();
+
+      }
+
+      failure = false;
+    }
+    finally {
+      try {
+        zos.close();
+      }
+      catch (IOException e) {
+        log.log(Level.SEVERE, "Unable to close zip output stream", e);
+      }
+
+      if (failure) {
+        Utilities.deleteFileIfExists(zipfile);
+      }
+    }
+  }
+
+  private void prepareDir(String dir, String prefix, List<OriginalFile> originalFiles) throws SftpException, IOException
+  {
+    System.out.println("count dir = " + dir);
+    Vector<ChannelSftp.LsEntry> entries = ls(dir);
+
+    for (ChannelSftp.LsEntry entry : entries) {
+      if (isSkippedSourceFile(entry)) continue;
+
+      SftpATTRS attrs = entry.getAttrs();
+
+      if (attrs.isDir()) {
+        prepareDir(dir + "/" + entry.getFilename(), prefix + entry.getFilename() + "/", originalFiles);
+      }
+      else if (!attrs.isLink()) {
+        OriginalFile of = new OriginalFile();
+        of.iosLocation = dir + "/" + entry.getFilename();
+        of.zipLocation = prefix + entry.getFilename();
+        of.attrs = attrs;
+        originalFiles.add(of);
+      }
+    }
+  }
+
+  private boolean isSkippedSourceFile(ChannelSftp.LsEntry entry)
+  {
+    if (".".equals(entry.getFilename()) || "..".equals(entry.getFilename())) return true;
+
+    // Don't need signed resources since we're jailbroken - and they'd be wrong anyway.
+    if ("_CodeSignature".equals(entry.getFilename())) return true;
+
+    // TODO: Skip SC_Info too?
+    return false;
+  }
+
+  private static class OriginalFile
+  {
+    public String iosLocation;
+    public String zipLocation;
+    public SftpATTRS attrs;
+  }
+
+
 // TODO all popups should be modal and with an owner window
 // TODO move to another class
+
+  // TODO when writing files back, do they need to be owned by root?
 
   public class MyUserInfo implements UserInfo, UIKeyboardInteractive
   {
@@ -417,9 +512,15 @@ public class IosConnection
   public static void main(String[] args) throws JSchException, IOException, SftpException
   {
     IosConnection ios = new IosConnection("192.168.2.162", null);
+    try {
+//    ProfileData data = ios.getProfileData();
+//    System.out.println("data = " + data);
 
-    ProfileData data = ios.getProfileData();
-    ios.close();
-    System.out.println("data = " + data);
+      ios.storeOriginalFiles(new File("source.zip"));
+
+    }
+    finally {
+      ios.close();
+    }
   }
 }
