@@ -24,7 +24,10 @@ import java.text.NumberFormat;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.goofans.gootool.*;
+import com.goofans.gootool.GooTool;
+import com.goofans.gootool.GooToolResourceBundle;
+import com.goofans.gootool.ProjectController;
+import com.goofans.gootool.ToolPreferences;
 import com.goofans.gootool.model.ProjectModel;
 import com.goofans.gootool.profile.*;
 import com.goofans.gootool.projects.Project;
@@ -292,13 +295,15 @@ public final class ProfilePanel implements ActionListener, ViewComponent
 //          viewTowerButton.setEnabled(true);
         saveTowerButton.setEnabled(true);
       }
-      catch (IOException e1) {
-        log.log(Level.SEVERE, "Unable to render tower", e1);
+      catch (Exception e) {
+        log.log(Level.SEVERE, "Unable to render tower", e);
         towerPanel.add(new JLabel(resourceBundle.getString("profile.tower.error")));
 //          viewTowerButton.setEnabled(false);
         saveTowerButton.setEnabled(false);
       }
     }
+
+    towerPanel.repaint();
 
     updateViewFromModel(null);
   }
@@ -431,7 +436,7 @@ public final class ProfilePanel implements ActionListener, ViewComponent
     propertyChangeSupport.firePropertyChange("anyProfilesHaveGeneratedId", oldAnyProfilesHaveGeneratedId, anyProfilesHaveGeneratedId); //NON-NLS
 
     profilesCombo.setSelectedItem(profileData.getCurrentProfile());
-      }
+  }
 
   private String formatHeight(double height)
   {
@@ -448,7 +453,7 @@ public final class ProfilePanel implements ActionListener, ViewComponent
 
     boolean enabled = ToolPreferences.isGooFansLoginOk() && validProfile;
     System.out.println("enabled = " + enabled);
-    
+
 
     profileBackupButton.setEnabled(enabled);
     profileRestoreButton.setEnabled(enabled);
