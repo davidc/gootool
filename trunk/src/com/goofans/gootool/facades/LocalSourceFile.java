@@ -5,7 +5,10 @@
 
 package com.goofans.gootool.facades;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,6 +57,11 @@ public class LocalSourceFile implements SourceFile
   public boolean isDirectory()
   {
     return backingFile.isDirectory();
+  }
+
+  public long getSize()
+  {
+    return backingFile.length();
   }
 
   public long lastModified()
