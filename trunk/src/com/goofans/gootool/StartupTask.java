@@ -120,10 +120,7 @@ public class StartupTask extends ProgressIndicatingTask
       // Migrate addins from old <customdir>/addins
       // At this point, we haven't upgraded to 1.1.0, so custom_dir is still on the GooTool preferences node
 
-
       migrateAddins1_0_3();
-
-
     }
 
     if (lastVersion.compareTo(new VersionSpec(1, 1, 0)) < 0) {
@@ -185,30 +182,6 @@ public class StartupTask extends ProgressIndicatingTask
     }
   }
 
-  /* private void initWog()
-  {
-    // Locate WoG
-    final WorldOfGoo worldOfGoo = WorldOfGoo.getTheInstance();
-    worldOfGoo.init();
-
-    if (!worldOfGoo.isWogFound()) {
-      String message = resourceBundle.getString("launcher.locategoo.notfound.message." + PlatformSupport.getPlatform().toString().toLowerCase());
-      log.finer("dialog opening");
-      showMessageDialog(resourceBundle.getString("launcher.locategoo.notfound.title"), message, JOptionPane.WARNING_MESSAGE);
-
-      log.finer("dialog closed");
-      while (!worldOfGoo.isWogFound()) {
-        int result = mainController.askToLocateWog();
-        if (result == -2) {
-          log.info("User refused to locate WorldOfGoo.exe, exiting");
-          System.exit(2);
-        }
-      }
-    }
-
-    warnIfDemo(worldOfGoo);
-  }*/
-
   /**
    * Initialise the addins directory. Called early in the startup sequence in case upgrade tasks need it.
    */
@@ -245,28 +218,6 @@ public class StartupTask extends ProgressIndicatingTask
       throw new RuntimeException("Unable to display message", e);
     }
   }
-/*
-  private void initProfile()
-  {
-    ProfileFactory.init();
-  }
-
-  private LocalProjectConfiguration initModel()
-  {
-    LocalProjectConfiguration c;
-    try {
-      c = WorldOfGoo.getTheInstance().readConfiguration();
-    }
-    catch (IOException e) {
-      log.log(Level.SEVERE, "Error reading configuration", e);
-      showMessageDialog(resourceBundle.getString("launcher.loadconfig.error.title"),
-              resourceBundle.formatString("launcher.loadconfig.error.message", e.getLocalizedMessage()),
-              JOptionPane.ERROR_MESSAGE);
-      System.exit(2);
-      return null;
-    }
-    return c;
-  }*/
 
   private MainWindow initControllerAndView()
   {

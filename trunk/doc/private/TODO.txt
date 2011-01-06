@@ -1,3 +1,5 @@
+- Somehow demo project got created with sourceDir pointing to the exe, not the directory!
+
 - Need a way to have cancellable progress-indicating tasks (e.g. testiosconnection)
 
 - Project drop-down shouldn't list the null projects!!!
