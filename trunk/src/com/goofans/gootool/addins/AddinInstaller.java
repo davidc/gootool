@@ -18,7 +18,9 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import com.goofans.gootool.facades.Source;
 import com.goofans.gootool.facades.SourceFile;
+import com.goofans.gootool.facades.Target;
 import com.goofans.gootool.facades.TargetFile;
 import com.goofans.gootool.io.Codec;
 import com.goofans.gootool.io.GameFormat;
@@ -64,11 +66,12 @@ public class AddinInstaller
   private Codec gameXmlCodec;
   private ImageCodec imageCodec;
 
-  public AddinInstaller(Project project)
+  /* Source/target are passed in here because the CALLER is responsible for closing them */
+  public AddinInstaller(Project project, Source source, Target target)
   {
     this.project = project;
-    this.sourceGameRoot = project.getSource().getGameRoot();
-    this.targetGameRoot = project.getTarget().getGameRoot();
+    this.sourceGameRoot = source.getGameRoot();
+    this.targetGameRoot = target.getGameRoot();
     gameXmlCodec = project.getCodecForGameXml();
     imageCodec = project.getImageCodec();
   }
@@ -405,7 +408,16 @@ public class AddinInstaller
   public static void main(String[] args) throws IOException, AddinFormatException
   {
     Addin addin = AddinFactory.loadAddinFromDir(new File("addins/src/com.goofans.davidc.jingleballs"));
-    AddinInstaller installer = new AddinInstaller(ProjectManager.simpleInit());
-    installer.installAddin(addin);
+    Project project = ProjectManager.simpleInit();
+    Source source = project.getSource();
+    Target target = project.getTarget();
+    try {
+      AddinInstaller installer = new AddinInstaller(project, source, target);
+      installer.installAddin(addin);
+    }
+    finally {
+      target.close();
+      source.close();
+    }
   }
 }

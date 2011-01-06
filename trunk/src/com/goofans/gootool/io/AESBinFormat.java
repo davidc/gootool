@@ -218,29 +218,34 @@ public class AESBinFormat extends Codec
   {
     Project project = ProjectManager.simpleInit();
     Source source = project.getSource();
-    SourceFile sourceGameRoot = source.getGameRoot();
+    try {
+      SourceFile sourceGameRoot = source.getGameRoot();
 
-    Codec codec = project.getCodecForGameXml();
+      Codec codec = project.getCodecForGameXml();
 
-    SourceFile textFile = sourceGameRoot.getChild(project.getGameXmlFilename("properties/text.xml"));
+      SourceFile textFile = sourceGameRoot.getChild(project.getGameXmlFilename("properties/text.xml"));
 
-    byte[] decoded = codec.decodeFile(textFile);
+      byte[] decoded = codec.decodeFile(textFile);
 
 //    Document doc = XMLUtil.loadDocumentFromInputStream(new ByteArrayInputStream(s.getBytes()));
-    Document doc = XMLUtil.loadDocumentFromInputStream(new ByteArrayInputStream(decoded));
-    System.out.println(XMLUtil.writeDocumentToString(doc));
+      Document doc = XMLUtil.loadDocumentFromInputStream(new ByteArrayInputStream(decoded));
+      System.out.println(XMLUtil.writeDocumentToString(doc));
 
-    TESTMODE = true;
+      TESTMODE = true;
 
-    testFile(codec, sourceGameRoot.getChild(project.getGameXmlFilename("properties/resources.xml")));
+      testFile(codec, sourceGameRoot.getChild(project.getGameXmlFilename("properties/resources.xml")));
 //    testFile("res\\levels\\GoingUp\\GoingUp.level.bin");
 //    testFile("res\\levels\\GoingUp\\GoingUp.resrc.bin");
 //    testFile("res\\levels\\GoingUp\\GoingUp.scene.bin");
 //    testFile("properties\\materials.xml.bin");
 
-    testDir(codec, source.getGameRoot());
+      testDir(codec, source.getGameRoot());
 
 //    testFile("res\\anim\\ball_counter.anim.binltl");
+    }
+    finally {
+      source.close();
+    }
   }
 
   @SuppressWarnings({"HardCodedStringLiteral"})

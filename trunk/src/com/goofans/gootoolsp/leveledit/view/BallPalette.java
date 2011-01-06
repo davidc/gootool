@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.goofans.gootool.facades.Target;
 import com.goofans.gootool.facades.TargetFile;
 import com.goofans.gootool.projects.ProjectManager;
 import com.goofans.gootool.util.GUIUtil;
@@ -54,33 +55,39 @@ public class BallPalette extends JComponent implements Scrollable
 
   public void addBalls() throws IOException
   {
-    TargetFile ballsDir = ProjectManager.simpleInit().getTarget().getGameRoot().getChild("res/balls"); //NON-NLS
+    Target target = ProjectManager.simpleInit().getTarget();
+    try {
+      TargetFile ballsDir = target.getGameRoot().getChild("res/balls"); //NON-NLS
 
-    List<TargetFile> ballsDirs = ballsDir.list();
+      List<TargetFile> ballsDirs = ballsDir.list();
 
-    for (TargetFile dir : ballsDirs) {
-      if (dir.isDirectory() && !dir.getName().startsWith("_")) {
-        Ball ball = new Ball(dir.getName());
-        final BallPaletteBall button = new BallPaletteBall(dir.getName(), ball);
-        button.setToolTipText(dir.getName());
-        add(button);
+      for (TargetFile dir : ballsDirs) {
+        if (dir.isDirectory() && !dir.getName().startsWith("_")) {
+          Ball ball = new Ball(dir.getName());
+          final BallPaletteBall button = new BallPaletteBall(dir.getName(), ball);
+          button.setToolTipText(dir.getName());
+          add(button);
 
-        paletteEntries.add(button);
+          paletteEntries.add(button);
 
-        button.addMouseListener(new MouseAdapter()
-        {
-          @Override
-          public void mousePressed(MouseEvent e)
+          button.addMouseListener(new MouseAdapter()
           {
-            for (BallPaletteBall paletteEntry : paletteEntries) {
-              paletteEntry.setSelected(paletteEntry.equals(button));
+            @Override
+            public void mousePressed(MouseEvent e)
+            {
+              for (BallPaletteBall paletteEntry : paletteEntries) {
+                paletteEntry.setSelected(paletteEntry.equals(button));
+              }
+              notifySelectionListeners(button);
             }
-            notifySelectionListeners(button);
-          }
-        });
+          });
 
-      }
+        }
 //      if (++i > 20) return;
+      }
+    }
+    finally {
+      target.close();
     }
   }
 

@@ -16,6 +16,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.goofans.gootool.GooTool;
+import com.goofans.gootool.facades.Source;
 import com.goofans.gootool.facades.SourceFile;
 import com.goofans.gootool.projects.Project;
 import com.goofans.gootool.projects.ProjectManager;
@@ -85,49 +86,55 @@ public class ImageTool extends ProgressIndicatingTask
     Document d = XMLUtil.loadDocumentFromFile(new File(sourceDir, "l10n_images.xml"));
 
     Project project = ProjectManager.simpleInit();
-    SourceFile sourceRoot = project.getSource().getGameRoot();
+    Source source = project.getSource();
+    try {
+      SourceFile sourceRoot = source.getGameRoot();
 
-    NodeList processImageNodes = d.getDocumentElement().getChildNodes();
-    for (int i = 0; i < processImageNodes.getLength(); i++) {
-      Node node = processImageNodes.item(i);
-      if (node instanceof Element) {
-        Element el = (Element) node;
-        if ("process-image".equals(el.getTagName())) { //NON-NLS
-          String sourceFileName = el.getElementsByTagName("source").item(0).getTextContent().trim();
-          String destFileName = el.getElementsByTagName("dest").item(0).getTextContent().trim();
+      NodeList processImageNodes = d.getDocumentElement().getChildNodes();
+      for (int i = 0; i < processImageNodes.getLength(); i++) {
+        Node node = processImageNodes.item(i);
+        if (node instanceof Element) {
+          Element el = (Element) node;
+          if ("process-image".equals(el.getTagName())) { //NON-NLS
+            String sourceFileName = el.getElementsByTagName("source").item(0).getTextContent().trim();
+            String destFileName = el.getElementsByTagName("dest").item(0).getTextContent().trim();
 
-          beginStep("Processing " + sourceFileName, false);
+            beginStep("Processing " + sourceFileName, false);
 
-          ImageGenerator generator = new ImageGenerator(new File(sourceDir, sourceFileName), el, fm, debug);
-
-          if (outputDir == null) {
-            constraints.gridy++;
-            constraints.gridx = 0;
-            contentPanel.add(new JLabel("<html>" + sourceFileName + " -&gt;<br>" + destFileName), constraints); //NON-NLS
-
-            try {
-              constraints.gridx++;
-              SourceFile input = ((SourceFile) sourceRoot).getChild(project.getGamePngFilename(destFileName));
-              contentPanel.add(makeLabel(ImageIO.read(input.read())), constraints);
-            }
-            catch (IIOException e) {
-              // don't care, e.g. test image
-            }
-          }
-
-          for (String language : languages.keySet()) {
-            generator.process(languages.get(language));
+            ImageGenerator generator = new ImageGenerator(new File(sourceDir, sourceFileName), el, fm, debug);
 
             if (outputDir == null) {
-              constraints.gridx++;
-              contentPanel.add(makeLabel(generator.getFinalImage()), constraints);
+              constraints.gridy++;
+              constraints.gridx = 0;
+              contentPanel.add(new JLabel("<html>" + sourceFileName + " -&gt;<br>" + destFileName), constraints); //NON-NLS
+
+              try {
+                constraints.gridx++;
+                SourceFile input = sourceRoot.getChild(project.getGamePngFilename(destFileName));
+                contentPanel.add(makeLabel(ImageIO.read(input.read())), constraints);
+              }
+              catch (IIOException e) {
+                // don't care, e.g. test image
+              }
             }
-            else {
-              generator.writeImage(new File(outputDir, destFileName + "." + language + ".png"));
+
+            for (String language : languages.keySet()) {
+              generator.process(languages.get(language));
+
+              if (outputDir == null) {
+                constraints.gridx++;
+                contentPanel.add(makeLabel(generator.getFinalImage()), constraints);
+              }
+              else {
+                generator.writeImage(new File(outputDir, destFileName + "." + language + ".png"));
+              }
             }
           }
         }
       }
+    }
+    finally {
+      source.close();
     }
   }
 

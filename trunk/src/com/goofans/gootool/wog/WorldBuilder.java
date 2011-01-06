@@ -57,34 +57,41 @@ public class WorldBuilder extends ProgressIndicatingTask
   private List<SourceFile> filesToCopy;
   private final GooToolResourceBundle resourceBundle;
   private final ProjectConfiguration config;
-  private final Source source;
-  private final Target target;
-  private final SourceFile sourceRealRoot;
-  private final TargetFile targetRealRoot;
+  private Source source;
+  private Target target;
+  private SourceFile sourceRealRoot;
+  private TargetFile targetRealRoot;
 
   public WorldBuilder(Project project, ProjectConfiguration config)
   {
     this.project = project;
     this.config = config;
     resourceBundle = GooTool.getTextProvider();
-    source = project.getSource();
-    target = project.getTarget();
-    sourceRealRoot = source.getRealRoot();
-    targetRealRoot = target.getRealRoot();
   }
 
   @Override
   public void run() throws Exception
   {
-    saveConfig();
+    source = project.getSource();
+    target = project.getTarget();
+    try {
+      sourceRealRoot = source.getRealRoot();
+      targetRealRoot = target.getRealRoot();
 
-    copyGameFiles();
+      saveConfig();
 
-    writeConfig();
+      copyGameFiles();
 
-    installAddins();
+      writeConfig();
 
-    log.log(Level.INFO, "Configuration writer work complete");
+      installAddins();
+
+      log.log(Level.INFO, "Configuration writer work complete");
+    }
+    finally {
+      target.close();
+      source.close();
+    }
   }
 
   // Writes the "custom" folder inside WoG. Might take a long time on first run.
@@ -393,7 +400,7 @@ public class WorldBuilder extends ProgressIndicatingTask
 
   private void installAddins() throws AddinFormatException
   {
-    AddinInstaller installer = new AddinInstaller(project);
+    AddinInstaller installer = new AddinInstaller(project, source, target);
 
     /* we need the addins in reverse order, as the earlier ones are higher priority */
 

@@ -5,17 +5,18 @@
 
 package com.goofans.gootool.addins;
 
+import javax.xml.transform.*;
+import javax.xml.transform.stream.StreamResult;
+import javax.xml.transform.stream.StreamSource;
+import java.io.*;
+
+import com.goofans.gootool.facades.Source;
 import com.goofans.gootool.facades.SourceFile;
 import com.goofans.gootool.io.FinalNewlineRemovingReader;
 import com.goofans.gootool.io.GameFormat;
 import com.goofans.gootool.io.UnicodeReader;
 import com.goofans.gootool.projects.Project;
 import com.goofans.gootool.projects.ProjectManager;
-
-import javax.xml.transform.*;
-import javax.xml.transform.stream.StreamResult;
-import javax.xml.transform.stream.StreamSource;
-import java.io.*;
 
 /**
  * Handles a single XSL transformation.
@@ -50,7 +51,7 @@ public class Merger
 //    System.out.println("input = " + input);
     this.input = input;
 
-    Source transformSource = new StreamSource(new FinalNewlineRemovingReader(transform));
+    StreamSource transformSource = new StreamSource(new FinalNewlineRemovingReader(transform));
     try {
       transformer = TransformerFactory.newInstance().newTransformer(transformSource);
     }
@@ -73,7 +74,7 @@ public class Merger
 //      e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
 //    }
 
-    Source src = new StreamSource(new FinalNewlineRemovingReader(input));
+    StreamSource src = new StreamSource(new FinalNewlineRemovingReader(input));
     StringWriter writer = new StringWriter();
     Result res = new StreamResult(writer);
     transformer.transform(src, res);
@@ -102,16 +103,22 @@ public class Merger
 
     FileReader transformReader = new FileReader(new File("resources/watermark.xsl"));
     Project project = ProjectManager.simpleInit();
-    SourceFile in = project.getSource().getGameRoot().getChild(project.getGameXmlFilename("properties/text.xml"));
-    File out = new File("newtext.xml.bin");
+    Source source = project.getSource();
+    try {
+      SourceFile in = source.getGameRoot().getChild(project.getGameXmlFilename("properties/text.xml"));
+      File out = new File("newtext.xml.bin");
 
-    Merger merger = new Merger(GameFormat.AES_BIN_CODEC.decodeFile(in), transformReader);
+      Merger merger = new Merger(GameFormat.AES_BIN_CODEC.decodeFile(in), transformReader);
 
-    merger.setTransformParameter("watermark", "goofans.com");
+      merger.setTransformParameter("watermark", "goofans.com");
 
-    String merged = merger.merge();
-    System.out.println("merged = " + merged);
+      String merged = merger.merge();
+      System.out.println("merged = " + merged);
 
-    GameFormat.AES_BIN_CODEC.encodeFile(out, merger.getResult());
+      GameFormat.AES_BIN_CODEC.encodeFile(out, merger.getResult());
+    }
+    finally {
+      source.close();
+    }
   }
 }

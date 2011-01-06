@@ -12,7 +12,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.prefs.BackingStoreException;
 
+import com.goofans.gootool.facades.Source;
 import com.goofans.gootool.facades.SourceFile;
+import com.goofans.gootool.facades.Target;
 import com.goofans.gootool.projects.IosProject;
 import com.goofans.gootool.projects.LocalProject;
 import com.goofans.gootool.projects.Project;
@@ -141,7 +143,6 @@ public class Diagnostics extends ProgressIndicatingTask
         out.println("Filename for Music: " + project.getGameMusicFilename("base"));
         out.println("Filename for Sound: " + project.getGameSoundFilename("base"));
         out.println("Filename for Anim/Movie: " + project.getGameAnimMovieFilename("base"));
-        out.println("Target: " + project.getTarget());
         try {
           out.println("Profile bytes: " + EncodingUtil.bytesToStringUtf8(project.getProfileBytes())); // TODO if possible, only do this if we've cached iOS password
         }
@@ -169,16 +170,41 @@ public class Diagnostics extends ProgressIndicatingTask
         out.println(project.getSavedConfiguration());
         out.println();
 
-        out.println("--- Source for project " + i + "---");
-        out.println();
-        out.println("Source: " + project.getSource());
-        out.println("Real root: " + project.getSource().getRealRoot());
-        out.println("Game root: " + project.getSource().getGameRoot());
+        Source source = project.getSource();
+        try {
+          out.println("--- Source for project " + i + "---");
+          out.println();
+          out.println("Source: " + source);
+          out.println("Real root: " + source.getRealRoot());
+          out.println("Game root: " + source.getGameRoot());
 
-        listDir(project.getSource().getRealRoot(), "");
+          listDir(source.getRealRoot(), "");
+        }
+        finally {
+          try {
+            source.close();
+          }
+          catch (IOException e) {
+            out.println("Warning: unable to close source");
+            e.printStackTrace(out);
+          }
+        }
         out.println();
 
         // TODO dump target as well
+        Target target = project.getTarget();
+        try {
+          out.println("Target: " + target);
+        }
+        finally {
+          try {
+            target.close();
+          }
+          catch (IOException e) {
+            out.println("Warning: unable to close source");
+            e.printStackTrace(out);
+          }
+        }
       }
     }
   }
