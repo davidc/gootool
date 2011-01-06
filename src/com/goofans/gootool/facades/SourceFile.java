@@ -33,6 +33,8 @@ public interface SourceFile extends ReadableFile
 
   boolean isDirectory();
 
+  long getSize();
+
   long lastModified();
 
   /**
@@ -45,6 +47,7 @@ public interface SourceFile extends ReadableFile
 
   /**
    * Gets the parent directory of this one, or null if we're the root of this target.
+   *
    * @return
    */
   SourceFile getParentDirectory();
