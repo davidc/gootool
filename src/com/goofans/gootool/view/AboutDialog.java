@@ -74,16 +74,21 @@ public class AboutDialog extends JDialog
 
     vmMemory.setText(resourceBundle.formatString("about.vmMemory.value", TextUtil.binaryNumToString(usedMem), TextUtil.binaryNumToString(totalMem)));
 
-    String text = copyrightLabel.getText();
-
     pack();
     setLocationRelativeTo(mainFrame);
 
+    initEgg();
+  }
+
+  private void initEgg()
+  {
     final BufferedImage eggImage;
     final int[] step = {0};
 
     try {
       eggImage = ImageIO.read(getClass().getResourceAsStream("/mc.jpg"));
+
+      String text = copyrightLabel.getText();
 
       int underlinedIndex = text.indexOf("David"); //NON-NLS
       FontMetrics fm = copyrightLabel.getFontMetrics(copyrightLabel.getFont());
@@ -95,8 +100,7 @@ public class AboutDialog extends JDialog
         @Override
         public void mouseMoved(MouseEvent e)
         {
-          if (hitbox.contains(e.getX(), e.getY())) getGlassPane().setVisible(true);
-          else getGlassPane().setVisible(false);
+          getGlassPane().setVisible(hitbox.contains(e.getX(), e.getY()));
         }
       });
       copyrightLabel.addMouseListener(new MouseInputAdapter()
@@ -156,11 +160,12 @@ public class AboutDialog extends JDialog
             }
           }
           catch (InterruptedException e) {
-            e.printStackTrace();
+            // Do nothing, window closed.
           }
         }
       };
       animThread.start();
+
       addWindowListener(new WindowAdapter()
       {
         @Override
