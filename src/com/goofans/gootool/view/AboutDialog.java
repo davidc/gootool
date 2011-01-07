@@ -7,10 +7,15 @@ package com.goofans.gootool.view;
 
 import net.infotrek.util.TextUtil;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.event.MouseInputAdapter;
+import java.awt.*;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionAdapter;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.text.DateFormat;
-import java.util.Map;
-import java.util.Properties;
 
 import com.goofans.gootool.GooTool;
 import com.goofans.gootool.GooToolResourceBundle;
@@ -23,6 +28,8 @@ import com.goofans.gootool.util.Version;
  */
 public class AboutDialog extends JDialog
 {
+  private static final GooToolResourceBundle resourceBundle = GooTool.getTextProvider();
+
   private JPanel rootPanel;
   private JLabel infoPane;
   private JLabel versionField;
@@ -33,8 +40,7 @@ public class AboutDialog extends JDialog
   private JLabel javaHome;
   private JLabel vmType;
   private JLabel vmMemory;
-
-  private static final GooToolResourceBundle resourceBundle = GooTool.getTextProvider();
+  private JLabel copyrightLabel;
 
   public AboutDialog(JFrame mainFrame)
   {
@@ -45,8 +51,6 @@ public class AboutDialog extends JDialog
     setResizable(false);
 
     setContentPane(rootPanel);
-
-//    GUIUtil.setPackOnOpen(this);
 
     GUIUtil.setDefaultClosingOkButton(okButton, this);
     GUIUtil.setCloseOnEscape(this);
@@ -68,18 +72,61 @@ public class AboutDialog extends JDialog
 
     vmMemory.setText(resourceBundle.formatString("about.vmMemory.value", TextUtil.binaryNumToString(usedMem), TextUtil.binaryNumToString(totalMem)));
 
+    String text = copyrightLabel.getText();
+
     pack();
     setLocationRelativeTo(mainFrame);
+
+    final BufferedImage eggImage;
+
+    try {
+      eggImage = ImageIO.read(getClass().getResourceAsStream("/mc.jpg"));
+
+      int underlinedIndex = text.indexOf("David"); //NON-NLS
+      FontMetrics fm = copyrightLabel.getFontMetrics(copyrightLabel.getFont());
+      final Rectangle hitbox = new Rectangle(fm.stringWidth(text.substring(0, underlinedIndex)), 0,
+              fm.charWidth(text.charAt(underlinedIndex)), fm.getHeight());
+
+      copyrightLabel.addMouseMotionListener(new MouseMotionAdapter()
+      {
+        @Override
+        public void mouseMoved(MouseEvent e)
+        {
+          if (hitbox.contains(e.getX(), e.getY())) getGlassPane().setVisible(true);
+          else getGlassPane().setVisible(false);
+        }
+      });
+      copyrightLabel.addMouseListener(new MouseInputAdapter()
+      {
+        @Override
+        public void mouseExited(MouseEvent e)
+        {
+          getGlassPane().setVisible(false);
+        }
+      });
+
+      setGlassPane(new JComponent()
+      {
+        @Override
+        protected void paintComponent(Graphics g)
+        {
+          int centreX = getWidth() / 2;
+          int centreY = getHeight() / 2;
+
+          int x = centreX - (eggImage.getWidth() / 2);
+          int y = centreY - (eggImage.getHeight() / 2);
+          g.drawImage(eggImage, x, y, null);
+        }
+      });
+    }
+    catch (IOException e) {
+      // Silent fail
+    }
   }
 
   @SuppressWarnings({"UseOfSystemOutOrSystemErr"})
   public static void main(String[] args)
   {
-    Properties p = System.getProperties();
-    for (Map.Entry<Object, Object> property : p.entrySet()) {
-      System.out.println(property.getKey() + " = " + property.getValue());
-    }
-
     GUIUtil.switchToSystemLookAndFeel();
     new AboutDialog(null).setVisible(true);
   }
