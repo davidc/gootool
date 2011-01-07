@@ -13,6 +13,8 @@ import javax.swing.event.MouseInputAdapter;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.text.DateFormat;
@@ -78,6 +80,7 @@ public class AboutDialog extends JDialog
     setLocationRelativeTo(mainFrame);
 
     final BufferedImage eggImage;
+    final int[] step = {0};
 
     try {
       eggImage = ImageIO.read(getClass().getResourceAsStream("/mc.jpg"));
@@ -115,7 +118,55 @@ public class AboutDialog extends JDialog
 
           int x = centreX - (eggImage.getWidth() / 2);
           int y = centreY - (eggImage.getHeight() / 2);
+
+          x += (100d * Math.sin(((double) step[0]) / 51));
+          y += (70d * Math.sin(((double) step[0]) / 60));
+
           g.drawImage(eggImage, x, y, null);
+
+/*          x = centreX - 150;
+          y = centreY - 200;
+          int width = 180;
+          int height = 150;
+          g.setColor(Color.RED);
+          g.drawRect(x, y, width, height);
+
+          String text = "hello";
+          Font font = new Font("Monospaced", Font.PLAIN, 32);
+          g.setFont(font);
+
+          g.setColor(new Color(63, 63, 0));
+          g.drawString(text, x + 5, y + 3);
+
+          g.setColor(Color.YELLOW);
+          g.drawString(text, x, y);*/
+        }
+      });
+
+      final Thread animThread = new Thread()
+      {
+        @Override
+        public void run()
+        {
+          try {
+            while (true) {
+              Thread.sleep(20);
+              step[0]++;
+              getGlassPane().repaint();
+            }
+          }
+          catch (InterruptedException e) {
+            e.printStackTrace();
+          }
+        }
+      };
+      animThread.start();
+      addWindowListener(new WindowAdapter()
+      {
+        @Override
+        public void windowClosed(WindowEvent e)
+        {
+          animThread.interrupt();
         }
       });
     }
