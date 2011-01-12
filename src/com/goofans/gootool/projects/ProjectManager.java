@@ -99,7 +99,7 @@ public class ProjectManager
 
     IosProject project = new IosProject(getPrefsForProject(nextId));
 
-    createProjectInternal(nextId, project, PREF_TYPE_LOCAL);
+    createProjectInternal(nextId, project, PREF_TYPE_IOS);
 
     return project;
   }
