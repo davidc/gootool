@@ -192,18 +192,18 @@ public class Diagnostics extends ProgressIndicatingTask
         out.println();
 
         // TODO dump target as well
-        Target target = project.getTarget();
         try {
-          out.println("Target: " + target);
-        }
-        finally {
+          Target target = project.getTarget();
           try {
+            out.println("Target: " + target);
+          }
+          finally {
             target.close();
           }
-          catch (IOException e) {
-            out.println("Warning: unable to close source");
-            e.printStackTrace(out);
-          }
+        }
+        catch (IOException e) {
+          out.println("Warning: unable to get or close target");
+          e.printStackTrace(out);
         }
       }
     }

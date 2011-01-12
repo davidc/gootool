@@ -151,7 +151,7 @@ public abstract class Project
    *
    * @return the Target for this project.
    */
-  public abstract Target getTarget();
+  public abstract Target getTarget() throws IOException;
 
   public abstract Codec getCodecForGameXml();
 

@@ -71,7 +71,7 @@ public class IosProject extends Project
   @Override
   public byte[] getProfileBytes() throws IOException
   {
-    return new byte[0];  //To change body of implemented methods use File | Settings | File Templates.
+    return null;
   }
 
   @Override
@@ -110,13 +110,13 @@ public class IosProject extends Project
   @Override
   public Source getSource() throws IOException
   {
-    return null;  //To change body of implemented methods use File | Settings | File Templates.
+    throw new IOException("IOSProject.getSource not yet implemented");
   }
 
   @Override
-  public Target getTarget()
+  public Target getTarget() throws IOException
   {
-    return null;  //To change body of implemented methods use File | Settings | File Templates.
+    throw new IOException("IOSProject.getTarget not yet implemented");
   }
 
   @Override
