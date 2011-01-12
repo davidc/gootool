@@ -157,7 +157,7 @@ public final class ProfilePanel implements ActionListener, ViewComponent
   {
     String cmd = event.getActionCommand();
 
-    log.fine("cmd " + cmd);
+    log.fine("ProfilePanel cmd " + cmd);
 
     if (cmd.equals(CMD_REFRESH)) {
       Project project = projectController.getCurrentProject();
@@ -176,9 +176,7 @@ public final class ProfilePanel implements ActionListener, ViewComponent
       currentProfile = newProfile;
       log.fine("currentProfile = " + currentProfile);
 
-      if (currentProfile != null) {
-        profileChanged();
-      }
+      profileChanged();
     }
     else if (cmd.equals(CMD_VIEW_TOWER) && tr != null) {
       showTower();
@@ -214,38 +212,40 @@ public final class ProfilePanel implements ActionListener, ViewComponent
 
   private void profileChanged()
   {
-    profileName.setText(currentProfile.getName());
-    playTime.setText(TextUtil.formatTime(currentProfile.getPlayTime()));
-    levelsPlayed.setText(String.valueOf(currentProfile.getLevels()));
+    profileName.setText(currentProfile == null ? "(none loaded)" : currentProfile.getName());
+    playTime.setText(currentProfile == null ? "" : TextUtil.formatTime(currentProfile.getPlayTime()));
+    levelsPlayed.setText(currentProfile == null ? "" : String.valueOf(currentProfile.getLevels()));
 
     StringBuilder flagInfo = new StringBuilder();
-    if (currentProfile.hasFlag(Profile.FLAG_ONLINE)) {
-      flagInfo.append(resourceBundle.getString("profile.info.flags.online")).append(BR);
-    }
-    if (currentProfile.hasFlag(Profile.FLAG_GOOCORP_UNLOCKED)) {
-      flagInfo.append(resourceBundle.getString("profile.info.flags.goocorpunlocked")).append(BR);
-    }
-    if (currentProfile.hasFlag(Profile.FLAG_GOOCORP_DESTROYED)) {
-      flagInfo.append(resourceBundle.getString("profile.info.flags.goocorpdestroyed")).append(BR);
-    }
-    if (currentProfile.hasFlag(Profile.FLAG_WHISTLE)) {
-      flagInfo.append(resourceBundle.getString("profile.info.flags.whistle")).append(BR);
-    }
-    if (currentProfile.hasFlag(Profile.FLAG_TERMS)) {
-      flagInfo.append(resourceBundle.getString("profile.info.flags.terms")).append(BR);
-    }
-    if (currentProfile.hasFlag(Profile.FLAG_32)) {
-      flagInfo.append(resourceBundle.getString("profile.info.flags.flag32")).append(BR);
-    }
-    if (currentProfile.hasFlag(Profile.FLAG_64)) {
-      flagInfo.append(resourceBundle.getString("profile.info.flags.flag64")).append(BR);
-    }
-    if (currentProfile.hasFlag(Profile.FLAG_128)) {
-      flagInfo.append(resourceBundle.getString("profile.info.flags.flag128")).append(BR);
-    }
+    if (currentProfile != null) {
+      if (currentProfile.hasFlag(Profile.FLAG_ONLINE)) {
+        flagInfo.append(resourceBundle.getString("profile.info.flags.online")).append(BR);
+      }
+      if (currentProfile.hasFlag(Profile.FLAG_GOOCORP_UNLOCKED)) {
+        flagInfo.append(resourceBundle.getString("profile.info.flags.goocorpunlocked")).append(BR);
+      }
+      if (currentProfile.hasFlag(Profile.FLAG_GOOCORP_DESTROYED)) {
+        flagInfo.append(resourceBundle.getString("profile.info.flags.goocorpdestroyed")).append(BR);
+      }
+      if (currentProfile.hasFlag(Profile.FLAG_WHISTLE)) {
+        flagInfo.append(resourceBundle.getString("profile.info.flags.whistle")).append(BR);
+      }
+      if (currentProfile.hasFlag(Profile.FLAG_TERMS)) {
+        flagInfo.append(resourceBundle.getString("profile.info.flags.terms")).append(BR);
+      }
+      if (currentProfile.hasFlag(Profile.FLAG_32)) {
+        flagInfo.append(resourceBundle.getString("profile.info.flags.flag32")).append(BR);
+      }
+      if (currentProfile.hasFlag(Profile.FLAG_64)) {
+        flagInfo.append(resourceBundle.getString("profile.info.flags.flag64")).append(BR);
+      }
+      if (currentProfile.hasFlag(Profile.FLAG_128)) {
+        flagInfo.append(resourceBundle.getString("profile.info.flags.flag128")).append(BR);
+      }
 
-    if (flagInfo.length() == 0) {
-      flagInfo.append(resourceBundle.getString("profile.info.flags.none"));
+      if (flagInfo.length() == 0) {
+        flagInfo.append(resourceBundle.getString("profile.info.flags.none"));
+      }
     }
     flags.setText("<html>" + flagInfo + "</html>"); //NON-NLS
 
@@ -253,7 +253,7 @@ public final class ProfilePanel implements ActionListener, ViewComponent
 
     towerPanel.removeAll();
 
-    Tower tower = currentProfile.getTower();
+    Tower tower = currentProfile == null ? null : currentProfile.getTower();
 
     if (tower == null || tower.getHeight() == 0) {
       towerHeight.setText("-");
@@ -261,7 +261,6 @@ public final class ProfilePanel implements ActionListener, ViewComponent
       towerNodeBalls.setText("-");
       towerStrandBalls.setText("-");
       towerPanel.add(new JLabel(resourceBundle.getString("profile.tower.none")));
-//          viewTowerButton.setEnabled(false);
       saveTowerButton.setEnabled(false);
     }
     else {
@@ -292,13 +291,11 @@ public final class ProfilePanel implements ActionListener, ViewComponent
           }
         });
         towerPanel.add(thumb);
-//          viewTowerButton.setEnabled(true);
         saveTowerButton.setEnabled(true);
       }
       catch (Exception e) {
         log.log(Level.SEVERE, "Unable to render tower", e);
         towerPanel.add(new JLabel(resourceBundle.getString("profile.tower.error")));
-//          viewTowerButton.setEnabled(false);
         saveTowerButton.setEnabled(false);
       }
     }
@@ -401,41 +398,50 @@ public final class ProfilePanel implements ActionListener, ViewComponent
     profilesCombo.removeAllItems();
 
     Project project = projectController.getCurrentProject();
-    if (project == null || !project.isProfileValid()) {
-      return;
-    }
 
     ProfileData profileData;
-    try {
-      profileData = project.getProfileData();
-    }
-    catch (IOException e) {
-      log.log(Level.SEVERE, "Unable to read profile", e);
-      JOptionPane.showMessageDialog(rootPanel, resourceBundle.getString("profile.error.corrupt.message"), resourceBundle.getString("profile.error.corrupt.title"), JOptionPane.ERROR_MESSAGE);
-      return;
-    }
+    boolean newAllProfilesAreOnline;
+    boolean newAnyProfilesHaveGeneratedId;
 
-    Boolean oldAllProfilesAreOnline = allProfilesAreOnline;
-    Boolean oldAnyProfilesHaveGeneratedId = anyProfilesHaveGeneratedId;
-    allProfilesAreOnline = true;
-    anyProfilesHaveGeneratedId = false;
+    if (project == null || !project.isProfileValid()) {
+      profileData = null;
 
-    for (Profile profile : profileData.getProfiles()) {
-      if (profile != null) {
-        profilesCombo.addItem(profile);
-        if (profile.getOnlineId() == null) {
-          allProfilesAreOnline = false;
-        }
-        else if (GenerateOnlineIds.isGeneratedId(profile.getOnlineId())) {
-          anyProfilesHaveGeneratedId = true;
+      newAllProfilesAreOnline = true;
+      newAnyProfilesHaveGeneratedId = false;
+    }
+    else {
+      try {
+        profileData = project.getProfileData();
+      }
+      catch (IOException e) {
+        log.log(Level.SEVERE, "Unable to read profile", e);
+        JOptionPane.showMessageDialog(rootPanel, resourceBundle.getString("profile.error.corrupt.message"), resourceBundle.getString("profile.error.corrupt.title"), JOptionPane.ERROR_MESSAGE);
+        return;
+      }
+
+      newAllProfilesAreOnline = true;
+      newAnyProfilesHaveGeneratedId = false;
+
+      for (Profile profile : profileData.getProfiles()) {
+        if (profile != null) {
+          profilesCombo.addItem(profile);
+          if (profile.getOnlineId() == null) {
+            newAllProfilesAreOnline = false;
+          }
+          else if (GenerateOnlineIds.isGeneratedId(profile.getOnlineId())) {
+            newAnyProfilesHaveGeneratedId = true;
+          }
         }
       }
+      profilesCombo.setSelectedItem(profileData == null ? null : profileData.getCurrentProfile());
     }
 
-    propertyChangeSupport.firePropertyChange("allProfilesAreOnline", oldAllProfilesAreOnline, allProfilesAreOnline); //NON-NLS
-    propertyChangeSupport.firePropertyChange("anyProfilesHaveGeneratedId", oldAnyProfilesHaveGeneratedId, anyProfilesHaveGeneratedId); //NON-NLS
+    propertyChangeSupport.firePropertyChange("allProfilesAreOnline", allProfilesAreOnline, Boolean.valueOf(newAllProfilesAreOnline)); //NON-NLS
+    allProfilesAreOnline = newAllProfilesAreOnline;
+    propertyChangeSupport.firePropertyChange("anyProfilesHaveGeneratedId", allProfilesAreOnline, Boolean.valueOf(newAnyProfilesHaveGeneratedId)); //NON-NLS
+    anyProfilesHaveGeneratedId = newAnyProfilesHaveGeneratedId;
 
-    profilesCombo.setSelectedItem(profileData.getCurrentProfile());
+    System.out.println("reloaded profiles");
   }
 
   private String formatHeight(double height)

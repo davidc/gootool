@@ -509,23 +509,24 @@ public class ProjectController implements ActionListener
 
     if (!currentProject.readyToBuild()) return;
 
-    Target target = currentProject.getTarget();
     try {
-      TargetFile testFile = target.getGameRoot().getChild(currentProject.getGameXmlFilename("properties/text.xml"));
-
-      if (!testFile.isFile()) {
-        mainController.showMessageDialog(resourceBundle.getString("firstBuild.title"), resourceBundle.getString("firstBuild.message"));
-      }
-    }
-    finally {
-      // TODO Ideally we would pass the target into WorldBuilder here to avoid closing and reopening it. Or even better, a flag on project to indicate
-      // first build
+      Target target = currentProject.getTarget();
       try {
+        TargetFile testFile = target.getGameRoot().getChild(currentProject.getGameXmlFilename("properties/text.xml"));
+
+        if (!testFile.isFile()) {
+          mainController.showMessageDialog(resourceBundle.getString("firstBuild.title"), resourceBundle.getString("firstBuild.message"));
+        }
+      }
+      finally {
+        // TODO Ideally we would pass the target into WorldBuilder here to avoid closing and reopening it. Or even better, a flag on project to indicate
+        // first build
         target.close();
       }
-      catch (IOException e) {
-        log.log(Level.WARNING, "Unable to close target", e);
-      }
+    }
+    catch (IOException e) {
+      log.log(Level.WARNING, "Unable to open or close target", e);
+      mainController.showErrorDialog(resourceBundle.getString("worldBuilder.error.title"), e.getMessage() + " (" + e.getClass().getName() + ")");
     }
 
     WorldBuilder configWriter = new WorldBuilder(currentProject, projectModel.getEditorConfig());
@@ -536,7 +537,7 @@ public class ProjectController implements ActionListener
       GUIUtil.runTask(mainController.getMainWindow(), resourceBundle.getString("worldBuilder.progress.title"), configWriter);
     }
     catch (Exception e) {
-      log.log(Level.SEVERE, "Error writing configuration", e);
+      log.log(Level.SEVERE, "Error building world", e);
       mainController.showErrorDialog(resourceBundle.getString("worldBuilder.error.title"), e.getMessage() + " (" + e.getClass().getName() + ")");
       errored = true;
     }
