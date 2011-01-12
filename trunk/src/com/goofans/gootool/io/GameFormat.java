@@ -15,6 +15,7 @@ public class GameFormat
 
   public static final Codec AES_BIN_CODEC = new AESBinFormat();
   public static final Codec MAC_BIN_CODEC = new MacBinFormat();
+  public static final Codec NULL_BIN_CODEC = new NullBinFormat();
 
   public static final ImageCodec NULL_IMAGE_CODEC = new NullImageCodec();
   public static final ImageCodec MAC_IMAGE_CODEC = new MacImageCodec();
