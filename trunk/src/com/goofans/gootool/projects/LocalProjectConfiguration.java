@@ -30,15 +30,6 @@ public class LocalProjectConfiguration extends ProjectConfiguration
   {
   }
 
-  public LocalProjectConfiguration(LocalProjectConfiguration c)
-  {
-    super(c);
-    resolution = c.resolution;
-    refreshRate = c.refreshRate;
-    uiInset = c.uiInset;
-    windowsVolumeControl = c.windowsVolumeControl;
-  }
-
   public Resolution getResolution()
   {
     if (resolution == null) return Resolution.DEFAULT_RESOLUTION;
@@ -113,6 +104,7 @@ public class LocalProjectConfiguration extends ProjectConfiguration
   {
     LocalProjectConfiguration clone;
     clone = (LocalProjectConfiguration) super.clone();
+    // Do any deep cloning of fields here
     return clone;
   }
 

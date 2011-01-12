@@ -22,22 +22,12 @@ public class ProjectConfiguration implements Cloneable
   private boolean skipOpeningMovie;
   private String watermark;
   private boolean billboardsDisabled;
+  // this is a list because ordering of addins is important.
   private List<String> enabledAddins = new ArrayList<String>();
 
   ProjectConfiguration()
   {
   }
-
-  ProjectConfiguration(ProjectConfiguration c)
-  {
-    language = c.language;
-    skipOpeningMovie = c.skipOpeningMovie;
-    watermark = c.watermark;
-    billboardsDisabled = c.billboardsDisabled;
-
-    enabledAddins = new ArrayList<String>(c.enabledAddins);
-  }
-
 
   public Language getLanguage()
   {
@@ -62,6 +52,7 @@ public class ProjectConfiguration implements Cloneable
 
   public String getWatermark()
   {
+    if (watermark == null) return "";
     return watermark;
   }
 

@@ -9,4 +9,9 @@
       <val val="{&quot;UseOfSystemOutOrSystemErr&quot;, &quot;HardCodedStringLiteral&quot;, &quot;HardcodedFileSeparator&quot;}"/>
     </annotation>
   </item>
+  <item name='com.goofans.gootool.facades.LocalTargetFile void setModified(long)'>
+    <annotation name='java.lang.SuppressWarnings'>
+      <val val="{&quot;ResultOfMethodCallIgnored&quot;}"/>
+    </annotation>
+  </item>
 </root>

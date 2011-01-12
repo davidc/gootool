@@ -144,7 +144,7 @@ public abstract class Project
    *
    * @return the Source for this project.
    */
-  public abstract Source getSource();
+  public abstract Source getSource() throws IOException;
 
   /**
    * Gets the Source representing the target files for this project. The caller is responsible for closing it after use.
@@ -156,6 +156,7 @@ public abstract class Project
   public abstract Codec getCodecForGameXml();
 
   // TODO we should not expose this, since it's not even a file on IOS!
+  @Deprecated
   public abstract Codec getCodecForProfile();
 
   public abstract ImageCodec getImageCodec();

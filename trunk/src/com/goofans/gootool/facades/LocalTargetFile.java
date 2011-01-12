@@ -125,6 +125,11 @@ public class LocalTargetFile implements TargetFile
     return list;
   }
 
+  public void setModified(long time)
+  {
+    backingFile.setLastModified(time);
+  }
+
   @Override
   public boolean equals(Object o)
   {

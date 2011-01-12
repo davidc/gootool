@@ -110,21 +110,21 @@ public class ProjectController implements ActionListener
 
   private void warnIfDemo()
   {
-    boolean isDemo;
+    boolean isDemo = false;
 
     // A file that will not exist in the demo version.
-    Source source = currentProject.getSource();
     try {
-      SourceFile flagFile = source.getGameRoot().getChild(currentProject.getGameXmlFilename("res/levels/island3/island3.level"));
-      isDemo = (flagFile == null || !flagFile.isFile());
-    }
-    finally {
+      Source source = currentProject.getSource();
       try {
+        SourceFile flagFile = source.getGameRoot().getChild(currentProject.getGameXmlFilename("res/levels/island3/island3.level")); // NON-NLS
+        isDemo = (flagFile == null || !flagFile.isFile());
+      }
+      finally {
         source.close();
       }
-      catch (IOException e) {
-        log.log(Level.WARNING, "Unable to close source", e);
-      }
+    }
+    catch (IOException e) {
+      log.log(Level.WARNING, "Unable to test for demo version", e);
     }
 
     if (isDemo) {

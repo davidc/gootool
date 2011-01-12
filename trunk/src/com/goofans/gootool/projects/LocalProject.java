@@ -141,6 +141,7 @@ public class LocalProject extends Project
     savedConfiguration = null;
   }
 
+  @Override
   protected void saveProjectConfiguration(ProjectConfiguration c)
   {
     if (!(c instanceof LocalProjectConfiguration))

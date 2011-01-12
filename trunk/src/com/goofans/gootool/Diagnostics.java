@@ -170,24 +170,24 @@ public class Diagnostics extends ProgressIndicatingTask
         out.println(project.getSavedConfiguration());
         out.println();
 
-        Source source = project.getSource();
         try {
-          out.println("--- Source for project " + i + "---");
-          out.println();
-          out.println("Source: " + source);
-          out.println("Real root: " + source.getRealRoot());
-          out.println("Game root: " + source.getGameRoot());
-
-          listDir(source.getRealRoot(), "");
-        }
-        finally {
+          Source source = project.getSource();
           try {
+            out.println("--- Source for project " + i + "---");
+            out.println();
+            out.println("Source: " + source);
+            out.println("Real root: " + source.getRealRoot());
+            out.println("Game root: " + source.getGameRoot());
+
+            listDir(source.getRealRoot(), "");
+          }
+          finally {
             source.close();
           }
-          catch (IOException e) {
-            out.println("Warning: unable to close source");
-            e.printStackTrace(out);
-          }
+        }
+        catch (IOException e) {
+          out.println("Warning: unable to get or close source");
+          e.printStackTrace(out);
         }
         out.println();
 

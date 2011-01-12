@@ -15,6 +15,7 @@ import java.util.prefs.Preferences;
 import com.goofans.gootool.facades.Source;
 import com.goofans.gootool.facades.Target;
 import com.goofans.gootool.io.Codec;
+import com.goofans.gootool.io.GameFormat;
 import com.goofans.gootool.io.ImageCodec;
 import com.goofans.gootool.util.Utilities;
 
@@ -29,9 +30,9 @@ public class IosProject extends Project
   private static final String PREF_KEY_HOST = "host";
   private static final String PREF_KEY_PASSWORD = "password";
 
-  private ProjectConfiguration savedConfiguration; // todo will be IosProjectConfiguration
+  private IosProjectConfiguration savedConfiguration;
 
-  IosProject(Preferences prefsNode)
+  public /* TODO NOT PUBLIC */ IosProject(Preferences prefsNode)
   {
     super(prefsNode);
   }
@@ -82,23 +83,32 @@ public class IosProject extends Project
   @Override
   public ProjectConfiguration getSavedConfiguration()
   {
-    return null;  //To change body of implemented methods use File | Settings | File Templates.
+    if (savedConfiguration == null) {
+      savedConfiguration = new IosProjectConfiguration();
+//TODO      loadProjectConfiguration(savedConfiguration);
+    }
+    return savedConfiguration;
   }
+
+  // We don't override loadProjectConfiguration since we currently have nothing to do
 
   @Override
   public void saveConfiguration(ProjectConfiguration c)
   {
-    //To change body of implemented methods use File | Settings | File Templates.
+//TODO    saveProjectConfiguration(c);
+    savedConfiguration = null;
   }
+
+  // We don't override saveProjectConfiguration since we currently have nothing to do
 
   @Override
   public boolean readyToBuild()
   {
-    return false;  //To change body of implemented methods use File | Settings | File Templates.
+    return true;
   }
 
   @Override
-  public Source getSource()
+  public Source getSource() throws IOException
   {
     return null;  //To change body of implemented methods use File | Settings | File Templates.
   }
@@ -112,48 +122,48 @@ public class IosProject extends Project
   @Override
   public Codec getCodecForGameXml()
   {
-    return null;  //To change body of implemented methods use File | Settings | File Templates.
+    return GameFormat.NULL_BIN_CODEC;
   }
 
   @Override
   public Codec getCodecForProfile()
   {
-    return null;  //To change body of implemented methods use File | Settings | File Templates.
+    return GameFormat.NULL_BIN_CODEC;
   }
 
   @Override
   public ImageCodec getImageCodec()
   {
-    return null;  //To change body of implemented methods use File | Settings | File Templates.
+    return GameFormat.NULL_IMAGE_CODEC;
   }
 
   @Override
   public String getGameXmlFilename(String baseName)
   {
-    return null;  //To change body of implemented methods use File | Settings | File Templates.
+    return baseName;
   }
 
   @Override
   public String getGamePngFilename(String baseName)
   {
-    return null;  //To change body of implemented methods use File | Settings | File Templates.
+    return baseName + ".png";
   }
 
   @Override
   public String getGameSoundFilename(String baseName)
   {
-    return null;  //To change body of implemented methods use File | Settings | File Templates.
+    return baseName + ".aac";
   }
 
   @Override
   public String getGameMusicFilename(String baseName)
   {
-    return null;  //To change body of implemented methods use File | Settings | File Templates.
+    return baseName + ".aifc";
   }
 
   @Override
   public String getGameAnimMovieFilename(String baseName)
   {
-    return null;  //To change body of implemented methods use File | Settings | File Templates.
+    return baseName + ".binltl";
   }
 }
