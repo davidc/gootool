@@ -268,7 +268,7 @@ public class IosConnection
 
         // Prepare the zip entry
         ZipEntry ze = new ZipEntry(originalFile.zipLocation);
-        ze.setTime(originalFile.attrs.getMTime());
+        ze.setTime(originalFile.attrs.getMTime()); // TODO this is not working, it gives 1/1/1980
         ze.setSize(originalFile.attrs.getSize());
 
         crc32.reset();
@@ -313,6 +313,7 @@ public class IosConnection
         of.iosLocation = dir + "/" + entry.getFilename();
         of.zipLocation = prefix + entry.getFilename();
         of.attrs = attrs;
+        // of.attrs = sftp.stat(dir + "/" + entry.getFilename()); // TODO might need to use this to fill in the mtime???
         originalFiles.add(of);
 
         // TODO test that this is now storing the directories as zip entries too
