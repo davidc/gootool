@@ -308,15 +308,17 @@ public class IosConnection
 
       SftpATTRS attrs = entry.getAttrs();
 
-      if (attrs.isDir()) {
-        prepareDir(dir + "/" + entry.getFilename(), prefix + entry.getFilename() + "/", originalFiles);
-      }
-      else if (!attrs.isLink()) {
+      if (!attrs.isLink()) {
         OriginalFile of = new OriginalFile();
         of.iosLocation = dir + "/" + entry.getFilename();
         of.zipLocation = prefix + entry.getFilename();
         of.attrs = attrs;
         originalFiles.add(of);
+
+        // TODO test that this is now storing the directories as zip entries too
+        if (attrs.isDir()) {
+          prepareDir(dir + "/" + entry.getFilename(), prefix + entry.getFilename() + "/", originalFiles);
+        }
       }
     }
   }
