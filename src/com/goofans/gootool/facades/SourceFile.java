@@ -35,6 +35,11 @@ public interface SourceFile extends ReadableFile
 
   long getSize();
 
+  /**
+   * Returns the last modified time, or 0 if the file doesn't have a last modified time somehow.
+   *
+   * @return Modified time, or 0 if unavailable
+   */
   long lastModified();
 
   /**
