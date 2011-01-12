@@ -514,6 +514,7 @@
         <w>unparsable</w>
         <w>username</w>
         <w>widescreen</w>
+        <w>zipfile</w>
       </words>
     </dictionary>
   </component>

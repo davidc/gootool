@@ -38,7 +38,7 @@ public interface SourceFile extends ReadableFile
   /**
    * Returns the last modified time, or 0 if the file doesn't have a last modified time somehow.
    *
-   * @return Modified time, or 0 if unavailable
+   * @return Modified time in milliseconds since January 1, 1970, 00:00:00 GMT, or 0 if unavailable
    */
   long lastModified();
 

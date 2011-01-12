@@ -17,10 +17,7 @@ import com.goofans.gootool.BillboardUpdater;
 import com.goofans.gootool.GooTool;
 import com.goofans.gootool.GooToolResourceBundle;
 import com.goofans.gootool.addins.*;
-import com.goofans.gootool.facades.Source;
-import com.goofans.gootool.facades.SourceFile;
-import com.goofans.gootool.facades.Target;
-import com.goofans.gootool.facades.TargetFile;
+import com.goofans.gootool.facades.*;
 import com.goofans.gootool.io.Codec;
 import com.goofans.gootool.platform.LinuxSupport;
 import com.goofans.gootool.platform.MacOSXSupport;
@@ -112,21 +109,14 @@ public class WorldBuilder extends ProgressIndicatingTask
 
     beginStep(resourceBundle.getString("worldBuilder.step.preparing"), false);
 
-    /*
-     * First build a list of everything to copy, so we have an estimate for the progress bar
-     */
+    /* First build a list of everything to copy, so we have an estimate for the progress bar */
+
     filesToCopy = new ArrayList<SourceFile>(ESTIMATED_SOURCE_FILES);
 
-    // TODO: OR project instanceof IosProject
-    if (project instanceof LocalProject && PlatformSupport.getPlatform() == PlatformSupport.Platform.MACOSX) {
-//      getFilesInFolder(wogDir, filesToCopy, "");
-      addFilesToCopy(sourceRealRoot);
-    }
-    else {
+    if (project instanceof LocalProject && PlatformSupport.getPlatform() != PlatformSupport.Platform.MACOSX) {
       // WINDOWS/LINUX
       for (String resourceDirName : RESOURCE_DIRS) {
         SourceFile resourceDir = sourceRealRoot.getChild(resourceDirName);
-//        File resourceDir = new File(wogDir, resourceDirName);
         if (resourceDir != null) {
           addFilesToCopy(resourceDir);
         }
@@ -139,14 +129,13 @@ public class WorldBuilder extends ProgressIndicatingTask
         }
       }
     }
-
-    // TODO Project needs a getPropertiesDir() and getResDir() as it differs based on target platform. There should be no use of PlatformSupport (host platform) in this class!! 
+    else {
+      addFilesToCopy(sourceRealRoot);
+    }
 
     log.fine(filesToCopy.size() + " files in source directories");
 
-    /*
-     * Now reomve any files that we are going to overwrite or remove anyway.
-     */
+    /* Now remove any files that we are going to overwrite or remove anyway. */
     // TODO we can also skip files that are overwritten by addins.
 
     removeSkippedFiles();
@@ -185,7 +174,6 @@ public class WorldBuilder extends ProgressIndicatingTask
         }
       }
     }
-
 
     // TODO remove files/dirs that only exist in dest dir
 
@@ -244,6 +232,8 @@ public class WorldBuilder extends ProgressIndicatingTask
       }
     }
 
+    // TODO ios install icon and properties file
+
     progressStep(100f);
   }
 
@@ -262,6 +252,7 @@ public class WorldBuilder extends ProgressIndicatingTask
     finally {
       is.close();
     }
+    destFile.setModified(srcFile.lastModified());
   }
 
   private void addFilesToCopy(SourceFile sourceFile)
@@ -298,6 +289,7 @@ public class WorldBuilder extends ProgressIndicatingTask
   {
     beginStep(resourceBundle.getString("worldBuilder.step.saveConfig"), false);
 
+    //TODO this could actually be done by the Controller instead, so Save can be done independently from Build.
     project.saveConfiguration(config);
   }
 
@@ -456,29 +448,22 @@ public class WorldBuilder extends ProgressIndicatingTask
   {
     DebugUtil.setAllLogging();
 
-    LocalProjectConfiguration c = null;// TODO worldOfGoo.readConfiguration();
-    c.setSkipOpeningMovie(true);
-    c.setWatermark("hi there!");
 
-    for (Addin addin : AddinsStore.getAvailableAddins()) {
-      System.out.println("addin.getId() = " + addin.getId());
-    }
+    Project project = new IosProject(null)
+    {
+      @Override
+      public Source getSource() throws IOException
+      {
+        return new IosSource(new File("source - with manual dirs.zip"));
+      }
 
-    // TODO the following tests an addin from an extracted directory and needs reworking 
-    // Remove any installed net.davidc.madscientist.dejavu
-    String addinId = "net.davidc.madscientist.dejavu";
-//    WorldOfGoo.DEBUGremoveAddinById(addinId);
+      @Override
+      public Target getTarget()
+      {
+        return new LocalTarget(new File("target/"));
+      }
+    };
 
-    Addin addin = AddinFactory.loadAddinFromDir(new File("addins/src/net.davidc.madscientist.dejavu"));
-//    WorldOfGoo.DEBUGaddAvailableAddin(addin);
-
-
-    // Should end up as a football, since earlier is priority
-//    c.enableAddin("com.2dboy.talic.football");
-//    c.enableAddin("com.2dboy.talic.basketball");
-    c.enableAddin(addinId);
-
-    Project project = ProjectManager.simpleInit();
     WorldBuilder writer = new WorldBuilder(project, project.getSavedConfiguration());
 
     writer.setParentComponent(null);

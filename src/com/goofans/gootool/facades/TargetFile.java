@@ -18,6 +18,7 @@ public interface TargetFile extends ReadableFile
   String getName();
 
   boolean isFile();
+
   boolean isDirectory();
 
   long lastModified();
@@ -25,6 +26,7 @@ public interface TargetFile extends ReadableFile
 
   /**
    * Gets the child of the given name, even if it doesn't exist (since we might want to create it). Differs from SourceFile in this respect.
+   *
    * @param name
    * @return
    */
@@ -40,6 +42,7 @@ public interface TargetFile extends ReadableFile
 
   /**
    * Creates a directory with this name. Throws an exception if a file exists or directory couldn't be created.
+   *
    * @throws IOException
    */
   void mkdir() throws IOException;
@@ -58,6 +61,7 @@ public interface TargetFile extends ReadableFile
 
   /**
    * Gets the parent directory of this one, or null if we're the root of this target.
+   *
    * @return
    */
   TargetFile getParentDirectory();
@@ -68,4 +72,11 @@ public interface TargetFile extends ReadableFile
    * @return
    */
   List<TargetFile> list();
+
+  /**
+   * Sets the last modified time on the file.
+   *
+   * @param time The last modified time, in milliseconds since January 1, 1970, 00:00:00 GMT.
+   */
+  void setModified(long time);
 }

@@ -224,10 +224,7 @@ public class IosSourceFile implements SourceFile
   public String toString()
   {
     return "IosSourceFile{" +
-            "source=" + source +
-            ", zipFile=" + zipFile +
-            ", fullName='" + fullName + '\'' +
-            ", zipEntry=" + zipEntry +
+            "fullName='" + fullName + '\'' +
             '}';
   }
 }
