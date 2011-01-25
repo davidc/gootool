@@ -87,6 +87,37 @@ public class IosConnection
     }
   }
 
+  public IosConnectionParameters getParams()
+  {
+    return params;
+  }
+
+  /**
+   * Tests that the connection is still connected and usable by sending a dummy command
+   *
+   * @return true if the connection is working, otherwise false.
+   */
+  public boolean testConnection()
+  {
+    if (sftp == null || session == null) return false;
+
+    if (!(sftp.isConnected() && session.isConnected())) return false;
+
+    try {
+      //This won't work, because this only SENDS a keepalive, it doesn't check for a response.
+      //session.sendKeepAliveMsg();
+
+      // Instead, we do a stat() on the root directory and ignore the results. If connection is broken, an exception will have been thrown.
+      sftp.stat("/");
+
+      return true;
+    }
+    catch (SftpException e) {
+      log.log(Level.WARNING, "SSH connection lost during keepalive", e);
+      return false;
+    }
+  }
+
   public void close()
   {
     if (sftp != null) {
@@ -115,7 +146,7 @@ public class IosConnection
     UserInfo ui = new MyUserInfo();
     session.setUserInfo(ui);
 
-    log.log(Level.FINER, "Connecting to IOS device at " + params.host);
+    log.log(Level.FINER, "Connecting to iOS device at " + params.host);
 
     try {
       session.connect(CONNECT_TIMEOUT);
@@ -124,7 +155,7 @@ public class IosConnection
       throw new IosException("Unable to connect to " + params.host + ". Reason: " + e.getLocalizedMessage(), e);
     }
 
-    log.log(Level.FINER, "Connected to IOS device");
+    log.log(Level.FINER, "Connected to iOS device");
 
     try {
       sftp = (ChannelSftp) session.openChannel(SSH_CHANNEL_TYPE_SFTP);
@@ -536,8 +567,6 @@ public class IosConnection
       monitor.close();
     }
   }
-
-  // TODO new IOSCommunicationException
 
   public static void main(String[] args) throws IosException, IOException
   {
