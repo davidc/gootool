@@ -451,12 +451,6 @@ public class WorldBuilder extends ProgressIndicatingTask
     Project project = new IosProject(null, new File("c:\\dev\\gootool\\iosproject"))
     {
       @Override
-      public Source getSource() throws IOException
-      {
-        return new IosSource(new File("source - with manual dirs.zip"));
-      }
-
-      @Override
       public Target getTarget()
       {
         return new LocalTarget(new File("target/"));

@@ -9,6 +9,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.prefs.Preferences;
 
+import com.goofans.gootool.MainController;
 import com.goofans.gootool.facades.LocalSource;
 import com.goofans.gootool.facades.LocalTarget;
 import com.goofans.gootool.facades.Source;
@@ -166,7 +167,7 @@ public class LocalProject extends Project
   }
 
   @Override
-  public boolean readyToBuild()
+  public boolean readyToBuild(MainController mainController)
   {
 
     // TODO validate here

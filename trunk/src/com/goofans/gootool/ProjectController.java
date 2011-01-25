@@ -507,7 +507,7 @@ public class ProjectController implements ActionListener
 
     projectModel.removeUnavailableAddins();
 
-    if (!currentProject.readyToBuild()) return;
+    if (!currentProject.readyToBuild(mainController)) return;
 
     try {
       Target target = currentProject.getTarget();

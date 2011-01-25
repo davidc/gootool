@@ -10,10 +10,8 @@ import net.infotrek.util.BinaryPlistParser;
 import javax.swing.*;
 import java.awt.*;
 import java.io.*;
-import java.util.ArrayList;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
-import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.zip.CRC32;
@@ -22,6 +20,7 @@ import java.util.zip.ZipOutputStream;
 
 import com.goofans.gootool.platform.PlatformSupport;
 import com.goofans.gootool.profile.ProfileData;
+import com.goofans.gootool.util.ProgressListener;
 import com.goofans.gootool.util.Utilities;
 import com.goofans.gootool.wog.WorldBuilder;
 import com.jcraft.jsch.*;
@@ -55,6 +54,7 @@ public class IosConnection
   private boolean jailbrokenWog = false;
   private String prefsFile = null;
   private int prefsFileSize;
+  private static final byte[] EMPTY_BYTE_ARRAY = new byte[0];
 
   public IosConnection(IosConnectionParameters params)
   {
@@ -169,7 +169,7 @@ public class IosConnection
     log.log(Level.INFO, "SSH connected to " + params.host + ", server version " + session.getServerVersion() + ", SFTP protocol version " + sftp.version());
   }
 
-  synchronized boolean locateWog() throws IosException
+  public synchronized boolean locateWog() throws IosException
   {
     if (wogDir != null) return true;
 
@@ -287,7 +287,7 @@ public class IosConnection
     }
   }
 
-  public void storeOriginalFiles(File zipfile) throws IosException, IOException
+  public void storeOriginalFiles(File zipfile, ProgressListener listener) throws IosException, IOException
   {
     if (!locateWog()) throw new IosException("World of Goo was not found");
 
@@ -297,32 +297,54 @@ public class IosConnection
     try {
       zos.setMethod(ZipOutputStream.STORED);
 
-      System.out.println("Counting source files");
+      log.log(Level.FINE, "Counting source files");
 
       List<OriginalFile> originalFiles = new ArrayList<OriginalFile>(WorldBuilder.ESTIMATED_SOURCE_FILES);
 
-      prepareDir(wogDir + "/wog.app", "", originalFiles);
+      long totalSize = prepareDir(wogDir + "/wog.app", "", originalFiles);
 
-      System.out.println("Num files = " + originalFiles.size());
+      log.log(Level.INFO, originalFiles.size() + " source files (" + totalSize + " total bytes) to copy");
 
       ByteArrayOutputStream tmpbuf = new ByteArrayOutputStream(8196);
       CRC32 crc32 = new CRC32();
+      long doneSize = 0;
 
       for (int i = 0; i < originalFiles.size(); i++) {
         OriginalFile originalFile = originalFiles.get(i);
 
-        System.out.println("Progress: " + i + " of " + originalFiles.size());
+//        System.out.println("Progress: " + i + " of " + originalFiles.size());
+        if (listener != null && i % 10 == 0) {
+          listener.progressStep((100f * doneSize) / totalSize);
+        }
 
-        // Get the file into our tmpbuf
-        tmpbuf.reset();
-        sftp.get(originalFile.iosLocation, tmpbuf);
-        byte[] data = tmpbuf.toByteArray(); // TODO this is inefficient since it returns a COPY of the data.
+        byte[] data;
 
         // Prepare the zip entry
         ZipEntry ze = new ZipEntry(originalFile.zipLocation);
-        ze.setTime(originalFile.attrs.getMTime()); // TODO this is not working, it gives 1/1/1980
-        ze.setSize(originalFile.attrs.getSize());
+        long mtime = originalFile.attrs.getMTime() * 1000L;
+        System.out.println("new Date(mtime) = " + new Date(mtime));
+        System.out.println("originalFile.attrs.getMTime() = " + mtime);
+        ze.setTime(mtime); // TODO this is not working, it gives 1/1/1980
 
+        // Get the data
+        if (originalFile.attrs.isDir()) {
+          data = EMPTY_BYTE_ARRAY;
+
+          ze.setSize(0);
+        }
+        else {
+          // Get the file into our tmpbuf
+          tmpbuf.reset();
+          log.finest("Downloading " + originalFile.iosLocation);
+          sftp.get(originalFile.iosLocation, tmpbuf);
+          data = tmpbuf.toByteArray(); // TODO this is inefficient since it returns a COPY of the data.
+
+          long size = originalFile.attrs.getSize();
+          ze.setSize(size);
+          doneSize += size;
+        }
+
+        // Build the CRC32
         crc32.reset();
         crc32.update(data);
         ze.setCrc(crc32.getValue());
@@ -357,8 +379,10 @@ public class IosConnection
     }
   }
 
-  private void prepareDir(String dir, String prefix, List<OriginalFile> originalFiles) throws IosException
+  private long prepareDir(String dir, String prefix, List<OriginalFile> originalFiles) throws IosException
   {
+    long totalSize = 0;
+
     Vector<ChannelSftp.LsEntry> entries = ls(dir);
 
     for (ChannelSftp.LsEntry entry : entries) {
@@ -371,15 +395,19 @@ public class IosConnection
         of.iosLocation = dir + "/" + entry.getFilename();
         of.zipLocation = prefix + entry.getFilename();
         of.attrs = attrs;
-        // of.attrs = sftp.stat(dir + "/" + entry.getFilename()); // TODO might need to use this to fill in the mtime???
         originalFiles.add(of);
 
         // TODO test that this is now storing the directories as zip entries too
         if (attrs.isDir()) {
-          prepareDir(dir + "/" + entry.getFilename(), prefix + entry.getFilename() + "/", originalFiles);
+          totalSize += prepareDir(dir + "/" + entry.getFilename(), prefix + entry.getFilename() + "/", originalFiles);
+        }
+        else {
+          totalSize += attrs.getSize();
         }
       }
     }
+
+    return totalSize;
   }
 
   private boolean isSkippedSourceFile(ChannelSftp.LsEntry entry)
@@ -575,7 +603,7 @@ public class IosConnection
 //    ProfileData data = ios.getProfileData();
 //    System.out.println("data = " + data);
 
-      ios.storeOriginalFiles(new File("source.zip"));
+      ios.storeOriginalFiles(new File("source.zip"), null);
     }
     finally {
       ios.close();

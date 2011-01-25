@@ -1,3 +1,5 @@
+- Project - if iOS, new menu option to allow regeneration of cache file. new menu option to remove customwog.app.
+
 - Test volume control on win32 dist build
 
 - Somehow demo project got created with sourceDir pointing to the exe, not the directory!
@@ -20,7 +22,7 @@ Remove files in dest dir that don't exist in source dir and aren't added by a mo
 
 If A depends on B, B must be installed first. (bubble sort the addins list)
 
-- Addin buildling phase of WorldBuilder should have a progress bar.
+- Addin building phase of WorldBuilder should have a progress bar.
 
 
 Soon!

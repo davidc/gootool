@@ -11,6 +11,7 @@ import java.util.StringTokenizer;
 import java.util.prefs.Preferences;
 
 import com.goofans.gootool.GooTool;
+import com.goofans.gootool.MainController;
 import com.goofans.gootool.facades.Source;
 import com.goofans.gootool.facades.Target;
 import com.goofans.gootool.io.Codec;
@@ -140,7 +141,13 @@ public abstract class Project
     return getName();
   }
 
-  public abstract boolean readyToBuild();
+  /**
+   * Called by the MainController to ask whether this project is ready to be built. GUI interaction is allowed here, for example to show errors
+   * as to why the project cannot be built. Also used for iOS projects to download the initial zipfile.
+   *
+   * @return
+   */
+  public abstract boolean readyToBuild(MainController mainController);
 
   /**
    * Gets the Source representing the source files for this project. The caller is responsible for closing it after use.
