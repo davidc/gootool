@@ -57,7 +57,7 @@ public class IosProject extends Project
       return new String(TextUtil.base64Decode(enc));
     }
     catch (IOException e) {
-      log.log(Level.SEVERE, "Base64 encoding exception in IOS root password, removing");
+      log.log(Level.SEVERE, "Base64 encoding exception in iOS root password, removing");
       return null;
     }
   }
@@ -110,13 +110,13 @@ public class IosProject extends Project
   @Override
   public Source getSource() throws IOException
   {
-    throw new IOException("IOSProject.getSource not yet implemented");
+    throw new IOException("IosProject.getSource not yet implemented");
   }
 
   @Override
   public Target getTarget() throws IOException
   {
-    throw new IOException("IOSProject.getTarget not yet implemented");
+    throw new IOException("IosProject.getTarget not yet implemented");
   }
 
   @Override

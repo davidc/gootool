@@ -15,7 +15,7 @@ public interface Source extends Closeable
 {
   /**
    * Returns the full root directory of the game installation, i.e. the directory of WorldOfGoo(.exe) for Windows/Linux,
-   * and the .app file for Mac OS X/IOS.
+   * and the .app file for Mac OS X/iOS.
    *
    * @return the real root directory of this source.
    */
@@ -24,7 +24,7 @@ public interface Source extends Closeable
 //  SourceFile getRoot();
 
   /**
-   * Returns the game directory (containing properties and res). For Windows/Linux/IOS, this is the same as the real root,
+   * Returns the game directory (containing properties and res). For Windows/Linux/iOS, this is the same as the real root,
    * but for Mac OS X, it's the subdirectory Contents/Resources/game.
    *
    * @return the game directory of this source.
