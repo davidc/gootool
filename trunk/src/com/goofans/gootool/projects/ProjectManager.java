@@ -286,7 +286,7 @@ public class ProjectManager
     // If they have a saved current_project, and it's still valid, use it
 
     int currentProjectId = PREFS.getInt(PREF_KEY_CURRENT_PROJECT, -1);
-    if (currentProjectId >= 0 && projects.get(currentProjectId) != null) {
+    if (currentProjectId >= 0 && currentProjectId < projects.size() && projects.get(currentProjectId) != null) {
       System.out.println("Get current project, saved (" + currentProjectId + "): " + projects.get(currentProjectId));
       return projects.get(currentProjectId);
     }
