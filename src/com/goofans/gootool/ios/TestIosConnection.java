@@ -32,7 +32,7 @@ public class TestIosConnection extends ProgressIndicatingTask
     GooToolResourceBundle resourceBundle = GooTool.getTextProvider();
 
     beginStep(resourceBundle.getString("projectProps.ios.device.testConnection.connecting"), false);
-    IosConnection con = new IosConnection(host, password);
+    IosConnection con = new IosConnection(new IosConnectionParameters(host, password));
 
     try {
       con.connect();
