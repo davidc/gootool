@@ -763,11 +763,11 @@
     </library>
     <library name="jsch">
       <CLASSES>
-        <root url="jar://$PROJECT_DIR$/dist_src/common/lib/jsch-0.1.42.jar!/" />
+        <root url="jar://$PROJECT_DIR$/dist_src/common/lib/jsch-0.1.44.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES>
-        <root url="file://$PROJECT_DIR$/../src/jsch-0.1.42/src" />
+        <root url="file://$PROJECT_DIR$/../src/jsch-0.1.44/src" />
       </SOURCES>
     </library>
     <library name="uiruntime">
