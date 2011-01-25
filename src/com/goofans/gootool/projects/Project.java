@@ -5,6 +5,7 @@
 
 package com.goofans.gootool.projects;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.StringTokenizer;
 import java.util.prefs.Preferences;
@@ -35,10 +36,12 @@ public abstract class Project
   static final String PREF_KEY_ADDINS = "addins";
 
   protected final Preferences prefsNode;
+  protected final File storageDir;
 
-  public Project(Preferences prefsNode)
+  public Project(Preferences prefsNode, File storageDir)
   {
     this.prefsNode = prefsNode;
+    this.storageDir = storageDir;
   }
 
   public String getName()

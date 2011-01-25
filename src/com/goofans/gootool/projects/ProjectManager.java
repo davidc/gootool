@@ -5,6 +5,8 @@
 
 package com.goofans.gootool.projects;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -14,6 +16,7 @@ import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
 
 import com.goofans.gootool.GooTool;
+import com.goofans.gootool.platform.PlatformSupport;
 import com.goofans.gootool.util.Utilities;
 
 /**
@@ -66,10 +69,10 @@ public class ProjectManager
 
         String projectType = PREFS.get(key, null);
         if (PREF_TYPE_LOCAL.equals(projectType)) {
-          projects.set(projectId, new LocalProject(getPrefsForProject(projectId)));
+          projects.set(projectId, new LocalProject(getProjectPrefs(projectId), getProjectStorageDir(projectId)));
         }
         else if (PREF_TYPE_IOS.equals(projectType)) {
-          projects.set(projectId, new IosProject(getPrefsForProject(projectId)));
+          projects.set(projectId, new IosProject(getProjectPrefs(projectId), getProjectStorageDir(projectId)));
         }
         else {
           throw new RuntimeException("Unrecognised stored project type " + projectType);
@@ -78,43 +81,61 @@ public class ProjectManager
     }
   }
 
-  public static LocalProject createLocalProject()
+  public static LocalProject createLocalProject() throws IOException
   {
     initProjects();
     int nextId = getNextId();
     log.log(Level.INFO, "Creating new local project " + nextId);
 
-    LocalProject project = new LocalProject(getPrefsForProject(nextId));
+    LocalProject project = new LocalProject(getProjectPrefs(nextId), getProjectStorageDir(nextId));
 
     createProjectInternal(nextId, project, PREF_TYPE_LOCAL);
 
     return project;
   }
 
-  public static IosProject createIosProject()
+  public static IosProject createIosProject() throws IOException
   {
     initProjects();
     int nextId = getNextId();
     log.log(Level.INFO, "Creating new iOS project " + nextId);
 
-    IosProject project = new IosProject(getPrefsForProject(nextId));
+    IosProject project = new IosProject(getProjectPrefs(nextId), getProjectStorageDir(nextId));
 
     createProjectInternal(nextId, project, PREF_TYPE_IOS);
 
     return project;
   }
 
-  private static Preferences getPrefsForProject(int id)
+  private static Preferences getProjectPrefs(int id)
   {
     return PREFS.node("" + id);
   }
 
-  private static void createProjectInternal(int id, Project project, String type)
+  private static void createProjectInternal(int id, Project project, String type) throws IOException
   {
     PREFS.put(id + PREF_KEY_SUFFIX_TYPE, type);
     projects.set(id, project);
 
     Utilities.flushPrefs(PREFS);
+
+    File storageDir = getProjectStorageDir(id);
+    if (storageDir.exists()) {
+      Utilities.rmdirAll(storageDir);
+    }
+    Utilities.mkdirsOrException(storageDir);
+  }
+
+  private static File getProjectStorageDir(int id)
+  {
+    File projectsDir;
+    try {
+      projectsDir = new File(PlatformSupport.getToolStorageDirectory(), "projects");
+    }
+    catch (IOException e) {
+      throw new RuntimeException("Can't get GooTool storage directory");
+    }
+    return new File(projectsDir, "" + id);
   }
 
   private static int getNextId()
@@ -135,7 +156,7 @@ public class ProjectManager
     return nextId;
   }
 
-  public static void deleteProject(Project project)
+  public static void deleteProject(Project project) throws IOException
   {
     initProjects();
 
@@ -152,7 +173,7 @@ public class ProjectManager
     projects.set(id, null);
 
     // Remove this project's prefs and our pref for its type
-    Preferences projectPrefs = getPrefsForProject(id);
+    Preferences projectPrefs = getProjectPrefs(id);
     try {
       projectPrefs.removeNode();
       projectPrefs.flush();
@@ -165,6 +186,11 @@ public class ProjectManager
     }
 
     Utilities.flushPrefs(PREFS);
+
+    File storageDir = getProjectStorageDir(id);
+    if (storageDir.exists()) {
+      Utilities.rmdirAll(storageDir);
+    }
 
     // Remove any trailing null entries from the list (there may be more than one if there was a hole just before the end)
     while (!projects.isEmpty() && projects.get(projects.size() - 1) == null) {
@@ -192,7 +218,7 @@ public class ProjectManager
 
     Preferences oldPrefs = GooTool.getPreferences();
 
-    Preferences newPrefs = getPrefsForProject(0);
+    Preferences newPrefs = getProjectPrefs(0);
 
     migratePrefString(oldPrefs, "wog_dir", newPrefs, LocalProject.PREF_KEY_SOURCE_DIR);
     migratePrefString(oldPrefs, "custom_dir", newPrefs, LocalProject.PREF_KEY_TARGET_DIR);

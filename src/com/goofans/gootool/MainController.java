@@ -484,28 +484,34 @@ public class MainController implements ActionListener
 
     Project newProject = null;
 
-    if (option == options[0]) {
-      LocalProjectPropertiesDialog propsDialog = new LocalProjectPropertiesDialog(mainWindow, null);
-      propsDialog.setVisible(true);
+    ProjectPropertiesDialog propsDialog;
 
-      if (propsDialog.isOkButtonPressed()) {
-        newProject = ProjectManager.createLocalProject();
-        propsDialog.saveToProject(newProject);
-      }
+    if (option == options[0]) {
+      propsDialog = new LocalProjectPropertiesDialog(mainWindow, null);
     }
     else {
-      IosProjectPropertiesDialog propsDialog = new IosProjectPropertiesDialog(mainWindow, null);
-      propsDialog.setVisible(true);
-
-      if (propsDialog.isOkButtonPressed()) {
-        newProject = ProjectManager.createIosProject();
-        propsDialog.saveToProject(newProject);
-      }
+      propsDialog = new IosProjectPropertiesDialog(mainWindow, null);
     }
 
-    if (newProject == null) {
+    propsDialog.setVisible(true);
+
+    if (!propsDialog.isOkButtonPressed()) {
       return;
     }
+
+    try {
+      if (option == options[0]) {
+        newProject = ProjectManager.createLocalProject();
+      }
+      else {
+        newProject = ProjectManager.createIosProject();
+      }
+    }
+    catch (IOException e) {
+      showErrorDialog(resourceBundle.getString("project.add.error.title"), resourceBundle.formatString("project.add.error.message", e.getLocalizedMessage()));
+      return;
+    }
+    propsDialog.saveToProject(newProject);
 
     // Initialise their preferences from their existing game config.txt file
     // then force a save
@@ -565,7 +571,13 @@ public class MainController implements ActionListener
 
     mainWindow.mainPanel.setSelectedProject(null);
 
-    ProjectManager.deleteProject(project);
+    try {
+      ProjectManager.deleteProject(project);
+    }
+    catch (IOException e) {
+      showErrorDialog(resourceBundle.getString("project.delete.error.title"), resourceBundle.formatString("project.delete.error.message", e.getLocalizedMessage()));
+    }
+
     mainWindow.mainPanel.updateProjectsCombo();
 
     // TODO select new project (or none) on the ProjectController
