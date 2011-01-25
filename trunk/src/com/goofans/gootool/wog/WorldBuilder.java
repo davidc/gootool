@@ -448,8 +448,7 @@ public class WorldBuilder extends ProgressIndicatingTask
   {
     DebugUtil.setAllLogging();
 
-
-    Project project = new IosProject(null)
+    Project project = new IosProject(null, new File("c:\\dev\\gootool\\iosproject"))
     {
       @Override
       public Source getSource() throws IOException

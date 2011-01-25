@@ -38,9 +38,9 @@ public class LocalProject extends Project
 
   private LocalProjectConfiguration savedConfiguration;
 
-  LocalProject(Preferences prefsNode)
+  LocalProject(Preferences prefsNode, File storageDir)
   {
-    super(prefsNode);
+    super(prefsNode, storageDir);
   }
 
   public String getSourceDir()

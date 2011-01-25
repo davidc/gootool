@@ -7,6 +7,7 @@ package com.goofans.gootool.projects;
 
 import net.infotrek.util.TextUtil;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -32,9 +33,9 @@ public class IosProject extends Project
 
   private IosProjectConfiguration savedConfiguration;
 
-  public /* TODO NOT PUBLIC */ IosProject(Preferences prefsNode)
+  public /* TODO NOT PUBLIC */ IosProject(Preferences prefsNode, File storageDir)
   {
-    super(prefsNode);
+    super(prefsNode, storageDir);
   }
 
   public String getHost()
