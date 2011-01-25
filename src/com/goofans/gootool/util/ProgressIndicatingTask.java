@@ -33,7 +33,7 @@ public abstract class ProgressIndicatingTask
   }
 
 
-  protected void beginStep(String taskDescription, boolean progressAvailable)
+  public void beginStep(String taskDescription, boolean progressAvailable)
   {
 //    log.log(Level.INFO, "Beginning step " + taskDescription);
     for (ProgressListener listener : listeners) {
@@ -41,7 +41,7 @@ public abstract class ProgressIndicatingTask
     }
   }
 
-  protected void progressStep(float percent)
+  public void progressStep(float percent)
   {
     for (ProgressListener listener : listeners) {
       listener.progressStep(percent);

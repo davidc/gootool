@@ -7,17 +7,29 @@ package com.goofans.gootool.projects;
 
 import net.infotrek.util.TextUtil;
 
+import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
+import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.prefs.Preferences;
 
+import com.goofans.gootool.GooTool;
+import com.goofans.gootool.GooToolResourceBundle;
+import com.goofans.gootool.MainController;
+import com.goofans.gootool.facades.IosSource;
 import com.goofans.gootool.facades.Source;
 import com.goofans.gootool.facades.Target;
 import com.goofans.gootool.io.Codec;
 import com.goofans.gootool.io.GameFormat;
 import com.goofans.gootool.io.ImageCodec;
+import com.goofans.gootool.ios.IosConnection;
+import com.goofans.gootool.ios.IosConnectionFactory;
+import com.goofans.gootool.ios.IosConnectionParameters;
+import com.goofans.gootool.util.GUIUtil;
+import com.goofans.gootool.util.ProgressIndicatingTask;
+import com.goofans.gootool.util.ProgressListener;
 import com.goofans.gootool.util.Utilities;
 
 /**
@@ -103,15 +115,46 @@ public class IosProject extends Project
   // We don't override saveProjectConfiguration since we currently have nothing to do
 
   @Override
-  public boolean readyToBuild()
+  public boolean readyToBuild(MainController mainController)
   {
+    if (!initSourceCache(mainController)) return false;
+
+    return true;
+  }
+
+  private boolean initSourceCache(MainController mainController)
+  {
+    if (cacheZipFile().exists()) return true;
+
+    IosConnectionParameters connectionParams = new IosConnectionParameters(getHost(), getPassword());
+
+    ProgressIndicatingTask firstTimeTask = new DownloadSourceCacheTask(connectionParams, mainController);
+
+    GooToolResourceBundle resourceBundle = GooTool.getTextProvider();
+    try {
+      GUIUtil.runTask(mainController.getMainWindow(), resourceBundle.getString("ios.firstTime.title"), firstTimeTask);
+    }
+    catch (Exception e) {
+      log.log(Level.SEVERE, "Exception in iOS cache download", e);
+      JOptionPane.showMessageDialog(mainController.getMainWindow(),
+              resourceBundle.formatString("ios.firstTime.error.message", e.getLocalizedMessage(), e.getCause() != null ? e.getCause().getLocalizedMessage() : ""),
+              resourceBundle.getString("ios.firstTime.error.title"),
+              JOptionPane.ERROR_MESSAGE);
+      return false;
+    }
+
     return true;
   }
 
   @Override
   public Source getSource() throws IOException
   {
-    throw new IOException("IosProject.getSource not yet implemented");
+    return new IosSource(cacheZipFile());
+  }
+
+  private File cacheZipFile()
+  {
+    return new File(storageDir, "cache.zip");
   }
 
   @Override
@@ -166,5 +209,53 @@ public class IosProject extends Project
   public String getGameAnimMovieFilename(String baseName)
   {
     return baseName + ".binltl";
+  }
+
+  // Time to download through GUI (25/01/2011)
+
+  private class DownloadSourceCacheTask extends ProgressIndicatingTask implements ProgressListener
+  {
+    private final IosConnectionParameters connectionParams;
+    private final MainController mainController;
+
+    public DownloadSourceCacheTask(IosConnectionParameters connectionParams, MainController mainController)
+    {
+      this.connectionParams = connectionParams;
+      this.mainController = mainController;
+    }
+
+    @Override
+    public void run() throws Exception
+    {
+      ResourceBundle resourceBundle = GooTool.getTextProvider();
+
+      beginStep(resourceBundle.getString("ios.firstTime.status.connecting"), false);
+
+      IosConnection connection = IosConnectionFactory.getConnection(connectionParams);
+
+      beginStep(resourceBundle.getString("ios.firstTime.status.locating"), false);
+
+      if (!connection.locateWog()) {
+        JOptionPane.showMessageDialog(mainController.getMainWindow(),
+                resourceBundle.getString("ios.firstTime.notFound.message"),
+                resourceBundle.getString("ios.firstTime.notFound.title"),
+                JOptionPane.ERROR_MESSAGE);
+        return;
+      }
+
+      beginStep(resourceBundle.getString("ios.firstTime.status.caching"), true);
+
+      JOptionPane.showMessageDialog(mainController.getMainWindow(),
+              resourceBundle.getString("ios.firstTime.promptDownload.message"),
+              resourceBundle.getString("ios.firstTime.promptDownload.title"),
+              JOptionPane.INFORMATION_MESSAGE);
+
+      File tempFile = File.createTempFile("gooioscache", null);
+      connection.storeOriginalFiles(tempFile, this);
+
+      IosConnectionFactory.returnConnection(connection);
+
+      Utilities.moveFile(tempFile, cacheZipFile());
+    }
   }
 }

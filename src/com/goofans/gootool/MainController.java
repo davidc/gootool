@@ -508,6 +508,7 @@ public class MainController implements ActionListener
       }
     }
     catch (IOException e) {
+      log.log(Level.SEVERE, "Unable to create project", e);
       showErrorDialog(resourceBundle.getString("project.add.error.title"), resourceBundle.formatString("project.add.error.message", e.getLocalizedMessage()));
       return;
     }
