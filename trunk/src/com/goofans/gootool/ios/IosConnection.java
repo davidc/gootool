@@ -42,26 +42,23 @@ public class IosConnection
   private static final String SSH_CHANNEL_TYPE_SFTP = "sftp";
   private static final int CONNECT_TIMEOUT = 5000; //msec
 
-  private final String host;
-  private final String password;
+  static {
+    JSch.setLogger(new JSchLogger());
+  }
+
+  private final IosConnectionParameters params;
   private final JSch jsch;
   private Session session;
   private ChannelSftp sftp;
 
-  private String wogDir = null;
+  private String wogDir;
   private boolean jailbrokenWog = false;
   private String prefsFile = null;
   private int prefsFileSize;
 
-  public IosConnection(String host, String password)
+  public IosConnection(IosConnectionParameters params)
   {
-    this.host = host;
-    if (password != null && password.length() > 0) {
-      this.password = password;
-    }
-    else {
-      this.password = null;
-    }
+    this.params = params;
 
     jsch = new JSch();
 
@@ -103,31 +100,45 @@ public class IosConnection
     }
   }
 
-  void connect() throws JSchException
+  void connect() throws IosException
   {
     if (session != null && session.isConnected()) return;
 
-    session = jsch.getSession(SSH_USER, host, SSH_PORT);
+    try {
+      session = jsch.getSession(SSH_USER, params.host, SSH_PORT);
+    }
+    catch (JSchException e) {
+      throw new IosException("Unable to initialise session for connection to " + params.host, e);
+    }
 
     // username and password will be given via UserInfo interface.
     UserInfo ui = new MyUserInfo();
     session.setUserInfo(ui);
 
-    log.log(Level.FINER, "Connecting to IOS device at " + host);
+    log.log(Level.FINER, "Connecting to IOS device at " + params.host);
 
-    session.connect(CONNECT_TIMEOUT);
+    try {
+      session.connect(CONNECT_TIMEOUT);
+    }
+    catch (JSchException e) {
+      throw new IosException("Unable to connect to " + params.host + ". Reason: " + e.getLocalizedMessage(), e);
+    }
 
     log.log(Level.FINER, "Connected to IOS device");
 
-    sftp = (ChannelSftp) session.openChannel(SSH_CHANNEL_TYPE_SFTP);
+    try {
+      sftp = (ChannelSftp) session.openChannel(SSH_CHANNEL_TYPE_SFTP);
+      log.log(Level.FINER, "Opening SFTP channel");
+      sftp.connect();
+    }
+    catch (JSchException e) {
+      throw new IosException("Unable to open SFTP channel on " + params.host, e);
+    }
 
-    log.log(Level.FINER, "Opening SFTP channel");
-    sftp.connect();
-
-    log.log(Level.INFO, "SSH connected to " + host + ", server version " + session.getServerVersion() + ", SFTP protocol version " + sftp.version());
+    log.log(Level.INFO, "SSH connected to " + params.host + ", server version " + session.getServerVersion() + ", SFTP protocol version " + sftp.version());
   }
 
-  synchronized boolean locateWog() throws JSchException, SftpException
+  synchronized boolean locateWog() throws IosException
   {
     if (wogDir != null) return true;
 
@@ -168,21 +179,20 @@ public class IosConnection
     }
 
     if (wogDir == null) {
-      log.log(Level.WARNING, "World of Goo not found on " + host);
+      log.log(Level.WARNING, "World of Goo not found on " + params.host);
       return false;
     }
     else {
-      log.log(Level.INFO, "World of Goo found at " + wogDir + " on " + host);
+      log.log(Level.INFO, "World of Goo found at " + wogDir + " on " + params.host);
       return true;
     }
   }
 
-  private synchronized void locateProfile() throws JSchException, SftpException
+  private synchronized void locateProfile() throws IosException
   {
     if (prefsFile != null) return;
 
-    locateWog();
-    if (wogDir == null) return;
+    if (!locateWog()) return;
 
     String prefsFile;
     if (jailbrokenWog) {
@@ -206,12 +216,18 @@ public class IosConnection
     this.prefsFileSize = (int) attrs.getSize();
   }
 
-  public ProfileData getProfileData() throws JSchException, SftpException, IOException
+  public ProfileData getProfileData() throws IosException, IOException
   {
     locateProfile();
     if (prefsFile == null) return null;
 
-    InputStream is = sftp.get(prefsFile);
+    InputStream is;
+    try {
+      is = sftp.get(prefsFile);
+    }
+    catch (SftpException e) {
+      throw new IosException("Unable to get preferences file " + prefsFile, e);
+    }
 
     ByteArrayOutputStream os = new ByteArrayOutputStream(prefsFileSize);
     Utilities.copyStreams(is, os);
@@ -229,15 +245,20 @@ public class IosConnection
     // TODO Symbolic link our prefs to their originals on DEPLOY
   }
 
-  private Vector<ChannelSftp.LsEntry> ls(String dir) throws SftpException
+  private Vector<ChannelSftp.LsEntry> ls(String dir) throws IosException
   {
     //noinspection unchecked
-    return (Vector<ChannelSftp.LsEntry>) sftp.ls(dir);
+    try {
+      return (Vector<ChannelSftp.LsEntry>) sftp.ls(dir);
+    }
+    catch (SftpException e) {
+      throw new IosException("Unable to list directory " + dir, e);
+    }
   }
 
-  public void storeOriginalFiles(File zipfile) throws IOException, JSchException, SftpException
+  public void storeOriginalFiles(File zipfile) throws IosException, IOException
   {
-    locateWog();
+    if (!locateWog()) throw new IosException("World of Goo was not found");
 
     boolean failure = true;
 
@@ -279,10 +300,12 @@ public class IosConnection
         zos.putNextEntry(ze);
         zos.write(data);
         zos.closeEntry();
-
       }
 
       failure = false;
+    }
+    catch (SftpException e) {
+      throw new IosException("Can't retrieve files from " + params.host, e);
     }
     finally {
       try {
@@ -293,14 +316,18 @@ public class IosConnection
       }
 
       if (failure) {
-        Utilities.deleteFileIfExists(zipfile);
+        try {
+          Utilities.deleteFileIfExists(zipfile);
+        }
+        catch (IOException e) {
+          log.log(Level.WARNING, "Unable to remove part-completed output ZIP file " + zipfile, e);
+        }
       }
     }
   }
 
-  private void prepareDir(String dir, String prefix, List<OriginalFile> originalFiles) throws SftpException, IOException
+  private void prepareDir(String dir, String prefix, List<OriginalFile> originalFiles) throws IosException
   {
-    System.out.println("count dir = " + dir);
     Vector<ChannelSftp.LsEntry> entries = ls(dir);
 
     for (ChannelSftp.LsEntry entry : entries) {
@@ -382,8 +409,8 @@ public class IosConnection
 
     public boolean promptPassword(String message)
     {
-      if (password != null) {
-        passwd = password;
+      if (params.password != null) {
+        passwd = params.password;
         return true;
       }
       Object[] ob = {passwordField};
@@ -416,8 +443,8 @@ public class IosConnection
                                               String[] prompt,
                                               boolean[] echo)
     {
-      if (password != null && prompt.length == 1) {
-        return new String[]{password};
+      if (params.password != null && prompt.length == 1) {
+        return new String[]{params.password};
       }
 
       panel = new JPanel();
@@ -512,15 +539,14 @@ public class IosConnection
 
   // TODO new IOSCommunicationException
 
-  public static void main(String[] args) throws JSchException, IOException, SftpException
+  public static void main(String[] args) throws IosException, IOException
   {
-    IosConnection ios = new IosConnection("192.168.2.162", null);
+    IosConnection ios = new IosConnection(new IosConnectionParameters("192.168.2.162", null));
     try {
 //    ProfileData data = ios.getProfileData();
 //    System.out.println("data = " + data);
 
       ios.storeOriginalFiles(new File("source.zip"));
-
     }
     finally {
       ios.close();
