@@ -95,7 +95,7 @@ public class ProjectManager
   {
     initProjects();
     int nextId = getNextId();
-    log.log(Level.INFO, "Creating new IOS project " + nextId);
+    log.log(Level.INFO, "Creating new iOS project " + nextId);
 
     IosProject project = new IosProject(getPrefsForProject(nextId));
 

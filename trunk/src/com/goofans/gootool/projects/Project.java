@@ -155,14 +155,14 @@ public abstract class Project
 
   public abstract Codec getCodecForGameXml();
 
-  // TODO we should not expose this, since it's not even a file on IOS!
+  // TODO we should not expose this, since it's not even a file on iOS!
   @Deprecated
   public abstract Codec getCodecForProfile();
 
   public abstract ImageCodec getImageCodec();
 
   /**
-   * Gets the filename of an XML file. May have .bin appended for non-IOS platforms.
+   * Gets the filename of an XML file. May have .bin appended for non-iOS platforms.
    *
    * @param baseName Filename, without trailing .bin.
    * @return The filename that should be used in this project.
@@ -178,7 +178,7 @@ public abstract class Project
   public abstract String getGamePngFilename(String baseName);
 
   /**
-   * Gets the filename of a sound file (.ogg normally, .aac for IOS).
+   * Gets the filename of a sound file (.ogg normally, .aac for iOS).
    *
    * @param baseName Filename, without trailing .ogg.
    * @return The filename on this installation.
@@ -186,7 +186,7 @@ public abstract class Project
   public abstract String getGameSoundFilename(String baseName);
 
   /**
-   * Gets the filename of a music file (.ogg normally, .aifc for IOS).
+   * Gets the filename of a music file (.ogg normally, .aifc for iOS).
    *
    * @param baseName Filename, without trailing .ogg.
    * @return The filename on this installation.
