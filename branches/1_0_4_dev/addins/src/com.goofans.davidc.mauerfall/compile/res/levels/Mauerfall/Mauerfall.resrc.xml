@@ -1,0 +1,6 @@
+<ResourceManifest>
+  <Resources id="scene_Mauerfall">
+    <SetDefaults idprefix="" path="./"/>
+    <Image id="IMAGE_SCENE_MAUERFALL_BLOCK" path="res/levels/Mauerfall/block"/>
+  </Resources>
+</ResourceManifest>

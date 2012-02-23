@@ -1,0 +1,27 @@
+<addin spec-version="1.0">
+  <id>com.goofans.davidc.sandbox</id>
+  <name>Sandbox</name>
+  <type>level</type>
+  <version>0.1</version>
+  <description><![CDATA[
+  <html>
+  <p>A sandbox allowing you to use all kinds of balls.</p>
+  </html>
+  ]]></description>
+  <author>davidc/xanax</author>
+
+  <level>
+    <dir>Sandbox</dir>
+    <name text="Sandbox"
+            />
+    <subtitle text="hi, mom!"
+            />
+    <!--<ocd>balls,57</ocd>-->
+  </level>
+
+  <!-- Changelog:
+
+  0.1
+    -->
+
+</addin>

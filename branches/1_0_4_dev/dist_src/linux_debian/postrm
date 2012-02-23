@@ -1,0 +1,4 @@
+#!/bin/sh
+
+if test -x /usr/bin/update-menus; then /usr/bin/update-menus; fi
+if test -x /usr/bin/update-desktop-database; then /usr/bin/update-desktop-database; fi

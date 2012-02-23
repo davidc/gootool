@@ -1,0 +1,8 @@
+<addin spec-version="1.0">
+  <id>net.davidc.test.badoverride</id>
+  <name>Bad Override</name>
+  <type>mod</type>
+  <version>1.0</version>
+  <description>This addin has a bad file (a .bin file) in the override directory.</description>
+  <author>davidc</author>
+</addin>

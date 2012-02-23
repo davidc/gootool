@@ -1,0 +1,30 @@
+<ball name="GenIvy"
+      static="true"
+      shape="rectangle,51,51"
+      mass="20"
+      towermass="20"
+      strands="0"
+      walkspeed="0"
+      climbspeed="0"
+      speedvariance="0"
+      draggable="false"
+      detachable="false"
+
+      autobounds="false"
+	  autoboundsunattached="false"
+
+	  grumpy="true"
+	  suckable="false"
+
+	  spawn="Ivy"
+
+	  stacking="true"
+	  >
+
+  <part name="body" layer="0"
+        x="0" y="0"
+        image="IMAGE_BALL_GENIVY_BODY"
+        scale="1"/>
+
+
+</ball>
