@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008, 2009, 2010, 2011 David C A Croft. All rights reserved. Your use of this computer software
+ * Copyright (c) 2008, 2009, 2010 David C A Croft. All rights reserved. Your use of this computer software
  * is permitted only in accordance with the GooTool license agreement distributed with this file.
  */
 
@@ -8,12 +8,14 @@ package com.goofans.gootool.siteapi;
 import net.infotrek.util.TextUtil;
 
 import java.io.IOException;
+import java.io.File;
 import java.util.logging.Logger;
 
-import com.goofans.gootool.projects.Project;
-import com.goofans.gootool.projects.ProjectManager;
+import com.goofans.gootool.profile.ProfileFactory;
 import com.goofans.gootool.util.DebugUtil;
 import com.goofans.gootool.util.XMLUtil;
+import com.goofans.gootool.util.Utilities;
+import com.goofans.gootool.io.GameFormat;
 import org.w3c.dom.Document;
 
 /**
@@ -31,12 +33,12 @@ public class ProfileRestoreRequest extends APIRequestAuthenticated
     super(API_PROFILE_RESTORE);
   }
 
-  public void restoreProfile(Project project, int backupId) throws APIException
+  public void restoreProfile(int backupId) throws APIException
   {
     addPostParameter("backup_id", String.valueOf(backupId));
 
     Document doc = doRequest();
-    if (!"profile-restore-success".equalsIgnoreCase(doc.getDocumentElement().getTagName())) { //NON-NLS
+    if (!"profile-restore-success".equalsIgnoreCase(doc.getDocumentElement().getTagName())) {
       throw new APIException("Profile restore failed");
     }
 
@@ -48,17 +50,12 @@ public class ProfileRestoreRequest extends APIRequestAuthenticated
       throw new APIException("No profile content returned by server");
     }
 
-    try {
-      if (project.getProfileData() == null) {
-        throw new APIException("You don't have a profile on this computer yet. Create one before restoring.");
-      }
+    if (!ProfileFactory.isProfileFound()) {
+      throw new APIException("You don't have a profile on this computer yet. Create one before restoring.");
     }
-    catch (IOException e) {
-      throw new APIException("You don't have a profile on this computer yet. Create one before restoring.", e);
-    }
-
+    
     try {
-      project.setProfileBytes(profileContent);
+      GameFormat.encodeProfileFile(ProfileFactory.getProfileFile(), profileContent);
     }
     catch (IOException e) {
       throw new APIException("Unable to write the profile: " + e.getMessage(), e);
@@ -68,8 +65,8 @@ public class ProfileRestoreRequest extends APIRequestAuthenticated
   public static void main(String[] args) throws APIException, IOException
   {
     DebugUtil.setAllLogging();
+    ProfileFactory.init();
 
-    Project project = ProjectManager.simpleInit();
-    new ProfileRestoreRequest().restoreProfile(project, 1);
+    new ProfileRestoreRequest().restoreProfile(1);
   }
 }

@@ -1,30 +1,22 @@
 /*
- * Copyright (c) 2008, 2009, 2010, 2011 David C A Croft. All rights reserved. Your use of this computer software
+ * Copyright (c) 2008, 2009, 2010 David C A Croft. All rights reserved. Your use of this computer software
  * is permitted only in accordance with the GooTool license agreement distributed with this file.
  */
 
 package com.goofans.gootool;
-
-import net.infotrek.util.EncodingUtil;
 
 import java.io.*;
 import java.util.List;
 import java.util.Map;
 import java.util.prefs.BackingStoreException;
 
-import com.goofans.gootool.facades.Source;
-import com.goofans.gootool.facades.SourceFile;
-import com.goofans.gootool.facades.Target;
-import com.goofans.gootool.projects.IosProject;
-import com.goofans.gootool.projects.LocalProject;
-import com.goofans.gootool.projects.Project;
-import com.goofans.gootool.projects.ProjectManager;
 import com.goofans.gootool.siteapi.ProfileListRequest;
 import com.goofans.gootool.siteapi.VersionCheck;
 import com.goofans.gootool.util.ProgressIndicatingTask;
 import com.goofans.gootool.util.ProgressListener;
 import com.goofans.gootool.util.Utilities;
 import com.goofans.gootool.util.Version;
+import com.goofans.gootool.wog.WorldOfGoo;
 
 /**
  * Produces a file with a diagnostic information.
@@ -60,15 +52,13 @@ public class Diagnostics extends ProgressIndicatingTask
     dumpPreferences();
     dumpJavaEnvironment();
     dumpOSEnvironment();
-    dumpProjects();
+    dumpDirectories();
     dumpLogfiles();
     runConnectivityTests();
 
     // TODO:
     // WoG config
     // Installed addins and their zip contents
-
-    // TODO project configuration
 
     out.close();
   }
@@ -121,92 +111,42 @@ public class Diagnostics extends ProgressIndicatingTask
     out.println();
   }
 
-  private void dumpProjects()
+  private void dumpDirectories()
   {
-    beginStep("Dumping projects", false);
-    out.println("--- Projects ---");
-    //TODO current Project
-
-    List<Project> projects = ProjectManager.getProjects();
-
-    for (int i = 0; i < projects.size(); i++) {
-      Project project = projects.get(i);
-      if (project != null) {
-        out.println("--- Project " + i + " of type " + project.getClass().getName() + " ---");
-        out.println();
-        out.println("Name: " + project.getName());
-        out.println("Codec for Game XML: " + project.getCodecForGameXml().getClass().getName());
-        out.println("Codec for Images: " + project.getImageCodec().getClass().getName());
-        out.println("Codec for Profile: " + project.getCodecForProfile().getClass().getName());
-        out.println("Filename for XML: " + project.getGameXmlFilename("base"));
-        out.println("Filename for PNG: " + project.getGamePngFilename("base"));
-        out.println("Filename for Music: " + project.getGameMusicFilename("base"));
-        out.println("Filename for Sound: " + project.getGameSoundFilename("base"));
-        out.println("Filename for Anim/Movie: " + project.getGameAnimMovieFilename("base"));
-        try {
-          out.println("Profile bytes: " + EncodingUtil.bytesToStringUtf8(project.getProfileBytes())); // TODO if possible, only do this if we've cached iOS password
-        }
-        catch (IOException e) {
-          out.println("Unable to get profile bytes:");
-          e.printStackTrace(out);
-        }
-        out.println();
-
-        if (project instanceof LocalProject) {
-          LocalProject localProject = (LocalProject) project;
-          out.println("(LocalProject) Profile file: " + localProject.getProfileFile());
-          out.println("(LocalProject) Source dir: " + localProject.getSourceDir());
-          out.println("(LocalProject) Target dir: " + localProject.getTargetDir());
-        }
-        else if (project instanceof IosProject) {
-          IosProject iosProject = (IosProject) project;
-          out.println("(IosProject) Host:  " + iosProject.getHost());
-          out.println("(IosProject) Password: " + (iosProject.getPassword() == null ? "unset" : "set"));
-        }
-        out.println();
-
-        out.println("--- Active configuration for project " + i + " ---");
-        out.println();
-        out.println(project.getSavedConfiguration());
-        out.println();
-
-        try {
-          Source source = project.getSource();
-          try {
-            out.println("--- Source for project " + i + "---");
-            out.println();
-            out.println("Source: " + source);
-            out.println("Real root: " + source.getRealRoot());
-            out.println("Game root: " + source.getGameRoot());
-
-            listDir(source.getRealRoot(), "");
-          }
-          finally {
-            source.close();
-          }
-        }
-        catch (IOException e) {
-          out.println("Warning: unable to get or close source");
-          e.printStackTrace(out);
-        }
-        out.println();
-
-        // TODO dump target as well
-        try {
-          Target target = project.getTarget();
-          try {
-            out.println("Target: " + target);
-          }
-          finally {
-            target.close();
-          }
-        }
-        catch (IOException e) {
-          out.println("Warning: unable to get or close target");
-          e.printStackTrace(out);
-        }
+    beginStep("Dumping World of Goo directory", false);
+    out.println("--- Source World of Goo ---");
+    out.println();
+    WorldOfGoo wog = WorldOfGoo.getTheInstance();
+    if (wog.isWogFound()) {
+      try {
+        listDir(out, wog.getWogDir());
+      }
+      catch (IOException e) {
+        out.println("Can't list WoG dir:");
+        e.printStackTrace(out);
       }
     }
+    else {
+      out.println("No WoG dir set.");
+    }
+    out.println();
+
+    beginStep("Dumping custom directory", false);
+    out.println("--- Custom World of Goo ---");
+    out.println();
+    if (wog.isCustomDirSet()) {
+      try {
+        listDir(out, wog.getCustomDir());
+      }
+      catch (IOException e) {
+        out.println("Can't list custom dir:");
+        e.printStackTrace(out);
+      }
+    }
+    else {
+      out.println("No custom dir set.");
+    }
+    out.println();
   }
 
   private void dumpLogfiles()
@@ -278,26 +218,32 @@ public class Diagnostics extends ProgressIndicatingTask
     out.println();
   }
 
-  @SuppressWarnings({"HardcodedFileSeparator"})
-  private void listDir(SourceFile dir, String prefix)
+  private static void listDir(PrintStream out, File wogDir)
   {
-    List<SourceFile> files = dir.list();
+    out.println(wogDir + " >>>");
+    listDir(out, wogDir, "");
+  }
+
+  @SuppressWarnings({"HardcodedFileSeparator"})
+  private static void listDir(PrintStream out, File dir, String prefix)
+  {
+    File[] files = dir.listFiles();
 
     // Files and unknowns first
-    for (SourceFile file : files) {
+    for (File file : files) {
       if (file.isFile()) {
-        out.format("%8d f %s%n", file.getSize(), prefix + file.getName());
+        out.format("%8d f %s%n", file.length(), prefix + file.getName());
       }
       else if (!file.isDirectory()) {
-        out.format("%8d ? %s%n", file.getSize(), prefix + file.getName());
+        out.format("%8d ? %s%n", file.length(), prefix + file.getName());
       }
     }
 
     // Then subdirectories
-    for (SourceFile file : files) {
+    for (File file : files) {
       if (file.isDirectory()) {
         out.format("         d %s%n", prefix + file.getName() + "/");
-        listDir(file, "  " + prefix + file.getName() + "/");
+        listDir(out, file, "  " + prefix + file.getName() + "/");
       }
     }
   }
@@ -305,10 +251,9 @@ public class Diagnostics extends ProgressIndicatingTask
   @SuppressWarnings({"UseOfSystemOutOrSystemErr"})
   public static void main(String[] args) throws IOException
   {
+    WorldOfGoo.getTheInstance().init();
 
     Diagnostics d = new Diagnostics(System.out);
-
-    d.setParentComponent(null);
 
     d.addListener(new ProgressListener()
     {

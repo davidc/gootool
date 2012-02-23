@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008, 2009, 2010, 2011 David C A Croft. All rights reserved. Your use of this computer software
+ * Copyright (c) 2008, 2009, 2010 David C A Croft. All rights reserved. Your use of this computer software
  * is permitted only in accordance with the GooTool license agreement distributed with this file.
  */
 
@@ -15,7 +15,6 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.prefs.Preferences;
 
 import com.goofans.gootool.platform.PlatformSupport;
 import com.goofans.gootool.util.GUIUtil;
@@ -23,7 +22,7 @@ import com.goofans.gootool.util.ProgressIndicatingTask;
 import com.goofans.gootool.util.Version;
 
 /**
- * Responsible for launching the application, creating the view and mainController, and linking them together.
+ * Responsible for launching the application, creating the view and controller, and linking them together.
  *
  * @author David Croft (davidc@goofans.com)
  * @version $Id$
@@ -32,12 +31,12 @@ public class GooTool
 {
   private static final Logger log = Logger.getLogger(GooTool.class.getName());
 
-  private static ImageIcon icon = null;
-  private static GooToolResourceBundle resourceBundle = null;
-  private static MainController mainController = null;
+  private static ImageIcon icon;
+  private static GooToolResourceBundle resourceBundle;
+  private static Controller controller;
 
-  private static ExecutorService threadPoolExecutor = null;
-  private static ScheduledExecutorService scheduledExecutor = null;
+  private static ExecutorService threadPoolExecutor;
+  private static ScheduledExecutorService scheduledExecutor;
 
   private GooTool()
   {
@@ -62,11 +61,11 @@ public class GooTool
       initTextProvider();
       initExecutors();
 
-      mainController = new MainController();
+      controller = new Controller();
 
-      PlatformSupport.startup(mainController);
+      PlatformSupport.startup(controller);
 
-      ProgressIndicatingTask startupTask = new StartupTask(mainController);
+      ProgressIndicatingTask startupTask = new StartupTask(controller);
 
       GUIUtil.runTask((JFrame) null, resourceBundle.formatString("launcher.title", Version.RELEASE_FRIENDLY), startupTask);
       // In preparation for new splash screen:
@@ -76,8 +75,6 @@ public class GooTool
     }
     catch (Throwable t) {
       log.log(Level.SEVERE, "Uncaught exception", t);
-      // This can't be l10n since we might not yet have initialised the textProvider
-      //noinspection HardCodedStringLiteral,HardcodedLineSeparator
       JOptionPane.showMessageDialog(null, "Uncaught exception (" + t.getClass().getName() + "):\n" + t.getLocalizedMessage(), "GooTool Exception", JOptionPane.ERROR_MESSAGE);
       System.exit(1);
     }
@@ -86,16 +83,16 @@ public class GooTool
   /**
    * This is public so it can be used by the main() function of test cases.
    */
-  public static synchronized void initExecutors()
+  public static void initExecutors()
   {
-    if (threadPoolExecutor != null || scheduledExecutor != null) {
+    if (threadPoolExecutor != null) {
       throw new RuntimeException("Executors are already initialised");
     }
     threadPoolExecutor = Executors.newCachedThreadPool();
     scheduledExecutor = Executors.newScheduledThreadPool(1);
   }
 
-  private static List<Runnable> queuedTasks = null;
+  private static List<Runnable> queuedTasks;
   private static boolean startupIsComplete = false;
 
   public static void initQueuedTasks()
@@ -140,7 +137,7 @@ public class GooTool
 
   private static void initIcon()
   {
-    icon = new ImageIcon(GooTool.class.getResource("/48x48.png")); //NON-NLS
+    icon = new ImageIcon(GooTool.class.getResource("/48x48.png"));
     log.fine("icon = " + icon);
   }
 
@@ -160,7 +157,7 @@ public class GooTool
   private static synchronized void initTextProvider()
   {
     if (resourceBundle == null) {
-      resourceBundle = new GooToolResourceBundle("text"); //NON-NLS
+      resourceBundle = new GooToolResourceBundle("text");
     }
   }
 
@@ -170,9 +167,9 @@ public class GooTool
     return resourceBundle;
   }
 
-  public static MainController getController()
+  public static Controller getController()
   {
-    return mainController;
+    return controller;
   }
 
   public static void executeTaskInThreadPool(Runnable task)
@@ -191,10 +188,5 @@ public class GooTool
   {
     log.log(Level.FINEST, "Scheduling task " + task + " with init delay " + initialDelayMsec + " and recurring delay " + delayMsec);
     scheduledExecutor.scheduleWithFixedDelay(task, initialDelayMsec, delayMsec, TimeUnit.MILLISECONDS);
-  }
-
-  public static Preferences getPreferences()
-  {
-    return Preferences.userNodeForPackage(GooTool.class);
   }
 }

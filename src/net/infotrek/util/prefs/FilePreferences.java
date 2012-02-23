@@ -1,8 +1,3 @@
-/*
- * Copyright (c) 2008, 2009, 2010, 2011 David C A Croft. All rights reserved. Your use of this computer software
- * is permitted only in accordance with the GooTool license agreement distributed with this file.
- */
-
 package net.infotrek.util.prefs;
 
 import java.util.*;
@@ -181,7 +176,7 @@ public class FilePreferences extends AbstractPreferences
           List<String> toRemove = new ArrayList<String>();
 
           // Make a list of all direct children of this node to be removed
-          Enumeration<?> pnen = p.propertyNames();
+          final Enumeration<?> pnen = p.propertyNames();
           while (pnen.hasMoreElements()) {
             String propKey = (String) pnen.nextElement();
             if (propKey.startsWith(path)) {

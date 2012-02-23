@@ -1,12 +1,11 @@
 /*
- * Copyright (c) 2008, 2009, 2010, 2011 David C A Croft. All rights reserved. Your use of this computer software
+ * Copyright (c) 2008, 2009, 2010 David C A Croft. All rights reserved. Your use of this computer software
  * is permitted only in accordance with the GooTool license agreement distributed with this file.
  */
 
 package com.goofans.gootool.util;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -123,14 +122,8 @@ public class GUIUtil
    */
   public static void runTask(JFrame owner, String windowTitle, final ProgressIndicatingTask task) throws Exception
   {
-    ProgressDialog progressDialog = new ProgressDialog(owner, windowTitle);
-
-    if (owner == null) {
-      ((Frame) progressDialog.getOwner()).setIconImage(GooTool.getMainIconImage());
-    }
-
+    final ProgressDialog progressDialog = new ProgressDialog(owner, windowTitle);
     task.addListener(progressDialog);
-    task.setParentComponent(progressDialog);
     runTask(task, progressDialog);
   }
 
@@ -144,14 +137,8 @@ public class GUIUtil
    */
   public static void runTask(JDialog owner, String windowTitle, final ProgressIndicatingTask task) throws Exception
   {
-    ProgressDialog progressDialog = new ProgressDialog(owner, windowTitle);
-
-    if (owner == null) {
-      ((Frame) progressDialog.getOwner()).setIconImage(GooTool.getMainIconImage());
-    }
-
+    final ProgressDialog progressDialog = new ProgressDialog(owner, windowTitle);
     task.addListener(progressDialog);
-    task.setParentComponent(progressDialog);
     runTask(task, progressDialog);
   }
 
@@ -188,12 +175,6 @@ public class GUIUtil
             }
           });
         }
-      }
-
-      @Override
-      public String toString()
-      {
-        return "GUIUtil task " + task;
       }
     });
 

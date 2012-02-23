@@ -1,21 +1,13 @@
 /*
- * Copyright (c) 2008, 2009, 2010, 2011 David C A Croft. All rights reserved. Your use of this computer software
+ * Copyright (c) 2008, 2009, 2010 David C A Croft. All rights reserved. Your use of this computer software
  * is permitted only in accordance with the GooTool license agreement distributed with this file.
  */
 
 package com.goofans.gootool.io;
 
-import javax.xml.transform.TransformerException;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-import com.goofans.gootool.facades.Source;
-import com.goofans.gootool.facades.SourceFile;
-import com.goofans.gootool.projects.Project;
-import com.goofans.gootool.projects.ProjectManager;
+import com.goofans.gootool.util.Utilities;
 import com.goofans.gootool.util.XMLUtil;
+import com.goofans.gootool.wog.WorldOfGoo;
 import org.bouncycastle.crypto.BlockCipher;
 import org.bouncycastle.crypto.BufferedBlockCipher;
 import org.bouncycastle.crypto.InvalidCipherTextException;
@@ -24,13 +16,20 @@ import org.bouncycastle.crypto.modes.CBCBlockCipher;
 import org.bouncycastle.crypto.params.KeyParameter;
 import org.w3c.dom.Document;
 
+import javax.xml.transform.TransformerException;
+import java.io.File;
+import java.io.IOException;
+import java.io.ByteArrayInputStream;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  * Encrypt/decrypt .bin files in AES format (Windows/Linux).
  *
  * @author David Croft (davidc@goofans.com)
  * @version $Id$
  */
-public class AESBinFormat extends Codec
+public class AESBinFormat
 {
   private static final Logger log = Logger.getLogger(AESBinFormat.class.getName());
 
@@ -39,6 +38,7 @@ public class AESBinFormat extends Codec
           0x06, 0x09, 0x09, 0x04, 0x06, 0x0D, 0x03, 0x0F,
           0x03, 0x06, 0x0E, 0x01, 0x0E, 0x02, 0x07, 0x0B};
 
+//  private static final String CHARSET = "UTF-8";
   private static final byte EOF_MARKER = (byte) 0xFD;
 
 
@@ -48,8 +48,14 @@ public class AESBinFormat extends Codec
   private static int TESTMODE_DECODING_STRING_SIZE;
   private static byte[] TESTMODE_ORIGINAL;
 
-  AESBinFormat()
+  private AESBinFormat()
   {
+  }
+
+  public static byte[] decodeFile(File file) throws IOException
+  {
+    byte[] inputBytes = Utilities.readFile(file);
+    return decode(inputBytes);
   }
 
   // Java Crypto API - can't use because user will have to install 192-bit policy file.
@@ -64,7 +70,8 @@ public class AESBinFormat extends Codec
 //    aesDecrypt.InvCipher(bytes, decrypted);
 //
 
-  public byte[] decode(byte[] inputBytes) throws IOException
+
+  private static byte[] decode(byte[] inputBytes) throws IOException
   {
     int inputSize = inputBytes.length;
 
@@ -118,7 +125,14 @@ public class AESBinFormat extends Codec
     return finalBytes;
   }
 
-  public byte[] encode(byte[] inputBytes) throws IOException
+
+  public static void encodeFile(File file, byte[] input) throws IOException
+  {
+    byte[] bytes = encode(input);
+    Utilities.writeFile(file, bytes);
+  }
+
+  private static byte[] encode(byte[] inputBytes) throws IOException
   {
 //    byte[] inputBytes = input.getBytes(CHARSET);
 
@@ -216,48 +230,38 @@ public class AESBinFormat extends Codec
   @SuppressWarnings({"UseOfSystemOutOrSystemErr", "HardCodedStringLiteral", "HardcodedFileSeparator", "DuplicateStringLiteralInspection"})
   public static void main(String[] args) throws IOException, TransformerException
   {
-    Project project = ProjectManager.simpleInit();
-    Source source = project.getSource();
-    try {
-      SourceFile sourceGameRoot = source.getGameRoot();
+    WorldOfGoo worldOfGoo = WorldOfGoo.getTheInstance();
+    worldOfGoo.init();
 
-      Codec codec = project.getCodecForGameXml();
-
-      SourceFile textFile = sourceGameRoot.getChild(project.getGameXmlFilename("properties/text.xml"));
-
-      byte[] decoded = codec.decodeFile(textFile);
+    byte[] decoded = decodeFile(worldOfGoo.getGameFile("properties/text.xml.bin"));
 
 //    Document doc = XMLUtil.loadDocumentFromInputStream(new ByteArrayInputStream(s.getBytes()));
-      Document doc = XMLUtil.loadDocumentFromInputStream(new ByteArrayInputStream(decoded));
-      System.out.println(XMLUtil.writeDocumentToString(doc));
+    Document doc = XMLUtil.loadDocumentFromInputStream(new ByteArrayInputStream(decoded));
+    System.out.println(XMLUtil.writeDocumentToString(doc));
 
-      TESTMODE = true;
+    TESTMODE = true;
 
-      testFile(codec, sourceGameRoot.getChild(project.getGameXmlFilename("properties/resources.xml")));
+    testFile("properties/resources.xml.bin");
 //    testFile("res\\levels\\GoingUp\\GoingUp.level.bin");
 //    testFile("res\\levels\\GoingUp\\GoingUp.resrc.bin");
 //    testFile("res\\levels\\GoingUp\\GoingUp.scene.bin");
 //    testFile("properties\\materials.xml.bin");
 
-      testDir(codec, source.getGameRoot());
+    testDir(worldOfGoo.getGameFile(""));
 
 //    testFile("res\\anim\\ball_counter.anim.binltl");
-    }
-    finally {
-      source.close();
-    }
   }
 
   @SuppressWarnings({"HardCodedStringLiteral"})
-  private static void testDir(Codec codec, SourceFile dir) throws IOException
+  private static void testDir(File dir) throws IOException
   {
-    for (SourceFile file : dir.list()) {
+    for (File file : dir.listFiles()) {
       if (file.isDirectory()) {
-        testDir(codec, file);
+        testDir(file);
       }
       else if (file.isFile()) {
         if (file.getName().endsWith(".bin")) {
-          testFile(codec, file);
+          testFile(file);
         }
 //        else if (file.getName().endsWith(".binltl")) {
 //          testFile(file);
@@ -275,18 +279,25 @@ public class AESBinFormat extends Codec
     return "0x" + s.substring(s.length() - 2, s.length());
   }
 
+  private static byte[] testFile(String file) throws IOException
+  {
+    File f = WorldOfGoo.getTheInstance().getGameFile(file);
+
+    return testFile(f);
+  }
+
   @SuppressWarnings({"UseOfSystemOutOrSystemErr", "HardCodedStringLiteral"})
-  private static byte[] testFile(Codec codec, SourceFile f) throws IOException
+  private static byte[] testFile(File f) throws IOException
   {
     System.err.println("Testing " + f);
 
-    byte[] de = codec.decodeFile(f);
+    byte[] de = decodeFile(f);
 //    System.out.println("de = " + de);
 //    System.out.println("de.length() = " + de.length());
 
 //    byte[] enc =
     try {
-      codec.encode(de);
+      encode(de);
     }
     catch (RuntimeException re) {
       // We know about the BOM problem in text.xml.bin

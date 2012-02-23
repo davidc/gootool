@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008, 2009, 2010, 2011 David C A Croft. All rights reserved. Your use of this computer software
+ * Copyright (c) 2008, 2009, 2010 David C A Croft. All rights reserved. Your use of this computer software
  * is permitted only in accordance with the GooTool license agreement distributed with this file.
  */
 
@@ -29,8 +29,8 @@ public class LoginTestRequest extends APIRequestAuthenticated
   {
     Document doc = doRequest();
 
-    if (!"login-test-success".equalsIgnoreCase(doc.getDocumentElement().getTagName())) { //NON-NLS
-      throw new APIException("Login test failed"); //NON-NLS
+    if (!"login-test-success".equalsIgnoreCase(doc.getDocumentElement().getTagName())) {
+      throw new APIException("Login test failed");
     }
   }
 

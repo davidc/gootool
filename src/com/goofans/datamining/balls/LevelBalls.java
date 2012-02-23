@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008, 2009, 2010, 2011 David C A Croft. All rights reserved. Your use of this computer software
+ * Copyright (c) 2008, 2009, 2010 David C A Croft. All rights reserved. Your use of this computer software
  * is permitted only in accordance with the GooTool license agreement distributed with this file.
  */
 
@@ -9,13 +9,12 @@ import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathFactory;
 import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.util.*;
 
-import com.goofans.gootool.facades.Source;
-import com.goofans.gootool.facades.SourceFile;
-import com.goofans.gootool.projects.Project;
-import com.goofans.gootool.projects.ProjectManager;
+import com.goofans.gootool.io.GameFormat;
 import com.goofans.gootool.util.XMLUtil;
+import com.goofans.gootool.wog.WorldOfGoo;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -26,97 +25,88 @@ import org.w3c.dom.NodeList;
  */
 public class LevelBalls
 {
-  private LevelBalls()
-  {
-  }
-
   @SuppressWarnings({"UseOfSystemOutOrSystemErr", "HardCodedStringLiteral", "HardcodedFileSeparator", "StringConcatenation", "DuplicateStringLiteralInspection"})
   public static void main(String[] args) throws Exception
   {
+    final WorldOfGoo wog = WorldOfGoo.getTheInstance();
+    wog.init();
+
     Map<String, Set<String>> ballUsages = new TreeMap<String, Set<String>>();
 
 //    System.out.println("\n==== BY LEVEL ====\n");
 
-    Project project = ProjectManager.simpleInit();
-    Source source = project.getSource();
-    try {
-      SourceFile levelsDir = source.getGameRoot().getChild("res/levels/");
+    final File levelsDir = wog.getGameFile("res/levels/");
 
-      for (SourceFile levelDir : levelsDir.list()) {
-        if (levelDir.isDirectory()) {
-          String levelName = levelDir.getName();
+    for (File file : levelsDir.listFiles()) {
+      if (file.isDirectory()) {
+        String levelName = file.getName();
 
 //        System.out.println("Level " + levelName);
 
-          SourceFile levelFile = levelDir.getChild(project.getGameXmlFilename(levelName + "/" + levelName + ".level"));
+        final byte[] xmlBytes = GameFormat.decodeBinFile(new File(file, levelName + ".level.bin"));
+        final Document doc = XMLUtil.loadDocumentFromInputStream(new ByteArrayInputStream(xmlBytes));
 
-          byte[] xmlBytes = project.getCodecForGameXml().decodeFile(levelFile);
-          Document doc = XMLUtil.loadDocumentFromInputStream(new ByteArrayInputStream(xmlBytes));
+        final XPath xPath = XPathFactory.newInstance().newXPath();
 
-          XPath xPath = XPathFactory.newInstance().newXPath();
 
-          Set<String> attachedIds = new HashSet<String>();
+        Set<String> attachedIds = new HashSet<String>();
 
-          NodeList strands = (NodeList) xPath.evaluate("/level/Strand", doc, XPathConstants.NODESET);
+        final NodeList strands = (NodeList) xPath.evaluate("/level/Strand", doc, XPathConstants.NODESET);
 
-          for (int i = 0; i < strands.getLength(); i++) {
-            Node node = strands.item(i);
-            String gb1 = node.getAttributes().getNamedItem("gb1").getTextContent();
-            String gb2 = node.getAttributes().getNamedItem("gb2").getTextContent();
+        for (int i = 0; i < strands.getLength(); i++) {
+          Node node = strands.item(i);
+          String gb1 = node.getAttributes().getNamedItem("gb1").getTextContent();
+          String gb2 = node.getAttributes().getNamedItem("gb2").getTextContent();
 
-            attachedIds.add(gb1);
-            attachedIds.add(gb2);
+          attachedIds.add(gb1);
+          attachedIds.add(gb2);
+        }
+
+        final NodeList ballInstances = (NodeList) xPath.evaluate("/level/BallInstance", doc, XPathConstants.NODESET);
+
+        Map<String, Integer> ballTypesTotal = new TreeMap<String, Integer>();
+        Map<String, Integer> ballTypesSleeping = new TreeMap<String, Integer>();
+        Map<String, Integer> ballTypesAttached = new TreeMap<String, Integer>();
+
+        for (int i = 0; i < ballInstances.getLength(); i++) {
+          Node node = ballInstances.item(i);
+          String type = node.getAttributes().getNamedItem("type").getTextContent();
+          final Node discoveredAttr = node.getAttributes().getNamedItem("discovered");
+
+          boolean sleeping = discoveredAttr != null && ("false".equalsIgnoreCase(discoveredAttr.getTextContent()));
+
+          final String id = node.getAttributes().getNamedItem("id").getTextContent();
+
+          boolean attached = (attachedIds.contains(id));
+
+          if (ballTypesTotal.containsKey(type)) {
+            ballTypesTotal.put(type, ballTypesTotal.get(type) + 1);
+            if (sleeping) ballTypesSleeping.put(type, ballTypesSleeping.get(type) + 1);
+            if (attached) ballTypesAttached.put(type, ballTypesAttached.get(type) + 1);
           }
-
-          NodeList ballInstances = (NodeList) xPath.evaluate("/level/BallInstance", doc, XPathConstants.NODESET);
-
-          Map<String, Integer> ballTypesTotal = new TreeMap<String, Integer>();
-          Map<String, Integer> ballTypesSleeping = new TreeMap<String, Integer>();
-          Map<String, Integer> ballTypesAttached = new TreeMap<String, Integer>();
-
-          for (int i = 0; i < ballInstances.getLength(); i++) {
-            Node node = ballInstances.item(i);
-            String type = node.getAttributes().getNamedItem("type").getTextContent();
-            Node discoveredAttr = node.getAttributes().getNamedItem("discovered");
-
-            boolean sleeping = discoveredAttr != null && ("false".equalsIgnoreCase(discoveredAttr.getTextContent()));
-
-            String id = node.getAttributes().getNamedItem("id").getTextContent();
-
-            boolean attached = (attachedIds.contains(id));
-
-            if (ballTypesTotal.containsKey(type)) {
-              ballTypesTotal.put(type, ballTypesTotal.get(type) + 1);
-              if (sleeping) ballTypesSleeping.put(type, ballTypesSleeping.get(type) + 1);
-              if (attached) ballTypesAttached.put(type, ballTypesAttached.get(type) + 1);
-            }
-            else {
-              ballTypesTotal.put(type, 1);
-              ballTypesSleeping.put(type, 1);
-              ballTypesAttached.put(type, 0);
-            }
+          else {
+            ballTypesTotal.put(type, 1);
+            ballTypesSleeping.put(type, 1);
+            ballTypesAttached.put(type, 0);
           }
+        }
 
-          for (String type : ballTypesTotal.keySet()) {
+        for (String type : ballTypesTotal.keySet()) {
 //          System.out.println(type + ": " + ballTypesTotal.get(type) + " total (" + ballTypesSleeping.get(type) + " sleeping, " + ballTypesAttached.get(type) + " attached)");
-            System.out.println("level," + levelName + "," + type + "," + ballTypesTotal.get(type) + "," + ballTypesSleeping.get(type) + "," + ballTypesAttached.get(type));
+          System.out.println("level," + levelName + "," + type + "," + ballTypesTotal.get(type) + "," + ballTypesSleeping.get(type) + "," + ballTypesAttached.get(type));
 
-            if (ballUsages.containsKey(type)) {
-              ballUsages.get(type).add(levelName);
-            }
-            else {
-              TreeSet<String> set = new TreeSet<String>();
-              set.add(levelName);
-              ballUsages.put(type, set);
-            }
+          if (ballUsages.containsKey(type)) {
+            ballUsages.get(type).add(levelName);
           }
+          else {
+            final TreeSet<String> set = new TreeSet<String>();
+            set.add(levelName);
+            ballUsages.put(type, set);
+          }
+        }
 
 //        System.out.println("");
-        }
       }
-    }
-    finally {
-      source.close();
     }
 
 //    System.out.println("\n==== BY BALL TYPE ====\n");

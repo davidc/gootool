@@ -1,16 +1,15 @@
 /*
- * Copyright (c) 2008, 2009, 2010, 2011 David C A Croft. All rights reserved. Your use of this computer software
+ * Copyright (c) 2008, 2009, 2010 David C A Croft. All rights reserved. Your use of this computer software
  * is permitted only in accordance with the GooTool license agreement distributed with this file.
  */
 
 package com.goofans.gootool.profile;
 
 import java.io.IOException;
-import java.security.SecureRandom;
 import java.util.Random;
+import java.security.SecureRandom;
 
-import com.goofans.gootool.projects.Project;
-import com.goofans.gootool.projects.ProjectManager;
+import com.goofans.gootool.io.GameFormat;
 
 /**
  * Updates the user's profile file to add online IDs to each profile that is missing one.
@@ -30,9 +29,9 @@ public class GenerateOnlineIds
   {
   }
 
-  public static void generateOnlineIds(Project project) throws IOException
+  public static void generateOnlineIds() throws IOException
   {
-    ProfileData profileData = project.getProfileData();
+    ProfileData profileData = ProfileFactory.getProfileData();
 
     for (Profile profile : profileData.getProfiles()) {
       if (profile != null && profile.getOnlineId() == null) {
@@ -40,7 +39,7 @@ public class GenerateOnlineIds
       }
     }
 
-    project.setProfileBytes(profileData.toData());
+    GameFormat.encodeProfileFile(ProfileFactory.getProfileFile(), profileData.toData());
   }
 
   @SuppressWarnings({"MagicNumber"})
@@ -63,9 +62,9 @@ public class GenerateOnlineIds
     return new String(chars);
   }
 
-  public static void removeGeneratedOnlineIds(Project project) throws IOException
+  public static void removeGeneratedOnlineIds() throws IOException
   {
-    ProfileData profileData = project.getProfileData();
+    ProfileData profileData = ProfileFactory.getProfileData();
 
     for (Profile profile : profileData.getProfiles()) {
       if (profile != null) {
@@ -75,7 +74,7 @@ public class GenerateOnlineIds
       }
     }
 
-    project.setProfileBytes(profileData.toData());
+    GameFormat.encodeProfileFile(ProfileFactory.getProfileFile(), profileData.toData());
   }
 
   public static boolean isGeneratedId(String onlineId)
@@ -92,11 +91,11 @@ public class GenerateOnlineIds
     System.out.println(generateId());
     System.out.println(generateId());
     System.out.println(generateId());
-
-    Project project = ProjectManager.simpleInit();
-
-    generateOnlineIds(project);
-    removeGeneratedOnlineIds(project);
-    generateOnlineIds(project);
+    ProfileFactory.init();
+    generateOnlineIds();
+    ProfileFactory.init();
+    removeGeneratedOnlineIds();
+    ProfileFactory.init();
+    generateOnlineIds();
   }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008, 2009, 2010, 2011 David C A Croft. All rights reserved. Your use of this computer software
+ * Copyright (c) 2008, 2009, 2010 David C A Croft. All rights reserved. Your use of this computer software
  * is permitted only in accordance with the GooTool license agreement distributed with this file.
  */
 
@@ -7,22 +7,19 @@ package com.goofans.gootool.movie;
 
 import net.infotrek.util.XMLStringBuffer;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
+import java.io.*;
+import java.util.Map;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.ArrayList;
 
-import com.goofans.gootool.facades.Source;
-import com.goofans.gootool.facades.SourceFile;
-import com.goofans.gootool.projects.Project;
-import com.goofans.gootool.projects.ProjectManager;
+import com.goofans.gootool.wog.WorldOfGoo;
 import com.goofans.gootool.util.Utilities;
 import com.goofans.gootool.util.XMLUtil;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
+import org.w3c.dom.Node;
 
 /**
  * TODO check number of actors is sensible, and other validation on the file when loading.
@@ -42,13 +39,22 @@ public class BinMovie
 
   private BinImageAnimation soundAnim;
 
-  public BinMovie(SourceFile file) throws IOException
+  public BinMovie(File file) throws IOException
   {
-    this(Utilities.readStreamIntoBytes(file.read()));
-  }
+    byte[] contents;
 
-  public BinMovie(byte[] contents)
-  {
+    FileInputStream is = new FileInputStream(file);
+    try {
+      int fileLength = (int) file.length();
+      contents = new byte[fileLength];
+      if (is.read(contents) != fileLength) {
+        throw new IOException("short read on movie " + file.getName());
+      }
+    }
+    finally {
+      is.close();
+    }
+
     length = BinaryFormat.getFloat(contents, 0);
     int numActors = BinaryFormat.getInt(contents, 4);
     int actorsOffset = BinaryFormat.getInt(contents, 8);
@@ -100,14 +106,14 @@ public class BinMovie
   public BinMovie(Document doc) throws IOException
   {
     Element movieEl = doc.getDocumentElement();
-    if (!"movie".equals(movieEl.getTagName())) throw new IOException("Document element is not movie"); //NON-NLS
+    if (!"movie".equals(movieEl.getTagName())) throw new IOException("Document element is not movie");
 
-    length = XMLUtil.getAttributeFloatRequired(movieEl, "length"); //NON-NLS
+    length = XMLUtil.getAttributeFloatRequired(movieEl, "length");
 
-    NodeList actorEls = movieEl.getElementsByTagName("actor"); //NON-NLS
+        NodeList actorEls = movieEl.getElementsByTagName("actor");
 
     List<BinActor> actorsList = new ArrayList<BinActor>(actorEls.getLength());
-    List<BinImageAnimation> animsList = new ArrayList<BinImageAnimation>(actorEls.getLength());
+    List<BinImageAnimation> animsList= new ArrayList<BinImageAnimation>(actorEls.getLength());
 
     for (int i = 0; i < actorEls.getLength(); ++i) {
       Element actorEl = (Element) actorEls.item(i);
@@ -122,8 +128,8 @@ public class BinMovie
       animsList.add(anim);
     }
 
-    actors = actorsList.toArray(new BinActor[actorsList.size()]);
-    anims = animsList.toArray(new BinImageAnimation[actorsList.size()]);
+    actors = actorsList.toArray(new BinActor[0]);
+    anims = animsList.toArray(new BinImageAnimation[0]);
 
     // TODO sounds
 
@@ -139,8 +145,8 @@ public class BinMovie
     StringBuffer sb = new StringBuffer();
     // TODO xml prolog
     XMLStringBuffer xml = new XMLStringBuffer(sb, "");
-    xml.addComment("This XML format is subject to change. Do not program against this format yet!"); //NON-NLS
-    xml.addComment("See: http://goofans.com/forum/world-of-goo/modding/407"); //NON-NLS
+    xml.addComment("This XML format is subject to change. Do not program against this format yet!");
+    xml.addComment("See: http://goofans.com/forum/world-of-goo/modding/407");
     toXML(xml);
     return xml.toXML();
   }
@@ -153,8 +159,8 @@ public class BinMovie
   public void toXML(XMLStringBuffer xml)
   {
     Map<String, String> attributes = new LinkedHashMap<String, String>();
-    attributes.put("length", String.valueOf(length)); //NON-NLS
-    xml.push("movie", attributes); //NON-NLS
+    attributes.put("length", String.valueOf(length));
+    xml.push("movie", attributes);
 
     for (int i = 0; i < actors.length; i++) {
       BinActor actor = actors[i];
@@ -166,37 +172,33 @@ public class BinMovie
     }
 
     if (soundAnim != null) {
-      xml.push("sounds"); //NON-NLS
+      xml.push("sounds");
       soundAnim.toXMLSounds(xml);
-      xml.pop("sounds"); //NON-NLS
+      xml.pop("sounds");
     }
 
-    xml.pop("movie"); //NON-NLS
+    xml.pop("movie");
   }
 
   @SuppressWarnings({"UseOfSystemOutOrSystemErr", "HardcodedLineSeparator", "HardCodedStringLiteral", "HardcodedFileSeparator", "StringConcatenation"})
   public static void main(String[] args) throws IOException
   {
-    Project project = ProjectManager.simpleInit();
-    Source source = project.getSource();
-    try {
-      SourceFile sourceGameRoot = source.getGameRoot();
-      SourceFile f = sourceGameRoot.getChild("res\\movie");
-      for (SourceFile file : f.list()) {
-        String movie = file.getName();
-        if (!"_generic".equals(movie)) {
-          System.out.println("\n\n>>>>>>>> " + file.getName());
+    WorldOfGoo wog = WorldOfGoo.getTheInstance();
+    wog.init();
+
+    File f = wog.getGameFile("res\\movie");
+    for (File file : f.listFiles()) {
+      String movie = file.getName();
+      if (!"_generic".equals(movie)) {
+        System.out.println("\n\n>>>>>>>> " + file.getName());
 
 //        Document doc = GameFormat.decodeXmlBinFile(wog.getGameFile("res\\movie\\" + movie + "\\" + movie + ".resrc.bin"));
 //        Resources r = new Resources(doc);
-          BinMovie m = new BinMovie(sourceGameRoot.getChild(project.getGameAnimMovieFilename("res/movie/" + movie + "/" + movie + ".movie")));//, r);
+        BinMovie m = new BinMovie(wog.getGameFile("res\\movie\\" + movie + "\\" + movie + ".movie.binltl"));//, r);
 //        System.out.println(m.toXMLDocument());
-          Utilities.writeFile(new File("movie", movie + ".movie.xml"), m.toXMLDocument().getBytes());
-        }
+        Utilities.writeFile(new File("movie", movie + ".movie.xml"), m.toXMLDocument().getBytes());
+
       }
-    }
-    finally {
-      source.close();
     }
 
 //    String movie = "Chapter5End";

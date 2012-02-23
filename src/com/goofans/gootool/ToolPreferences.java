@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008, 2009, 2010, 2011 David C A Croft. All rights reserved. Your use of this computer software
+ * Copyright (c) 2008, 2009, 2010 David C A Croft. All rights reserved. Your use of this computer software
  * is permitted only in accordance with the GooTool license agreement distributed with this file.
  */
 
@@ -18,17 +18,15 @@ import java.util.logging.Level;
 import java.io.IOException;
 import java.io.PrintStream;
 
-import com.goofans.gootool.util.Utilities;
 import com.goofans.gootool.util.VersionSpec;
 
 /**
  * This is specifically for preferences that relate to GooTool's state (e.g. whether translator mode is enabled).
- * It is NOT for preferences that affect game building (such as "skip opening movie") - such things belong in ProjectConfiguration and WorldBuilder.
+ * It is NOT for preferences that affect game building (such as "skip opening movie") - such things belong in Configuration and ConfigurationWriterTask.
  *
  * @author David Croft (davidc@goofans.com)
  * @version $Id$
  */
-@SuppressWarnings({"StaticMethodOnlyUsedInOneClass"})
 public class ToolPreferences
 {
   private static final Logger log = Logger.getLogger(ToolPreferences.class.getName());
@@ -37,16 +35,20 @@ public class ToolPreferences
 
   private static final String PREF_GOOTOOL_ID = "gootool_random_id";
   private static final String PREF_IGNORE_UPDATE = "gootool_ignore_update";
+  private static final String PREF_L10N_MODE = "gootool_l10n_enabled";
   private static final String PREF_MRU_ADDIN_DIR = "gootool_mru_addin_dir";
   private static final String PREF_MRU_TOWER_DIR = "gootool_mru_tower_dir";
   private static final String PREF_WINDOW_POSITION = "gootool_window_position";
+
+  private static final String PREF_WOG_DIR = "wog_dir";
+  private static final String PREF_CUSTOM_DIR = "custom_dir";
 
   private static final String PREF_GOOFANS_USERNAME = "goofans_username";
   private static final String PREF_GOOFANS_PASSWORD = "goofans_password";
   private static final String PREF_GOOFANS_LOGINOK = "goofans_loginok";
 
+  private static final String PREF_BILLBOARDS_DISABLE = "billboard_disable";
   private static final String PREF_BILLBOARDS_LASTCHECK = "billboard_lastcheck";
-  private static final String PREF_ALLOW_WIDESCREEN = "allow_widescreen";
 
   private static final String PREF_RATINGS = "ratings";
   private static final String RATINGS_SEPARATOR = "|";
@@ -99,7 +101,16 @@ public class ToolPreferences
   {
     log.fine("Ignoring update " + version);
     PREFS.put(PREF_IGNORE_UPDATE, version.toString());
-    Utilities.flushPrefs(PREFS);
+  }
+
+  public static boolean isL10nEnabled()
+  {
+    return PREFS.getBoolean(PREF_L10N_MODE, false);
+  }
+
+  public static void setL10nEnabled(boolean enabled)
+  {
+    PREFS.putBoolean(PREF_L10N_MODE, enabled);
   }
 
   public static String getMruAddinDir()
@@ -110,7 +121,6 @@ public class ToolPreferences
   public static void setMruAddinDir(String mruDir)
   {
     PREFS.put(PREF_MRU_ADDIN_DIR, mruDir);
-    Utilities.flushPrefs(PREFS);
   }
 
   public static String getMruTowerDir()
@@ -121,7 +131,6 @@ public class ToolPreferences
   public static void setMruTowerDir(String mruDir)
   {
     PREFS.put(PREF_MRU_TOWER_DIR, mruDir);
-    Utilities.flushPrefs(PREFS);
   }
 
   public static String getWindowPosition()
@@ -132,7 +141,26 @@ public class ToolPreferences
   public static void setWindowPosition(String windowPosition)
   {
     PREFS.put(PREF_WINDOW_POSITION, windowPosition);
-    Utilities.flushPrefs(PREFS);
+  }
+
+  public static String getWogDir()
+  {
+    return PREFS.get(PREF_WOG_DIR, null);
+  }
+
+  public static void setWogDir(String wogDir)
+  {
+    PREFS.put(PREF_WOG_DIR, wogDir);
+  }
+
+  public static String getCustomDir()
+  {
+    return PREFS.get(PREF_CUSTOM_DIR, null);
+  }
+
+  public static void setCustomDir(String customDir)
+  {
+    PREFS.put(PREF_CUSTOM_DIR, customDir);
   }
 
   public static String getGooFansUsername()
@@ -143,7 +171,6 @@ public class ToolPreferences
   public static void setGooFansUsername(String username)
   {
     PREFS.put(PREF_GOOFANS_USERNAME, username);
-    Utilities.flushPrefs(PREFS);
   }
 
   public static String getGooFansPassword()
@@ -163,7 +190,6 @@ public class ToolPreferences
   public static void setGooFansPassword(String password)
   {
     PREFS.put(PREF_GOOFANS_PASSWORD, TextUtil.base64Encode(password.getBytes()));
-    Utilities.flushPrefs(PREFS);
   }
 
   public static boolean isGooFansLoginOk()
@@ -174,7 +200,16 @@ public class ToolPreferences
   public static void setGooFansLoginOk(boolean ok)
   {
     PREFS.putBoolean(PREF_GOOFANS_LOGINOK, ok);
-    Utilities.flushPrefs(PREFS);
+  }
+
+  public static boolean isBillboardDisable()
+  {
+    return PREFS.getBoolean(PREF_BILLBOARDS_DISABLE, false);
+  }
+
+  public static void setBillboardDisable(boolean disable)
+  {
+    PREFS.putBoolean(PREF_BILLBOARDS_DISABLE, disable);
   }
 
   public static long getBillboardLastCheck()
@@ -185,7 +220,16 @@ public class ToolPreferences
   public static void setBillboardLastCheck(long lastCheck)
   {
     PREFS.putLong(PREF_BILLBOARDS_LASTCHECK, lastCheck);
-    Utilities.flushPrefs(PREFS);
+  }
+
+  public static void setRatings(Map<String, Integer> ratings)
+  {
+    StringBuilder sb = new StringBuilder();
+    for (Map.Entry<String, Integer> rating : ratings.entrySet()) {
+      if (sb.length() > 0) sb.append(RATINGS_SEPARATOR);
+      sb.append(rating.getKey()).append(RATINGS_VALUE_SEPARATOR).append(rating.getValue());
+    }
+    PREFS.put(PREF_RATINGS, sb.toString());
   }
 
   public static Map<String, Integer> getRatings()
@@ -210,28 +254,6 @@ public class ToolPreferences
     return ratings;
   }
 
-  public static void setRatings(Map<String, Integer> ratings)
-  {
-    StringBuilder sb = new StringBuilder();
-    for (Map.Entry<String, Integer> rating : ratings.entrySet()) {
-      if (sb.length() > 0) sb.append(RATINGS_SEPARATOR);
-      sb.append(rating.getKey()).append(RATINGS_VALUE_SEPARATOR).append(rating.getValue());
-    }
-    PREFS.put(PREF_RATINGS, sb.toString());
-    Utilities.flushPrefs(PREFS);
-  }
-
-  public static boolean isAllowWidescreen()
-  {
-    return PREFS.getBoolean(PREF_ALLOW_WIDESCREEN, false);
-  }
-
-  public static void setAllowWidescreen(boolean allow)
-  {
-    PREFS.putBoolean(PREF_ALLOW_WIDESCREEN, allow);
-    Utilities.flushPrefs(PREFS);
-  }
-
   /**
    * Prints preferences to the specified output stream, hiding the user's GooFans password.
    * This method is useful for debugging.
@@ -245,7 +267,7 @@ public class ToolPreferences
     for (String prefKey : prefKeys) {
       out.print(prefKey + "=");
       if (prefKey.equals(PREF_GOOFANS_PASSWORD)) {
-        out.println("[hidden]"); //NON-NLS
+        out.println("[hidden]");
       }
       else {
         out.println(PREFS.get(prefKey, null));

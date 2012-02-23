@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008, 2009, 2010, 2011 David C A Croft. All rights reserved. Your use of this computer software
+ * Copyright (c) 2008, 2009, 2010 David C A Croft. All rights reserved. Your use of this computer software
  * is permitted only in accordance with the GooTool license agreement distributed with this file.
  */
 
@@ -9,16 +9,14 @@ import net.infotrek.util.EncodingUtil;
 
 import java.io.*;
 import java.util.Arrays;
-import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.logging.Level;
+import java.util.LinkedHashMap;
 import java.util.logging.Logger;
+import java.util.logging.Level;
 
 import com.goofans.gootool.io.GameFormat;
-import com.goofans.gootool.platform.PlatformSupport;
-import com.goofans.gootool.projects.Project;
-import com.goofans.gootool.projects.ProjectManager;
 import com.goofans.gootool.util.DebugUtil;
+import com.goofans.gootool.util.Utilities;
 
 /**
  * Contains all profiles (up to 3) in the user's profile file.
@@ -37,8 +35,10 @@ public class ProfileData
   private final Map<String, String> data = new LinkedHashMap<String, String>();
   private final Profile[] profiles = new Profile[MAX_PROFILES];
 
-  public ProfileData(byte[] profile) throws IOException
+  public ProfileData(File f) throws IOException
   {
+    byte[] profile = GameFormat.decodeProfileFile(f);
+
     readProfileData(profile);
 
     log.finest("ProfileData is " + data);
@@ -53,8 +53,8 @@ public class ProfileData
 
   private ProfileData(Profile p)
   {
-    data.put("countrycode", "EU"); //NON-NLS
-    data.put("mrpp", "0"); //NON-NLS
+    data.put("countrycode", "EU");
+    data.put("mrpp", "0");
     profiles[0] = p;
   }
 
@@ -191,49 +191,12 @@ public class ProfileData
     out.write(bytes);
   }
 
-  /**
-   * This method checks to see if the given file is a valid profile.
-   * It's only ever used for local projects, and we don't currently have an active project, so it's OK to not use project.getCodecForProfile() and
-   * just use the codec directly instead.
-   *
-   * @param file The file to test for validity
-   * @return True if this is a valid profile file.
-   */
-  public static boolean isValidProfile(File file)
-  {
-    log.finest("Is valid profile? " + file);
-    if (!file.exists()) return false;
-
-    // Attempt to read it in
-    try {
-      byte[] decoded = null;
-      switch (PlatformSupport.getPlatform()) {
-        case WINDOWS:
-        case LINUX:
-          decoded = GameFormat.AES_BIN_CODEC.decodeFile(file);
-          break;
-        case MACOSX:
-          decoded = GameFormat.MAC_BIN_CODEC.decodeFile(file);
-          break;
-      }
-      new ProfileData(decoded);
-      return true;
-    }
-    catch (IOException e) {
-      log.log(Level.WARNING, "Unable to read profile at " + file, e);
-      return false;
-    }
-  }
-
   @SuppressWarnings({"HardCodedStringLiteral", "HardcodedFileSeparator", "UseOfSystemOutOrSystemErr"})
   public static void main(String[] args) throws IOException
   {
     DebugUtil.setAllLogging();
-
-    Project project = ProjectManager.simpleInit();
-
     // Test a profile can be loaded ok
-    ProfileData pd = new ProfileData(project.getCodecForProfile().decodeFile(new File("testcases/qwsx-pers2.dat")));
+    ProfileData pd = new ProfileData(new File("testcases/qwsx-pers2.dat"));
     System.out.println(pd.getCurrentProfile().getTower());
 
     // Restore a profile from goofans published profile

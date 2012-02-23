@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008, 2009, 2010, 2011 David C A Croft. All rights reserved. Your use of this computer software
+ * Copyright (c) 2008, 2009, 2010 David C A Croft. All rights reserved. Your use of this computer software
  * is permitted only in accordance with the GooTool license agreement distributed with this file.
  */
 
@@ -42,8 +42,8 @@ public class Version
   static {
     try {
       Properties p = new Properties();
-      p.load(Version.class.getResourceAsStream("/release.properties")); //NON-NLS
-      p.load(Version.class.getResourceAsStream("/build.properties")); //NON-NLS
+      p.load(Version.class.getResourceAsStream("/release.properties"));
+      p.load(Version.class.getResourceAsStream("/build.properties"));
 
       RELEASE_MAJOR = Integer.parseInt(p.getProperty("release.major", "0"));
       RELEASE_MINOR = Integer.parseInt(p.getProperty("release.minor", "0"));
@@ -51,7 +51,7 @@ public class Version
       RELEASE_REVISION = Integer.parseInt(p.getProperty("release.revision", "0"));
 
       RELEASE_TYPE = p.getProperty("release.type");
-      RELEASE_DATE = new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.ENGLISH).parse(p.getProperty("release.date")); //NON-NLS
+      RELEASE_DATE = new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.ENGLISH).parse(p.getProperty("release.date"));
       RELEASE = new VersionSpec(new int[]{RELEASE_MAJOR, RELEASE_MINOR, RELEASE_MICRO, RELEASE_REVISION});
 
       String releaseFull;
@@ -68,10 +68,10 @@ public class Version
       }
       RELEASE_FRIENDLY = releaseFriendly.toString();
 
-      BUILD_USER = p.getProperty("build.user"); //NON-NLS
-      BUILD_DATE = new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.ENGLISH).parse(p.getProperty("build.date")); //NON-NLS
-      BUILD_JAVA = p.getProperty("build.java"); //NON-NLS
-      BUILD_OS = p.getProperty("build.os"); //NON-NLS
+      BUILD_USER = p.getProperty("build.user");
+      BUILD_DATE = new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.ENGLISH).parse(p.getProperty("build.date"));
+      BUILD_JAVA = p.getProperty("build.java");
+      BUILD_OS = p.getProperty("build.os");
 
     }
     catch (Exception e) {

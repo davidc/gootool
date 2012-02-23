@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008, 2009, 2010, 2011 David C A Croft. All rights reserved. Your use of this computer software
+ * Copyright (c) 2008, 2009, 2010 David C A Croft. All rights reserved. Your use of this computer software
  * is permitted only in accordance with the GooTool license agreement distributed with this file.
  */
 
@@ -23,13 +23,13 @@ import com.goofans.gootool.GooTool;
 import com.goofans.gootool.GooToolResourceBundle;
 import com.goofans.gootool.addins.Addin;
 import com.goofans.gootool.addins.AddinFactory;
-import com.goofans.gootool.addins.AddinsStore;
 import com.goofans.gootool.siteapi.APIException;
 import com.goofans.gootool.siteapi.AddinUpdatesCheckRequest;
 import com.goofans.gootool.util.DebugUtil;
 import com.goofans.gootool.util.GUIUtil;
 import com.goofans.gootool.util.ProgressIndicatingTask;
 import com.goofans.gootool.util.Utilities;
+import com.goofans.gootool.wog.WorldOfGoo;
 
 public class AddinUpdatesChooser extends JDialog
 {
@@ -85,7 +85,7 @@ public class AddinUpdatesChooser extends JDialog
     // Prepare data model
     updateRows = new ArrayList<UpdateRow>(updates.size());
 
-    for (Addin addin : AddinsStore.getAvailableAddins()) {
+    for (Addin addin : WorldOfGoo.getAvailableAddins()) {
       AddinUpdatesCheckRequest.AvailableUpdate update = updates.get(addin.getId());
       if (update != null) {
         if (update.version.compareTo(addin.getVersion()) > 0) {
@@ -138,6 +138,7 @@ public class AddinUpdatesChooser extends JDialog
         @Override
         public void run() throws Exception
         {
+          WorldOfGoo wog = WorldOfGoo.getTheInstance();
           for (UpdateRow updateRow : updateRows) {
             if (updateRow.install) {
               log.log(Level.INFO, "Downloading update " + updateRow.addin.getId() + " version " + updateRow.update.version);
@@ -152,8 +153,8 @@ public class AddinUpdatesChooser extends JDialog
                 // Load the addin once to get its ID and ensure it is valid.
                 Addin addin = AddinFactory.loadAddin(tempFile);
 
-                AddinsStore.uninstallAddin(updateRow.addin);
-                AddinsStore.installAddin(tempFile, addin.getId());
+                wog.uninstallAddin(updateRow.addin, true);
+                wog.installAddin(tempFile, addin.getId(), true);
               }
               finally {
                 Utilities.deleteFileIfExists(tempFile);
@@ -164,7 +165,7 @@ public class AddinUpdatesChooser extends JDialog
 
           }
           beginStep(resourceBundle.getString("addinUpdating.status.reloading"), false);
-          AddinsStore.updateAvailableAddins();
+          wog.updateInstalledAddins();
         }
       });
     }
@@ -262,6 +263,9 @@ public class AddinUpdatesChooser extends JDialog
   {
     DebugUtil.setAllLogging();
     GooTool.initExecutors();
+
+    WorldOfGoo wog = WorldOfGoo.getTheInstance();
+    wog.init();
 
     AddinUpdatesCheckRequest checkRequest = new AddinUpdatesCheckRequest();
     Map<String, AddinUpdatesCheckRequest.AvailableUpdate> updates = checkRequest.checkUpdates();

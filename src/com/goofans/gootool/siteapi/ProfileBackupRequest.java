@@ -1,19 +1,20 @@
 /*
- * Copyright (c) 2008, 2009, 2010, 2011 David C A Croft. All rights reserved. Your use of this computer software
+ * Copyright (c) 2008, 2009, 2010 David C A Croft. All rights reserved. Your use of this computer software
  * is permitted only in accordance with the GooTool license agreement distributed with this file.
  */
 
 package com.goofans.gootool.siteapi;
 
-import com.goofans.gootool.projects.Project;
-import com.goofans.gootool.projects.ProjectManager;
-import com.goofans.gootool.util.DebugUtil;
 import net.infotrek.util.TextUtil;
-import org.w3c.dom.Document;
 
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import com.goofans.gootool.io.GameFormat;
+import com.goofans.gootool.profile.ProfileFactory;
+import com.goofans.gootool.util.DebugUtil;
+import org.w3c.dom.Document;
 
 /**
  * A request to backup the profile file to the server.
@@ -30,41 +31,39 @@ public class ProfileBackupRequest extends APIRequestAuthenticated
     super(API_PROFILE_BACKUP);
   }
 
-  // TODO default description should include the project name
-  public void backupProfile(Project project, String description) throws APIException
+  public void backupProfile(String description) throws APIException
   {
     log.log(Level.FINE, "Profile upload " + description);
 
-    byte[] profile ;
-    try {
-      profile = project.getProfileBytes();
-    }
-    catch (IOException e) {
-      throw new APIException("Can't read profile", e);
+    if (!ProfileFactory.isProfileFound()) {
+      throw new APIException("Profile hasn't been located yet");
     }
 
-    if (profile == null) {
-      throw new APIException("Profile hasn't been located yet");
+    byte[] profile;
+    try {
+      profile = GameFormat.decodeProfileFile(ProfileFactory.getProfileFile());
+    }
+    catch (IOException e) {
+      throw new APIException("Profile decoding failed", e);
     }
 
     addPostParameter("profile", TextUtil.base64Encode(profile));
     addPostParameter("description", description);
 
     Document doc = doRequest();
-    if (!"profile-backup-success".equalsIgnoreCase(doc.getDocumentElement().getTagName())) { //NON-NLS
+    if (!"profile-backup-success".equalsIgnoreCase(doc.getDocumentElement().getTagName())) {
       throw new APIException("Profile backup failed");
     }
 
 //    System.out.println("Utilities.readStreamIntoString(doRequestInt()) = " + Utilities.readStreamIntoString(doRequestInt()));
   }
 
-  @SuppressWarnings({"HardCodedStringLiteral"})
   public static void main(String[] args) throws APIException, IOException
   {
     DebugUtil.setAllLogging();
+    ProfileFactory.init();
 
-    Project project = ProjectManager.simpleInit();
-    new ProfileBackupRequest().backupProfile(project, "test 213");
+    new ProfileBackupRequest().backupProfile("test 213");
 
   }
 }

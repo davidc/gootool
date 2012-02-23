@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008, 2009, 2010, 2011 David C A Croft. All rights reserved. Your use of this computer software
+ * Copyright (c) 2008, 2009, 2010 David C A Croft. All rights reserved. Your use of this computer software
  * is permitted only in accordance with the GooTool license agreement distributed with this file.
  */
 
@@ -7,31 +7,30 @@ package com.goofans.gootool.view;
 
 import net.infotrek.util.TextUtil;
 
-import javax.imageio.ImageIO;
+import com.goofans.gootool.ToolPreferences;
+import com.goofans.gootool.Controller;
+import com.goofans.gootool.GooTool;
+import com.goofans.gootool.GooToolResourceBundle;
+import com.goofans.gootool.model.Configuration;
+import com.goofans.gootool.util.FileNameExtensionFilter;
+import com.goofans.gootool.profile.*;
+
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableColumnModel;
+import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
-import java.beans.PropertyChangeListener;
-import java.beans.PropertyChangeSupport;
-import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Method;
+import java.io.File;
 import java.text.NumberFormat;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import com.goofans.gootool.GooTool;
-import com.goofans.gootool.GooToolResourceBundle;
-import com.goofans.gootool.ProjectController;
-import com.goofans.gootool.ToolPreferences;
-import com.goofans.gootool.model.ProjectModel;
-import com.goofans.gootool.profile.*;
-import com.goofans.gootool.projects.Project;
-import com.goofans.gootool.util.FileNameExtensionFilter;
+import java.lang.reflect.Method;
+import java.beans.PropertyChangeSupport;
+import java.beans.PropertyChangeListener;
 
 
 /**
@@ -84,7 +83,6 @@ public final class ProfilePanel implements ActionListener, ViewComponent
   private static final String BR = "<br>";
   private Boolean allProfilesAreOnline = null;
   private Boolean anyProfilesHaveGeneratedId = null;
-  private ProjectController projectController;
 
   static {
     COLUMN_NAMES = new String[]{
@@ -96,7 +94,7 @@ public final class ProfilePanel implements ActionListener, ViewComponent
   }
 
 
-  public ProfilePanel()
+  public ProfilePanel(Controller controller)
   {
     propertyChangeSupport = new PropertyChangeSupport(this);
 
@@ -111,6 +109,15 @@ public final class ProfilePanel implements ActionListener, ViewComponent
 
     profilesCombo.setActionCommand(CMD_PROFILE_CHANGED);
     profilesCombo.addActionListener(this);
+
+    profileBackupButton.setActionCommand(Controller.CMD_GOOFANS_BACKUP);
+    profileBackupButton.addActionListener(controller);
+
+    profileRestoreButton.setActionCommand(Controller.CMD_GOOFANS_RESTORE);
+    profileRestoreButton.addActionListener(controller);
+
+    profilePublishButton.setActionCommand(Controller.CMD_GOOFANS_PUBLISH);
+    profilePublishButton.addActionListener(controller);
 
     levelsTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     levelsModel = new LevelsTableModel();
@@ -129,41 +136,29 @@ public final class ProfilePanel implements ActionListener, ViewComponent
       levelsTable.setAutoCreateRowSorter(true);
       */
     try {
-      Method setAutoCreateRowSorterMethod = levelsTable.getClass().getMethod("setAutoCreateRowSorter", boolean.class); //NON-NLS
+      Method setAutoCreateRowSorterMethod = levelsTable.getClass().getMethod("setAutoCreateRowSorter", boolean.class);
       setAutoCreateRowSorterMethod.invoke(levelsTable, true);
     }
     catch (Exception e) {
-      log.log(Level.FINE, "No setAutoCreateRowSorter method found or can't execute (this is expected in Java < 1.6)");
+      log.log(Level.FINE, "No setAutoCreateRowSorter method found or can't execute", e);
     }
 
     createSaveTowerMenu();
-  }
 
-  public void initController(ProjectController projectController)
-  {
-    this.projectController = projectController;
-
-    profileBackupButton.setActionCommand(ProjectController.CMD_GOOFANS_BACKUP);
-    profileBackupButton.addActionListener(projectController);
-
-    profileRestoreButton.setActionCommand(ProjectController.CMD_GOOFANS_RESTORE);
-    profileRestoreButton.addActionListener(projectController);
-
-    profilePublishButton.setActionCommand(ProjectController.CMD_GOOFANS_PUBLISH);
-    profilePublishButton.addActionListener(projectController);
+    if (ProfileFactory.isProfileFound()) {
+      loadProfiles();
+    }
   }
 
   public void actionPerformed(ActionEvent event)
   {
     String cmd = event.getActionCommand();
 
-    log.fine("ProfilePanel cmd " + cmd);
+    log.fine("cmd " + cmd);
 
     if (cmd.equals(CMD_REFRESH)) {
-      Project project = projectController.getCurrentProject();
-
-      if (project == null || !project.isProfileValid()) {
-        JOptionPane.showMessageDialog(rootPanel, resourceBundle.getString("profile.error.notFound.message"), resourceBundle.getString("profile.error.notFound.title"), JOptionPane.ERROR_MESSAGE);
+      if (!ProfileFactory.isProfileFound()) {
+        JOptionPane.showMessageDialog(rootPanel, resourceBundle.getString("profile.error.notfound.message"), resourceBundle.getString("profile.error.notfound.title"), JOptionPane.ERROR_MESSAGE);
         return;
       }
 
@@ -171,12 +166,14 @@ public final class ProfilePanel implements ActionListener, ViewComponent
     }
     else if (cmd.equals(CMD_PROFILE_CHANGED) && profilesCombo.getSelectedItem() != currentProfile) {
       Profile newProfile = getSelectedProfile();
-      propertyChangeSupport.firePropertyChange("currentProfile", currentProfile, newProfile); //NON-NLS
+      propertyChangeSupport.firePropertyChange("currentProfile", currentProfile, newProfile);
 
       currentProfile = newProfile;
       log.fine("currentProfile = " + currentProfile);
 
-      profileChanged();
+      if (currentProfile != null) {
+        profileChanged();
+      }
     }
     else if (cmd.equals(CMD_VIEW_TOWER) && tr != null) {
       showTower();
@@ -212,48 +209,46 @@ public final class ProfilePanel implements ActionListener, ViewComponent
 
   private void profileChanged()
   {
-    profileName.setText(currentProfile == null ? "(none loaded)" : currentProfile.getName());
-    playTime.setText(currentProfile == null ? "" : TextUtil.formatTime(currentProfile.getPlayTime()));
-    levelsPlayed.setText(currentProfile == null ? "" : String.valueOf(currentProfile.getLevels()));
+    profileName.setText(currentProfile.getName());
+    playTime.setText(TextUtil.formatTime(currentProfile.getPlayTime()));
+    levelsPlayed.setText(String.valueOf(currentProfile.getLevels()));
 
     StringBuilder flagInfo = new StringBuilder();
-    if (currentProfile != null) {
-      if (currentProfile.hasFlag(Profile.FLAG_ONLINE)) {
-        flagInfo.append(resourceBundle.getString("profile.info.flags.online")).append(BR);
-      }
-      if (currentProfile.hasFlag(Profile.FLAG_GOOCORP_UNLOCKED)) {
-        flagInfo.append(resourceBundle.getString("profile.info.flags.goocorpunlocked")).append(BR);
-      }
-      if (currentProfile.hasFlag(Profile.FLAG_GOOCORP_DESTROYED)) {
-        flagInfo.append(resourceBundle.getString("profile.info.flags.goocorpdestroyed")).append(BR);
-      }
-      if (currentProfile.hasFlag(Profile.FLAG_WHISTLE)) {
-        flagInfo.append(resourceBundle.getString("profile.info.flags.whistle")).append(BR);
-      }
-      if (currentProfile.hasFlag(Profile.FLAG_TERMS)) {
-        flagInfo.append(resourceBundle.getString("profile.info.flags.terms")).append(BR);
-      }
-      if (currentProfile.hasFlag(Profile.FLAG_32)) {
-        flagInfo.append(resourceBundle.getString("profile.info.flags.flag32")).append(BR);
-      }
-      if (currentProfile.hasFlag(Profile.FLAG_64)) {
-        flagInfo.append(resourceBundle.getString("profile.info.flags.flag64")).append(BR);
-      }
-      if (currentProfile.hasFlag(Profile.FLAG_128)) {
-        flagInfo.append(resourceBundle.getString("profile.info.flags.flag128")).append(BR);
-      }
-
-      if (flagInfo.length() == 0) {
-        flagInfo.append(resourceBundle.getString("profile.info.flags.none"));
-      }
+    if (currentProfile.hasFlag(Profile.FLAG_ONLINE)) {
+      flagInfo.append(resourceBundle.getString("profile.info.flags.online")).append(BR);
     }
-    flags.setText("<html>" + flagInfo + "</html>"); //NON-NLS
+    if (currentProfile.hasFlag(Profile.FLAG_GOOCORP_UNLOCKED)) {
+      flagInfo.append(resourceBundle.getString("profile.info.flags.goocorpunlocked")).append(BR);
+    }
+    if (currentProfile.hasFlag(Profile.FLAG_GOOCORP_DESTROYED)) {
+      flagInfo.append(resourceBundle.getString("profile.info.flags.goocorpdestroyed")).append(BR);
+    }
+    if (currentProfile.hasFlag(Profile.FLAG_WHISTLE)) {
+      flagInfo.append(resourceBundle.getString("profile.info.flags.whistle")).append(BR);
+    }
+    if (currentProfile.hasFlag(Profile.FLAG_TERMS)) {
+      flagInfo.append(resourceBundle.getString("profile.info.flags.terms")).append(BR);
+    }
+    if (currentProfile.hasFlag(Profile.FLAG_32)) {
+      flagInfo.append(resourceBundle.getString("profile.info.flags.flag32")).append(BR);
+    }
+    if (currentProfile.hasFlag(Profile.FLAG_64)) {
+      flagInfo.append(resourceBundle.getString("profile.info.flags.flag64")).append(BR);
+    }
+    if (currentProfile.hasFlag(Profile.FLAG_128)) {
+      flagInfo.append(resourceBundle.getString("profile.info.flags.flag128")).append(BR);
+    }
+
+    if (flagInfo.length() == 0) {
+      flagInfo.append(resourceBundle.getString("profile.info.flags.none"));
+    }
+    flags.setText("<html>" + flagInfo + "</html>");
 
     levelsModel.fireTableDataChanged();
 
     towerPanel.removeAll();
 
-    Tower tower = currentProfile == null ? null : currentProfile.getTower();
+    Tower tower = currentProfile.getTower();
 
     if (tower == null || tower.getHeight() == 0) {
       towerHeight.setText("-");
@@ -261,6 +256,7 @@ public final class ProfilePanel implements ActionListener, ViewComponent
       towerNodeBalls.setText("-");
       towerStrandBalls.setText("-");
       towerPanel.add(new JLabel(resourceBundle.getString("profile.tower.none")));
+//          viewTowerButton.setEnabled(false);
       saveTowerButton.setEnabled(false);
     }
     else {
@@ -270,7 +266,7 @@ public final class ProfilePanel implements ActionListener, ViewComponent
       towerStrandBalls.setText(String.valueOf(tower.getUsedStrandBalls()));
 
       try {
-        tr = new TowerRenderer(projectController.getCurrentProject(), tower);
+        tr = new TowerRenderer(tower);
         tr.render();
 
         BufferedImage thumbImg = tr.getThumbnail();
@@ -291,16 +287,16 @@ public final class ProfilePanel implements ActionListener, ViewComponent
           }
         });
         towerPanel.add(thumb);
+//          viewTowerButton.setEnabled(true);
         saveTowerButton.setEnabled(true);
       }
-      catch (Exception e) {
-        log.log(Level.SEVERE, "Unable to render tower", e);
+      catch (IOException e1) {
+        log.log(Level.SEVERE, "Unable to render tower", e1);
         towerPanel.add(new JLabel(resourceBundle.getString("profile.tower.error")));
+//          viewTowerButton.setEnabled(false);
         saveTowerButton.setEnabled(false);
       }
     }
-
-    towerPanel.repaint();
 
     updateViewFromModel(null);
   }
@@ -393,73 +389,50 @@ public final class ProfilePanel implements ActionListener, ViewComponent
 
   public void loadProfiles()
   {
-    JOptionPane.showMessageDialog(null, "loading profiles");
-
     profilesCombo.removeAllItems();
 
-    Project project = projectController.getCurrentProject();
-
     ProfileData profileData;
-    boolean newAllProfilesAreOnline;
-    boolean newAnyProfilesHaveGeneratedId;
-
-    if (project == null || !project.isProfileValid()) {
-      profileData = null;
-
-      newAllProfilesAreOnline = true;
-      newAnyProfilesHaveGeneratedId = false;
+    try {
+      profileData = ProfileFactory.getProfileData();
     }
-    else {
-      try {
-        profileData = project.getProfileData();
-      }
-      catch (IOException e) {
-        log.log(Level.SEVERE, "Unable to read profile", e);
-        JOptionPane.showMessageDialog(rootPanel, resourceBundle.getString("profile.error.corrupt.message"), resourceBundle.getString("profile.error.corrupt.title"), JOptionPane.ERROR_MESSAGE);
-        return;
-      }
+    catch (IOException e) {
+      log.log(Level.SEVERE, "Unable to read profile", e);
+      JOptionPane.showMessageDialog(rootPanel, resourceBundle.getString("profile.error.corrupt.message"), resourceBundle.getString("profile.error.corrupt.title"), JOptionPane.ERROR_MESSAGE);
+      return;
+    }
 
-      newAllProfilesAreOnline = true;
-      newAnyProfilesHaveGeneratedId = false;
+    Boolean oldAllProfilesAreOnline = allProfilesAreOnline;
+    Boolean oldAnyProfilesHaveGeneratedId = anyProfilesHaveGeneratedId;
+    allProfilesAreOnline = true;
+    anyProfilesHaveGeneratedId = false;
 
-      for (Profile profile : profileData.getProfiles()) {
-        if (profile != null) {
-          profilesCombo.addItem(profile);
-          if (profile.getOnlineId() == null) {
-            newAllProfilesAreOnline = false;
-          }
-          else if (GenerateOnlineIds.isGeneratedId(profile.getOnlineId())) {
-            newAnyProfilesHaveGeneratedId = true;
-          }
+    for (Profile profile : profileData.getProfiles()) {
+      if (profile != null) {
+        profilesCombo.addItem(profile);
+        if (profile.getOnlineId() == null) {
+          allProfilesAreOnline = false;
+        }
+        else if (GenerateOnlineIds.isGeneratedId(profile.getOnlineId())) {
+          anyProfilesHaveGeneratedId = true;
         }
       }
-      profilesCombo.setSelectedItem(profileData == null ? null : profileData.getCurrentProfile());
     }
 
-    propertyChangeSupport.firePropertyChange("allProfilesAreOnline", allProfilesAreOnline, Boolean.valueOf(newAllProfilesAreOnline)); //NON-NLS
-    allProfilesAreOnline = newAllProfilesAreOnline;
-    propertyChangeSupport.firePropertyChange("anyProfilesHaveGeneratedId", allProfilesAreOnline, Boolean.valueOf(newAnyProfilesHaveGeneratedId)); //NON-NLS
-    anyProfilesHaveGeneratedId = newAnyProfilesHaveGeneratedId;
+    propertyChangeSupport.firePropertyChange("allProfilesAreOnline", oldAllProfilesAreOnline, allProfilesAreOnline);
+    propertyChangeSupport.firePropertyChange("anyProfilesHaveGeneratedId", oldAnyProfilesHaveGeneratedId, anyProfilesHaveGeneratedId);
 
-    System.out.println("reloaded profiles");
+    profilesCombo.setSelectedItem(profileData.getCurrentProfile());
   }
 
   private String formatHeight(double height)
   {
     NumberFormat nf = NumberFormat.getNumberInstance();
-    return nf.format(height) + " m"; //NON-NLS
+    return nf.format(height) + " m";
   }
 
-  public void updateViewFromModel(ProjectModel model)
+  public void updateViewFromModel(Configuration c)
   {
-    Project project = projectController.getCurrentProject();
-    boolean validProfile = project != null && project.isProfileValid();
-
-    System.out.println("validProfile = " + validProfile);
-
-    boolean enabled = ToolPreferences.isGooFansLoginOk() && validProfile;
-    System.out.println("enabled = " + enabled);
-
+    boolean enabled = ToolPreferences.isGooFansLoginOk() && ProfileFactory.isProfileFound();
 
     profileBackupButton.setEnabled(enabled);
     profileRestoreButton.setEnabled(enabled);
@@ -478,7 +451,7 @@ public final class ProfilePanel implements ActionListener, ViewComponent
     }
     else {
       String tooltip;
-      if (validProfile) {
+      if (!ProfileFactory.isProfileFound()) {
         tooltip = resourceBundle.getString("profile.goofans.disabled.profile.tooltip");
       }
       else {
@@ -491,13 +464,8 @@ public final class ProfilePanel implements ActionListener, ViewComponent
     }
   }
 
-  public void updateModelFromView(ProjectModel model)
+  public void updateModelFromView(Configuration c)
   {
-  }
-
-  public void projectChanged(ProjectModel model)
-  {
-    loadProfiles();
   }
 
 
@@ -510,7 +478,7 @@ public final class ProfilePanel implements ActionListener, ViewComponent
 
     public int getColumnCount()
     {
-      return COLUMN_NAMES.length;
+      return 4;
     }
 
     public Object getValueAt(int rowIndex, int columnIndex)

@@ -1,11 +1,10 @@
 /*
- * Copyright (c) 2008, 2009, 2010, 2011 David C A Croft. All rights reserved. Your use of this computer software
+ * Copyright (c) 2008, 2009, 2010 David C A Croft. All rights reserved. Your use of this computer software
  * is permitted only in accordance with the GooTool license agreement distributed with this file.
  */
 
 package com.goofans.gootool.util;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,7 +17,6 @@ import java.util.List;
 public abstract class ProgressIndicatingTask
 {
   private final List<ProgressListener> listeners = new ArrayList<ProgressListener>();
-  protected Component parentComponent;
 
   public abstract void run() throws Exception;
 
@@ -33,7 +31,7 @@ public abstract class ProgressIndicatingTask
   }
 
 
-  public void beginStep(String taskDescription, boolean progressAvailable)
+  protected void beginStep(String taskDescription, boolean progressAvailable)
   {
 //    log.log(Level.INFO, "Beginning step " + taskDescription);
     for (ProgressListener listener : listeners) {
@@ -41,15 +39,10 @@ public abstract class ProgressIndicatingTask
     }
   }
 
-  public void progressStep(float percent)
+  protected void progressStep(float percent)
   {
     for (ProgressListener listener : listeners) {
       listener.progressStep(percent);
     }
-  }
-
-  public void setParentComponent(Component c)
-  {
-    this.parentComponent = c;
   }
 }

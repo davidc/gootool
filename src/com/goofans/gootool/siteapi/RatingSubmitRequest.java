@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008, 2009, 2010, 2011 David C A Croft. All rights reserved. Your use of this computer software
+ * Copyright (c) 2008, 2009, 2010 David C A Croft. All rights reserved. Your use of this computer software
  * is permitted only in accordance with the GooTool license agreement distributed with this file.
  */
 
@@ -7,6 +7,7 @@ package com.goofans.gootool.siteapi;
 
 import java.io.IOException;
 
+import com.goofans.gootool.profile.ProfileFactory;
 import com.goofans.gootool.util.DebugUtil;
 import org.w3c.dom.Document;
 
@@ -36,7 +37,7 @@ public class RatingSubmitRequest extends APIRequestAuthenticated
     addPostParameter("vote", Integer.toString(vote));
 
     Document doc = doRequest();
-    if (!"rating-submit-success".equalsIgnoreCase(doc.getDocumentElement().getTagName())) { //NON-NLS
+    if (!"rating-submit-success".equalsIgnoreCase(doc.getDocumentElement().getTagName())) {
       throw new APIException("Rating submission failed");
     }
   }
@@ -44,7 +45,8 @@ public class RatingSubmitRequest extends APIRequestAuthenticated
   public static void main(String[] args) throws APIException, IOException
   {
     DebugUtil.setAllLogging();
+    ProfileFactory.init();
 
-    new RatingSubmitRequest().submitRating("com.goofans.davidc.jingleballs", 20); //NON-NLS
+    new RatingSubmitRequest().submitRating("com.goofans.davidc.jingleballs", 20);
   }
 }

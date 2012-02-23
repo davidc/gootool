@@ -1,8 +1,3 @@
-/*
- * Copyright (c) 2008, 2009, 2010, 2011 David C A Croft. All rights reserved. Your use of this computer software
- * is permitted only in accordance with the GooTool license agreement distributed with this file.
- */
-
 package net.infotrek.util.prefs;
 
 import java.io.File;
@@ -12,6 +7,7 @@ import java.util.prefs.PreferencesFactory;
 import java.util.prefs.BackingStoreException;
 
 import com.goofans.gootool.GooTool;
+import com.goofans.gootool.wog.WorldOfGoo;
 import com.goofans.gootool.util.DebugUtil;
 
 /**
@@ -47,14 +43,14 @@ public class FilePreferencesFactory implements PreferencesFactory
     return rootPreferences;
   }
 
-  private static File preferencesFile = null;
+  private static File preferencesFile;
 
-  public static synchronized File getPreferencesFile()
+  public static File getPreferencesFile()
   {
     if (preferencesFile == null) {
       String prefsFile = System.getProperty(SYSTEM_PROPERTY_FILE);
       if (prefsFile == null || prefsFile.length() == 0) {
-        prefsFile = System.getProperty("user.home") + File.separator + ".fileprefs"; //NON-NLS
+        prefsFile = System.getProperty("user.home") + File.separator + ".fileprefs";
       }
       preferencesFile = new File(prefsFile).getAbsoluteFile();
       log.finer("Preferences file is " + preferencesFile);
@@ -70,7 +66,7 @@ public class FilePreferencesFactory implements PreferencesFactory
     System.setProperty("java.util.prefs.PreferencesFactory", FilePreferencesFactory.class.getName());
     System.setProperty(SYSTEM_PROPERTY_FILE, "myprefs.txt");
 
-    Preferences p2 = Preferences.userNodeForPackage(FilePreferencesFactory.class);
+    Preferences p2 = Preferences.userNodeForPackage(WorldOfGoo.class);
     p2.put("hello", "there");
     Preferences p = Preferences.userNodeForPackage(GooTool.class);
 

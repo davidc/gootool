@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008, 2009, 2010, 2011 David C A Croft. All rights reserved. Your use of this computer software
+ * Copyright (c) 2008, 2009, 2010 David C A Croft. All rights reserved. Your use of this computer software
  * is permitted only in accordance with the GooTool license agreement distributed with this file.
  */
 
@@ -25,7 +25,6 @@ public class Tower
 
   private static final String TOWERELEMENT_BALL = "b";
   private static final String TOWERELEMENT_STRAND = "s";
-  private static final int MAX_BALLS = 300;
 
   private final List<Ball> balls;
   private final List<Strand> strands;
@@ -44,8 +43,8 @@ public class Tower
       towerStr = towerStr.substring(1);
     }
 
-    balls = new ArrayList<Ball>(MAX_BALLS);
-    strands = new ArrayList<Strand>(MAX_BALLS);
+    balls = new ArrayList<Ball>(300);
+    strands = new ArrayList<Strand>(300);
 
     usedStrandBalls = 0;
     totalBalls = 0;

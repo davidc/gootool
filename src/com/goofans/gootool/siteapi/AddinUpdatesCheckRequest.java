@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008, 2009, 2010, 2011 David C A Croft. All rights reserved. Your use of this computer software
+ * Copyright (c) 2008, 2009, 2010 David C A Croft. All rights reserved. Your use of this computer software
  * is permitted only in accordance with the GooTool license agreement distributed with this file.
  */
 
@@ -12,10 +12,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.goofans.gootool.addins.Addin;
-import com.goofans.gootool.addins.AddinsStore;
 import com.goofans.gootool.util.DebugUtil;
 import com.goofans.gootool.util.VersionSpec;
 import com.goofans.gootool.util.XMLUtil;
+import com.goofans.gootool.wog.WorldOfGoo;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -44,7 +44,7 @@ public class AddinUpdatesCheckRequest extends APIRequest
    */
   public Map<String, AvailableUpdate> checkUpdates() throws APIException
   {
-    List<Addin> availableAddins = AddinsStore.getAvailableAddins();
+    List<Addin> availableAddins = WorldOfGoo.getAvailableAddins();
     if (availableAddins.isEmpty()) {
       return new TreeMap<String, AvailableUpdate>();
     }
@@ -93,7 +93,7 @@ public class AddinUpdatesCheckRequest extends APIRequest
 
     Document doc = doRequest();
 
-    if (!"updates-check-results".equalsIgnoreCase(doc.getDocumentElement().getTagName())) { //NON-NLS
+    if (!"updates-check-results".equalsIgnoreCase(doc.getDocumentElement().getTagName())) {
       throw new APIException("Update check failed");
     }
 
@@ -102,7 +102,7 @@ public class AddinUpdatesCheckRequest extends APIRequest
       updates.put(addinId, null);
     }
 
-    NodeList theUpdates = doc.getDocumentElement().getElementsByTagName("addin");
+    final NodeList theUpdates = doc.getDocumentElement().getElementsByTagName("addin");
 
     for (int i = 0; i < theUpdates.getLength(); i++) {
       Element el = (Element) theUpdates.item(i);
@@ -171,11 +171,13 @@ public class AddinUpdatesCheckRequest extends APIRequest
   public static void main(String[] args) throws APIException, IOException
   {
     DebugUtil.setAllLogging();
+    final WorldOfGoo wog = WorldOfGoo.getTheInstance();
+    wog.init();
 
 //    new AddinUpdatesCheckRequest().checkUpdatesById(Arrays.asList(new String[]{"goas", "com.goofans.billboards"}));
-    Map<String, AvailableUpdate> updates = new AddinUpdatesCheckRequest().checkUpdates();
+    final Map<String, AvailableUpdate> updates = new AddinUpdatesCheckRequest().checkUpdates();
 
-    for (Addin addin : AddinsStore.getAvailableAddins()) {
+    for (Addin addin : WorldOfGoo.getAvailableAddins()) {
       AvailableUpdate update = updates.get(addin.getId());
       if (update != null) {
         System.out.println("addin.getId() = " + addin.getId());

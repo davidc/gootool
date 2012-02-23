@@ -1,20 +1,3 @@
-- Project - if iOS, new menu option to allow regeneration of cache file. new menu option to remove customwog.app.
-
-- Test volume control on win32 dist build
-
-- Somehow demo project got created with sourceDir pointing to the exe, not the directory!
-
-- Need a way to have cancellable progress-indicating tasks (e.g. testiosconnection)
-
-- Project drop-down shouldn't list the null projects!!!
-
--menu options save/save&launch/revert should only be active if active project, and should call projectcontroller
-
-- profile being loaded too often
-
-- diagnostics: dump projects
-
-- prevent main window smaller than contents
 
 set svn:eol-style native on all java, xml and text files
 
@@ -22,7 +5,6 @@ Remove files in dest dir that don't exist in source dir and aren't added by a mo
 
 If A depends on B, B must be installed first. (bubble sort the addins list)
 
-- Addin building phase of WorldBuilder should have a progress bar.
 
 
 Soon!

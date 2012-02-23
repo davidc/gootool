@@ -1,22 +1,22 @@
 /*
- * Copyright (c) 2008, 2009, 2010, 2011 David C A Croft. All rights reserved. Your use of this computer software
+ * Copyright (c) 2008, 2009, 2010 David C A Croft. All rights reserved. Your use of this computer software
  * is permitted only in accordance with the GooTool license agreement distributed with this file.
  */
 
 package com.goofans.gootoolsp.leveledit.model;
 
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-
 import java.io.IOException;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.List;
+import java.util.LinkedList;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
+import org.w3c.dom.Node;
 
 /**
  * @author David Croft (davidc@goofans.com)
@@ -37,7 +37,7 @@ public class LevelContents
   {
     Element rootElement = d.getDocumentElement();
 
-    if (!"level".equals(rootElement.getNodeName())) { //NON-NLS
+    if (!"level".equals(rootElement.getNodeName())) {
       throw new IOException("Root element isn't a level");
     }
 

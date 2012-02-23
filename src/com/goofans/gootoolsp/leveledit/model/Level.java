@@ -1,17 +1,15 @@
 /*
- * Copyright (c) 2008, 2009, 2010, 2011 David C A Croft. All rights reserved. Your use of this computer software
+ * Copyright (c) 2008, 2009, 2010 David C A Croft. All rights reserved. Your use of this computer software
  * is permitted only in accordance with the GooTool license agreement distributed with this file.
  */
 
 package com.goofans.gootoolsp.leveledit.model;
 
+import java.io.File;
 import java.io.IOException;
 
-import com.goofans.gootool.facades.Source;
-import com.goofans.gootool.facades.SourceFile;
-import com.goofans.gootool.io.Codec;
-import com.goofans.gootool.projects.Project;
-import com.goofans.gootool.projects.ProjectManager;
+import com.goofans.gootool.io.GameFormat;
+import com.goofans.gootool.wog.WorldOfGoo;
 import org.w3c.dom.Document;
 
 /**
@@ -26,28 +24,21 @@ public class Level
 
   public Level(String levelName) throws IOException
   {
-    Project project = ProjectManager.simpleInit();
-    Source source = project.getSource();
-    try {
-      SourceFile sourceDir = source.getGameRoot().getChild("res/levels/" + levelName);
+    WorldOfGoo worldOfGoo = WorldOfGoo.getTheInstance();
 
-      Codec codec = project.getCodecForGameXml();
+    String levelPrefix = "res/levels/" + levelName + "/" + levelName;
 
-      SourceFile sceneFile = sourceDir.getChild(project.getGameXmlFilename(levelName + ".scene"));
-      Document sceneDoc = codec.decodeFileToXML(sceneFile);
-      scene = new Scene(sceneDoc);
+    File sceneFile = worldOfGoo.getGameFile(levelPrefix + ".scene.bin");
+    Document sceneDoc = GameFormat.decodeXmlBinFile(sceneFile);
+    scene = new Scene(sceneDoc);
 
-      SourceFile resourcesFile = sourceDir.getChild(project.getGameXmlFilename(levelName + ".resrc"));
-      Document resourcesDoc = codec.decodeFileToXML(resourcesFile);
-      resources = new Resources(resourcesDoc);
+    File resourcesFile = worldOfGoo.getGameFile(levelPrefix + ".resrc.bin");
+    Document resourcesDoc = GameFormat.decodeXmlBinFile(resourcesFile);
+    resources = new Resources(resourcesDoc);
 
-      SourceFile levelFile = sourceDir.getChild(project.getGameXmlFilename(levelName + ".level"));
-      Document levelDoc = codec.decodeFileToXML(levelFile);
-      levelContents = new LevelContents(levelDoc);
-    }
-    finally {
-      source.close();
-    }
+    File levelFile = worldOfGoo.getGameFile(levelPrefix + ".level.bin");
+    Document levelDoc = GameFormat.decodeXmlBinFile(levelFile);
+    levelContents = new LevelContents(levelDoc);
   }
 
   public Scene getScene()
@@ -68,6 +59,8 @@ public class Level
   @SuppressWarnings({"UseOfSystemOutOrSystemErr", "HardCodedStringLiteral"})
   public static void main(String[] args) throws IOException
   {
+    WorldOfGoo worldOfGoo = WorldOfGoo.getTheInstance();
+    worldOfGoo.init();
     Level l = new Level("EconomicDivide");
 
     System.out.println("l = " + l);

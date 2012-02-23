@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008, 2009, 2010, 2011 David C A Croft. All rights reserved. Your use of this computer software
+ * Copyright (c) 2008, 2009, 2010 David C A Croft. All rights reserved. Your use of this computer software
  * is permitted only in accordance with the GooTool license agreement distributed with this file.
  */
 
@@ -16,18 +16,14 @@ import java.util.logging.Logger;
 import com.goofans.gootool.addins.Addin;
 import com.goofans.gootool.addins.AddinFactory;
 import com.goofans.gootool.addins.AddinFormatException;
-import com.goofans.gootool.platform.PlatformSupport;
-import com.goofans.gootool.projects.Project;
-import com.goofans.gootool.projects.ProjectConfiguration;
-import com.goofans.gootool.projects.ProjectManager;
 import com.goofans.gootool.siteapi.APIException;
 import com.goofans.gootool.siteapi.AddinUpdatesCheckRequest;
 import com.goofans.gootool.util.DebugUtil;
 import com.goofans.gootool.util.Utilities;
+import com.goofans.gootool.wog.WorldOfGoo;
 
 /**
  * Checks the billboards goomod file and updates it if a later version is available.
- * TODO this should use the tool storage directory, not the custom directory!
  *
  * @author David Croft (davidc@goofans.com)
  * @version $Id$
@@ -68,10 +64,10 @@ public class BillboardUpdater implements Runnable
 
       File billboardModFile;
       try {
-        billboardModFile = new File(PlatformSupport.getToolStorageDirectory(), BILLBOARDS_GOOMOD_FILENAME);
+        billboardModFile = WorldOfGoo.getTheInstance().getCustomGameFile(BILLBOARDS_GOOMOD_FILENAME);
       }
       catch (IOException e) {
-        log.log(Level.SEVERE, "Unable to locate billboards.goomod file in run");
+        log.log(Level.SEVERE, "Unable to locate billboards.goomod file");
         return;
       }
 
@@ -113,20 +109,12 @@ public class BillboardUpdater implements Runnable
 
   public static synchronized void maybeUpdateBillboards()
   {
-    // If all projects have their billboards disabled, don't download.
-    boolean billboardsEnabled = false;
-    for (Project project : ProjectManager.getProjects()) {
-      if (project != null) {
-        ProjectConfiguration c = project.getSavedConfiguration();
-        if (!c.isBillboardsDisabled()) {
-          billboardsEnabled = true;
-          break;
-        }
-      }
-    }
+    if (ToolPreferences.isBillboardDisable())
+      return;
 
-    if (!billboardsEnabled) {
-      log.log(Level.FINE, "Not updating billboards as no projects have billboards enabled");
+    final WorldOfGoo wog = WorldOfGoo.getTheInstance();
+    if (!wog.isCustomDirSet()) {
+      log.log(Level.WARNING, "Aborting update check as no custom dir set yet");
       return;
     }
 
@@ -137,10 +125,10 @@ public class BillboardUpdater implements Runnable
 
     File billboardModFile;
     try {
-      billboardModFile = new File(PlatformSupport.getToolStorageDirectory(), BILLBOARDS_GOOMOD_FILENAME);
+      billboardModFile = WorldOfGoo.getTheInstance().getCustomGameFile(BILLBOARDS_GOOMOD_FILENAME);
     }
     catch (IOException e) {
-      log.log(Level.SEVERE, "Unable to locate billboards.goomod file for maybeUpdateBillboards");
+      // won't happen due to isCustomDirSet check above
       return;
     }
 
@@ -152,16 +140,11 @@ public class BillboardUpdater implements Runnable
     GooTool.executeTaskInThreadPool(new BillboardUpdater());
   }
 
-  @Override
-  public String toString()
-  {
-    return "BillboardUpdater";
-  }
-
   public static void main(String[] args)
   {
     DebugUtil.setAllLogging();
     GooTool.initExecutors();
+    WorldOfGoo.getTheInstance().init();
 
     BillboardUpdater.maybeUpdateBillboards();
   }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008, 2009, 2010, 2011 David C A Croft. All rights reserved. Your use of this computer software
+ * Copyright (c) 2008, 2009, 2010 David C A Croft. All rights reserved. Your use of this computer software
  * is permitted only in accordance with the GooTool license agreement distributed with this file.
  */
 
@@ -11,16 +11,15 @@ import java.awt.event.HierarchyBoundsAdapter;
 import java.awt.event.HierarchyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.ArrayList;
 
-import com.goofans.gootool.facades.Target;
-import com.goofans.gootool.facades.TargetFile;
-import com.goofans.gootool.projects.ProjectManager;
-import com.goofans.gootool.util.GUIUtil;
 import com.goofans.gootoolsp.leveledit.resource.Ball;
 import com.goofans.gootoolsp.leveledit.ui.WrappingGridLayout;
+import com.goofans.gootool.util.GUIUtil;
+import com.goofans.gootool.wog.WorldOfGoo;
 
 /**
  * @author David Croft (davidc@goofans.com)
@@ -55,47 +54,42 @@ public class BallPalette extends JComponent implements Scrollable
 
   public void addBalls() throws IOException
   {
-    Target target = ProjectManager.simpleInit().getTarget();
-    try {
-      TargetFile ballsDir = target.getGameRoot().getChild("res/balls"); //NON-NLS
+    File ballsDir = WorldOfGoo.getTheInstance().getCustomGameFile("res/balls");
 
-      List<TargetFile> ballsDirs = ballsDir.list();
+    File[] ballsDirs = ballsDir.listFiles();
+    int i = 0;
+    for (File dir : ballsDirs) {
+      if (dir.isDirectory() && !dir.getName().startsWith("_")) {
+        Ball ball = new Ball(dir.getName());
+        final BallPaletteBall button = new BallPaletteBall(dir.getName(), ball);
+        button.setToolTipText(dir.getName());
+        add(button);
 
-      for (TargetFile dir : ballsDirs) {
-        if (dir.isDirectory() && !dir.getName().startsWith("_")) {
-          Ball ball = new Ball(dir.getName());
-          final BallPaletteBall button = new BallPaletteBall(dir.getName(), ball);
-          button.setToolTipText(dir.getName());
-          add(button);
+        paletteEntries.add(button);
 
-          paletteEntries.add(button);
-
-          button.addMouseListener(new MouseAdapter()
+        button.addMouseListener(new MouseAdapter()
+        {
+          @Override
+          public void mousePressed(MouseEvent e)
           {
-            @Override
-            public void mousePressed(MouseEvent e)
-            {
-              for (BallPaletteBall paletteEntry : paletteEntries) {
-                paletteEntry.setSelected(paletteEntry.equals(button));
-              }
-              notifySelectionListeners(button);
+            for (BallPaletteBall paletteEntry : paletteEntries) {
+              paletteEntry.setSelected(paletteEntry == button);
             }
-          });
+            notifySelectionListeners(button);
+          }
+        });
 
-        }
-//      if (++i > 20) return;
       }
-    }
-    finally {
-      target.close();
+//      if (++i > 20) return;
     }
   }
 
   public static void main(String[] args) throws IOException
   {
     GUIUtil.switchToSystemLookAndFeel();
+    WorldOfGoo.getTheInstance().init();
 
-    JFrame frame = new JFrame("Ball Palette"); //NON-NLS
+    JFrame frame = new JFrame("Ball Palette");
     frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     BallPalette palette = new BallPalette();
     palette.addBalls();

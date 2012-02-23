@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008, 2009, 2010, 2011 David C A Croft. All rights reserved. Your use of this computer software
+ * Copyright (c) 2008, 2009, 2010 David C A Croft. All rights reserved. Your use of this computer software
  * is permitted only in accordance with the GooTool license agreement distributed with this file.
  */
 
@@ -11,11 +11,9 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.goofans.gootool.GooTool;
-import com.goofans.gootool.GooToolResourceBundle;
 import com.goofans.gootool.ToolPreferences;
-import com.goofans.gootool.util.*;
 import com.goofans.gootool.view.NewVersionDialog;
+import com.goofans.gootool.util.*;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -67,8 +65,7 @@ public class VersionCheck implements Runnable
       failureReason = e;
 
       if (alwaysAlertUser) {
-        GooToolResourceBundle resourceBundle = GooTool.getTextProvider();
-        JOptionPane.showMessageDialog(parentWindow, resourceBundle.formatString("checkVersion.error.message", e.getLocalizedMessage()), resourceBundle.getString("checkVersion.error.title"), JOptionPane.ERROR_MESSAGE);
+        JOptionPane.showMessageDialog(parentWindow, "Can't check version: " + e.getLocalizedMessage(), "Can't check version", JOptionPane.ERROR_MESSAGE);
       }
     }
   }
@@ -78,7 +75,7 @@ public class VersionCheck implements Runnable
     APIRequest request = new APIRequest(APIRequest.API_CHECKVERSION);
     request.addGetParameter("version", Version.RELEASE.toString());
 
-    log.log(Level.FINE, "Check version " + request);
+    log.log(Level.FINE, "Checkversion " + request);
 
     Document doc = request.doRequest();
 
@@ -100,8 +97,7 @@ public class VersionCheck implements Runnable
         {
           public void run()
           {
-            GooToolResourceBundle resourceBundle = GooTool.getTextProvider();
-            JOptionPane.showMessageDialog(parentWindow, resourceBundle.formatString("checkVersion.upToDate.message", Version.RELEASE_FRIENDLY), resourceBundle.getString("checkVersion.upToDate.title"), JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(parentWindow, "You are running the latest version " + Version.RELEASE_FRIENDLY, "GooTool is up to date", JOptionPane.INFORMATION_MESSAGE);
           }
         });
       }
@@ -138,13 +134,7 @@ public class VersionCheck implements Runnable
     return upToDate;
   }
 
-  @Override
-  public String toString()
-  {
-    return "VersionCheck task";
-  }
-
-  @SuppressWarnings({"UseOfSystemOutOrSystemErr", "HardCodedStringLiteral"})
+  @SuppressWarnings({"UseOfSystemOutOrSystemErr"})
   public static void main(String[] args) throws Exception
   {
     DebugUtil.setAllLogging();

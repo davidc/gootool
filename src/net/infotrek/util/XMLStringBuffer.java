@@ -1,12 +1,6 @@
-/*
- * Copyright (c) 2008, 2009, 2010, 2011 David C A Croft. All rights reserved. Your use of this computer software
- * is permitted only in accordance with the GooTool license agreement distributed with this file.
- */
-
 package net.infotrek.util;
 
-import java.util.Map;
-import java.util.Stack;
+import java.util.*;
 
 /**
  * This class allows you to generate an XML text document by pushing and popping tags from a stack maintained
@@ -14,7 +8,6 @@ import java.util.Stack;
  * <p/>
  * NB Currently more recent than ec svn.
  */
-@SuppressWarnings({"HardCodedStringLiteral", "HardcodedLineSeparator", "HardcodedFileSeparator"})
 public class XMLStringBuffer
 {
   private static final String INDENT_INCREMENT = "  ";

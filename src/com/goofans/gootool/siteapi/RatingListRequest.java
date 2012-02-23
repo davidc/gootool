@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008, 2009, 2010, 2011 David C A Croft. All rights reserved. Your use of this computer software
+ * Copyright (c) 2008, 2009, 2010 David C A Croft. All rights reserved. Your use of this computer software
  * is permitted only in accordance with the GooTool license agreement distributed with this file.
  */
 
@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.util.Map;
 import java.util.TreeMap;
 
+import com.goofans.gootool.profile.ProfileFactory;
 import com.goofans.gootool.util.DebugUtil;
 import com.goofans.gootool.util.XMLUtil;
 import org.w3c.dom.Document;
@@ -32,7 +33,7 @@ public class RatingListRequest extends APIRequestAuthenticated
   {
     Document doc = doRequest();
 
-    if (!"rating-list-success".equalsIgnoreCase(doc.getDocumentElement().getTagName())) { //NON-NLS
+    if (!"rating-list-success".equalsIgnoreCase(doc.getDocumentElement().getTagName())) {
       throw new APIException("Get ratings failed");
     }
 
@@ -59,6 +60,7 @@ public class RatingListRequest extends APIRequestAuthenticated
   public static void main(String[] args) throws APIException, IOException
   {
     DebugUtil.setAllLogging();
+    ProfileFactory.init();
 
     Map<String, Integer> ratings = new RatingListRequest().getRatings();
     for (Map.Entry<String, Integer> rating : ratings.entrySet()) {

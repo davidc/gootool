@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008, 2009, 2010, 2011 David C A Croft. All rights reserved. Your use of this computer software
+ * Copyright (c) 2008, 2009, 2010 David C A Croft. All rights reserved. Your use of this computer software
  * is permitted only in accordance with the GooTool license agreement distributed with this file.
  */
 
@@ -13,20 +13,20 @@ import javax.swing.event.HyperlinkListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.io.File;
+import java.io.IOException;
 import java.util.Set;
 import java.util.logging.Logger;
 
-import com.goofans.gootool.MainController;
+import com.goofans.gootool.Controller;
 import com.goofans.gootool.GooTool;
-import com.goofans.gootool.ProjectController;
 import com.goofans.gootool.ToolPreferences;
-import com.goofans.gootool.model.ProjectModel;
+import com.goofans.gootool.model.Configuration;
 import com.goofans.gootool.model.Language;
 import com.goofans.gootool.model.Resolution;
 import com.goofans.gootool.platform.PlatformSupport;
-import com.goofans.gootool.projects.LocalProjectConfiguration;
-import com.goofans.gootool.projects.ProjectConfiguration;
+import com.goofans.gootool.profile.ProfileFactory;
 import com.goofans.gootool.ui.HyperlinkLabel;
+import com.goofans.gootool.wog.WorldOfGoo;
 
 /**
  * @author David Croft (davidc@goofans.com)
@@ -43,6 +43,12 @@ public class OptionsPanel implements ViewComponent
   private JTextField uiInset;
   private JCheckBox skipOpeningMovieCheckBox;
   private JTextField watermark;
+  private JTextField installDirText;
+  private JButton changeInstallDirButton;
+  private JTextField customDirText;
+  private JButton changeCustomDirButton;
+  private JTextField profileFileText;
+  private JButton changeProfileFileButton;
   private JTextField goofansUsername;
   private JPasswordField goofansPassword;
   private JButton gooFansLoginButton;
@@ -51,9 +57,8 @@ public class OptionsPanel implements ViewComponent
   private HyperlinkLabel windowsVolumeControlHyperlink;
   private JCheckBox disableBillboardsCheckBox;
   private JComboBox refreshRateCombo;
-  private JPanel displayPanel;
 
-  public OptionsPanel()
+  public OptionsPanel(Controller controller)
   {
     for (Language language : Language.getSupportedLanguages()) {
       languageCombo.addItem(language);
@@ -66,6 +71,18 @@ public class OptionsPanel implements ViewComponent
         updateResolutions();
       }
     });
+
+    changeInstallDirButton.addActionListener(controller);
+    changeInstallDirButton.setActionCommand(Controller.CMD_CHANGE_INSTALL_DIR);
+
+    changeCustomDirButton.addActionListener(controller);
+    changeCustomDirButton.setActionCommand(Controller.CMD_CHANGE_CUSTOM_DIR);
+
+    changeProfileFileButton.addActionListener(controller);
+    changeProfileFileButton.setActionCommand(Controller.CMD_CHANGE_PROFILE_FILE);
+
+    gooFansLoginButton.addActionListener(controller);
+    gooFansLoginButton.setActionCommand(Controller.CMD_GOOFANS_LOGIN);
 
     if (PlatformSupport.getPlatform() == PlatformSupport.Platform.WINDOWS) {
       final File f = new File("lib\\irrKlang\\README.txt");
@@ -82,6 +99,9 @@ public class OptionsPanel implements ViewComponent
         log.warning("Can't locate " + f.getAbsolutePath());
         windowsVolumeControlHyperlink.setVisible(false);
       }
+    }
+    else {
+      soundPanel.setVisible(false);
     }
 
     Set<Integer> refreshRates = Resolution.getSystemRefreshRates();
@@ -104,7 +124,6 @@ public class OptionsPanel implements ViewComponent
     {
       return refreshRate + " Hz";
     }
-
   }
 
   private void updateResolutions()
@@ -128,79 +147,79 @@ public class OptionsPanel implements ViewComponent
     resolutionCombo.setSelectedItem(curValue);
   }
 
-  public void initController(ProjectController projectController)
+  public void updateViewFromModel(Configuration c)
   {
-    gooFansLoginButton.addActionListener(projectController);
-    gooFansLoginButton.setActionCommand(MainController.CMD_GOOFANS_LOGIN); //@@ TODO this needs to hit the maincontroller
-  }
-
-  public void updateViewFromModel(ProjectModel model)
-  {
-    ProjectConfiguration c = model.getEditorConfig();
-
     languageCombo.setSelectedItem(c.getLanguage());
+
+    uiInset.setText(String.valueOf(c.getUiInset()));// TODO validate input
+
     skipOpeningMovieCheckBox.setSelected(c.isSkipOpeningMovie());
     watermark.setText(c.getWatermark());
-    disableBillboardsCheckBox.setSelected(c.isBillboardsDisabled());
 
-    if (c instanceof LocalProjectConfiguration) {
-      LocalProjectConfiguration lpc = (LocalProjectConfiguration) c;
+    // NB order matters here:
+    allowWidescreen.setSelected(c.isAllowWidescreen());
+    updateResolutions();
+    resolutionCombo.setSelectedItem(c.getResolution());
 
-      uiInset.setText(String.valueOf(lpc.getUiInset()));// TODO validate input
-
-      // NB order matters here:
-      allowWidescreen.setSelected(ToolPreferences.isAllowWidescreen()); // TODO move this off this screen into tool-wide prefernces screen
-      updateResolutions();
-      resolutionCombo.setSelectedItem(lpc.getResolution());
-
-      // Set selected refresh rate
-      if (lpc.getRefreshRate() != null) {
-        for (int i = 0; i < refreshRateCombo.getItemCount(); ++i) {
-          if (((RefreshRate) refreshRateCombo.getItemAt(i)).refreshRate == lpc.getRefreshRate()) {
-            refreshRateCombo.setSelectedIndex(i);
-            break;
-          }
-        }
+    // Set selected refresh rate
+    for (int i = 0; i < refreshRateCombo.getItemCount(); ++i) {
+      if (((RefreshRate) refreshRateCombo.getItemAt(i)).refreshRate == c.getRefreshRate()) {
+        refreshRateCombo.setSelectedIndex(i);
+        break;
       }
-      windowsVolumeControlCheckBox.setSelected(lpc.isWindowsVolumeControl());
+    }
 
-      displayPanel.setVisible(true);
-      soundPanel.setVisible(PlatformSupport.getPlatform() == PlatformSupport.Platform.WINDOWS);
+    try {
+      installDirText.setText(WorldOfGoo.getTheInstance().getWogDir().getAbsolutePath());
+    }
+    catch (IOException e) {
+      installDirText.setText("");
+    }
+
+    try {
+      customDirText.setText(WorldOfGoo.getTheInstance().getCustomDir().getAbsolutePath());
+    }
+    catch (IOException e) {
+      customDirText.setText("");
+    }
+
+    File file = ProfileFactory.getProfileFile();
+    if (file != null) {
+      profileFileText.setText(file.getAbsolutePath());
     }
     else {
-      displayPanel.setVisible(false);
-      soundPanel.setVisible(false);
+      profileFileText.setText("");
     }
+
+    goofansUsername.setText(ToolPreferences.getGooFansUsername());
+    goofansPassword.setText(ToolPreferences.getGooFansPassword());
+
+    windowsVolumeControlCheckBox.setSelected(c.isWindowsVolumeControl());
+
+    disableBillboardsCheckBox.setSelected(ToolPreferences.isBillboardDisable());
   }
 
-  public void updateModelFromView(ProjectModel model)
+  public void updateModelFromView(Configuration c)
   {
-    ProjectConfiguration c = model.getEditorConfig();
-
     c.setLanguage((Language) languageCombo.getSelectedItem());
+    try {
+      c.setUiInset(Integer.valueOf(uiInset.getText()));
+    }
+    catch (NumberFormatException e) {
+      c.setUiInset(0);
+    }
     c.setSkipOpeningMovie(skipOpeningMovieCheckBox.isSelected());
     c.setWatermark(watermark.getText());
-    c.setBillboardsDisabled(disableBillboardsCheckBox.isSelected());
+    c.setAllowWidescreen(allowWidescreen.isSelected());
+    c.setResolution((Resolution) resolutionCombo.getSelectedItem());
+    c.setRefreshRate(((RefreshRate)refreshRateCombo.getSelectedItem()).refreshRate);
 
-    if (c instanceof LocalProjectConfiguration) {
-      LocalProjectConfiguration lpc = (LocalProjectConfiguration) c;
+    ToolPreferences.setGooFansUsername(goofansUsername.getText());
+    ToolPreferences.setGooFansPassword(new String(goofansPassword.getPassword()));
 
-      try {
-        lpc.setUiInset(Integer.valueOf(uiInset.getText()));
-      }
-      catch (NumberFormatException e) {
-        lpc.setUiInset(0);
-      }
+    c.setWindowsVolumeControl(windowsVolumeControlCheckBox.isSelected());
 
-      ToolPreferences.setAllowWidescreen(allowWidescreen.isSelected()); // TODO move this off this screen
-      lpc.setResolution((Resolution) resolutionCombo.getSelectedItem());
-      lpc.setRefreshRate(((RefreshRate) refreshRateCombo.getSelectedItem()).refreshRate);
-
-//      ToolPreferences.setGooFansUsername(goofansUsername.getText()); // TODO move elsewhere
-//      ToolPreferences.setGooFansPassword(new String(goofansPassword.getPassword()));
-
-      lpc.setWindowsVolumeControl(windowsVolumeControlCheckBox.isSelected());
-    }
+    ToolPreferences.setBillboardDisable(disableBillboardsCheckBox.isSelected());
   }
 
   private void createUIComponents()

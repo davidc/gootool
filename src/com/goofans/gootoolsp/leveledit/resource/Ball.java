@@ -1,28 +1,26 @@
 /*
- * Copyright (c) 2008, 2009, 2010, 2011 David C A Croft. All rights reserved. Your use of this computer software
+ * Copyright (c) 2008, 2009, 2010 David C A Croft. All rights reserved. Your use of this computer software
  * is permitted only in accordance with the GooTool license agreement distributed with this file.
  */
 
 package com.goofans.gootoolsp.leveledit.resource;
 
 import java.awt.*;
-import java.awt.geom.Ellipse2D;
 import java.awt.geom.Rectangle2D;
+import java.awt.geom.Ellipse2D;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.StringTokenizer;
 
-import com.goofans.gootool.facades.Target;
-import com.goofans.gootool.facades.TargetFile;
-import com.goofans.gootool.io.Codec;
-import com.goofans.gootool.projects.Project;
-import com.goofans.gootool.projects.ProjectManager;
+import com.goofans.gootool.io.GameFormat;
+import com.goofans.gootoolsp.leveledit.model.Resources;
 import com.goofans.gootool.util.DebugUtil;
 import com.goofans.gootool.util.XMLUtil;
-import com.goofans.gootoolsp.leveledit.model.Resources;
+import com.goofans.gootool.wog.WorldOfGoo;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 
@@ -40,42 +38,30 @@ public class Ball
   public Ball(String ballName) throws IOException
   {
     this.ballName = ballName;
-
-    Resources resources;
-    Document ballDoc;
-
-    Project project = ProjectManager.simpleInit();
-    Target target = project.getTarget();
-    try {
-      TargetFile ballDir = target.getGameRoot().getChild("res/balls/" + ballName); //NON-NLS
-      if (!ballDir.isDirectory()) {
-        throw new IOException("Ball dir " + ballDir + " doesn't exist");
-      }
-
-      Codec codec = project.getCodecForGameXml();
-
-      Document resDoc = codec.decodeFileToXML(ballDir.getChild(project.getGameXmlFilename("resources.xml"))); //NON-NLS
-      resources = new Resources(resDoc);
-      ballDoc = codec.decodeFileToXML(ballDir.getChild(project.getGameXmlFilename("balls.xml"))); //NON-NLS
-    }
-    finally {
-      target.close();
+    File ballDir = WorldOfGoo.getTheInstance().getCustomGameFile("res/balls/" + ballName);
+    if (!ballDir.isDirectory()) {
+      throw new IOException("Ball dir " + ballDir + " doesn't exist");
     }
 
-    if (!ballName.equals(XMLUtil.getAttributeStringRequired(ballDoc.getDocumentElement(), "name"))) { //NON-NLS
+    Document resDoc = GameFormat.decodeXmlBinFile(new File(ballDir, "resources.xml.bin"));
+    Resources resources = new Resources(resDoc);
+
+    Document ballDoc = GameFormat.decodeXmlBinFile(new File(ballDir, "balls.xml.bin"));
+
+    if (!ballName.equals(XMLUtil.getAttributeStringRequired(ballDoc.getDocumentElement(), "name"))) {
       throw new IOException("Ball name in xml doc doesn't equal ball dir");
     }
 
-    String shapeStr = XMLUtil.getAttributeStringRequired(ballDoc.getDocumentElement(), "shape"); //NON-NLS
+    String shapeStr = XMLUtil.getAttributeStringRequired(ballDoc.getDocumentElement(), "shape");
 
     StringTokenizer tok = new StringTokenizer(shapeStr, ",");
     String shapeName = tok.nextToken();
-    if ("rectangle".equals(shapeName)) { //NON-NLS
+    if ("rectangle".equals(shapeName)) {
       outlineShape = new Rectangle2D.Double(0, 0, Double.valueOf(tok.nextToken()), Double.valueOf(tok.nextToken()));
     }
-    else if ("circle".equals(shapeName)) { //NON-NLS
+    else if ("circle".equals(shapeName)) {
       double radius = Double.valueOf(tok.nextToken());
-      outlineShape = new Ellipse2D.Double(0, 0, radius * 2, radius * 2);
+      outlineShape = new Ellipse2D.Double(0, 0, radius *2, radius*2);
     }
     else {
       throw new IOException("Unknown shape " + shapeName + " on ball " + ballName);
@@ -225,6 +211,7 @@ public class Ball
   @SuppressWarnings({"HardCodedStringLiteral", "DuplicateStringLiteralInspection", "MagicNumber"})
   public static void main(String[] args) throws IOException
   {
+    WorldOfGoo.getTheInstance().init();
 
 //    DebugUtil.showImageWindow(new Ball("common").getImageInState("standing", new Dimension(20, 20)));
 //    DebugUtil.showImageWindow(new Ball("common").getImageInState("attached", new Dimension(20, 20)));

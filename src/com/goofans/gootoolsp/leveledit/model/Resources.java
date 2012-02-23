@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008, 2009, 2010, 2011 David C A Croft. All rights reserved. Your use of this computer software
+ * Copyright (c) 2008, 2009, 2010 David C A Croft. All rights reserved. Your use of this computer software
  * is permitted only in accordance with the GooTool license agreement distributed with this file.
  */
 
@@ -7,16 +7,13 @@ package com.goofans.gootoolsp.leveledit.model;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
+import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.goofans.gootool.facades.Source;
-import com.goofans.gootool.facades.SourceFile;
-import com.goofans.gootool.facades.Target;
-import com.goofans.gootool.facades.TargetFile;
-import com.goofans.gootool.projects.Project;
-import com.goofans.gootool.projects.ProjectManager;
+import com.goofans.gootool.io.GameFormat;
+import com.goofans.gootool.wog.WorldOfGoo;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -29,64 +26,53 @@ import org.w3c.dom.NodeList;
 public class Resources
 {
   private final Map<String, Image> images = new HashMap<String, Image>();
-  private final Map<String, SourceFile> sounds = new HashMap<String, SourceFile>();
+  private final Map<String, File> sounds = new HashMap<String, File>();
 
   public Resources(Document d) throws IOException
   {
     NodeList resourcesNodes = d.getDocumentElement().getElementsByTagName("Resources");
 
-    Project project = ProjectManager.simpleInit();
-    Source source = project.getSource();
-    try {
+    for (int i = 0; i < resourcesNodes.getLength(); i++) {
+      Node resourcesEl = resourcesNodes.item(i);
 
-      for (int i = 0; i < resourcesNodes.getLength(); i++) {
-        Node resourcesEl = resourcesNodes.item(i);
+      File rootDir = WorldOfGoo.getTheInstance().getCustomGameFile("");
 
-        SourceFile rootDir = source.getGameRoot();
+      File defaultPath = rootDir;
+      String defaultIdPrefix = "";
 
-        SourceFile defaultPath = rootDir;
-        String defaultIdPrefix = "";
+      for (int j = 0; j < resourcesEl.getChildNodes().getLength(); j++) {
+        Node node = resourcesEl.getChildNodes().item(j);
+        if (node instanceof Element) {
+          Element el = (Element) node;
 
-        for (int j = 0; j < resourcesEl.getChildNodes().getLength(); j++) {
-          Node node = resourcesEl.getChildNodes().item(j);
-          if (node instanceof Element) {
-            Element el = (Element) node;
+          if ("SetDefaults".equals(el.getNodeName())) {
+            defaultPath = new File(rootDir, el.getAttribute("path"));
+            defaultIdPrefix = el.getAttribute("idprefix");
+          }
+          else if ("Image".equals(el.getNodeName())) {
+            String id = defaultIdPrefix + el.getAttribute("id");
+            File f = new File(defaultPath, el.getAttribute("path") + ".png");
 
-            if ("SetDefaults".equals(el.getNodeName())) { //NON-NLS
-              defaultPath = rootDir.getChild(el.getAttribute("path")); //NON-NLS
-              defaultIdPrefix = el.getAttribute("idprefix"); //NON-NLS
+            // HACK: fix Fish
+            if ("IMAGE_BALL_FISH_WINGLEFT".equals(id)) id = "IMAGE_BALL_TIMEBUG_WINGLEFT";
+            if ("IMAGE_BALL_FISH_WINGRIGHT".equals(id)) id = "IMAGE_BALL_TIMEBUG_WINGRIGHT";
+
+            try {
+              images.put(id, ImageIO.read(f));
             }
-            else if ("Image".equals(el.getNodeName())) { //NON-NLS
-              String id = defaultIdPrefix + el.getAttribute("id"); //NON-NLS
-              SourceFile f = defaultPath.getChild(project.getGamePngFilename(el.getAttribute("path"))); //NON-NLS
-
-              // HACK: fix Fish
-              if ("IMAGE_BALL_FISH_WINGLEFT".equals(id)) id = "IMAGE_BALL_TIMEBUG_WINGLEFT"; //NON-NLS
-              if ("IMAGE_BALL_FISH_WINGRIGHT".equals(id)) id = "IMAGE_BALL_TIMEBUG_WINGRIGHT"; //NON-NLS
-
-              try {
-                images.put(id, ImageIO.read(f.read()));
-              }
-              catch (IOException e) {
-                throw new IOException("Can't read " + f + ": " + e.getMessage());
-              }
+            catch (IOException e) {
+              throw new IOException("Can't read " + f.getPath() + ": " + e.getMessage());
             }
-            else if ("Sound".equals(el.getNodeName())) { //NON-NLS
-              String id = defaultIdPrefix + el.getAttribute("id"); //NON-NLS
-              SourceFile f = defaultPath.getChild(project.getGameSoundFilename(el.getAttribute("path"))); //NON-NLS
-              if (!f.isFile()) {
-                f = defaultPath.getChild(project.getGameMusicFilename(el.getAttribute("path"))); //NON-NLS
-              }
+          }
+          else if ("Sound".equals(el.getNodeName())) {
+            String id = defaultIdPrefix + el.getAttribute("id");
+            File f = new File(defaultPath, el.getAttribute("path") + ".ogg");
 
 //          System.out.println(id + "->" + f.getAbsolutePath());
-              sounds.put(id, f);
-            }
+            sounds.put(id, f);
           }
         }
       }
-    }
-    finally {
-      source.close();
     }
   }
 
@@ -95,7 +81,7 @@ public class Resources
     return images;
   }
 
-  public Map<String, SourceFile> getSounds()
+  public Map<String, File> getSounds()
   {
     return sounds;
   }
@@ -105,27 +91,20 @@ public class Resources
 //    return new
 //    return Toolkit.getDefaultToolkit().createImage(resources.get(id).getAbsolutePath());
     Image image = images.get(id);
-    if (image == null) throw new IOException("Image " + id + " not found"); //NON-NLS
+    if (image == null) throw new IOException("Image " + id + " not found");
     return image;
   }
 
 
-  private static Resources globalResources = null;
+  private static Resources globalResources;
 
   // TODO don't cache after saving as we may have modified via an addin
   public static synchronized Resources getGlobalResources() throws IOException
   {
     if (globalResources == null) {
-      Project project = ProjectManager.simpleInit();
-      Target target = project.getTarget();
-      try {
-        TargetFile f = target.getGameRoot().getChild(project.getGameXmlFilename("properties/resources.xml")); //NON-NLS
-        Document doc = project.getCodecForGameXml().decodeFileToXML(f);
-        globalResources = new Resources(doc);
-      }
-      finally {
-        target.close();
-      }
+      File f = WorldOfGoo.getTheInstance().getCustomGameFile("properties/resources.xml.bin");
+      Document doc = GameFormat.decodeXmlBinFile(f);
+      globalResources = new Resources(doc);
     }
     return globalResources;
   }
@@ -133,6 +112,9 @@ public class Resources
   @SuppressWarnings({"UseOfSystemOutOrSystemErr", "HardCodedStringLiteral"})
   public static void main(String[] args) throws IOException
   {
+    WorldOfGoo worldOfGoo = WorldOfGoo.getTheInstance();
+    worldOfGoo.init();
+
 //    File f = worldOfGoo.getCustomGameFile("res/levels/AB3/AB3.resrc.bin");
 //    Document doc = GameFormat.decodeXmlBinFile(f);
 //    Resources res = new Resources(doc);

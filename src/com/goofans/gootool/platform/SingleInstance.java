@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008, 2009, 2010, 2011 David C A Croft. All rights reserved. Your use of this computer software
+ * Copyright (c) 2008, 2009, 2010 David C A Croft. All rights reserved. Your use of this computer software
  * is permitted only in accordance with the GooTool license agreement distributed with this file.
  */
 
@@ -15,7 +15,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.goofans.gootool.GooTool;
-import com.goofans.gootool.MainController;
+import com.goofans.gootool.Controller;
 
 /**
  * Handles ensuring that only a single instance of the tool is running, for Windows and Linux platforms.
@@ -71,7 +71,7 @@ public class SingleInstance
 
   /**
    * Ensures that only one copy of the tool is running. If this is the first copy, dispatch the arguments
-   * to the MainController, and set up a listening socket on the loopback interface to receive arguments from
+   * to the Controller, and set up a listening socket on the loopback interface to receive arguments from
    * subsequent instances.
    * <p/>
    * If a copy is already running, pass the arguments to it, then return false indicating the caller should exit.
@@ -105,7 +105,7 @@ public class SingleInstance
   private void testTempDir()
   {
     File testFile = getTempFile(TEST_FILE + new Random().nextInt(Integer.MAX_VALUE));
-    log.finest("Testing temp directory at " + testFile);
+    log.finest("Testing tmpdir at " + testFile);
 
     try {
       RandomAccessFile randomAccessFile = new RandomAccessFile(testFile, "rws");
@@ -127,7 +127,7 @@ public class SingleInstance
     }
     catch (IOException e) {
       log.log(Level.SEVERE, "Unable to write to temp directory " + testFile, e);
-      throw new RuntimeException("Unable to write to temporary directory " + testFile);
+      throw new RuntimeException("Unable to write to temp directory " + testFile);
     }
     testFile.delete();
   }
@@ -150,15 +150,15 @@ public class SingleInstance
       lock = channel.tryLock();
     }
     catch (IOException e) {
-      log.log(Level.SEVERE, "Unable to lock the lock file " + lockFile);
-      throw new RuntimeException("Unable to lock our lock file " + lockFile);
+      log.log(Level.SEVERE, "Unable to lock lockfile " + lockFile);
+      throw new RuntimeException("Unable to lock lockfile " + lockFile);
     }
     return lock;
   }
 
   /**
    * Called when we are the primary instance. Setup a shutdown hook to release the lock, start up the
-   * listening socket, then pass the arguments to the MainController.
+   * listening socket, then pass the arguments to the Controller.
    *
    * @param lock The successful FileLock on the lockfile.
    * @param args The command-line arguments.
@@ -269,24 +269,18 @@ public class SingleInstance
       log.finer("args[" + i + "] = " + args.get(i));
     }
 
-    // Queue for the event-dispatch thread to pass to the MainController once startup is fully completed.
+    // Queue for the event-dispatch thread to pass to the Controller once startup is fully completed.
     GooTool.queueTask(new Runnable()
     {
       public void run()
       {
-        MainController mainController = GooTool.getController();
-        mainController.bringToForeground();
+        Controller controller = GooTool.getController();
+        controller.bringToForeground();
         if (!args.isEmpty()) {
           for (String arg : args) {
-            mainController.installAddin(new File(arg));
+            controller.installAddin(new File(arg));
           }
         }
-      }
-
-      @Override
-      public String toString()
-      {
-        return "Command-line handler " + args;
       }
     });
   }
@@ -303,7 +297,6 @@ public class SingleInstance
   private InetAddress getLoopbackAddress()
   {
     try {
-      //noinspection MagicNumber
       return InetAddress.getByAddress(new byte[]{127, 0, 0, 1});
     }
     catch (UnknownHostException e) {
@@ -314,7 +307,7 @@ public class SingleInstance
 
   /**
    * A thread run on the primary instance that listens in the background for command-line arguments from
-   * secondary instances, deserialising them and dispatching them to the MainController.
+   * secondary instances, deserialising them and dispatching them to the Controller.
    */
   private class PrimaryInstanceSocket extends Thread
   {
@@ -335,8 +328,8 @@ public class SingleInstance
         socketFile.deleteOnExit();
       }
       catch (IOException e) {
-        log.log(Level.SEVERE, "Unable to write our socket details to socket file", e);
-        throw new RuntimeException("Unable to write our socket details to socket file");
+        log.log(Level.SEVERE, "Unable to write our socket details to socketfile", e);
+        throw new RuntimeException("Unable to write our socket details to socketfile");
       }
 
       log.log(Level.FINE, "Primary instance listening on " + serverSocketChannel);
@@ -381,7 +374,7 @@ public class SingleInstance
     }
 
     /**
-     * Main loop that blocks waiting for args from clients, then dispatches them.
+     * Main loop that blocks waiting for args from clients, then dispatchse them.
      */
     @Override
     public void run()

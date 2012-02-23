@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008, 2009, 2010, 2011 David C A Croft. All rights reserved. Your use of this computer software
+ * Copyright (c) 2008, 2009, 2010 David C A Croft. All rights reserved. Your use of this computer software
  * is permitted only in accordance with the GooTool license agreement distributed with this file.
  */
 
@@ -10,11 +10,11 @@ import javax.swing.*;
 import java.awt.image.BufferedImage;
 import java.awt.image.RenderedImage;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 
-import com.goofans.gootool.io.GameFormat;
+import com.goofans.gootool.io.AESBinFormat;
+import com.goofans.gootool.io.MacBinFormat;
+import com.goofans.gootool.io.MacGraphicFormat;
 import com.goofans.gootool.movie.BinImageAnimation;
 import com.goofans.gootool.movie.BinMovie;
 import com.goofans.gootool.util.FileNameExtensionFilter;
@@ -39,7 +39,7 @@ public class GameFileCodecTool
     PNGBINLTL_DECODE(false),
     PNGBINLTL_ENCODE(true),
     ANIM_DECODE(false),
-    //   ANIM_ENCODE(true),
+//   ANIM_ENCODE(true),
     MOVIE_DECODE(false);
     //MOVIE_ENCODE(true);
 
@@ -204,48 +204,35 @@ public class GameFileCodecTool
 
     switch (codecType) {
       case AES_DECODE:
-        bytes = GameFormat.AES_BIN_CODEC.decodeFile(inputFile);
+        bytes = AESBinFormat.decodeFile(inputFile);
         Utilities.writeFile(outputFile, bytes);
         break;
       case AES_ENCODE:
         bytes = Utilities.readFile(inputFile);
-        GameFormat.AES_BIN_CODEC.encodeFile(outputFile, bytes);
+        AESBinFormat.encodeFile(outputFile, bytes);
         break;
       case XOR_DECODE:
-        bytes = GameFormat.MAC_BIN_CODEC.decodeFile(inputFile);
+        bytes = MacBinFormat.decodeFile(inputFile);
         Utilities.writeFile(outputFile, bytes);
         break;
       case XOR_ENCODE:
         bytes = Utilities.readFile(inputFile);
-        GameFormat.MAC_BIN_CODEC.encodeFile(outputFile, bytes);
+        MacBinFormat.encodeFile(outputFile, bytes);
         break;
       case PNGBINLTL_DECODE:
-        RenderedImage decImage;
-        FileInputStream is = new FileInputStream(inputFile);
-        try {
-          decImage = GameFormat.MAC_IMAGE_CODEC.readImage(is);
-        }
-        finally {
-          is.close();
-        }
-        ImageIO.write(decImage, GameFormat.PNG_FORMAT, outputFile);
+        RenderedImage decImage = MacGraphicFormat.decodeImage(inputFile);
+        ImageIO.write(decImage, "PNG", outputFile);
         break;
       case PNGBINLTL_ENCODE:
         BufferedImage encImage = ImageIO.read(inputFile);
-        FileOutputStream os = new FileOutputStream(outputFile);
-        try {
-          GameFormat.MAC_IMAGE_CODEC.writeImage(encImage, os);
-        }
-        finally {
-          os.close();
-        }
+        MacGraphicFormat.encodeImage(outputFile, encImage);
         break;
       case ANIM_DECODE:
         BinImageAnimation anim = new BinImageAnimation(inputFile);
         Utilities.writeFile(outputFile, anim.toXMLDocument().getBytes());
         break;
       case MOVIE_DECODE:
-        BinMovie movie = new BinMovie(Utilities.readFile(inputFile));
+        BinMovie movie = new BinMovie(inputFile);
         Utilities.writeFile(outputFile, movie.toXMLDocument().getBytes());
         break;
     }

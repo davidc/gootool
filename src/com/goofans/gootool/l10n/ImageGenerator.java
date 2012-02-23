@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008, 2009, 2010, 2011 David C A Croft. All rights reserved. Your use of this computer software
+ * Copyright (c) 2008, 2009, 2010 David C A Croft. All rights reserved. Your use of this computer software
  * is permitted only in accordance with the GooTool license agreement distributed with this file.
  */
 
@@ -21,9 +21,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import com.goofans.gootool.image.GaussianFilter;
-import com.goofans.gootool.io.GameFormat;
-import com.goofans.gootool.util.Utilities;
 import com.goofans.gootool.util.XMLUtil;
+import com.goofans.gootool.util.Utilities;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -236,7 +235,7 @@ public class ImageGenerator
   public void writeImage(File file) throws IOException
   {
     Utilities.mkdirsOrException(file.getParentFile());
-    ImageIO.write(finalImage, GameFormat.PNG_FORMAT, file);
+    ImageIO.write(finalImage, "PNG", file);
   }
 
   private void drawPoint(Graphics2D g, int x, int y, Color color)
@@ -375,7 +374,6 @@ public class ImageGenerator
     throw new IOException("No position specified on " + drawEl.getTagName());
   }
 
-  @SuppressWarnings({"HardCodedStringLiteral"})
   private int decodeXJustify(String val) throws IOException
   {
     if ("left".equalsIgnoreCase(val)) return FixedPosition.X_JUSTIFY_LEFT;
@@ -384,7 +382,6 @@ public class ImageGenerator
     throw new IOException("Invalid x-justify value " + val);
   }
 
-  @SuppressWarnings({"HardCodedStringLiteral"})
   private int decodeYJustify(String val) throws IOException
   {
     if ("top".equalsIgnoreCase(val)) return FixedPosition.Y_JUSTIFY_TOP;
