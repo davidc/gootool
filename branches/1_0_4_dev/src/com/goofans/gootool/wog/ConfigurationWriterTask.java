@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008, 2009, 2010 David C A Croft. All rights reserved. Your use of this computer software
+ * Copyright (c) 2008, 2009, 2010, 2011 David C A Croft. All rights reserved. Your use of this computer software
  * is permitted only in accordance with the GooTool license agreement distributed with this file.
  */
 
@@ -123,7 +123,7 @@ public class ConfigurationWriterTask extends ProgressIndicatingTask
 
     for (int i = 0; i < filesToCopy.size(); i++) {
       String fileToCopy = filesToCopy.get(i);
-      if (i % 50 == 0) {
+      if (i % 10 == 0) {
         progressStep((100f * i) / filesToCopy.size());
       }
 

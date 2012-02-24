@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008, 2009, 2010 David C A Croft. All rights reserved. Your use of this computer software
+ * Copyright (c) 2008, 2009, 2010, 2011 David C A Croft. All rights reserved. Your use of this computer software
  * is permitted only in accordance with the GooTool license agreement distributed with this file.
  */
 
@@ -39,7 +39,8 @@ public class WorldOfGooWindows extends WorldOfGoo
           "%HOME%/.PlayOnLinux/wineprefix/WorldOfGoo/drive_c/Program Files/WorldOfGoo", // PlayOnLinux
           "%HOME%/.wine/drive_c/Program Files/WorldOfGoo", // wine
           "%ProgramFiles%\\Steam\\steamapps\\common\\world of goo", // steam
-          "%ProgramFiles(x86)%\\Steam\\steamapps\\common\\world of goo" // steam 32-bit on 64-bit windows
+          "%ProgramFiles(x86)%\\Steam\\steamapps\\common\\world of goo", // steam 32-bit on 64-bit windows
+          "%SystemDrive%\\Games\\Steam\\steamapps\\common\\world of goo", // steam
   };
   public static final String EXE_FILENAME = "WorldOfGoo.exe";
 
