@@ -1,3 +1,8 @@
+1.0.4, unreleased
+
+- Make progress bar smoother when performing build.
+- Fix parsing of XML elements that should have text content but are empty.
+
 1.0.3, 15-October-2010
 
 - This is the first release with the full source code released simultaneously (#0000244).
