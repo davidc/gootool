@@ -272,7 +272,9 @@ public class XMLUtil
   {
     Element foundEl = getElement(el, tagName);
     if (foundEl == null) return "";
-    return foundEl.getTextContent().trim();
+    String text = foundEl.getTextContent();
+    if (text == null) return "";
+    return text.trim();
   }
 
   public static String getElementStringRequired(Element el, String tagName) throws IOException
