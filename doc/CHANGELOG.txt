@@ -1,7 +1,14 @@
+Ratings greyed out - tooltip should explain that it's because you're not logged in
+
+Install updates - if all up to date, say so! No dialog then.
+
+If copied from steam (steam_api.dll), warn that they must be running Steam (with a "Do not show this message again")
+
 1.0.4, unreleased
 
 - Make progress bar smoother when performing build.
 - Fix parsing of XML elements that should have text content but are empty.
+- Explain on the options tab what logging in is good for (#0000293)
 
 1.0.3, 15-October-2010
 
