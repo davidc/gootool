@@ -471,7 +471,7 @@
     </dictionary>
   </component>
   <component name="ProjectKey">
-    <option name="state" value="svn+ssh://david@svn.sargasso.net/svn/gootool/trunk/gootool.ipr" />
+    <option name="state" value="svn+ssh://david@svn.sargasso.net/svn/gootool/branches/1_0_4_dev" />
   </component>
   <component name="ProjectModuleManager">
     <modules>

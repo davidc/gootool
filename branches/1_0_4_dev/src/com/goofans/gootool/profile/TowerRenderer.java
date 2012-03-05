@@ -79,13 +79,11 @@ public class TowerRenderer implements ImageObserver
     strandHeight = strandImage.getHeight();
     strandXOffset = -(strandImage.getWidth() / 2);
 
-
     File groundFile = worldOfGoo.getGameFile("res/levels/wogcd/groundTile.png");
     groundImage = GameFormat.decodeImage(groundFile);
 
     File skyFile = worldOfGoo.getGameFile("res/levels/wogcd/skytile.png");
     skyImage = GameFormat.decodeImage(skyFile);
-
   }
 
   public void render()
@@ -130,7 +128,6 @@ public class TowerRenderer implements ImageObserver
     height += PADDING_Y * 2;
     xOffset += PADDING_X;
     yOffset += PADDING_Y;
-
 
     fullSizeDimension = new Dimension(width, height);
     log.log(Level.FINER, "fullSizeDimension = " + fullSizeDimension);
@@ -207,13 +204,11 @@ public class TowerRenderer implements ImageObserver
     g.drawImage(strandImage, strandXOffset, 0, this);
 
     g.setTransform(identity);
-
   }
 
 
   private void createPretty()
   {
-
 //    pretty = new BufferedImage(100, 100, BufferedImage.TYPE_4BYTE_ABGR);
 //    g = pretty.createGraphics();
 
