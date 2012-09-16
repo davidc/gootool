@@ -165,7 +165,7 @@ public class ProjectController implements ActionListener
   {
     if (currentProject == null) {
       log.log(Level.SEVERE, "Action " + event.getActionCommand() + " requested while no project loaded");
-      mainController.showErrorDialog("Invalid state", "can't perform action " + event.getActionCommand() + " with no project loaded!");
+      GUIUtil.showErrorDialog(mainController.getMainWindow(), "Invalid state", "can't perform action " + event.getActionCommand() + " with no project loaded!");
       return;
     }
 
@@ -220,7 +220,7 @@ public class ProjectController implements ActionListener
       removeOnlineId();
     }
     else {
-      mainController.showErrorDialog("ProjectController", "Unrecognised ProjectController action " + cmd);
+      GUIUtil.showErrorDialog(mainController.getMainWindow(), "ProjectController", "Unrecognised ProjectController action " + cmd);
     }
   }
 
@@ -243,7 +243,7 @@ public class ProjectController implements ActionListener
     }
     catch (Exception e) {
       log.log(Level.SEVERE, "Error checking for updates", e);
-      mainController.showErrorDialog(resourceBundle.getString("addinUpdateCheck.error.title"), resourceBundle.formatString("addinUpdateCheck.error.message", e.getLocalizedMessage()));
+      GUIUtil.showErrorDialog(mainController.getMainWindow(), resourceBundle.getString("addinUpdateCheck.error.title"), resourceBundle.formatString("addinUpdateCheck.error.message", e.getLocalizedMessage()));
       return;
     }
 
@@ -286,11 +286,11 @@ public class ProjectController implements ActionListener
     }
     catch (IOException e) {
       log.log(Level.SEVERE, "Unable to uninstall addin", e);
-      mainController.showErrorDialog(resourceBundle.getString("uninstallAddin.error.title"), resourceBundle.formatString("uninstallAddin.error.message", e.getLocalizedMessage()));
+      GUIUtil.showErrorDialog(mainController.getMainWindow(), resourceBundle.getString("uninstallAddin.error.title"), resourceBundle.formatString("uninstallAddin.error.message", e.getLocalizedMessage()));
       return;
     }
 
-    mainController.showMessageDialog(resourceBundle.getString("uninstallAddin.uninstalled.title"), resourceBundle.formatString("uninstallAddin.uninstalled.message", addin.getName()));
+    GUIUtil.showInformationDialog(mainController.getMainWindow(), resourceBundle.getString("uninstallAddin.uninstalled.title"), resourceBundle.formatString("uninstallAddin.uninstalled.message", addin.getName()));
 
     disableAddin(addin.getId());
     refreshView();
@@ -315,7 +315,7 @@ public class ProjectController implements ActionListener
 
     if (!addin.areDependenciesSatisfiedBy(AddinsStore.getAvailableAddins())) {
       log.info("Not installing because dependencies not satisfied");
-      mainController.showErrorDialog(resourceBundle.getString("enableAddin.dependencies.title"), resourceBundle.formatString("enableAddin.dependencies.message", addin.getName()));
+      GUIUtil.showErrorDialog(mainController.getMainWindow(), resourceBundle.getString("enableAddin.dependencies.title"), resourceBundle.formatString("enableAddin.dependencies.message", addin.getName()));
       return;
     }
 
@@ -348,11 +348,11 @@ public class ProjectController implements ActionListener
     try {
       ProfileBackupRequest request = new ProfileBackupRequest();
       request.backupProfile(currentProject, description);
-      mainController.showMessageDialog(resourceBundle.getString("gooFansBackup.success.title"), resourceBundle.getString("gooFansBackup.success.message"));
+      GUIUtil.showInformationDialog(mainController.getMainWindow(), resourceBundle.getString("gooFansBackup.success.title"), resourceBundle.getString("gooFansBackup.success.message"));
     }
     catch (APIException e) {
       log.log(Level.WARNING, "Backup failed", e);
-      mainController.showErrorDialog(resourceBundle.getString("gooFansBackup.error.title"), resourceBundle.formatString("gooFansBackup.error.message", e.getLocalizedMessage()));
+      GUIUtil.showErrorDialog(mainController.getMainWindow(), resourceBundle.getString("gooFansBackup.error.title"), resourceBundle.formatString("gooFansBackup.error.message", e.getLocalizedMessage()));
     }
   }
 
@@ -365,7 +365,7 @@ public class ProjectController implements ActionListener
 
       List<ProfileListRequest.BackupInstance> backups = listRequest.listBackups();
       if (backups.isEmpty()) {
-        mainController.showErrorDialog(resourceBundle.getString("gooFansRestore.noBackups.title"), resourceBundle.getString("gooFansRestore.noBackups.message"));
+        GUIUtil.showErrorDialog(mainController.getMainWindow(), resourceBundle.getString("gooFansRestore.noBackups.title"), resourceBundle.getString("gooFansRestore.noBackups.message"));
         return;
       }
 
@@ -393,11 +393,11 @@ public class ProjectController implements ActionListener
 
       refreshView();
 
-      mainController.showMessageDialog(resourceBundle.getString("gooFansRestore.success.title"), resourceBundle.getString("gooFansRestore.success.message"));
+      GUIUtil.showInformationDialog(mainController.getMainWindow(), resourceBundle.getString("gooFansRestore.success.title"), resourceBundle.getString("gooFansRestore.success.message"));
     }
     catch (APIException e) {
       log.log(Level.WARNING, "Restore failed", e);
-      mainController.showErrorDialog(resourceBundle.getString("gooFansRestore.error.title"), resourceBundle.formatString("gooFansRestore.error.message", e.getLocalizedMessage()));
+      GUIUtil.showErrorDialog(mainController.getMainWindow(), resourceBundle.getString("gooFansRestore.error.title"), resourceBundle.formatString("gooFansRestore.error.message", e.getLocalizedMessage()));
     }
   }
 
@@ -415,13 +415,13 @@ public class ProjectController implements ActionListener
 
       sb.append(resourceBundle.getString("gooFansPublish.success.message"));
 
-      if (mainController.showYesNoDialog(resourceBundle.getString("gooFansPublish.success.title"), sb.toString())) {
+      if (GUIUtil.showYesNoDialog(mainController.getMainWindow(), resourceBundle.getString("gooFansPublish.success.title"), sb.toString())) {
         DesktopUtil.browseAndWarn(profileUrl, mainController.getMainWindow());
       }
     }
     catch (APIException e) {
       log.log(Level.WARNING, "Publish failed", e);
-      mainController.showErrorDialog(resourceBundle.getString("gooFansPublish.error.title"), resourceBundle.formatString("gooFansPublish.error.message", e.getLocalizedMessage()));
+      GUIUtil.showErrorDialog(mainController.getMainWindow(), resourceBundle.getString("gooFansPublish.error.title"), resourceBundle.formatString("gooFansPublish.error.message", e.getLocalizedMessage()));
     }
   }
 
@@ -485,7 +485,7 @@ public class ProjectController implements ActionListener
     System.out.println("liveConfig = " + liveConfig);
 
     if (!projectModel.getEditorConfig().equals(liveConfig)) {
-      if (!mainController.showYesNoDialog(resourceBundle.getString("exit.unsaved.title"), resourceBundle.getString("exit.unsaved.message"))) {
+      if (!GUIUtil.showYesNoDialog(mainController.getMainWindow(), resourceBundle.getString("exit.unsaved.title"), resourceBundle.getString("exit.unsaved.message"))) {
         log.fine("User cancelled exit");
         return false;
       }
@@ -515,7 +515,7 @@ public class ProjectController implements ActionListener
         TargetFile testFile = target.getGameRoot().getChild(currentProject.getGameXmlFilename("properties/text.xml"));
 
         if (!testFile.isFile()) {
-          mainController.showMessageDialog(resourceBundle.getString("firstBuild.title"), resourceBundle.getString("firstBuild.message"));
+          GUIUtil.showInformationDialog(mainController.getMainWindow(), resourceBundle.getString("firstBuild.title"), resourceBundle.getString("firstBuild.message"));
         }
       }
       finally {
@@ -526,7 +526,7 @@ public class ProjectController implements ActionListener
     }
     catch (IOException e) {
       log.log(Level.WARNING, "Unable to open or close target", e);
-      mainController.showErrorDialog(resourceBundle.getString("worldBuilder.error.title"), e.getMessage() + " (" + e.getClass().getName() + ")");
+      GUIUtil.showErrorDialog(mainController.getMainWindow(), resourceBundle.getString("worldBuilder.error.title"), e.getMessage() + " (" + e.getClass().getName() + ")");
     }
 
     WorldBuilder configWriter = new WorldBuilder(currentProject, projectModel.getEditorConfig());
@@ -538,7 +538,7 @@ public class ProjectController implements ActionListener
     }
     catch (Exception e) {
       log.log(Level.SEVERE, "Error building world", e);
-      mainController.showErrorDialog(resourceBundle.getString("worldBuilder.error.title"), e.getMessage() + " (" + e.getClass().getName() + ")");
+      GUIUtil.showErrorDialog(mainController.getMainWindow(), resourceBundle.getString("worldBuilder.error.title"), e.getMessage() + " (" + e.getClass().getName() + ")");
       errored = true;
     }
 
@@ -552,7 +552,7 @@ public class ProjectController implements ActionListener
       }
       catch (IOException e) {
         log.log(Level.SEVERE, "Error launching World of Goo", e);
-        mainController.showErrorDialog(resourceBundle.getString("launch.error.title"), e.getLocalizedMessage());
+        GUIUtil.showErrorDialog(mainController.getMainWindow(), resourceBundle.getString("launch.error.title"), e.getLocalizedMessage());
       }
     }
   }
@@ -595,7 +595,7 @@ public class ProjectController implements ActionListener
 
   public void generateOnlineId()
   {
-    if (!mainController.showYesNoDialog(resourceBundle.getString("generateOnlineId.confirm.title"), resourceBundle.getString("generateOnlineId.confirm.message"))) {
+    if (!GUIUtil.showYesNoDialog(mainController.getMainWindow(), resourceBundle.getString("generateOnlineId.confirm.title"), resourceBundle.getString("generateOnlineId.confirm.message"))) {
       return;
     }
 
@@ -603,19 +603,19 @@ public class ProjectController implements ActionListener
       GenerateOnlineIds.generateOnlineIds(currentProject);
     }
     catch (IOException e) {
-      mainController.showErrorDialog(resourceBundle.getString("generateOnlineId.error.title"), resourceBundle.formatString("generateOnlineId.error.message", e.getLocalizedMessage()));
+      GUIUtil.showErrorDialog(mainController.getMainWindow(), resourceBundle.getString("generateOnlineId.error.title"), resourceBundle.formatString("generateOnlineId.error.message", e.getLocalizedMessage()));
       return;
     }
 
     projectPanel.profilePanel.loadProfiles(); // TODO ugh!
 
     refreshView();
-    mainController.showMessageDialog(resourceBundle.getString("generateOnlineId.success.title"), resourceBundle.getString("generateOnlineId.success.message"));
+    GUIUtil.showInformationDialog(mainController.getMainWindow(), resourceBundle.getString("generateOnlineId.success.title"), resourceBundle.getString("generateOnlineId.success.message"));
   }
 
   public void removeOnlineId()
   {
-    if (!mainController.showYesNoDialog(resourceBundle.getString("removeOnlineId.confirm.title"), resourceBundle.getString("removeOnlineId.confirm.message"))) {
+    if (!GUIUtil.showYesNoDialog(mainController.getMainWindow(), resourceBundle.getString("removeOnlineId.confirm.title"), resourceBundle.getString("removeOnlineId.confirm.message"))) {
       return;
     }
 
@@ -623,14 +623,14 @@ public class ProjectController implements ActionListener
       GenerateOnlineIds.removeGeneratedOnlineIds(currentProject);
     }
     catch (IOException e) {
-      mainController.showErrorDialog(resourceBundle.getString("removeOnlineId.error.title"), resourceBundle.formatString("removeOnlineId.error.message", e.getLocalizedMessage()));
+      GUIUtil.showErrorDialog(mainController.getMainWindow(), resourceBundle.getString("removeOnlineId.error.title"), resourceBundle.formatString("removeOnlineId.error.message", e.getLocalizedMessage()));
       return;
     }
 
     projectPanel.profilePanel.loadProfiles(); // TODO ugh!
 
     refreshView();
-    mainController.showMessageDialog(resourceBundle.getString("removeOnlineId.success.title"), resourceBundle.getString("removeOnlineId.success.message"));
+    GUIUtil.showInformationDialog(mainController.getMainWindow(), resourceBundle.getString("removeOnlineId.success.title"), resourceBundle.getString("removeOnlineId.success.message"));
   }
 
 //  public void addinsUpdated()

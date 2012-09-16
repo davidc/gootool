@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008, 2009, 2010, 2011 David C A Croft. All rights reserved. Your use of this computer software
+ * Copyright (c) 2008, 2009, 2010, 2011, 2012 David C A Croft. All rights reserved. Your use of this computer software
  * is permitted only in accordance with the GooTool license agreement distributed with this file.
  */
 
@@ -136,10 +136,7 @@ public class IosProject extends Project
     }
     catch (Exception e) {
       log.log(Level.SEVERE, "Exception in iOS cache download", e);
-      JOptionPane.showMessageDialog(mainController.getMainWindow(),
-              resourceBundle.formatString("ios.firstTime.error.message", e.getLocalizedMessage(), e.getCause() != null ? e.getCause().getLocalizedMessage() : ""),
-              resourceBundle.getString("ios.firstTime.error.title"),
-              JOptionPane.ERROR_MESSAGE);
+      GUIUtil.showErrorDialog(mainController.getMainWindow(), resourceBundle.getString("ios.firstTime.error.title"), resourceBundle.formatString("ios.firstTime.error.message", e.getLocalizedMessage(), e.getCause() != null ? e.getCause().getLocalizedMessage() : ""));
       return false;
     }
 
@@ -236,19 +233,13 @@ public class IosProject extends Project
       beginStep(resourceBundle.getString("ios.firstTime.status.locating"), false);
 
       if (!connection.locateWog()) {
-        JOptionPane.showMessageDialog(mainController.getMainWindow(),
-                resourceBundle.getString("ios.firstTime.notFound.message"),
-                resourceBundle.getString("ios.firstTime.notFound.title"),
-                JOptionPane.ERROR_MESSAGE);
+        GUIUtil.showErrorDialog(mainController.getMainWindow(), resourceBundle.getString("ios.firstTime.notFound.title"), resourceBundle.getString("ios.firstTime.notFound.message"));
         return;
       }
 
       beginStep(resourceBundle.getString("ios.firstTime.status.caching"), true);
 
-      JOptionPane.showMessageDialog(mainController.getMainWindow(),
-              resourceBundle.getString("ios.firstTime.promptDownload.message"),
-              resourceBundle.getString("ios.firstTime.promptDownload.title"),
-              JOptionPane.INFORMATION_MESSAGE);
+      GUIUtil.showInformationDialog(mainController.getMainWindow(), resourceBundle.getString("ios.firstTime.promptDownload.title"), resourceBundle.getString("ios.firstTime.promptDownload.message"));
 
       File tempFile = File.createTempFile("gooioscache", null);
       connection.storeOriginalFiles(tempFile, this);

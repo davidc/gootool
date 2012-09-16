@@ -132,7 +132,7 @@ public class MainController implements ActionListener
       }
       catch (Exception e) {
         // should never happen.
-        showErrorDialog(resourceBundle.getString("gootoolUpdateCheck.error.title"), resourceBundle.formatString("gootoolUpdateCheck.error.message", e.getLocalizedMessage()));
+        GUIUtil.showErrorDialog(mainWindow, resourceBundle.getString("gootoolUpdateCheck.error.title"), resourceBundle.formatString("gootoolUpdateCheck.error.message", e.getLocalizedMessage()));
       }
     }
     else if (cmd.equals(CMD_DIAGNOSTICS)) {
@@ -156,11 +156,11 @@ public class MainController implements ActionListener
       }
       catch (Exception e) {
         log.log(Level.SEVERE, "Error coding file", e);
-        showErrorDialog("Error coding file", e.getLocalizedMessage());
+        GUIUtil.showErrorDialog(mainWindow, "Error coding file", e.getLocalizedMessage());
       }
     }
     else {
-      showErrorDialog("MainController", "Unrecognised MainController action " + cmd);
+      GUIUtil.showErrorDialog(mainWindow, "MainController", "Unrecognised MainController action " + cmd);
     }
   }
 
@@ -183,7 +183,7 @@ public class MainController implements ActionListener
   {
     if (!addinFile.exists()) {
       log.info("File not found: " + addinFile);
-      showErrorDialog(resourceBundle.getString("installAddin.notFound.title"), resourceBundle.formatString("installAddin.notFound.message", addinFile));
+      GUIUtil.showErrorDialog(mainWindow, resourceBundle.getString("installAddin.notFound.title"), resourceBundle.formatString("installAddin.notFound.message", addinFile));
       return;
     }
 
@@ -194,8 +194,7 @@ public class MainController implements ActionListener
     }
     catch (Exception e) {
       log.log(Level.SEVERE, "Error opening file " + addinFile, e);
-      showErrorDialog(resourceBundle.getString("installAddin.invalid.title"),
-              resourceBundle.formatString("installAddin.invalid.message", addinFile.getName(), e.getLocalizedMessage()));
+      GUIUtil.showErrorDialog(mainWindow, resourceBundle.getString("installAddin.invalid.title"), resourceBundle.formatString("installAddin.invalid.message", addinFile.getName(), e.getLocalizedMessage()));
       return;
     }
 
@@ -210,7 +209,7 @@ public class MainController implements ActionListener
 
     String msg = resourceBundle.formatString("installAddin.confirm.message", addin.getName(), addin.getAuthor(), addin.getVersion());
 
-    if (!showYesNoDialog(resourceBundle.getString("installAddin.confirm.title"), msg)) {
+    if (!GUIUtil.showYesNoDialog(mainWindow, resourceBundle.getString("installAddin.confirm.title"), msg)) {
       log.info("User cancelled installation of " + addin);
       return;
     }
@@ -233,7 +232,7 @@ public class MainController implements ActionListener
             msg += resourceBundle.getString("installAddin.exists.message.sameVersion");
           }
 
-          if (!showYesNoDialog(resourceBundle.getString("installAddin.exists.title"), msg)) {
+          if (!GUIUtil.showYesNoDialog(mainWindow, resourceBundle.getString("installAddin.exists.title"), msg)) {
             log.info("User cancelled overwriting installation of " + addin);
             return;
           }
@@ -246,12 +245,12 @@ public class MainController implements ActionListener
     }
     catch (IOException e) {
       log.log(Level.SEVERE, "Unable to copy to addins directory", e);
-      showErrorDialog(resourceBundle.getString("installAddin.error.title"), resourceBundle.formatString("installAddin.error.message", e.getLocalizedMessage()));
+      GUIUtil.showErrorDialog(mainWindow, resourceBundle.getString("installAddin.error.title"), resourceBundle.formatString("installAddin.error.message", e.getLocalizedMessage()));
       return;
     }
     catch (AddinFormatException e) {
       log.log(Level.SEVERE, "Addin format exception", e);
-      showErrorDialog(resourceBundle.getString("installAddin.error.title"), resourceBundle.formatString("installAddin.error.message", e.getLocalizedMessage()));
+      GUIUtil.showErrorDialog(mainWindow, resourceBundle.getString("installAddin.error.title"), resourceBundle.formatString("installAddin.error.message", e.getLocalizedMessage()));
       return;
     }
 
@@ -268,7 +267,7 @@ public class MainController implements ActionListener
       msg = resourceBundle.formatString("installAddin.installed.mod", addin.getName());
     }
 
-    showMessageDialog(resourceBundle.getString("installAddin.installed.title"), msg);
+    GUIUtil.showInformationDialog(mainWindow, resourceBundle.getString("installAddin.installed.title"), msg);
   }
 
   private void gooFansLogin()
@@ -283,30 +282,8 @@ public class MainController implements ActionListener
     ToolPreferences.setGooFansPassword(null);
     ToolPreferences.setGooFansLoginOk(false);
 
-    showMessageDialog(resourceBundle.getString("gooFansLogout.title"), resourceBundle.getString("gooFansLogout.message"));
+    GUIUtil.showInformationDialog(mainWindow, resourceBundle.getString("gooFansLogout.title"), resourceBundle.getString("gooFansLogout.message"));
     projectController.refreshView();
-  }
-
-  void showMessageDialog(String title, String msg)
-  {
-    JOptionPane.showMessageDialog(mainWindow, msg, title, JOptionPane.INFORMATION_MESSAGE);
-  }
-
-  void showErrorDialog(String title, String msg)
-  {
-    JOptionPane.showMessageDialog(mainWindow, msg, title, JOptionPane.ERROR_MESSAGE);
-  }
-
-  /**
-   * Show a "Yes or No" dialog, returning true only if the user selected "Yes".
-   *
-   * @param title Title bar
-   * @param msg   Message
-   * @return True only if the user said "yes", false if they said "No" or closed the window.
-   */
-  boolean showYesNoDialog(String title, String msg)
-  {
-    return JOptionPane.showConfirmDialog(mainWindow, msg, title, JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION;
   }
 
   public void maybeExit()
@@ -372,8 +349,7 @@ public class MainController implements ActionListener
     }
     catch (Exception e) {
       log.log(Level.SEVERE, "Unable to run diagnostics", e);
-      showErrorDialog(resourceBundle.getString("diagnostics.error.title"),
-              resourceBundle.formatString("diagnostics.error.message", e.getLocalizedMessage()));
+      GUIUtil.showErrorDialog(mainWindow, resourceBundle.getString("diagnostics.error.title"), resourceBundle.formatString("diagnostics.error.message", e.getLocalizedMessage()));
       return;
     }
 
@@ -504,7 +480,7 @@ public class MainController implements ActionListener
     }
     catch (IOException e) {
       log.log(Level.SEVERE, "Unable to create project", e);
-      showErrorDialog(resourceBundle.getString("project.add.error.title"), resourceBundle.formatString("project.add.error.message", e.getLocalizedMessage()));
+      GUIUtil.showErrorDialog(mainWindow, resourceBundle.getString("project.add.error.title"), resourceBundle.formatString("project.add.error.message", e.getLocalizedMessage()));
       return;
     }
     propsDialog.saveToProject(newProject);
@@ -561,7 +537,7 @@ public class MainController implements ActionListener
   {
     Project project = projectController.getCurrentProject();
 
-    if (!showYesNoDialog(resourceBundle.getString("project.delete.confirm.title"), resourceBundle.formatString("project.delete.confirm.message", project.getName()))) {
+    if (!GUIUtil.showYesNoDialog(mainWindow, resourceBundle.getString("project.delete.confirm.title"), resourceBundle.formatString("project.delete.confirm.message", project.getName()))) {
       return;
     }
 
@@ -571,7 +547,7 @@ public class MainController implements ActionListener
       ProjectManager.deleteProject(project);
     }
     catch (IOException e) {
-      showErrorDialog(resourceBundle.getString("project.delete.error.title"), resourceBundle.formatString("project.delete.error.message", e.getLocalizedMessage()));
+      GUIUtil.showErrorDialog(mainWindow, resourceBundle.getString("project.delete.error.title"), resourceBundle.formatString("project.delete.error.message", e.getLocalizedMessage()));
     }
 
     mainWindow.mainPanel.updateProjectsCombo();

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008, 2009, 2010, 2011 David C A Croft. All rights reserved. Your use of this computer software
+ * Copyright (c) 2008, 2009, 2010, 2011, 2012 David C A Croft. All rights reserved. Your use of this computer software
  * is permitted only in accordance with the GooTool license agreement distributed with this file.
  */
 
@@ -178,16 +178,6 @@ public class LocalProjectPropertiesDialog extends JDialog implements ActionListe
     updateButtonStates();
   }
 
-  private void showErrorDialog(String title, String msg)
-  {
-    JOptionPane.showMessageDialog(mainWindow, msg, title, JOptionPane.ERROR_MESSAGE);
-  }
-
-  private boolean showYesNoDialog(String title, String msg)
-  {
-    return JOptionPane.showConfirmDialog(mainWindow, msg, title, JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION;
-  }
-
   private void changeTargetDir()
   {
     File oldFile = null;
@@ -203,7 +193,7 @@ public class LocalProjectPropertiesDialog extends JDialog implements ActionListe
 
     if (!selectedFile.exists()) {
       // Doesn't exist. OK to create?
-      if (!showYesNoDialog(resourceBundle.getString("localProject.targetDir.create.title"), resourceBundle.formatString("localProject.targetDir.create.message", selectedFile.getAbsolutePath()))) {
+      if (!GUIUtil.showYesNoDialog(mainWindow, resourceBundle.getString("localProject.targetDir.create.title"), resourceBundle.formatString("localProject.targetDir.create.message", selectedFile.getAbsolutePath()))) {
         return;
       }
     }
@@ -211,7 +201,7 @@ public class LocalProjectPropertiesDialog extends JDialog implements ActionListe
       // Check if it's not empty
 
       if (selectedFile.list().length > 0) {
-        if (!showYesNoDialog(resourceBundle.getString("localProject.targetDir.notEmpty.title"), resourceBundle.formatString("localProject.targetDir.notEmpty.message", selectedFile.getAbsolutePath()))) {
+        if (!GUIUtil.showYesNoDialog(mainWindow, resourceBundle.getString("localProject.targetDir.notEmpty.title"), resourceBundle.formatString("localProject.targetDir.notEmpty.message", selectedFile.getAbsolutePath()))) {
           return;
         }
       }
@@ -238,7 +228,7 @@ public class LocalProjectPropertiesDialog extends JDialog implements ActionListe
 
     File selectedFile = chooser.getSelectedFile();
     if (!ProfileData.isValidProfile(selectedFile)) {
-      showErrorDialog(resourceBundle.getString("localProject.profileFile.error.title"), resourceBundle.getString("localProject.profileFile.error.message"));
+      GUIUtil.showErrorDialog(mainWindow, resourceBundle.getString("localProject.profileFile.error.title"), resourceBundle.getString("localProject.profileFile.error.message"));
       return;
     }
 
@@ -295,7 +285,7 @@ public class LocalProjectPropertiesDialog extends JDialog implements ActionListe
     }
 
     if (sameDirectory) {
-      showErrorDialog(resourceBundle.getString("localProject.targetDir.sameAsSource.title"), resourceBundle.getString("localProject.targetDir.sameAsSource.message"));
+      GUIUtil.showErrorDialog(mainWindow, resourceBundle.getString("localProject.targetDir.sameAsSource.title"), resourceBundle.getString("localProject.targetDir.sameAsSource.message"));
       return;
     }
 
@@ -303,7 +293,7 @@ public class LocalProjectPropertiesDialog extends JDialog implements ActionListe
 
     if (!targetDir.isDirectory()) {
       if (!targetDir.mkdir()) {
-        showErrorDialog(resourceBundle.getString("localProject.targetDir.cantCreate.title"), resourceBundle.formatString("localProject.targetDir.cantCreate.message", targetDir.getAbsolutePath()));
+        GUIUtil.showErrorDialog(mainWindow, resourceBundle.getString("localProject.targetDir.cantCreate.title"), resourceBundle.formatString("localProject.targetDir.cantCreate.message", targetDir.getAbsolutePath()));
         return;
       }
     }
@@ -313,7 +303,7 @@ public class LocalProjectPropertiesDialog extends JDialog implements ActionListe
       Utilities.testDirectoryWriteable(targetDir);
     }
     catch (IOException e) {
-      showErrorDialog(resourceBundle.getString("localProject.targetDir.notWritable.title"), resourceBundle.formatString("localProject.targetDir.notWritable.message", targetDir.getAbsolutePath(), e.getLocalizedMessage()));
+      GUIUtil.showErrorDialog(mainWindow, resourceBundle.getString("localProject.targetDir.notWritable.title"), resourceBundle.formatString("localProject.targetDir.notWritable.message", targetDir.getAbsolutePath(), e.getLocalizedMessage()));
       return;
     }
 
@@ -336,7 +326,6 @@ public class LocalProjectPropertiesDialog extends JDialog implements ActionListe
     localProject.setTargetDir(targetDirText.getText());
     localProject.setProfileFile(profileFileText.getText());
   }
-
 
   private void updateButtonStates()
   {

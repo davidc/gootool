@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008, 2009, 2010, 2011 David C A Croft. All rights reserved. Your use of this computer software
+ * Copyright (c) 2008, 2009, 2010, 2011, 2012 David C A Croft. All rights reserved. Your use of this computer software
  * is permitted only in accordance with the GooTool license agreement distributed with this file.
  */
 
@@ -68,7 +68,7 @@ public class VersionCheck implements Runnable
 
       if (alwaysAlertUser) {
         GooToolResourceBundle resourceBundle = GooTool.getTextProvider();
-        JOptionPane.showMessageDialog(parentWindow, resourceBundle.formatString("checkVersion.error.message", e.getLocalizedMessage()), resourceBundle.getString("checkVersion.error.title"), JOptionPane.ERROR_MESSAGE);
+        GUIUtil.showErrorDialog(parentWindow, resourceBundle.getString("checkVersion.error.title"), resourceBundle.formatString("checkVersion.error.message", e.getLocalizedMessage()));
       }
     }
   }
@@ -101,7 +101,7 @@ public class VersionCheck implements Runnable
           public void run()
           {
             GooToolResourceBundle resourceBundle = GooTool.getTextProvider();
-            JOptionPane.showMessageDialog(parentWindow, resourceBundle.formatString("checkVersion.upToDate.message", Version.RELEASE_FRIENDLY), resourceBundle.getString("checkVersion.upToDate.title"), JOptionPane.INFORMATION_MESSAGE);
+            GUIUtil.showInformationDialog(parentWindow, resourceBundle.getString("checkVersion.upToDate.title"), resourceBundle.formatString("checkVersion.upToDate.message", Version.RELEASE_FRIENDLY));
           }
         });
       }

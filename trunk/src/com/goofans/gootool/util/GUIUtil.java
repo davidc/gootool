@@ -235,4 +235,9 @@ public class GUIUtil
   {
     JOptionPane.showMessageDialog(parentComponent, message, title, JOptionPane.ERROR_MESSAGE);
   }
+
+  public static boolean showYesNoDialog(Component parentComponent, String title, String msg)
+  {
+    return JOptionPane.showConfirmDialog(parentComponent, msg, title, JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION;
+  }
 }
