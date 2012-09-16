@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008, 2009, 2010, 2011 David C A Croft. All rights reserved. Your use of this computer software
+ * Copyright (c) 2008, 2009, 2010, 2011, 2012 David C A Croft. All rights reserved. Your use of this computer software
  * is permitted only in accordance with the GooTool license agreement distributed with this file.
  */
 
@@ -20,6 +20,7 @@ import com.goofans.gootool.projects.LocalProject;
 import com.goofans.gootool.projects.Project;
 import com.goofans.gootool.projects.ProjectManager;
 import com.goofans.gootool.siteapi.ProfileListRequest;
+import com.goofans.gootool.siteapi.RatingListRequest;
 import com.goofans.gootool.siteapi.VersionCheck;
 import com.goofans.gootool.util.ProgressIndicatingTask;
 import com.goofans.gootool.util.ProgressListener;
@@ -43,11 +44,6 @@ public class Diagnostics extends ProgressIndicatingTask
     this.out = out;
   }
 
-  public Diagnostics(File outFile) throws IOException
-  {
-    this.out = new PrintStream(new BufferedOutputStream(new FileOutputStream(outFile)));
-  }
-
   @Override
   public void run()
   {
@@ -69,8 +65,6 @@ public class Diagnostics extends ProgressIndicatingTask
     // Installed addins and their zip contents
 
     // TODO project configuration
-
-    out.close();
   }
 
   private void dumpGooTool()
@@ -263,17 +257,28 @@ public class Diagnostics extends ProgressIndicatingTask
 
     if (ToolPreferences.isGooFansLoginOk()) {
       try {
-        ProfileListRequest listRequest = new ProfileListRequest();
-        List<ProfileListRequest.BackupInstance> backups = listRequest.listBackups();
+        ProfileListRequest backupsRequest = new ProfileListRequest();
+        List<ProfileListRequest.BackupInstance> backups = backupsRequest.listBackups();
         out.println("ProfileListRequest succeeded. Number of backups: " + backups.size());
       }
       catch (Exception e) {
         out.println("ProfileListRequest test failed:");
         e.printStackTrace(out);
       }
+
+      try {
+        RatingListRequest ratingsRequest = new RatingListRequest();
+        Map<String, Integer> ratings = ratingsRequest.getRatings();
+        out.println("RatingListRequest succeeded. Number of ratings: " + ratings.size());
+      }
+      catch (Exception e) {
+        out.println("RatingListRequest test failed:");
+        e.printStackTrace(out);
+      }
+
     }
     else {
-      out.println("Skipping ProfileListRequest test as user is not logged into GooFans.");
+      out.println("Skipping ProfileListRequest and RatingListRequest tests as user is not logged into GooFans.");
     }
     out.println();
   }

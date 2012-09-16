@@ -12,8 +12,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -344,8 +343,14 @@ public class MainController implements ActionListener
 
     File outFile = chooser.getSelectedFile();
     try {
-      Diagnostics diagnostics = new Diagnostics(outFile);
-      GUIUtil.runTask(mainWindow, resourceBundle.getString("diagnostics.running.title"), diagnostics);
+      PrintStream os = new PrintStream(new BufferedOutputStream(new FileOutputStream(outFile)));
+      try {
+        Diagnostics diagnostics = new Diagnostics(os);
+        GUIUtil.runTask(mainWindow, resourceBundle.getString("diagnostics.running.title"), diagnostics);
+      }
+      finally {
+        os.close();
+      }
     }
     catch (Exception e) {
       log.log(Level.SEVERE, "Unable to run diagnostics", e);
