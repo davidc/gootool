@@ -99,7 +99,7 @@ public class GooFansLoginDialog extends JDialog implements DocumentListener, Act
 
   private boolean arePropertiesValid()
   {
-    return !goofansUsername.getText().isEmpty() && goofansPassword.getPassword().length > 0;
+    return goofansUsername.getText().length() > 0 && goofansPassword.getPassword().length > 0;
   }
 
   private void updateButtonStates()
