@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008, 2009, 2010, 2011 David C A Croft. All rights reserved. Your use of this computer software
+ * Copyright (c) 2008, 2009, 2010, 2011, 2012 David C A Croft. All rights reserved. Your use of this computer software
  * is permitted only in accordance with the GooTool license agreement distributed with this file.
  */
 
@@ -13,16 +13,26 @@ import org.w3c.dom.Document;
 
 /**
  * A simple authenticated request that does nothing, but does throw an APIException if the user login failed.
- * Used when the user enters their username/password to check that it is correct. 
+ * Used when the user enters their username/password to check that it is correct.
  *
  * @author David Croft (davidc@goofans.com)
  * @version $Id$
  */
-public class LoginTestRequest extends APIRequestAuthenticated
+public class LoginTestRequest extends APIRequest
 {
-  public LoginTestRequest() throws APIException
+  private static final Logger log = Logger.getLogger(LoginTestRequest.class.getName());
+
+  public LoginTestRequest(String username, String password) throws APIException
   {
     super(API_LOGIN_TEST);
+
+    if (username == null || password == null) {
+      throw new APIException("No GooFans username or password set");
+    }
+
+    addPostParameter(PARAM_USERNAME, username);
+    addPostParameter(PARAM_PASSWORD, password);
+    log.finest("Instantiated authenticated LoginTestRequest for user " + username);
   }
 
   public void loginTest() throws APIException
@@ -38,6 +48,6 @@ public class LoginTestRequest extends APIRequestAuthenticated
   {
     DebugUtil.setAllLogging();
 
-    new LoginTestRequest().loginTest();
+    new LoginTestRequest("blah", "blah").loginTest();
   }
 }

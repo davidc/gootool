@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008, 2009, 2010, 2011 David C A Croft. All rights reserved. Your use of this computer software
+ * Copyright (c) 2008, 2009, 2010, 2011, 2012 David C A Croft. All rights reserved. Your use of this computer software
  * is permitted only in accordance with the GooTool license agreement distributed with this file.
  */
 
@@ -24,10 +24,7 @@ import java.text.NumberFormat;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.goofans.gootool.GooTool;
-import com.goofans.gootool.GooToolResourceBundle;
-import com.goofans.gootool.ProjectController;
-import com.goofans.gootool.ToolPreferences;
+import com.goofans.gootool.*;
 import com.goofans.gootool.model.ProjectModel;
 import com.goofans.gootool.profile.*;
 import com.goofans.gootool.projects.Project;
@@ -64,6 +61,8 @@ public final class ProfilePanel implements ActionListener, ViewComponent
   private JButton profileBackupButton;
   private JButton profileRestoreButton;
   private JButton profilePublishButton;
+  private JButton loginButton;
+  private JButton logoutButton;
 
   private static final String CMD_REFRESH = "REFRESH";
   private static final String CMD_PROFILE_CHANGED = "PROFILE_CHANGED";
@@ -151,6 +150,12 @@ public final class ProfilePanel implements ActionListener, ViewComponent
 
     profilePublishButton.setActionCommand(ProjectController.CMD_GOOFANS_PUBLISH);
     profilePublishButton.addActionListener(projectController);
+
+    loginButton.setActionCommand(MainController.CMD_GOOFANS_LOGIN);
+    loginButton.addActionListener(projectController.getMainController());
+
+    logoutButton.setActionCommand(MainController.CMD_GOOFANS_LOGOUT);
+    logoutButton.addActionListener(projectController.getMainController());
   }
 
   public void actionPerformed(ActionEvent event)
@@ -455,11 +460,7 @@ public final class ProfilePanel implements ActionListener, ViewComponent
     Project project = projectController.getCurrentProject();
     boolean validProfile = project != null && project.isProfileValid();
 
-    System.out.println("validProfile = " + validProfile);
-
     boolean enabled = ToolPreferences.isGooFansLoginOk() && validProfile;
-    System.out.println("enabled = " + enabled);
-
 
     profileBackupButton.setEnabled(enabled);
     profileRestoreButton.setEnabled(enabled);
@@ -479,15 +480,24 @@ public final class ProfilePanel implements ActionListener, ViewComponent
     else {
       String tooltip;
       if (validProfile) {
-        tooltip = resourceBundle.getString("profile.goofans.disabled.profile.tooltip");
+        tooltip = resourceBundle.getString("profile.goofans.disabled.tooltip");
       }
       else {
-        tooltip = resourceBundle.getString("profile.goofans.disabled.tooltip");
+        tooltip = resourceBundle.getString("profile.goofans.disabled.profile.tooltip");
       }
       profileBackupButton.setToolTipText(tooltip);
       profileRestoreButton.setToolTipText(tooltip);
       profilePublishButton.setToolTipText(tooltip);
       profilePublishButton.setEnabled(false);
+    }
+
+    if (ToolPreferences.isGooFansLoginOk()) {
+      loginButton.setVisible(false);
+      logoutButton.setVisible(true);
+    }
+    else {
+      loginButton.setVisible(true);
+      logoutButton.setVisible(false);
     }
   }
 

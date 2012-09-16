@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008, 2009, 2010, 2011 David C A Croft. All rights reserved. Your use of this computer software
+ * Copyright (c) 2008, 2009, 2010, 2011, 2012 David C A Croft. All rights reserved. Your use of this computer software
  * is permitted only in accordance with the GooTool license agreement distributed with this file.
  */
 
@@ -40,6 +40,22 @@ public class GUIUtil
       public void actionPerformed(ActionEvent e)
       {
         dialog.setVisible(false);
+      }
+    }, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_IN_FOCUSED_WINDOW);
+  }
+
+  /**
+   * Adds a keyboard listener to dispose the dialog when ESCAPE is pressed.
+   *
+   * @param dialog The dialog to act upon.
+   */
+  public static void setDisposeOnEscape(final JDialog dialog)
+  {
+    dialog.getRootPane().registerKeyboardAction(new ActionListener()
+    {
+      public void actionPerformed(ActionEvent e)
+      {
+        dialog.dispose();
       }
     }, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_IN_FOCUSED_WINDOW);
   }
@@ -208,5 +224,15 @@ public class GUIUtil
       log.log(Level.SEVERE, "Task " + task + " failed to execute");
       throw new Exception("The task failed to complete due to a fatal error - check the log.");
     }
+  }
+
+  public static void showInformationDialog(Component parentComponent, String title, String message)
+  {
+    JOptionPane.showMessageDialog(parentComponent, message, title, JOptionPane.INFORMATION_MESSAGE);
+  }
+
+  public static void showErrorDialog(Component parentComponent, String title, String message)
+  {
+    JOptionPane.showMessageDialog(parentComponent, message, title, JOptionPane.ERROR_MESSAGE);
   }
 }
