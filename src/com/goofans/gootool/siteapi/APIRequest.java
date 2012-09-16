@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008, 2009, 2010, 2011 David C A Croft. All rights reserved. Your use of this computer software
+ * Copyright (c) 2008, 2009, 2010, 2011, 2012 David C A Croft. All rights reserved. Your use of this computer software
  * is permitted only in accordance with the GooTool license agreement distributed with this file.
  */
 
@@ -54,6 +54,9 @@ public class APIRequest
   protected static final URL API_ADDIN_UPDATES_CHECK;
   protected static final URL API_RATING_LIST;
   protected static final URL API_RATING_SUBMIT;
+
+  protected static final String PARAM_USERNAME = "u";
+  protected static final String PARAM_PASSWORD = "p";
 
   static {
     API_DATEFORMAT.setTimeZone(TimeZone.getTimeZone("UTC")); //NON-NLS
@@ -171,13 +174,15 @@ public class APIRequest
     urlConn.setRequestProperty("User-Agent", platformStr.toString()); //NON-NLS
 
 
-    ProjectModel model = GooTool.getController().getProjectController().getProjectModel();
-    if (model != null) {
-      ProjectConfiguration config = model.getEditorConfig();
-      urlConn.setRequestProperty("WoG-Language", config.getLanguage().getCode()); //NON-NLS
-      if (config instanceof LocalProjectConfiguration) {
-        LocalProjectConfiguration lpconfig = (LocalProjectConfiguration) config;
-        urlConn.setRequestProperty("WoG-Resolution", lpconfig.getResolution().getWidth() + "x" + lpconfig.getResolution().getHeight() + ";" + lpconfig.getRefreshRate()); //NON-NLS
+    if (GooTool.getController() != null) {
+      ProjectModel model = GooTool.getController().getProjectController().getProjectModel();
+      if (model != null) {
+        ProjectConfiguration config = model.getEditorConfig();
+        urlConn.setRequestProperty("WoG-Language", config.getLanguage().getCode()); //NON-NLS
+        if (config instanceof LocalProjectConfiguration) {
+          LocalProjectConfiguration lpconfig = (LocalProjectConfiguration) config;
+          urlConn.setRequestProperty("WoG-Resolution", lpconfig.getResolution().getWidth() + "x" + lpconfig.getResolution().getHeight() + ";" + lpconfig.getRefreshRate()); //NON-NLS
+        }
       }
     }
 

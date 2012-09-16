@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008, 2009, 2010, 2011 David C A Croft. All rights reserved. Your use of this computer software
+ * Copyright (c) 2008, 2009, 2010, 2011, 2012 David C A Croft. All rights reserved. Your use of this computer software
  * is permitted only in accordance with the GooTool license agreement distributed with this file.
  */
 
@@ -27,8 +27,6 @@ import com.goofans.gootool.addins.AddinsStore;
 import com.goofans.gootool.facades.Source;
 import com.goofans.gootool.l10n.ImageLocalisationDialog;
 import com.goofans.gootool.projects.*;
-import com.goofans.gootool.siteapi.APIException;
-import com.goofans.gootool.siteapi.LoginTestRequest;
 import com.goofans.gootool.siteapi.VersionCheck;
 import com.goofans.gootool.util.FileNameExtensionFilter;
 import com.goofans.gootool.util.GUIUtil;
@@ -54,6 +52,7 @@ public class MainController implements ActionListener
   public static final String CMD_DIAGNOSTICS = "Help>Diagnostics";
 
   public static final String CMD_GOOFANS_LOGIN = "GooFans>Login";
+  public static final String CMD_GOOFANS_LOGOUT = "GooFans>Logout";
 
   public static final String CMD_LOCALISATION = "Localisation";
   public static final String CMD_GENERATE_ONLINE_ID = "GenerateOnlineId";
@@ -112,6 +111,9 @@ public class MainController implements ActionListener
     }
     else if (cmd.equals(CMD_GOOFANS_LOGIN)) {
       gooFansLogin();
+    }
+    else if (cmd.equals(CMD_GOOFANS_LOGOUT)) {
+      gooFansLogout();
     }
     else if (cmd.equals(CMD_LOCALISATION)) {
       openLocalisationDialog();
@@ -269,27 +271,20 @@ public class MainController implements ActionListener
     showMessageDialog(resourceBundle.getString("installAddin.installed.title"), msg);
   }
 
-
-  // TODO background task this
-
   private void gooFansLogin()
   {
-    projectController.updateModelFromView(); // TODO
+    new GooFansLoginDialog(this).setVisible(true);
+    projectController.refreshView();
+  }
 
-    try {
-      LoginTestRequest request = new LoginTestRequest();
-      request.loginTest();
+  private void gooFansLogout()
+  {
+    ToolPreferences.setGooFansUsername(null);
+    ToolPreferences.setGooFansPassword(null);
+    ToolPreferences.setGooFansLoginOk(false);
 
-      showMessageDialog(resourceBundle.getString("gooFansLogin.success.title"), resourceBundle.getString("gooFansLogin.success.message"));
-      ToolPreferences.setGooFansLoginOk(true);
-    }
-    catch (APIException e) {
-      log.log(Level.WARNING, "Login test API call failed", e);
-      ToolPreferences.setGooFansLoginOk(false);
-      showErrorDialog(resourceBundle.getString("gooFansLogin.error.title"), resourceBundle.formatString("gooFansLogin.error.message", e.getLocalizedMessage()));
-    }
-
-    projectController.updateViewFromModel();
+    showMessageDialog(resourceBundle.getString("gooFansLogout.title"), resourceBundle.getString("gooFansLogout.message"));
+    projectController.refreshView();
   }
 
   void showMessageDialog(String title, String msg)

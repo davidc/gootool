@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008, 2009, 2010, 2011 David C A Croft. All rights reserved. Your use of this computer software
+ * Copyright (c) 2008, 2009, 2010, 2011, 2012 David C A Croft. All rights reserved. Your use of this computer software
  * is permitted only in accordance with the GooTool license agreement distributed with this file.
  */
 
@@ -43,9 +43,6 @@ public class OptionsPanel implements ViewComponent
   private JTextField uiInset;
   private JCheckBox skipOpeningMovieCheckBox;
   private JTextField watermark;
-  private JTextField goofansUsername;
-  private JPasswordField goofansPassword;
-  private JButton gooFansLoginButton;
   private JCheckBox windowsVolumeControlCheckBox;
   private JPanel soundPanel;
   private HyperlinkLabel windowsVolumeControlHyperlink;
@@ -130,8 +127,6 @@ public class OptionsPanel implements ViewComponent
 
   public void initController(ProjectController projectController)
   {
-    gooFansLoginButton.addActionListener(projectController);
-    gooFansLoginButton.setActionCommand(MainController.CMD_GOOFANS_LOGIN); //@@ TODO this needs to hit the maincontroller
   }
 
   public void updateViewFromModel(ProjectModel model)
@@ -195,9 +190,6 @@ public class OptionsPanel implements ViewComponent
       ToolPreferences.setAllowWidescreen(allowWidescreen.isSelected()); // TODO move this off this screen
       lpc.setResolution((Resolution) resolutionCombo.getSelectedItem());
       lpc.setRefreshRate(((RefreshRate) refreshRateCombo.getSelectedItem()).refreshRate);
-
-//      ToolPreferences.setGooFansUsername(goofansUsername.getText()); // TODO move elsewhere
-//      ToolPreferences.setGooFansPassword(new String(goofansPassword.getPassword()));
 
       lpc.setWindowsVolumeControl(windowsVolumeControlCheckBox.isSelected());
     }
