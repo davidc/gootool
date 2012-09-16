@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008, 2009, 2010, 2011 David C A Croft. All rights reserved. Your use of this computer software
+ * Copyright (c) 2008, 2009, 2010, 2011, 2012 David C A Croft. All rights reserved. Your use of this computer software
  * is permitted only in accordance with the GooTool license agreement distributed with this file.
  */
 
@@ -141,8 +141,7 @@ public class IosProjectPropertiesDialog extends JDialog implements ActionListene
     if (test.isWogFound()) {
       connectionTestedOk = true;
       if (!silentSuccess) {
-        JOptionPane.showMessageDialog(mainWindow, resourceBundle.getString("projectProps.ios.device.testConnection.success"),
-                resourceBundle.getString("projectProps.ios.device.testConnection.result"), JOptionPane.INFORMATION_MESSAGE);
+        GUIUtil.showInformationDialog(mainWindow, resourceBundle.getString("projectProps.ios.device.testConnection.result"), resourceBundle.getString("projectProps.ios.device.testConnection.success"));
       }
     }
     else {

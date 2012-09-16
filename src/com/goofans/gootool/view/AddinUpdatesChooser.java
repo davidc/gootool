@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008, 2009, 2010, 2011 David C A Croft. All rights reserved. Your use of this computer software
+ * Copyright (c) 2008, 2009, 2010, 2011, 2012 David C A Croft. All rights reserved. Your use of this computer software
  * is permitted only in accordance with the GooTool license agreement distributed with this file.
  */
 
@@ -170,12 +170,10 @@ public class AddinUpdatesChooser extends JDialog
     }
     catch (Exception e) {
       log.log(Level.SEVERE, "Error downloading updates", e);
-      JOptionPane.showMessageDialog(this, resourceBundle.formatString("addinUpdating.failed.message", e.getLocalizedMessage()),
-              resourceBundle.getString("addinUpdating.failed.title"), JOptionPane.ERROR_MESSAGE);
+      GUIUtil.showErrorDialog(this, resourceBundle.getString("addinUpdating.failed.title"), resourceBundle.formatString("addinUpdating.failed.message", e.getLocalizedMessage()));
     }
 
-    JOptionPane.showMessageDialog(this, resourceBundle.formatString("addinUpdating.completed.message", numSuccess[0], numSuccess[0] == 1 ? "" : "s"),
-            resourceBundle.getString("addinUpdating.completed.title"), JOptionPane.INFORMATION_MESSAGE);
+    GUIUtil.showInformationDialog(this, resourceBundle.getString("addinUpdating.completed.title"), resourceBundle.formatString("addinUpdating.completed.message", numSuccess[0], numSuccess[0] == 1 ? "" : "s"));
 
     //TODO force WOG to rescan addins if we installed updates, once the "skip recheck" option is implemented
     dispose();

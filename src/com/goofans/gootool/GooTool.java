@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008, 2009, 2010, 2011 David C A Croft. All rights reserved. Your use of this computer software
+ * Copyright (c) 2008, 2009, 2010, 2011, 2012 David C A Croft. All rights reserved. Your use of this computer software
  * is permitted only in accordance with the GooTool license agreement distributed with this file.
  */
 
@@ -78,7 +78,7 @@ public class GooTool
       log.log(Level.SEVERE, "Uncaught exception", t);
       // This can't be l10n since we might not yet have initialised the textProvider
       //noinspection HardCodedStringLiteral,HardcodedLineSeparator
-      JOptionPane.showMessageDialog(null, "Uncaught exception (" + t.getClass().getName() + "):\n" + t.getLocalizedMessage(), "GooTool Exception", JOptionPane.ERROR_MESSAGE);
+      GUIUtil.showErrorDialog(null, "GooTool Exception", "Uncaught exception (" + t.getClass().getName() + "):\n" + t.getLocalizedMessage());
       System.exit(1);
     }
   }

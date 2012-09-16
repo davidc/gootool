@@ -29,6 +29,7 @@ import com.goofans.gootool.model.ProjectModel;
 import com.goofans.gootool.profile.*;
 import com.goofans.gootool.projects.Project;
 import com.goofans.gootool.util.FileNameExtensionFilter;
+import com.goofans.gootool.util.GUIUtil;
 
 
 /**
@@ -168,7 +169,7 @@ public final class ProfilePanel implements ActionListener, ViewComponent
       Project project = projectController.getCurrentProject();
 
       if (project == null || !project.isProfileValid()) {
-        JOptionPane.showMessageDialog(rootPanel, resourceBundle.getString("profile.error.notFound.message"), resourceBundle.getString("profile.error.notFound.title"), JOptionPane.ERROR_MESSAGE);
+        GUIUtil.showErrorDialog(rootPanel, resourceBundle.getString("profile.error.notFound.title"), resourceBundle.getString("profile.error.notFound.message"));
         return;
       }
 
@@ -338,10 +339,7 @@ public final class ProfilePanel implements ActionListener, ViewComponent
       }
       catch (IOException e) {
         log.log(Level.WARNING, "Unable to save tower", e);
-        JOptionPane.showMessageDialog(this.rootPanel,
-                resourceBundle.formatString("profile.tower.saveimage.error.message", e.getLocalizedMessage()),
-                resourceBundle.getString("profile.tower.saveimage.error.title"),
-                JOptionPane.ERROR_MESSAGE);
+        GUIUtil.showErrorDialog(this.rootPanel, resourceBundle.getString("profile.tower.saveimage.error.title"), resourceBundle.formatString("profile.tower.saveimage.error.message", e.getLocalizedMessage()));
       }
 
       ToolPreferences.setMruTowerDir(chooser.getCurrentDirectory().getPath());
@@ -420,7 +418,7 @@ public final class ProfilePanel implements ActionListener, ViewComponent
       }
       catch (IOException e) {
         log.log(Level.SEVERE, "Unable to read profile", e);
-        JOptionPane.showMessageDialog(rootPanel, resourceBundle.getString("profile.error.corrupt.message"), resourceBundle.getString("profile.error.corrupt.title"), JOptionPane.ERROR_MESSAGE);
+        GUIUtil.showErrorDialog(rootPanel, resourceBundle.getString("profile.error.corrupt.title"), resourceBundle.getString("profile.error.corrupt.message"));
         return;
       }
 

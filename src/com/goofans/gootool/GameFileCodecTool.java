@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008, 2009, 2010, 2011 David C A Croft. All rights reserved. Your use of this computer software
+ * Copyright (c) 2008, 2009, 2010, 2011, 2012 David C A Croft. All rights reserved. Your use of this computer software
  * is permitted only in accordance with the GooTool license agreement distributed with this file.
  */
 
@@ -98,7 +98,7 @@ public class GameFileCodecTool
 
     for (File inputFile : inputFiles) {
       if (!inputFile.exists()) {
-        JOptionPane.showMessageDialog(parent, "File " + inputFile + " not found", "File not found", JOptionPane.ERROR_MESSAGE);
+        GUIUtil.showErrorDialog(parent, "File not found", "File " + inputFile + " not found");
         return;
       }
     }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008, 2009, 2010, 2011 David C A Croft. All rights reserved. Your use of this computer software
+ * Copyright (c) 2008, 2009, 2010, 2011, 2012 David C A Croft. All rights reserved. Your use of this computer software
  * is permitted only in accordance with the GooTool license agreement distributed with this file.
  */
 
@@ -133,7 +133,7 @@ public class ImageLocalisationDialog extends JDialog implements ActionListener
   {
     File inputDirectory = new File(inputDirectoryTextField.getText());
     if (!inputDirectory.exists()) {
-      JOptionPane.showMessageDialog(rootPanel, "Input directory doesn't exist: " + inputDirectory, "Directory not found", JOptionPane.ERROR_MESSAGE);
+      GUIUtil.showErrorDialog(rootPanel, "Directory not found", "Input directory doesn't exist: " + inputDirectory);
       return;
     }
 
@@ -155,13 +155,13 @@ public class ImageLocalisationDialog extends JDialog implements ActionListener
   {
     File inputDirectory = new File(inputDirectoryTextField.getText());
     if (!inputDirectory.exists()) {
-      JOptionPane.showMessageDialog(rootPanel, "Input directory doesn't exist: " + inputDirectory, "Directory not found", JOptionPane.ERROR_MESSAGE);
+      GUIUtil.showErrorDialog(rootPanel, "Directory not found", "Input directory doesn't exist: " + inputDirectory);
       return;
     }
 
     File outputDirectory = new File(outputDirectoryTextField.getText());
     if (!outputDirectory.exists()) {
-      JOptionPane.showMessageDialog(rootPanel, "Output directory doesn't exist: " + outputDirectory, "Directory not found", JOptionPane.ERROR_MESSAGE);
+      GUIUtil.showErrorDialog(rootPanel, "Directory not found", "Output directory doesn't exist: " + outputDirectory);
       return;
     }
 
@@ -172,7 +172,7 @@ public class ImageLocalisationDialog extends JDialog implements ActionListener
 
       GUIUtil.runTask((JFrame) null, "Preparing images", imageTool);
 
-      JOptionPane.showMessageDialog(rootPanel, "Build complete in " + outputDirectory + "!", "Build complete", JOptionPane.INFORMATION_MESSAGE);
+      GUIUtil.showInformationDialog(rootPanel, "Build complete", "Build complete in " + outputDirectory + "!");
     }
     catch (Exception e) {
       JOptionPane.showMessageDialog(rootPanel, "Exception: " + e.getClass() + ": " + e.getLocalizedMessage());
