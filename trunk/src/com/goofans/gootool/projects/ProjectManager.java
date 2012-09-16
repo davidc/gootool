@@ -310,11 +310,16 @@ public class ProjectManager
    */
   public static void setCurrentProject(Project project)
   {
-    int id = getIdForProject(project);
-    if (id == -1) throw new RuntimeException("Attempt to set current project to non-existent or already-deleted project " + project.getName());
+    if (project == null) {
+      PREFS.remove(PREF_KEY_CURRENT_PROJECT);
+    }
+    else {
+      int id = getIdForProject(project);
+      if (id == -1) throw new RuntimeException("Attempt to set current project to non-existent or already-deleted project " + project.getName());
 
-    PREFS.putInt(PREF_KEY_CURRENT_PROJECT, id);
-    Utilities.flushPrefs(PREFS);
+      PREFS.putInt(PREF_KEY_CURRENT_PROJECT, id);
+      Utilities.flushPrefs(PREFS);
+    }
   }
 
   /**
