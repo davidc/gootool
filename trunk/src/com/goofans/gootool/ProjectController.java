@@ -220,7 +220,7 @@ public class ProjectController implements ActionListener
       removeOnlineId();
     }
     else {
-      GUIUtil.showErrorDialog(mainController.getMainWindow(), "ProjectController", "Unrecognised ProjectController action " + cmd);
+      GUIUtil.showErrorDialog(mainController.getMainWindow(), "ProjectController", "Unrecognised ProjectController action " + cmd); //NON-NLS
     }
   }
 
@@ -304,7 +304,7 @@ public class ProjectController implements ActionListener
 
   public void enableAddin(String id)
   {
-    System.out.println("id = " + id);
+    System.out.println("enable addin, id = " + id);
     Addin addin = AddinsStore.getAddinById(id);
     enableAddinInternal(addin);
   }

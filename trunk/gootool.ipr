@@ -174,7 +174,7 @@
         </inspection_tool>
         <inspection_tool class="DuplicateStringLiteralInspection" enabled="true" level="WARNING" enabled_by_default="true">
           <option name="MIN_STRING_LENGTH" value="5" />
-          <option name="IGNORE_PROPERTY_KEYS" value="false" />
+          <option name="IGNORE_PROPERTY_KEYS" value="true" />
         </inspection_tool>
         <inspection_tool class="EmptyClass" enabled="true" level="WARNING" enabled_by_default="true">
           <option name="ignorableAnnotations">
