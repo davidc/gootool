@@ -14,14 +14,12 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.*;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.goofans.gootool.addins.Addin;
 import com.goofans.gootool.addins.AddinFactory;
-import com.goofans.gootool.addins.AddinFormatException;
 import com.goofans.gootool.addins.AddinsStore;
 import com.goofans.gootool.facades.Source;
 import com.goofans.gootool.l10n.ImageLocalisationDialog;
@@ -54,8 +52,8 @@ public class MainController implements ActionListener
   public static final String CMD_GOOFANS_LOGOUT = "GooFans>Logout";
 
   public static final String CMD_LOCALISATION = "Localisation";
-  public static final String CMD_GENERATE_ONLINE_ID = "GenerateOnlineId";
-  public static final String CMD_REMOVE_ONLINE_ID = "RemoveOnlineId";
+//  public static final String CMD_GENERATE_ONLINE_ID = "GenerateOnlineId";
+//  public static final String CMD_REMOVE_ONLINE_ID = "RemoveOnlineId";
 
   public static final String CMD_DECRYPT_BIN_PC = "Decrypt>BinPC";
   public static final String CMD_DECRYPT_BIN_MAC = "Decrypt>BinMac";
@@ -155,10 +153,11 @@ public class MainController implements ActionListener
       }
       catch (Exception e) {
         log.log(Level.SEVERE, "Error coding file", e);
-        GUIUtil.showErrorDialog(mainWindow, "Error coding file", e.getLocalizedMessage());
+        GUIUtil.showErrorDialog(mainWindow, resourceBundle.getString("codec.error.title"), e.getLocalizedMessage());
       }
     }
     else {
+      //noinspection HardCodedStringLiteral
       GUIUtil.showErrorDialog(mainWindow, "MainController", "Unrecognised MainController action " + cmd);
     }
   }
@@ -242,13 +241,8 @@ public class MainController implements ActionListener
 
       AddinsStore.installAddin(addinFile, addin.getId());
     }
-    catch (IOException e) {
-      log.log(Level.SEVERE, "Unable to copy to addins directory", e);
-      GUIUtil.showErrorDialog(mainWindow, resourceBundle.getString("installAddin.error.title"), resourceBundle.formatString("installAddin.error.message", e.getLocalizedMessage()));
-      return;
-    }
-    catch (AddinFormatException e) {
-      log.log(Level.SEVERE, "Addin format exception", e);
+    catch (Exception e) {
+      log.log(Level.SEVERE, "Error (re)installing addin", e);
       GUIUtil.showErrorDialog(mainWindow, resourceBundle.getString("installAddin.error.title"), resourceBundle.formatString("installAddin.error.message", e.getLocalizedMessage()));
       return;
     }
@@ -294,31 +288,6 @@ public class MainController implements ActionListener
     log.info("Exiting");
     System.exit(0);
   }
-
-  private void removeUnavailableAddins(ProjectConfiguration config)
-  {
-    // Remove any addins that are enabled but don't exist
-    List<Addin> availableAddins = AddinsStore.getAvailableAddins();
-    boolean foundThisAddin = false;
-    do {
-      for (String enabledAddinName : config.getEnabledAddins()) {
-        foundThisAddin = false;
-        // see if this addin is available
-        for (Addin availableAddin : availableAddins) {
-          if (availableAddin.getId().equals(enabledAddinName)) {
-            foundThisAddin = true;
-            break;
-          }
-        }
-        if (!foundThisAddin) {
-          log.log(Level.WARNING, "Removed enabled addin " + enabledAddinName + " as it is not installed");
-          config.disableAddin(enabledAddinName);
-          break;
-        }
-      }
-    } while (!config.getEnabledAddins().isEmpty() && !foundThisAddin);
-  }
-
 
   public void openAboutDialog()
   {

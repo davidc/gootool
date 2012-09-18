@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008, 2009, 2010, 2011 David C A Croft. All rights reserved. Your use of this computer software
+ * Copyright (c) 2008, 2009, 2010, 2011, 2012 David C A Croft. All rights reserved. Your use of this computer software
  * is permitted only in accordance with the GooTool license agreement distributed with this file.
  */
 
@@ -105,7 +105,8 @@ public class GooInfo
       }
     }
     catch (Throwable t) {
-      log.log(Level.SEVERE, "Uncaught exception", t);
+      log.log(Level.SEVERE, "Uncaught exception in GooInfo", t);
+      //noinspection DuplicateStringLiteralInspection,HardcodedLineSeparator
       System.err.println("Uncaught exception (" + t.getClass().getName() + "):\n" + t.getLocalizedMessage());
       System.exit(1);
     }
