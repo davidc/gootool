@@ -1,3 +1,8 @@
+
+- Test Connection (IOS) should have a progress bar
+
+- Deleting an IOS project should prompt to remove customwog.app from iPad
+
 - Project - if iOS, new menu option to allow regeneration of cache file. new menu option to remove customwog.app.
 
 - Test volume control on win32 dist build
