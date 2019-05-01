@@ -255,7 +255,7 @@ public class WorldBuilder extends ProgressIndicatingTask
     destFile.setModified(srcFile.lastModified());
   }
 
-  private void addFilesToCopy(SourceFile sourceFile)
+  private void addFilesToCopy(SourceFile sourceFile) throws IOException
   {
     // Copy the directory (mkdir)
     filesToCopy.add(sourceFile);

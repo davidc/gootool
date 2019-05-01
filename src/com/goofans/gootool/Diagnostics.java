@@ -284,7 +284,7 @@ public class Diagnostics extends ProgressIndicatingTask
   }
 
   @SuppressWarnings({"HardcodedFileSeparator"})
-  private void listDir(SourceFile dir, String prefix)
+  private void listDir(SourceFile dir, String prefix) throws IOException
   {
     List<SourceFile> files = dir.list();
 

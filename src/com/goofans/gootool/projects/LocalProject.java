@@ -230,12 +230,15 @@ public class LocalProject extends Project
     return null;
   }
 
+  @Deprecated // TODO move to Source
   @Override
   public String getGameXmlFilename(String baseName)
   {
     return baseName + ".bin"; //NON-NLS
   }
 
+
+  @Deprecated // TODO move to Source
   @Override
   public String getGamePngFilename(String baseName)
   {

@@ -1,0 +1,2 @@
+Windows
+- Game resources (res/ and properties/) are now one level further down in a "game" subdirectory adjacent to the WorldofGoo.exe

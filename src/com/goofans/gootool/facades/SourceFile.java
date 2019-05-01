@@ -43,7 +43,8 @@ public interface SourceFile extends ReadableFile
   long lastModified();
 
   /**
-   * Gets the child of the given name, or null if it does not exist. (this differs from new File() which would return a file, but exists() would be true)
+   * Gets the child of the given name, or null if it does not exist. (this differs from new File() which would return a file, but exists() would be true).
+   * This method expects any path components to be separated by "/", regardless of platform separator.
    *
    * @param name
    * @return
@@ -62,7 +63,7 @@ public interface SourceFile extends ReadableFile
    *
    * @return
    */
-  List<SourceFile> list();
+  List<SourceFile> list() throws IOException;
 
   InputStream read() throws IOException;
 }

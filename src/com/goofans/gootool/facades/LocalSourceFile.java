@@ -21,7 +21,7 @@ public class LocalSourceFile implements SourceFile
   private final LocalSource source;
   private final File backingFile;
 
-  public LocalSourceFile(LocalSource source, File backingFile)
+  LocalSourceFile(LocalSource source, File backingFile)
   {
     this.source = source;
     this.backingFile = backingFile;
@@ -71,6 +71,8 @@ public class LocalSourceFile implements SourceFile
 
   public SourceFile getChild(String name)
   {
+    name = name.replace('/', File.separatorChar);
+
     File child = new File(backingFile, name);
     if (!child.exists()) return null;
 
@@ -88,8 +90,9 @@ public class LocalSourceFile implements SourceFile
     return new LocalSourceFile(source, parentFile);
   }
 
-  public List<SourceFile> list()
+  public List<SourceFile> list() throws IOException
   {
+    if (source.isClosed()) throw new IOException("Source is closed");
     if (!backingFile.isDirectory()) return null;
 
     File[] backingList = backingFile.listFiles();
@@ -106,6 +109,7 @@ public class LocalSourceFile implements SourceFile
 
   public InputStream read() throws IOException
   {
+    if (source.isClosed()) throw new IOException("Source is closed");
     return new FileInputStream(backingFile);
   }
 

@@ -41,6 +41,21 @@ public class IosSource implements Source
     return gameRoot;
   }
 
+  public String getGameXmlFilename(String baseName)
+  {
+    throw new UnsupportedOperationException("Not yet implemented"); // TODO
+  }
+
+  public String getGamePngFilename(String baseName)
+  {
+    throw new UnsupportedOperationException("Not yet implemented"); // TODO
+  }
+
+  public boolean isDemoVersion()
+  {
+    throw new UnsupportedOperationException("Not yet implemented"); // TODO
+  }
+
   public void close() throws IOException
   {
     zipFile.close();
