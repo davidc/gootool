@@ -15,3 +15,8 @@ This is currently a copy of the SVN repository as of September 2012. The branch 
 version. The trunk contains a lot of unreleased development work that separates out "target" worlds that are built (this was done to
 allow for remote targets over SFTP, e.g. on iOS). I believe this is working but it involved a rewrite of a large chunk of the core
 code and it has not had substantial testing as yet.
+
+### Building
+
+The tool builds with ant with only two external dependencies (three if you build the NSIS installer). These are listed
+and their locations are set in ant.properties.
