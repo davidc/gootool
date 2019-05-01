@@ -66,8 +66,8 @@ public class MainMenu implements MenuListener
     JMenu onlineIdMenuItem = createMenu("mainMenu.advanced.onlineId");
     menu.add(onlineIdMenuItem);
 
-    onlineIdMenuItem.add(generateIdMenuItem = createMenuItem(JMenuItem.class, "mainMenu.advanced.onlineId.generate", MainController.CMD_GENERATE_ONLINE_ID));
-    onlineIdMenuItem.add(removeIdMenuItem = createMenuItem(JMenuItem.class, "mainMenu.advanced.onlineId.remove", MainController.CMD_REMOVE_ONLINE_ID));
+    onlineIdMenuItem.add(generateIdMenuItem = createMenuItem(JMenuItem.class, "mainMenu.advanced.onlineId.generate", ProjectController.CMD_GENERATE_ONLINE_ID));
+    onlineIdMenuItem.add(removeIdMenuItem = createMenuItem(JMenuItem.class, "mainMenu.advanced.onlineId.remove", ProjectController.CMD_REMOVE_ONLINE_ID));
 
     JMenu decryptMenuItem = createMenu("mainMenu.advanced.decrypt");
     menu.add(decryptMenuItem);

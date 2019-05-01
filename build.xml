@@ -136,7 +136,7 @@
   <target name="compile" depends="-update-build-properties" description="Compile module gootool">
     <mkdir dir="${output.dir}"/>
     <javac2 destdir="${output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}"
-            fork="true" executable="${project.jdk.bin}/javac" target="1.5">
+            fork="true" executable="${project.jdk.bin}/javac" source="1.5" target="1.5">
       <compilerarg line="${compiler.args}"/>
       <!--<bootclasspath refid="gootool.module.bootclasspath"/>-->
       <classpath refid="gootool.module.build.classpath"/>

@@ -5,6 +5,7 @@
 
 package com.goofans.gootool.util;
 
+import java.io.InputStream;
 import java.util.Date;
 import java.util.Properties;
 import java.util.Locale;
@@ -12,8 +13,8 @@ import java.text.SimpleDateFormat;
 
 /**
  * Static access to the release/build version information. These are pulled from the release.properties
- * and build.properties files that are generated on release tag and build respectively. 
- *
+ * and build.properties files that are generated on release tag and build respectively.
+ * <p>
  * FULL includes the full version and the type (-dev etc).
  * FRIENDLY is like FULL but without the final version component (SVN revision).
  *
@@ -42,8 +43,18 @@ public class Version
   static {
     try {
       Properties p = new Properties();
-      p.load(Version.class.getResourceAsStream("/release.properties")); //NON-NLS
-      p.load(Version.class.getResourceAsStream("/build.properties")); //NON-NLS
+
+      InputStream releasePropertiesResource = Version.class.getResourceAsStream("/release.properties"); //NON-NLS
+      if (releasePropertiesResource == null) {
+        throw new ExceptionInInitializerError("release.properties file not found");
+      }
+      p.load(releasePropertiesResource);
+
+      InputStream buildPropertiesResource = Version.class.getResourceAsStream("/build.properties"); //NON-NLS
+      if (buildPropertiesResource == null) {
+        throw new ExceptionInInitializerError("build.properties file not found");
+      }
+      p.load(buildPropertiesResource);
 
       RELEASE_MAJOR = Integer.parseInt(p.getProperty("release.major", "0"));
       RELEASE_MINOR = Integer.parseInt(p.getProperty("release.minor", "0"));
