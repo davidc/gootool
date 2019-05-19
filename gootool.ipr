@@ -83,11 +83,8 @@
   </component>
   <component name="CopyrightManager" default="">
     <copyright>
-      <option name="notice" value="Copyright (c) 2008, 2009, 2010, 2011 David C A Croft. All rights reserved. Your use of this computer software&#10;is permitted only in accordance with the GooTool license agreement distributed with this file." />
-      <option name="keyword" value="Copyright" />
-      <option name="allowReplaceKeyword" value="" />
+      <option name="notice" value="Copyright (c) 2008, 2009, 2010, 2019 David C A Croft. All rights reserved. Your use of this computer software&#10;is permitted only in accordance with the GooTool license agreement distributed with this file." />
       <option name="myName" value="GooTool" />
-      <option name="myLocal" value="true" />
     </copyright>
     <module2copyright>
       <element module="Files to add copyright" copyright="GooTool" />
@@ -97,7 +94,7 @@
     <option name="myForwardDirection" value="false" />
   </component>
   <component name="DependencyValidationManager">
-    <scope name="Files to add copyright" pattern="src[gootool]:*..*&amp;&amp;!file[gootool]:resources/release.properties&amp;&amp;!src[gootool]:com.goofans.gootool.image..*" />
+    <scope name="Files to add copyright" pattern="(src[gootool]:*..*&amp;&amp;!file[gootool]:resources/release.properties&amp;&amp;!src[gootool]:com.goofans.gootool.image..*||file:resources/text.properties)&amp;&amp;!src:net.infotrek.util.*&amp;&amp;!src:net.infotrek.util..*" />
     <option name="SKIP_IMPORT_STATEMENTS" value="false" />
   </component>
   <component name="EclipseCompilerSettings">
@@ -110,9 +107,6 @@
     <option name="DEPRECATION" value="false" />
     <option name="ADDITIONAL_OPTIONS_STRING" value="" />
     <option name="MAXIMUM_HEAP_SIZE" value="128" />
-  </component>
-  <component name="EntryPointsManager">
-    <entry_points version="2.0" />
   </component>
   <component name="IdProvider" IDEtalkID="B2C21A5452E2E453C59DC88F0040274D" />
   <component name="InspectionProjectProfileManager">
