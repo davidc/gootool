@@ -4,8 +4,9 @@ Install updates - if all up to date, say so! No dialog then.
 
 If copied from steam (steam_api.dll), warn that they must be running Steam (with a "Do not show this message again")
 
-1.0.4, unreleased
+1.1.0, unreleased
 
+- GooTool now requires Java 1.8 or later
 - Make progress bar smoother when performing build.
 - Fix parsing of XML elements that should have text content but are empty.
 - Explain on the options tab what logging in is good for (#0000293)

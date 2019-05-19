@@ -1,0 +1,8 @@
+Windows
+TODO
+
+- Game resources (res/ and properties/) are now one level further down in a "game" subdirectory adjacent to the WorldofGoo.exe
+- pers2.dat is now pers3.dat and unencrypted
+- libirrklang.dll not available on 1.5, don't show the volume control option
+
+DONE

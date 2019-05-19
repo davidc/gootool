@@ -5,6 +5,7 @@
 
 package com.goofans.gootool.util;
 
+import java.io.InputStream;
 import java.util.Date;
 import java.util.Properties;
 import java.util.Locale;
@@ -42,8 +43,19 @@ public class Version
   static {
     try {
       Properties p = new Properties();
-      p.load(Version.class.getResourceAsStream("/release.properties"));
-      p.load(Version.class.getResourceAsStream("/build.properties"));
+
+      InputStream releasePropertiesResource = Version.class.getResourceAsStream("/release.properties"); //NON-NLS
+      p.load(Version.class.getResourceAsStream("/build.properties")); //NON-NLS	      InputStream releasePropertiesResource = Version.class.getResourceAsStream("/release.properties"); //NON-NLS
+      if (releasePropertiesResource == null) {
+        throw new ExceptionInInitializerError("release.properties file not found");
+      }
+      p.load(releasePropertiesResource);
+
+      InputStream buildPropertiesResource = Version.class.getResourceAsStream("/build.properties"); //NON-NLS
+      if (buildPropertiesResource == null) {
+        throw new ExceptionInInitializerError("build.properties file not found");
+      }
+      p.load(buildPropertiesResource);
 
       RELEASE_MAJOR = Integer.parseInt(p.getProperty("release.major", "0"));
       RELEASE_MINOR = Integer.parseInt(p.getProperty("release.minor", "0"));
